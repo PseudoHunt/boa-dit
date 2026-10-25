@@ -91,16 +91,21 @@ later one. Guard arms and the row-attribution diagnostic are **not** run here; t
 | a | gates-only, K=4 | `gates_w4_K4_lam1_brcfg` | 0.238 | 0.600 | 0.09226 ± 0.00327 | **-1.5%** | [-5.9%, +2.6%] | 52% |
 | b | gain-only, λ=0.5, K=1 | `gain_w4_K1_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.555 | 0.268 | 0.09480 ± 0.00309 | **-4.3%** | [-9.0%, +0.2%] | 45% |
 | c | full, λ=0.5, K=4 | `full_w4_K4_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.544 | 0.276 | 0.08997 ± 0.00287 | **+1.0%** | [-3.2%, +5.2%] | 49% |
-| d | gain-only, tempered τ*, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25` | 0.470 | 0.302 | 0.00000 ± 0.00000 | **+100.0%** | [+100.0%, +100.0%] | 100% |
+| d | gain-only, tempered τ*, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25` | 0.470 | 0.302 | 0.08918 ± 0.00296 | **+1.9%** | [-2.0%, +5.6%] | 52% |
 | e | full, tempered τ*, K=4 | `full_w4_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25` | 0.402 | 0.397 | 0.09928 ± 0.00344 | **-9.2%** | [-13.9%, -4.8%] | 42% |
 | f | gain-only, clipped max/min ≤ 10, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_clip10` | 0.710 | 0.155 | not run (cap) or pending | — | — | — |
 
-GPU-hours spent on the set: **1.35** (cap 1.5).
+### Execution notes
+
+- **Arm d was evaluated twice; the first result is invalid.** It was quantized on cuda:1 and evaluated on cuda:0. GPU peer-to-peer copies on this host are silently wrong (a cuda:1 → cuda:0 `copy_` returns bad data with no error, although peer access is reported available), and `torch.load` without `map_location` restores tensors onto the saving GPU, so `load_state_dict` left the FP weights in place and the eval scored FP against FP (rel. MSE exactly 0). The invalid JSON is kept in `results/stage2/eval_invalid/`. All checkpoint loads now go through CPU and are verified tensor by tensor (`boa_dit.model.load_quant_state`). Every other arm was quantized and evaluated on the same GPU; no other result crossed GPUs. The wasted eval (≈ 0.08 GPU-h) counts toward the cap.
+- **Arm f: not run (cap).** When cuda:1 finished arm c, spent + f's projected cost + the W3 reserve exceeded 1.5 GPU-h, so the driver took the skip branch. Its SKIP log line is missing because the driver called `log()` while holding the same non-reentrant lock and deadlocked there; the driver was then stopped by hand.
+- No W3 rerun: no W4 arm reached 5%.
+
+GPU-hours spent on the set: **1.44** (cap 1.5).
 
 ### Decision (pre-registered rule)
 
-- Best W4 arm: **d** (gain-only, tempered τ*, K=1), reduction +100.0% (needs ≥ 5%): **True**.
-- W3 rerun reduction: pending
+- Best W4 arm: **d** (gain-only, tempered τ*, K=1), reduction +1.9% (needs ≥ 5%): **False**.
 
-**Gate 2b: PENDING**
+**Gate 2b: STOP**
 
