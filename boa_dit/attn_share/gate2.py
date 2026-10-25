@@ -25,7 +25,10 @@ from boa_dit.sample import sample_seeds
 OUT = os.path.join(RESULTS, "attn_share")
 MAPS = os.path.join(OUT, "maps")
 ARMS = {"k5": (5, "all"), "k10": (10, "all"), "k15": (15, "all"), "k20": (20, "all"), "k15-sel": (15, "sel"),
-        "k10-onemap": (10, "onemap"), "k10-uniform": (10, "uniform"), "fp": (0, "off")}
+        "k10-onemap": (10, "onemap"), "k10-uniform": (10, "uniform"), "fp": (0, "off"),
+        # Gate 3 storage variants at k = k_pass (set by --k); V1 = the Gate 2 arm k{k_pass} itself
+        "V2": (None, "windowed"), "V3": (None, "kernel"), "V4": (None, "sparse32"), "V5": (None, "condonly")}
+GATE3 = ("V2", "V3", "V4", "V5")
 N_FID, N_LAT, N_GRID = 2000, 512, 16
 
 
@@ -43,8 +46,51 @@ def load_maps(k, dev):
     return out
 
 
-def configure(arm, dev):
+def storage_bytes(kind, k, L=28, H=16, N=256):
+    """Bytes stored for both CFG branches (fp16 values; uint8 column indices for the sparse variant)."""
+    W = -(-k // 5)
+    per = {"perstep": k * L * H * N * N * 2, "windowed": W * L * H * N * N * 2, "kernel": W * L * H * 961 * 2,
+           "sparse32": k * L * H * N * 32 * 3, "condonly": k * L * H * N * N * 2}[kind]
+    return per if kind == "condonly" else 2 * per
+
+
+def gate3_maps(kind, k, dev):
+    from boa_dit.attn_share.gate1 import offsets
+    Mc, Mu = load_maps(k, dev)
+    if kind == "condonly":
+        return Mc, Mc
+    out = []
+    for M in (Mc, Mu):
+        if kind in ("windowed", "kernel"):
+            Mw = torch.stack([M[w:w + 5].float().mean(0) for w in range(0, k, 5)])        # [W, L, H, N, N]
+            if kind == "kernel":
+                offs = offsets().to(dev)
+                flat = offs.flatten()
+                cnt = torch.zeros(961, device=dev).index_add_(0, flat, torch.ones_like(flat, dtype=torch.float))
+                kap = torch.zeros(*Mw.shape[:3], 961, device=dev).index_add_(3, flat, Mw.flatten(3)) / cnt
+                Mw = kap[..., offs]
+                Mw = Mw / Mw.sum(-1, keepdim=True)
+            out.append(Mw.half())
+        else:  # sparse32: top-32 entries per row of the per-step map, renormalized
+            S = torch.empty_like(M)
+            for s in range(k):
+                v, i = M[s].float().topk(32, dim=-1)
+                S[s] = torch.zeros_like(M[s], dtype=torch.float).scatter_(-1, i, v / v.sum(-1, keepdim=True)).half()
+            out.append(S)
+    return out
+
+
+def configure(arm, dev, k_override=None):
     k, kind = ARMS[arm]
+    if arm in GATE3:
+        k = k_override
+        CTRL.k, CTRL.heads, CTRL.mode = k, None, "share"
+        Mc, Mu = gate3_maps(kind, k, dev)
+        if kind in ("windowed", "kernel"):
+            CTRL.maps = lambda b, s: (Mc[s // 5, b], Mu[s // 5, b])
+        else:
+            CTRL.maps = lambda b, s: (Mc[s, b], Mu[s, b])
+        return
     CTRL.k, CTRL.heads = k, None
     if kind == "off":
         CTRL.mode = None
@@ -107,18 +153,21 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--arm", required=True, choices=list(ARMS))
     ap.add_argument("--device", default="cuda:1")
+    ap.add_argument("--k", type=int, default=None, help="k_pass, Gate 3 variants only")
     a = ap.parse_args()
     dev = a.device
-    out_json = os.path.join(OUT, "eval", f"gate2_{a.arm}.json")
+    g3 = a.arm in GATE3
+    assert not g3 or a.k, "--k (k_pass) is required for Gate 3 variants"
+    out_json = os.path.join(OUT, "eval", f"gate3_{a.arm}_k{a.k}.json" if g3 else f"gate2_{a.arm}.json")
     if os.path.exists(out_json):
         print("exists", out_json)
         return
     os.makedirs(os.path.dirname(out_json), exist_ok=True)
-    with Run("attn_share", f"gate2_{a.arm}", dev, vars(a)) as run:
+    with Run("attn_share", f"gate3_{a.arm}_k{a.k}" if g3 else f"gate2_{a.arm}", dev, vars(a)) as run:
         ref_top1 = fp_top1(dev)
         model, diffusion = patch(load_dit(dev)), make_diffusion(50)
-        configure(a.arm, dev)
-        part = os.path.join(CKPT_DIR, f"attn_share_{a.arm}_fid2k.partial")
+        configure(a.arm, dev, a.k)
+        part = os.path.join(CKPT_DIR, f"attn_share_{a.arm}{a.k or ''}_fid2k.partial")
         try:
             x = sample_seeds(model, diffusion, list(range(N_FID)), 1.5, 32, partial=part, resume=True)
         finally:
@@ -135,8 +184,11 @@ def main():
         fid = fid_from_stats(mu, sigma, ref["mu"], ref["sigma"])
         is_mean, is_std = inception_score(imgs, dev)
         top1 = resnet_top1(imgs[:N_LAT], dev)
-        atomic_torch_save(imgs[:N_GRID].clone(), os.path.join(MAPS, f"grid_{a.arm}.pt"))
-        res = {"arm": a.arm, "k": ARMS[a.arm][0], "kind": ARMS[a.arm][1], "n_fid": N_FID, "fid2k": fid,
+        atomic_torch_save(imgs[:N_GRID].clone(), os.path.join(MAPS, f"grid_{a.arm}{a.k or ''}.pt"))
+        k = a.k if g3 else ARMS[a.arm][0]
+        res = {"arm": a.arm, "k": k, "kind": ARMS[a.arm][1], "n_fid": N_FID, "fid2k": fid,
+               "storage_bytes": storage_bytes(ARMS[a.arm][1], k) if g3 else
+               (storage_bytes("perstep", k) if ARMS[a.arm][1] in ("all", "sel") else None),
                "is_mean": is_mean, "is_std": is_std,
                "is_note": "torchvision Inception-v3, 10 splits of 200; not comparable to published IS",
                "rel_mse_mean_512": float(rel.mean()), "rel_mse_median_512": float(rel.median()),
