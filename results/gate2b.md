@@ -67,3 +67,36 @@ The earlier RESPONSE asked that, on a Gate 2 fail, guard arms (top-0.1% rows at 
 This later RESPONSE pre-registers a closed set and says "no further arms after this set". This document follows the
 later one. Guard arms and the row-attribution diagnostic are **not** run here; they are flagged to the human in
 `REPORT.md` for a decision (they would apply in Stage 3 if an arm passes, per item 4 of this RESPONSE).
+
+---
+
+## Results (appended after the runs by `scripts/make_gate2b.py`)
+
+**Headline diagnostic (peakedness):** the fp32 median gain alone puts 81.0% of its weight on steps 0–14 and 3.5% on steps 25–49 (max/min over buckets 114).
+
+### τ selection on held-out calibration seeds 1032–1095 (64 images, W4, gain-only K=1)
+
+| τ | held-out rel. latent MSE | steps 0–14 | steps 25–49 |
+| ---: | ---: | ---: | ---: |
+| 0.25 | — | 0.470 | 0.302 |
+| 0.5 | — | 0.622 | 0.159 |
+| 0.75 | — | 0.734 | 0.076 |
+
+τ* = **pending**
+
+### W4 arms vs `uniform` (`uniform_w4_K1_lam1_brcfg`, rel. latent MSE 0.09087), eval seeds 0–511
+
+| arm | definition | name | steps 0–14 | steps 25–49 | rel. latent MSE | reduction vs uniform | 95% CI | images improved |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- | ---: |
+| a | gates-only, K=4 | `gates_w4_K4_lam1_brcfg` | 0.238 | 0.600 | not run (cap) or pending | — | — | — |
+| b | gain-only, λ=0.5, K=1 | `gain_w4_K1_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.555 | 0.268 | not run (cap) or pending | — | — | — |
+| c | full, λ=0.5, K=4 | `full_w4_K4_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.544 | 0.276 | not run (cap) or pending | — | — | — |
+| d | gain-only, tempered τ*, K=1 | — | — | — | — | — | — | — |
+| e | full, tempered τ*, K=4 | — | — | — | — | — | — | — |
+| f | gain-only, clipped max/min ≤ 10, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_clip10` | 0.710 | 0.155 | not run (cap) or pending | — | — | — |
+
+GPU-hours spent on the set: **0.01** (cap 1.5).
+
+### Decision (pre-registered rule)
+
+Pending.
