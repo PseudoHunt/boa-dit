@@ -1,0 +1,19 @@
+{
+ "name": "uniform_w4_K1_lam1_brcfg",
+ "n": 2000,
+ "fid": 29.111544674750633,
+ "stage": "stage2",
+ "run": "fid2000_uniform_w4_K1_lam1_brcfg",
+ "device": "cuda:0",
+ "config": {
+  "ref": false,
+  "name": "uniform_w4_K1_lam1_brcfg",
+  "n": 2000,
+  "stage": "stage2",
+  "device": "cuda:0"
+ },
+ "git_sha": "d54cb8e398185a3d229279302f6a7a171a976896",
+ "start_utc": "2026-10-25T09:04:30Z",
+ "wall_s": 1138.712961435318,
+ "gpu_hours": 0.316309155954255
+}
