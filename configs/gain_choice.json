@@ -1,0 +1,7 @@
+{
+ "tag": "gain_iso_rho0.003_fp32",
+ "stat": "median",
+ "floor_tag": "gain_iso_rho0.0001",
+ "rho_pairs": [["gain_iso_rho0.01", "gain_iso_rho0.03"], ["gain_iso_rho0.003", "gain_iso_rho0.01"], ["gain_iso_rho0.001_fp32", "gain_iso_rho0.003_fp32"]],
+ "why": "Deviation from the handoff's ratio-of-means at rho=0.01 (fp16). (1) In the fp16 sampler, rounding chaos sets a floor on ||dx0||^2 (at rho=1e-4 the apparent gain2 is 10^1-10^3), so lowering rho as instructed is impossible in fp16; the probe was rerun with an fp32 forward. (2) Even in fp32 the ratio of means is not rho-independent: 1-2 of 16 seeds sit near a trajectory bifurcation, their linear gain keeps growing as rho shrinks, and they dominate the mean. The median over seeds of the per-seed ratio is rho-independent in fp32 (1e-3 vs 3e-3: see table) and is used for Stage 2. Ratio-of-means remains a Stage 3 ablation."
+}

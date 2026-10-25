@@ -3,3 +3,4 @@ ckpt/
 *.npz
 __pycache__/
 *.log.big
+logs/

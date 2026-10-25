@@ -1,0 +1,15 @@
+{
+ "note": "All runs: weight-only, per-channel asymmetric, adaLN W8 RTN, BoA layer-output (GPTQ) path, damping = fork default (1%), act_order off, 32 calibration images x 2 branches x 50 steps, B = 10 buckets. `uniform` = p = 1/B over per-bucket Grams with the CFG branch weights s^2/(s-1)^2 folded in (the handoff's H_t); `uniform, plain pooled` = equal branch weights too (what LLM-style quantizers and Q-DiT do). Gain = fp32 median-of-ratios (configs/gain_choice.json).",
+ "runs": {
+  "4": [["P1 RTN", "rtn_w4"],
+        ["P2 uniform, plain pooled", "uniform_w4_K1_lam1_brequal"],
+        ["P2 uniform", "uniform_w4_K1_lam1_brcfg"],
+        ["P6 full", "full_w4_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian"]],
+  "3": [["P1 RTN", "rtn_w3"],
+        ["P2 uniform, plain pooled", "uniform_w3_K1_lam1_brequal"],
+        ["P2 uniform", "uniform_w3_K1_lam1_brcfg"],
+        ["P6 full", "full_w3_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian"]]
+ },
+ "compare": ["P2 uniform", "P6 full"],
+ "also_compare": [["P2 uniform, plain pooled", "P6 full"], ["P2 uniform, plain pooled", "P2 uniform"]]
+}
