@@ -73,8 +73,8 @@
   better.
 - Best arm d +1.9% < 5% -> no W3 rerun -> **STOP**. No further arms run.
 - Reading: once the time weight is flattened enough to stop hurting (tau 0.25, lambda 0.5), it no longer helps at
-  W4 either; every arm's CI includes 0 or is negative. Adding the K=4 gate row groups made things worse in both
-  paired comparisons (e vs d: -9.2% vs +1.9%; Gate 2 full vs gain-only is consistent). The one positive signal in
+  W4 either; every arm's CI includes 0 or is negative. Adding the K=4 gate row groups made things worse in the one
+  pair that isolates it (e vs d: -9.2% vs +1.9%; also a, gates-only, -1.5%). The one positive signal in
   the whole POC is at W3 (Gate 2 full +6.5% vs uniform, +12.7% vs pooled) and the CFG branch weights (uniform vs
   pooled: +6.6% W3, +1.8% W4), neither of which met a pre-registered bar.
 - Headline diagnostic: the fp32 median gain puts 81.0% of its weight on steps 0-14 and 3.5% on steps 25-49.
