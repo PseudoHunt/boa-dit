@@ -1,0 +1,19 @@
+{
+ "name": "fp",
+ "n": 2000,
+ "fid": 23.888380079814056,
+ "stage": "stage2",
+ "run": "fid2000_fp",
+ "device": "cuda:0",
+ "config": {
+  "ref": false,
+  "name": "fp",
+  "n": 2000,
+  "stage": "stage2",
+  "device": "cuda:0"
+ },
+ "git_sha": "620fcfa952fd4a3d975a8c18bd3e8709bda282a1",
+ "start_utc": "2026-10-25T08:45:31Z",
+ "wall_s": 1135.9813499450684,
+ "gpu_hours": 0.3155503749847412
+}
