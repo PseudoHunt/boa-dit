@@ -29,6 +29,7 @@ does not touch quantization.
 
 ## Reproducing
 `git clone --recursive`, then `pip install -r requirements.txt`. The DiT-XL/2-256 weights and the ADM reference batch
-are downloaded on first use. Run commands are recorded per stage in `results/REPORT.md`. Known host issue: GPU
+are downloaded on first use. Each module is run as `python -m boa_dit.<module> --help` (see its docstring); each
+results JSON stores the exact config it was produced with (`config`, `git_sha`). Known host issue: GPU
 peer-to-peer copies were silently wrong on the original machine, so every checkpoint load goes through CPU and is
 checked tensor by tensor (`model.load_quant_state`).
