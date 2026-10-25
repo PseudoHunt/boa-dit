@@ -1,0 +1,23 @@
+{
+ "note": "FID-2k vs the ADM 256 reference batch (10k), seeds 0-1999, cfg 1.5, DDIM-50, pytorch-fid; same seeds for all three. FID-2k is biased upward and noisy by ~1-2 points.",
+ "anchors": {
+  "FP": {
+   "name": "fp",
+   "fid2k": 23.888380079814056,
+   "gpu_hours": 0.3155503749847412,
+   "rel_latent_mse_512": 0.0
+  },
+  "uniform W4": {
+   "name": "uniform_w4_K1_lam1_brcfg",
+   "fid2k": 29.111544674750633,
+   "gpu_hours": 0.316309155954255,
+   "rel_latent_mse_512": 0.09087326377630234
+  },
+  "uniform W3": {
+   "name": "uniform_w3_K1_lam1_brcfg",
+   "fid2k": 130.90679684533586,
+   "gpu_hours": 0.31658409257729847,
+   "rel_latent_mse_512": 0.3945660889148712
+  }
+ }
+}
