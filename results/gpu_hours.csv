@@ -37,3 +37,4 @@ stage2,eval_latent_fpref_heldout_gate2b,cuda:1,2026-10-25T07:31:16Z,2026-10-25T0
 stage2,quant_uniform_w4_K1_lam1_brequal,cuda:0,2026-10-25T07:32:02Z,2026-10-25T07:38:34Z,0.1089
 stage2,quant_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25,cuda:1,2026-10-25T07:32:24Z,2026-10-25T07:38:54Z,0.1083
 stage2,eval_latent_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25,cuda:1,2026-10-25T07:38:58Z,2026-10-25T07:39:47Z,0.0138
+stage2,eval_latent_uniform_w4_K1_lam1_brequal,cuda:0,2026-10-25T07:38:37Z,2026-10-25T07:43:13Z,0.0766

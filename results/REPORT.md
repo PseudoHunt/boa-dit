@@ -43,3 +43,23 @@
   type alone at W4 <= 0.12 except mlp.fc2 (0.80); fc2 per block: every block <= 0.009 except **block 27 (0.77)**.
   Keeping block 27 fc2's top-10 gate-energy rows in FP brings it to < 5e-5. A handful of gated rows in the last
   block's fc2 decide the whole image, which is exactly the row-level gate structure this POC weights for.
+
+## 2026-10-25 — Stage 2: Gate 2 STOP (deferred) -> pre-registered Gate 2b running
+- Gate 2 (`results/gate2.md`): W4 `full` vs `uniform` **-11.7%** (worse; paired 95% CI [-17.0%, -6.9%]); W3 **+6.5%**
+  (CI [5.1%, 8.0%], below the 10% bar). Verdict STOP per handoff 5.5 (worse at one bit-width).
+- New baseline naming (RESPONSE item 3): pooled (equal branches, external baseline) / uniform (ablation) / full.
+  Pooled rel. MSE: W4 0.0925, W3 0.4226. Branch weighting alone (uniform vs pooled): +1.8% W4, +6.6% W3.
+  full vs pooled: -9.8% W4, +12.7% W3.
+- Gain: fp32 median-over-seeds approved; `results/stage1/gain.json` holds mean and median curves; 23 bifurcation
+  steps (mean/median > 3), all within steps 2-28.
+- Headline diagnostic: the gain weight is very peaked (81.0% on steps 0-14, 3.5% on steps 25-49).
+- Gate 2b pre-registered in `results/gate2b.md` (commit 6a01d0a, before any arm ran) and running under
+  `scripts/run_gate2b.py`. Projected cost ~1.65 GPU-h > 1.5 cap, so arms run in a fixed priority order
+  (tau-selection, d, e, a, c, b, f) with 0.21 GPU-h reserved for the W3 rerun; arms that would breach the cap are
+  recorded "not run (cap)".
+- GPU-hours to date: see gpu_hours.csv (about 2.8 before Gate 2b).
+- **Decision needed from a human:** the two RESPONSEs conflict on the guard arms. The first says to run guard arms
+  (+ row attribution) at W4 before any STOP; the second pre-registers a closed set and says "no further arms after this
+  set". I followed the second: guard arms and row attribution are NOT run. Note: row attribution as specified (swap
+  each of 112 layers back to FP, 64 seeds each) costs ~1 GPU-hour, not ~10 min. Please say whether guard arms
+  should run if Gate 2b ends in STOP.
