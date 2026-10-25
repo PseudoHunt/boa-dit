@@ -1,0 +1,94 @@
+{
+ "verify": {
+  "max_rel_fp32": 1.459086774957541e-06,
+  "max_rel_fp16_last_block": 0.0010731014190241694,
+  "tolerance": 0.001,
+  "blocks_checked": [
+   0,
+   2,
+   13,
+   27
+  ],
+  "kernel_window": "s0-4"
+ },
+ "bench": {
+  "batch_rows": 16,
+  "dtype": "fp16",
+  "notes": "ms are for the whole batch of rows; divide by rows for per-row",
+  "per_N": {
+   "256": {
+    "ms_block_attention_sublayer": {
+     "full attention (fused SDPA)": 0.14233599603176117,
+     "V1 dense stored map": 0.16486400365829468,
+     "V3 conv (31x31 depthwise)": 0.3246079981327057
+    },
+    "ms_core_only": {
+     "SDPA": 0.050175998359918594,
+     "V1 P@V": 0.10444799810647964,
+     "V3 conv": 0.23347200453281403
+    },
+    "gflops_per_row_attention_sublayer": {
+     "full attention": 3.02514176,
+     "V1 dense stored map": 1.50994944,
+     "V3 conv (direct)": 1.92577536
+    },
+    "stored_map_bytes_per_block_branch_step": {
+     "V1": 2097152,
+     "V3": 30752
+    }
+   },
+   "1024": {
+    "ms_block_attention_sublayer": {
+     "full attention (fused SDPA)": 0.14950400590896606,
+     "V1 dense stored map": 0.159743994474411,
+     "V3 conv (31x31 depthwise)": 0.3031040132045746
+    },
+    "ms_core_only": {
+     "SDPA": 0.050175998359918594,
+     "V1 P@V": 0.10444799810647964,
+     "V3 conv": 0.22732800245285034
+    },
+    "gflops_per_row_attention_sublayer": {
+     "full attention": 15.787360256,
+     "V1 dense stored map": 7.851737088,
+     "V3 conv (direct)": 7.70310144
+    },
+    "stored_map_bytes_per_block_branch_step": {
+     "V1": 33554432,
+     "V3": 30752
+    }
+   },
+   "4096": {
+    "ms_block_attention_sublayer": {
+     "full attention (fused SDPA)": 0.17510400712490082,
+     "V1 dense stored map": 0.1658879965543747,
+     "V3 conv (31x31 depthwise)": 0.2877439856529236
+    },
+    "ms_core_only": {
+     "SDPA": 0.04710400104522705,
+     "V1 P@V": 0.10342399775981903,
+     "V3 conv": 0.21401600539684296
+    },
+    "gflops_per_row_attention_sublayer": {
+     "full attention": 122.13813248,
+     "V1 dense stored map": 60.3979776,
+     "V3 conv (direct)": 30.81240576
+    },
+    "stored_map_bytes_per_block_branch_step": {
+     "V1": 536870912,
+     "V3": 30752
+    }
+   }
+  }
+ },
+ "stage": "attn_share",
+ "run": "convpath_verify_bench",
+ "device": "cuda:1",
+ "config": {
+  "device": "cuda:1"
+ },
+ "git_sha": "594ae5dba8ecf300a08f97fb3c3a0bb85964423a",
+ "start_utc": "2026-10-25T12:46:39Z",
+ "wall_s": 46.50556468963623,
+ "gpu_hours": 0.012918212413787843
+}
