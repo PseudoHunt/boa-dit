@@ -104,3 +104,5 @@ attn_share,latency,cuda:1,2026-10-25T12:45:47Z,2026-10-25T12:46:35Z,0.0134
 attn_share,convpath_verify_bench,cuda:1,2026-10-25T12:46:39Z,2026-10-25T12:47:26Z,0.0129
 attn_share,latency,cuda:1,2026-10-25T12:48:18Z,2026-10-25T12:49:06Z,0.0133
 attn_share,convpath_verify_bench,cuda:1,2026-10-25T12:49:09Z,2026-10-25T12:49:56Z,0.0129
+attn_share,pixart_stats_estimate(FAILED),cuda:0,2026-10-25T13:21:02Z,2026-10-25T13:21:38Z,0.0101
+attn_share,pixart_stats_estimate,cuda:0,2026-10-25T13:21:57Z,2026-10-25T13:22:30Z,0.0092
