@@ -1,0 +1,9 @@
+{
+ "frac_share_below_0.3": 0.4107142857142857,
+ "stop": false,
+ "r_star": 8,
+ "n_high_share": 22,
+ "mechanism_pass": false,
+ "frac_high_share_cos_ge_0.9": 0.045454545454545456,
+ "verdict": "PASS (G2 proceeds)"
+}
