@@ -131,3 +131,4 @@ deflate,fid2000_deflate_dc_r1_w3,cuda:1,2026-10-25T14:47:18Z,2026-10-25T15:09:56
 gateA,eval_static-8_w4,cuda:0,2026-10-25T15:08:41Z,2026-10-25T15:13:53Z,0.0865
 gateA,lowrank_build_w3,cuda:0,2026-10-25T15:13:57Z,2026-10-25T15:15:23Z,0.0238
 deflate,quant_deflate_c_rstar_w3,cuda:1,2026-10-25T15:10:19Z,2026-10-25T15:15:31Z,0.0868
+gateA,eval_static-8_w3,cuda:0,2026-10-25T15:15:32Z,2026-10-25T15:20:43Z,0.0864
