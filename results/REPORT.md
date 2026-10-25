@@ -196,3 +196,12 @@
 - Verdict as far as measured (`results/prior/rule.md`, generated): criterion 1 fails (A1 removes 6.5% [3.0, 11.1] of the W4
   error; V restoration, A4, removes 25.0%), criterion 2 fails (shared fraction 0.04–0.18 in blocks 0–4, buckets 0–2; B2 latent
   equal to base). STOP before Part C. Not run: FID-2k/labels for A1/A4/A6/base, B2 FID, B2 variants; SUMMARY.md not written.
+
+## 2026-10-25 — Feasibility Part V (VAR-d30, ImageNet 256) done
+- Rule: `results/feasibility/rule.md` (pre-registered). Summary: `results/feasibility/var/SUMMARY.md`.
+- Label accuracy (1,000 matched images): full 93.7% (FID-1k 47.84), oracle-25 94.9% (FID-1k 47.56), positional-25 93.2% (FID-1k 48.33), random-25 78.5% (FID-1k 60.44);
+  stock (fused SDPA) 94.8% (FID-1k 47.89).
+- Verdict: headroom yes (oracle-25 is harmless); positional-25 is 1.7 points below oracle with overlapping CIs, which is
+  neither "room for a selector" (needs ≥ 3 points, non-overlapping) nor "captured by the fixed rule" (≤ 1.5).
+- Deviations: batch 16 (memory); per-batch seeds (VAR API); stock uses fused SDPA, so token identity is impossible; all arms
+  share one explicit path, and the stock arm confirms statistical equivalence.

@@ -162,3 +162,4 @@ feas_var,arm_full,cuda:0,2026-10-25T16:50:36Z,2026-10-25T16:52:50Z,0.0370
 feas_video,arm_stock,cuda:1,2026-10-25T16:50:07Z,2026-10-25T16:53:14Z,0.0518
 feas_var,arm_oracle25,cuda:0,2026-10-25T16:52:50Z,2026-10-25T16:56:39Z,0.0637
 feas_var,arm_positional25,cuda:0,2026-10-25T16:56:39Z,2026-10-25T16:58:47Z,0.0355
+feas_var,arm_random25,cuda:0,2026-10-25T16:58:47Z,2026-10-25T17:01:13Z,0.0406
