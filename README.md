@@ -28,8 +28,11 @@ does not touch quantization.
 | `scripts/make_*.py` | regenerate every results table from the JSONs (no hand-typed numbers) |
 
 ## Reproducing
-`git clone --recursive`, then `pip install -r requirements.txt`. The DiT-XL/2-256 weights and the ADM reference batch
-are downloaded on first use. Each module is run as `python -m boa_dit.<module> --help` (see its docstring); each
+`git clone --recursive`, then `pip install -r requirements.txt`. The DiT-XL/2-256 weights download on first use. For FID,
+put the ADM reference batch at `ckpt/VIRTUAL_imagenet256_labeled.npz`
+(https://openaipublic.blob.core.windows.net/diffusion/jul-2021/ref_batches/imagenet/256/VIRTUAL_imagenet256_labeled.npz),
+then run `python -m boa_dit.eval_fid --ref` once to cache its Inception statistics. Checkpoints and `.npz` files
+are not in git. Each module is run as `python -m boa_dit.<module> --help` (see its docstring); each
 results JSON stores the exact config it was produced with (`config`, `git_sha`). Known host issue: GPU
 peer-to-peer copies were silently wrong on the original machine, so every checkpoint load goes through CPU and is
 checked tensor by tensor (`model.load_quant_state`).
