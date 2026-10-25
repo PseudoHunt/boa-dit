@@ -58,6 +58,7 @@ def main():
     ap.add_argument("--n", type=int, default=512)
     ap.add_argument("--stage", default="stage2")
     ap.add_argument("--seed_start", type=int, default=0, help="0 = eval seeds; 1032 = held-out calibration seeds")
+    ap.add_argument("--carry", action="store_true", help="attach results/deflate/quant/<name>/carry.pt (deflate arms)")
     a = ap.parse_args()
     dev = a.device
     seeds = list(range(a.seed_start, a.seed_start + a.n))
@@ -68,6 +69,9 @@ def main():
     with Run(a.stage, f"eval_latent_{a.name}", dev, vars(a)) as run:
         model, diffusion = load_dit(dev), make_diffusion(50)
         load_quant_state(model, os.path.join(CKPT_DIR, f"ckpt_{a.name}", "model.pt"))
+        if a.carry:
+            from boa_dit.deflate.carry import install_from
+            install_from(model, a.name)
         part = os.path.join(CKPT_DIR, f"ckpt_{a.name}", f"eval_latents_{a.seed_start}_{a.n}.partial")
         xq = sample_seeds(model, diffusion, seeds, 1.5, 32, partial=part, resume=True)
         rel, mse, psnr = per_image(xq, xf)

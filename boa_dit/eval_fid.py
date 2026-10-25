@@ -44,7 +44,7 @@ def compute_ref(device):
 
 
 @torch.no_grad()
-def generate_and_score(name, n, device, bs=32, stage="stage2"):
+def generate_and_score(name, n, device, bs=32, stage="stage2", carry=False, grid=None):
     """FID-n of model `name` ('fp' or ckpt/ckpt_<name>/model.pt). Seeds 0..n-1, cfg 1.5, DDIM-50."""
     from boa_dit.model import decode, load_dit, load_quant_state, load_vae, make_diffusion
     from boa_dit.sample import sample_seeds
@@ -53,12 +53,19 @@ def generate_and_score(name, n, device, bs=32, stage="stage2"):
     os.makedirs(cdir, exist_ok=True)
     if name != "fp":
         load_quant_state(model, os.path.join(cdir, "model.pt"))
+    if carry:
+        from boa_dit.deflate.carry import install_from
+        install_from(model, name)
     part = os.path.join(cdir, f"fid{n}_latents.partial")
     x = sample_seeds(model, diffusion, list(range(n)), 1.5, bs, partial=part, resume=True)
     del model
     torch.cuda.empty_cache()
     vae = load_vae(device)
-    imgs = decode(vae, x.to(device)).permute(0, 2, 3, 1).numpy()       # NHWC uint8
+    imgs_t = decode(vae, x.to(device))
+    if grid:
+        from boa_dit.common import atomic_torch_save
+        atomic_torch_save(imgs_t[:16].clone(), grid)
+    imgs = imgs_t.permute(0, 2, 3, 1).numpy()       # NHWC uint8
     del vae
     mu, sigma = inception_stats(imgs, device)
     ref = np.load(REF_STATS)
@@ -73,6 +80,8 @@ def main():
     ap.add_argument("--n", type=int, default=2000)
     ap.add_argument("--stage", default="stage2")
     ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--carry", action="store_true", help="attach results/deflate/quant/<name>/carry.pt")
+    ap.add_argument("--grid", default=None, help="save the first 16 decoded images (uint8) to this path")
     args = ap.parse_args()
     if args.ref:
         with Run("stage0", "fid_ref_stats", args.device, vars(args)) as run:
@@ -82,7 +91,7 @@ def main():
         print(rec)
     if args.name:
         with Run(args.stage, f"fid{args.n}_{args.name}", args.device, vars(args)) as run:
-            fid = generate_and_score(args.name, args.n, args.device, stage=args.stage)
+            fid = generate_and_score(args.name, args.n, args.device, stage=args.stage, carry=args.carry, grid=args.grid)
             rec = {"name": args.name, "n": args.n, "fid": fid, **run.record()}
         atomic_write_json(os.path.join(RESULTS, args.stage, "eval", f"fid{args.n}_{args.name}.json"), rec)
         print(rec)
