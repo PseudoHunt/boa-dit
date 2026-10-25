@@ -87,3 +87,4 @@ attn_share,gate2_k15,cuda:1,2026-10-25T10:31:27Z,2026-10-25T10:50:32Z,0.3180
 attn_share,gate2_k15-sel,cuda:0,2026-10-25T10:43:07Z,2026-10-25T11:02:54Z,0.3297
 attn_share,gate2_k5,cuda:1,2026-10-25T10:50:36Z,2026-10-25T11:09:31Z,0.3154
 attn_share,gate2_k10-onemap,cuda:0,2026-10-25T11:02:58Z,2026-10-25T11:22:08Z,0.3193
+attn_share,gate2_k10-uniform,cuda:1,2026-10-25T11:09:36Z,2026-10-25T11:28:34Z,0.3162
