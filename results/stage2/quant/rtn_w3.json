@@ -1,0 +1,30 @@
+{
+ "name": "rtn_w3",
+ "blocks": {},
+ "quant_wall_s": 0.9279937744140625,
+ "stage": "stage2",
+ "run": "quant_rtn_w3",
+ "device": "cuda:0",
+ "config": {
+  "bits": 3,
+  "weighting": "rtn",
+  "K": 4,
+  "lam": 1.0,
+  "branch": "cfg",
+  "gain_tag": "gain_iso_rho0.01",
+  "gain_stat": "mean",
+  "adaln_bits": 8,
+  "groupsize": -1,
+  "n_calib": 32,
+  "blocks": 28,
+  "cfg": 1.5,
+  "buckets": 10,
+  "device": "cuda:0",
+  "resume": true,
+  "suffix": ""
+ },
+ "git_sha": "354577dde50512d6e56d7fab8b85b9af6363f779",
+ "start_utc": "2026-10-25T06:43:37Z",
+ "wall_s": 2.2541821002960205,
+ "gpu_hours": 0.0006261616945266724
+}
