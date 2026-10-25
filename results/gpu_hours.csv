@@ -27,3 +27,4 @@ stage2,rtn_w4_diagnostics(estimate: 3 ad-hoc scripts; not auto-logged),cuda:1,20
 stage2,eval_latent_uniform_w3_K1_lam1_brcfg,cuda:0,2026-10-25T06:55:22Z,2026-10-25T06:59:56Z,0.0764
 stage2,quant_full_w3_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian,cuda:1,2026-10-25T06:55:01Z,2026-10-25T07:04:36Z,0.1599
 stage2,quant_uniform_w4_K1_lam1_brcfg,cuda:0,2026-10-25T07:00:14Z,2026-10-25T07:06:50Z,0.1100
+stage2,eval_latent_full_w3_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian,cuda:1,2026-10-25T07:04:40Z,2026-10-25T07:09:13Z,0.0760
