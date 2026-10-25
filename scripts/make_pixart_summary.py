@@ -25,6 +25,8 @@ L = ["# PixArt-Σ 1024 (4096 tokens, text-conditioned): early self-attention dia
      f"| B: diff-/same-prompt within ratio ≥ 0.9 | in {100 * v['B_frac_ratio_ge_0.9']:.1f}% of triples (median {v['B_ratio_median']:.3f}) | ≥ 70% | {v['B']} |",
      f"| C: floor-subtracted 95% residual square | median {v['C_side_min_median']:.0f} tokens; ≤ 21 in {100 * v['C_frac_side_le_21']:.1f}% | "
      f"median ≤ 13, ≥ 90% ≤ 21 | {v['C']} |",
+     (f"| C (dated addendum): truncation K_min, cosine ≥ 0.98 | median {v['C_addendum']['K_min_median']}, p90 "
+      f"{v['C_addendum']['K_min_p90']} | median ≤ 13, p90 ≤ 21 | {v['C_addendum']['holds']} |" if "C_addendum" in v else ""),
      f"\ns_max = {v['s_max']} (agreement holds at steps 0–{v['s_max_contiguous']} of 20).\n",
      "## What it means\n",
      f"- **Prompt-independence survives text conditioning.** Early self-attention rows agree across different prompts as "

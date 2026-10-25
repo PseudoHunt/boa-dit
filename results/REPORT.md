@@ -153,3 +153,19 @@
   in fp16 (transformers 5 ignored `torch_dtype`); prompt encoding under no_grad.
 - All heavy processes are stopped. The instance can be shut down after this push. Not in git: ckpt/ (BoA checkpoints, PixArt
   latents and kappa.pt, about 0.6 GB) and the PixArt weights in /home/jl_fs.
+
+## 2026-10-25 — Reviewer response: residual-kernel verdict held; truncation test
+- DiT-XL/2 (CPU, `kernel_truncation.json`, cond): median cosine to M at K = 3 / 9 / 13 / 21 / 31(full) =
+  0.902 / 0.957 / 0.967 / 0.974 / 0.979. K_min (cosine ≥ 0.98) ≤ 9 in 30%, ≤ 15 in 34%,
+  ≤ 21 in 41%; 52% never reach 0.98 even with the full kernel (bimodal). Residual low-frequency
+  energy ≥ 0.9 in 27%.
+- Functional check (k = 10, 32 seeds, rel. latent MSE): per-step maps 0.0161 (the earlier 0.016 was this arm,
+  not V3), V3 full kernel 0.0219, two-part K = 15 0.0279, K = 9 0.0286, uniform 0.2636.
+  In image space the residual is close to compact; the cosine-based K_min is limited by the kernel form's own fit.
+- PixArt-Σ (GPU rerun, mean maps were not stored; κ reproduced to 8.8e-07): full-kernel cosine median
+  0.923; K_min median none, p90 none → C fails under the dated addendum as well (the addendum was written
+  after the first results; see gate.md). Residual low-frequency energy ≥ 0.9 in 79%. Overall PixArt verdict unchanged
+  (STOP; A failed).
+- Uniform control (Gate 2): k10 +20.97 FID-2k, −21.7 label-accuracy points; no k15 uniform arm was run. Recorded in
+  SUMMARY.md: the floor alone does not work.
+- GPU: truncation smoke 0.02 h (plus one 0.02 h failed attempt), PixArt rerun 0.05 h.

@@ -144,6 +144,18 @@ def main():
              f"Robustness, floor = median κ: median side {v['C_side_median_floor_median']:.0f}, ≤ 21 in "
              f"{v['C_frac_side_le_21_median_floor']:.3f}. Floor share of κ's mass: median {v['floor_share_min_median']:.2f} (min floor), "
              f"{v['floor_share_median_median']:.2f} (median floor).")
+    tr = load("truncation.json")
+    if tr:
+        v["C_addendum"] = {"K_min_median": tr["K_min_median"], "K_min_p90": tr["K_min_p90"], "holds": tr["C_holds_under_addendum"]}
+        atomic_write_json(os.path.join(OUT, "verdict.json"), v)
+        L.append(f"- **C under the dated addendum** (truncation K_min, cosine ≥ 0.98; `truncation.json`): median K_min "
+                 f"**{tr['K_min_median']}**, p90 **{tr['K_min_p90']}** (needs ≤ 13 / ≤ 21) → **C {tr['C_holds_under_addendum']}**. "
+                 f"K_min ≤ 13 in {100 * tr['frac_K_min_le_13']:.1f}% of kernels; even the full 127 × 127 kernel stays below 0.98 "
+                 f"in {100 * tr['frac_full_kernel_below_thr']:.0f}% (median full-kernel cosine {tr['full_kernel_cos_median']:.3f}). "
+                 "Median cosine by K: " + ", ".join(f"{k}: {c:.3f}" for k, c in tr["cos_median_per_K"].items()) +
+                 f". The residual is smooth (low-frequency energy ≥ 0.9 in {100 * tr['frac_lowfreq_ge_0.9']:.0f}% of kernels). "
+                 f"The rerun reproduced the stored κ to {tr['kappa_reproduction_max_rel_diff']:.1e}. Secondary, pre-registered "
+                 f"95%-mass side: median {v['C_side_min_median']:.0f}.")
     L.append(f"- s_max = **{v['s_max']}** (contiguous from 0: {v['s_max_contiguous']}).")
     L.append(f"\n**{v['verdict']}**\n")
     fr = v["frac_pairs_within_ge_0.8_per_step"]

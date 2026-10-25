@@ -108,7 +108,9 @@ def main():
                  "exist yet**; it is a prerequisite for the PixArt-Σ step, along with bounded kernel support.\n")
     kr = load("kernel_residual_support.json")
     if kr:
-        L.append("## Residual-kernel support (floor removed)\n")
+        L.append("## Residual-kernel support: 95%-mass metric (held by the reviewer, superseded by the truncation test below)\n")
+        L.append("The reviewer held this verdict. Most of the kernel's cells lie outside 15 × 15, and each is averaged over few "
+                 "token pairs and clipped to non-negative noise, which inflates the 95%-mass side. Kept for the record.\n")
         L.append("From the saved V3 kernels (`artifacts/V3_kernels_k20.pt`), per (block, head, window), k = 20; "
                  "κ_res = (κ − floor)₊; side = smallest centered square holding 95% of κ_res's mass (full = 31). "
                  "Rule: compact iff median side ≤ 9 and ≥ 90% of kernels ≤ 15. Source: `kernel_residual_support.json`.\n")
@@ -119,9 +121,39 @@ def main():
                 L.append(f"| {br} | {how}(κ) | {100 * r['floor_share_median']:.0f}% [{100 * r['floor_share_p10']:.0f}, "
                          f"{100 * r['floor_share_p90']:.0f}] | {r['side_median']:.0f} | {100 * r['frac_side_le_9']:.1f}% | "
                          f"{100 * r['frac_side_le_15']:.1f}% | {100 * r['frac_side_31']:.1f}% | {r['verdict']} |")
-        L.append(f"\n**Verdict: {kr['verdict']}.** It holds whether the floor is the minimum or the median of κ. On DiT-XL/2 "
+        L.append(f"\nUnder this (held) metric: {kr['verdict']}. That reading holds whether the floor is the minimum or the median of κ. On DiT-XL/2 "
                  "at 256 px, the non-uniform part of early attention is spread over the whole 16×16 grid, not concentrated "
-                 "in a small window. A \"global mean of V + small convolution\" form does not reproduce these maps here.\n")
+                 "in a small window. The functional truncation test below qualifies this.\n")
+    kt, sm = load("kernel_truncation.json"), load("truncation_smoke.json")
+    if kt:
+        L.append("## Truncation test (two-part kernel: least-squares floor + residual inside K × K)\n")
+        L.append("Per (window, block, head): f_K = mean of κ outside the centered K × K square; κ_K = κ inside, f_K outside; "
+                 "rebuild the row-normalized map and take its cosine to M (median over rows). K_min = smallest K with "
+                 "cosine ≥ 0.98. `kernel_truncation.json`.\n")
+        L.append("| branch | median cosine K = 3 / 9 / 13 / 21 / 31 (full) | K_min median / p90 | K_min ≤ 9 | ≤ 15 | ≤ 21 | "
+                 "full kernel < 0.98 | K_min within 0.005 of full (median) | residual low-freq ≥ 0.9 |")
+        L.append("| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |")
+        for br, r in kt["per_branch"].items():
+            cm = r["cos_median_per_K"]
+            L.append(f"| {br} | {' / '.join(f'{cm[k]:.3f}' for k in ('3', '9', '13', '21', '31'))} | {r['K_min_median']} / "
+                     f"{r['K_min_p90']} | {100 * r['frac_K_min_le_9']:.0f}% | {100 * r['frac_K_min_le_15']:.0f}% | "
+                     f"{100 * r['frac_K_min_le_21']:.0f}% | {100 * r['frac_full_kernel_below_thr']:.0f}% | {r['K_min_rel_median']:.0f} | "
+                     f"{100 * r['frac_lowfreq_ge_0.9']:.0f}% |")
+        L.append("\nThe distribution is bimodal. About 30% of kernels reach 0.98 with K ≤ 9, most already at K = 3. About half "
+                 "never reach 0.98 even with the full kernel, whose median cosine sits at the threshold. So an absolute 0.98 "
+                 "bar mostly measures the kernel form's own fit, not truncation.\n")
+    if sm:
+        a = sm["arms"]
+        L.append("**Functional check** (`truncation_smoke.json`; k = 10, seeds 0–31, rel. latent MSE vs FP): "
+                 f"per-step maps {a['V1_perstep']['rel_mse_mean']:.4f}; V3 full 31 × 31 kernel {a['V3_full']['rel_mse_mean']:.4f}; "
+                 f"two-part K = 15 {a['two_part_K15']['rel_mse_mean']:.4f}; two-part K = 9 {a['two_part_K9']['rel_mse_mean']:.4f}; "
+                 f"uniform {a['uniform']['rel_mse_mean']:.4f}. In image space, a floor plus a 9 × 9 residual is close to the full "
+                 f"kernel ({a['two_part_K9']['rel_mse_mean'] - a['V3_full']['rel_mse_mean']:+.4f}), while the floor alone is not "
+                 f"({a['uniform']['rel_mse_mean'] - a['V3_full']['rel_mse_mean']:+.4f}). Not FID-checked.\n")
+    if ev.get("k10-uniform"):
+        L.append(f"**The floor alone does not work; the residual is required.** The uniform-map control at k10 scored "
+                 f"{ev['k10-uniform']['fid2k'] - fp:+.2f} FID-2k and {100 * (load('eval/label_acc_k10-uniform.json')['label_acc_512'] - ev['fp']['label_acc_512']):+.1f} "
+                 "label-accuracy points against FP, far outside the k10 bar of +1.0 (no k15 uniform arm was run).\n")
     L.append("## Not verified\n")
     L.append("- Text-to-image models (PixArt-Σ): text cross-attention and prompts may change how image-independent "
              "early self-attention is.")

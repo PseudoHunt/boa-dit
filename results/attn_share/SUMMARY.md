@@ -32,7 +32,9 @@ Open risk for that step: at 256 px the V3 kernel is not compact. The smallest ce
 
 Per-block microbenchmarks (`compute.md` §5; synthetic inputs, A30): at N = 4096 a dense stored map applied to all rows takes 11.1 ms vs 27.3 ms for fused attention, but needs 537 MB per block-step. The V3 convolution takes 783 ms in PyTorch/cuDNN. **A fast kernel-form implementation does not exist yet**; it is a prerequisite for the PixArt-Σ step, along with bounded kernel support.
 
-## Residual-kernel support (floor removed)
+## Residual-kernel support: 95%-mass metric (held by the reviewer, superseded by the truncation test below)
+
+The reviewer held this verdict. Most of the kernel's cells lie outside 15 × 15, and each is averaged over few token pairs and clipped to non-negative noise, which inflates the 95%-mass side. Kept for the record.
 
 From the saved V3 kernels (`artifacts/V3_kernels_k20.pt`), per (block, head, window), k = 20; κ_res = (κ − floor)₊; side = smallest centered square holding 95% of κ_res's mass (full = 31). Rule: compact iff median side ≤ 9 and ≥ 90% of kernels ≤ 15. Source: `kernel_residual_support.json`.
 
@@ -43,7 +45,22 @@ From the saved V3 kernels (`artifacts/V3_kernels_k20.pt`), per (block, head, win
 | uncond | min(κ) | 39% [0, 87] | 31 | 0.3% | 0.3% | 97.9% | residual not compact |
 | uncond | median(κ) | 85% [14, 100] | 31 | 0.3% | 0.3% | 91.4% | residual not compact |
 
-**Verdict: residual not compact.** It holds whether the floor is the minimum or the median of κ. On DiT-XL/2 at 256 px, the non-uniform part of early attention is spread over the whole 16×16 grid, not concentrated in a small window. A "global mean of V + small convolution" form does not reproduce these maps here.
+Under this (held) metric: residual not compact. That reading holds whether the floor is the minimum or the median of κ. On DiT-XL/2 at 256 px, the non-uniform part of early attention is spread over the whole 16×16 grid, not concentrated in a small window. The functional truncation test below qualifies this.
+
+## Truncation test (two-part kernel: least-squares floor + residual inside K × K)
+
+Per (window, block, head): f_K = mean of κ outside the centered K × K square; κ_K = κ inside, f_K outside; rebuild the row-normalized map and take its cosine to M (median over rows). K_min = smallest K with cosine ≥ 0.98. `kernel_truncation.json`.
+
+| branch | median cosine K = 3 / 9 / 13 / 21 / 31 (full) | K_min median / p90 | K_min ≤ 9 | ≤ 15 | ≤ 21 | full kernel < 0.98 | K_min within 0.005 of full (median) | residual low-freq ≥ 0.9 |
+| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| cond | 0.902 / 0.957 / 0.967 / 0.974 / 0.979 | none / none | 30% | 34% | 41% | 52% | 21 | 27% |
+| uncond | 0.916 / 0.960 / 0.969 / 0.976 / 0.982 | 31.0 / none | 32% | 37% | 44% | 46% | 21 | 29% |
+
+The distribution is bimodal. About 30% of kernels reach 0.98 with K ≤ 9, most already at K = 3. About half never reach 0.98 even with the full kernel, whose median cosine sits at the threshold. So an absolute 0.98 bar mostly measures the kernel form's own fit, not truncation.
+
+**Functional check** (`truncation_smoke.json`; k = 10, seeds 0–31, rel. latent MSE vs FP): per-step maps 0.0161; V3 full 31 × 31 kernel 0.0219; two-part K = 15 0.0279; two-part K = 9 0.0286; uniform 0.2636. In image space, a floor plus a 9 × 9 residual is close to the full kernel (+0.0067), while the floor alone is not (+0.2417). Not FID-checked.
+
+**The floor alone does not work; the residual is required.** The uniform-map control at k10 scored +20.97 FID-2k and -21.7 label-accuracy points against FP, far outside the k10 bar of +1.0 (no k15 uniform arm was run).
 
 ## Not verified
 
