@@ -130,16 +130,16 @@
   "iters": 30,
   "timings": {
    "baseline (fused SDPA)": {
-    "median_ms": 23.578624725341797,
-    "min_ms": 23.429119110107422
+    "median_ms": 315.5077209472656,
+    "min_ms": 314.608642578125
    },
    "explicit softmax (no sharing)": {
-    "median_ms": 106.65164947509766,
-    "min_ms": 105.89695739746094
+    "median_ms": 403.9516296386719,
+    "min_ms": 402.40948486328125
    },
    "shared map, V-only projection": {
-    "median_ms": 38.43379211425781,
-    "min_ms": 37.99244689941406
+    "median_ms": 318.6411437988281,
+    "min_ms": 317.62738037109375
    }
   },
   "stage": "attn_share",
@@ -150,9 +150,9 @@
    "device": "cuda:1",
    "k": "10,15,20"
   },
-  "git_sha": "594ae5dba8ecf300a08f97fb3c3a0bb85964423a",
-  "start_utc": "2026-10-25T12:45:47Z",
-  "wall_s": 48.300458669662476,
-  "gpu_hours": 0.013416794074906244
+  "git_sha": "810b7e2d3b6d945642ad678d41efd87e646d7825",
+  "start_utc": "2026-10-25T12:48:18Z",
+  "wall_s": 47.85337233543396,
+  "gpu_hours": 0.013292603426509434
  }
 }

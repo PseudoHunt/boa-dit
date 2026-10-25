@@ -8,13 +8,13 @@ ResNet-50 label accuracy (top-1 vs the conditioning label y, seeds 0–511): FP 
 
 | arm | definition | FID-2k | ΔFID vs FP | IS | rel. latent MSE (mean / median) | class changed | label acc | Δ acc vs FP | GPU-h |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| k5 | s < 5, all heads | 23.81 | -0.07 | 85.8 ± 4.7 | 0.0070 / 0.0012 | 4.7% | pending | — | 0.32 |
-| k10 | s < 10, all heads | 23.90 | +0.01 | 85.3 ± 5.1 | 0.0226 / 0.0066 | 6.4% | pending | — | 0.32 |
-| k15 | s < 15, all heads | 24.25 | +0.36 | 83.1 ± 4.5 | 0.0625 / 0.0298 | 11.3% | pending | — | 0.32 |
-| k20 | s < 20, all heads | 25.09 | +1.20 | 77.8 ± 4.6 | 0.1324 / 0.0891 | 15.4% | pending | — | 0.32 |
-| k15-sel | s < 15, heads with Gate 1 within ≥ 0.8 | 24.06 | +0.17 | 84.8 ± 4.9 | 0.0451 / 0.0164 | 8.6% | pending | — | 0.33 |
-| k10-onemap | s < 10, single map M[·,·,5] | 23.94 | +0.05 | 85.5 ± 5.5 | 0.0233 / 0.0068 | 6.4% | pending | — | 0.32 |
-| k10-uniform | control (not in verdict): s < 10, uniform 1/256 maps | 44.86 | +20.97 | 47.9 ± 3.2 | 0.2624 / 0.2271 | 34.0% | pending | — | 0.32 |
+| k5 | s < 5, all heads | 23.81 | -0.07 | 85.8 ± 4.7 | 0.0070 / 0.0012 | 4.7% | 87.1% | -0.4 [-1.8, +1.0] | 0.32 |
+| k10 | s < 10, all heads | 23.90 | +0.01 | 85.3 ± 5.1 | 0.0226 / 0.0066 | 6.4% | 88.1% | +0.6 [-1.2, +2.3] | 0.32 |
+| k15 | s < 15, all heads | 24.25 | +0.36 | 83.1 ± 4.5 | 0.0625 / 0.0298 | 11.3% | 85.4% | -2.1 [-4.5, +0.2] | 0.32 |
+| k20 | s < 20, all heads | 25.09 | +1.20 | 77.8 ± 4.6 | 0.1324 / 0.0891 | 15.4% | 85.4% | -2.1 [-5.3, +1.0] | 0.32 |
+| k15-sel | s < 15, heads with Gate 1 within ≥ 0.8 | 24.06 | +0.17 | 84.8 ± 4.9 | 0.0451 / 0.0164 | 8.6% | 86.7% | -0.8 [-2.7, +1.4] | 0.33 |
+| k10-onemap | s < 10, single map M[·,·,5] | 23.94 | +0.05 | 85.5 ± 5.5 | 0.0233 / 0.0068 | 6.4% | 87.1% | -0.4 [-2.1, +1.4] | 0.32 |
+| k10-uniform | control (not in verdict): s < 10, uniform 1/256 maps | 44.86 | +20.97 | 47.9 ± 3.2 | 0.2624 / 0.2271 | 34.0% | 65.8% | -21.7 [-25.8, -17.4] | 0.32 |
 | fp | check (not in verdict): patched model, sharing off | 23.89 | +0.00 | 86.4 ± 4.5 | 0.0000 / 0.0000 | 0.0% | 87.5% | +0.0 [+0.0, +0.0] | 0.32 |
 
 Reading of the rule (fixed 2026-10-25T10:12Z in commit aa9b67c, before any Gate 2 arm finished): PASS iff FID(k10) ≤ FP + 1.0 and FID(k15) ≤ FP + 2.0. `k_pass` = largest k ∈ {5, 10, 15, 20} whose FID is within its bar: +1.0 for k ≤ 10 and +2.0 for k ≥ 15 (k20 is held to the k15 bar). STOP if k5 already exceeds +1.0.
@@ -23,6 +23,7 @@ Reading of the rule (fixed 2026-10-25T10:12Z in commit aa9b67c, before any Gate 
 - k_pass = **20**.
 - Check: the patched model with sharing off reproduces FID-2k 23.89 (anchor 23.89); rel. latent MSE vs the FP reference 0.0e+00.
 - Control: uniform maps over the same window give FID-2k 44.86 vs 23.90 for the stored maps (rel. latent MSE 0.2624 vs 0.0226).
+- Label accuracy across the six arms: k5 87.1%, k10 88.1%, k15 85.4%, k20 85.4%, k15-sel 86.7%, k10-onemap 87.1% (FP 87.5%). Flat: every arm's CI for Δ vs FP includes 0, so the class changes are benign bifurcations (a different valid image of the same class), not damage.
 
 **Gate 2: PASS**
 

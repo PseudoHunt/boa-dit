@@ -18,14 +18,14 @@
   "per_N": {
    "256": {
     "ms_block_attention_sublayer": {
-     "full attention (fused SDPA)": 0.14233599603176117,
-     "V1 dense stored map": 0.16486400365829468,
-     "V3 conv (31x31 depthwise)": 0.3246079981327057
+     "full attention (fused SDPA)": 0.8939520120620728,
+     "V1 dense stored map": 0.605184018611908,
+     "V3 conv (31x31 depthwise)": 19.497983932495117
     },
     "ms_core_only": {
-     "SDPA": 0.050175998359918594,
-     "V1 P@V": 0.10444799810647964,
-     "V3 conv": 0.23347200453281403
+     "SDPA": 0.13209599256515503,
+     "V1 P@V": 0.15564799308776855,
+     "V3 conv": 19.296255111694336
     },
     "gflops_per_row_attention_sublayer": {
      "full attention": 3.02514176,
@@ -39,14 +39,14 @@
    },
    "1024": {
     "ms_block_attention_sublayer": {
-     "full attention (fused SDPA)": 0.14950400590896606,
-     "V1 dense stored map": 0.159743994474411,
-     "V3 conv (31x31 depthwise)": 0.3031040132045746
+     "full attention (fused SDPA)": 3.1692800521850586,
+     "V1 dense stored map": 1.7192959785461426,
+     "V3 conv (31x31 depthwise)": 145.227783203125
     },
     "ms_core_only": {
-     "SDPA": 0.050175998359918594,
-     "V1 P@V": 0.10444799810647964,
-     "V3 conv": 0.22732800245285034
+     "SDPA": 1.1991039514541626,
+     "V1 P@V": 0.7413759827613831,
+     "V3 conv": 144.5191650390625
     },
     "gflops_per_row_attention_sublayer": {
      "full attention": 15.787360256,
@@ -60,14 +60,14 @@
    },
    "4096": {
     "ms_block_attention_sublayer": {
-     "full attention (fused SDPA)": 0.17510400712490082,
-     "V1 dense stored map": 0.1658879965543747,
-     "V3 conv (31x31 depthwise)": 0.2877439856529236
+     "full attention (fused SDPA)": 27.254783630371094,
+     "V1 dense stored map": 11.112447738647461,
+     "V3 conv (31x31 depthwise)": 783.33544921875
     },
     "ms_core_only": {
-     "SDPA": 0.04710400104522705,
-     "V1 P@V": 0.10342399775981903,
-     "V3 conv": 0.21401600539684296
+     "SDPA": 19.29523277282715,
+     "V1 P@V": 7.468031883239746,
+     "V3 conv": 780.49072265625
     },
     "gflops_per_row_attention_sublayer": {
      "full attention": 122.13813248,
@@ -87,8 +87,8 @@
  "config": {
   "device": "cuda:1"
  },
- "git_sha": "594ae5dba8ecf300a08f97fb3c3a0bb85964423a",
- "start_utc": "2026-10-25T12:46:39Z",
- "wall_s": 46.50556468963623,
- "gpu_hours": 0.012918212413787843
+ "git_sha": "810b7e2d3b6d945642ad678d41efd87e646d7825",
+ "start_utc": "2026-10-25T12:49:09Z",
+ "wall_s": 46.377294301986694,
+ "gpu_hours": 0.012882581750551859
 }

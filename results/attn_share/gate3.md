@@ -7,12 +7,15 @@ k_pass = **20**.
 | variant | what is stored | size | % of V1 | FID-2k | ΔFID vs V1 | rel. latent MSE vs FP | class changed |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | V1 | M for every (block, head, s < 20) | 2348.8 MB | 100% | 25.09 | — | 0.1324 | 15.4% |
-| V2 | one mean map per (block, head) per 5-step window | 469.8 MB | 20.0% | pending | — | — | — |
+| V2 | one mean map per (block, head) per 5-step window | 469.76 MB | 20.00% | 25.10 | +0.01 | 0.1331 | 14.8% |
 | V3 | 31×31 offset kernel per (block, head, window), row-normalized at use | 6.89 MB | 0.29% | 25.64 | +0.55 | 0.1539 | 16.0% |
-| V4 | top-32 entries per row of V1, renormalized (fp16 values + uint8 indices) | 440.4 MB | 18.8% | pending | — | — | — |
-| V5 | V1 with the cond map reused for the uncond branch | 1174.4 MB | 50.0% | pending | — | — | — |
+| V4 | top-32 entries per row of V1, renormalized (fp16 values + uint8 indices) | 440.40 MB | 18.75% | 78.45 | +53.36 | 1.2342 | 67.2% |
+| V5 | V1 with the cond map reused for the uncond branch | 1174.41 MB | 50.00% | 25.15 | +0.06 | 0.1336 | 15.6% |
 
 Size note, known before any Gate 3 arm ran: on its own, only V3 can meet the ≤ 10% size condition. V2 stores 4 maps instead of 20 (20%), and V4 stores 3 bytes for each of 32 of the 256 entries per row (18.8%). With V5's branch sharing applied, they would be 10% and 9.4%; that combination was not run unless it appears in the table. The rule is unchanged.
 
-**Gate 3: PENDING**
+Rule: PASS if any of V2–V4 is within +0.5 FID-2k of V1 at ≤ 10% of V1's size. Passing: none.
+V5 (branch sharing) ΔFID vs V1: +0.06.
+
+**Gate 3: STOP**
 

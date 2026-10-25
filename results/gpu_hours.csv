@@ -102,3 +102,5 @@ attn_share,gate3_V4_k20,cuda:1,2026-10-25T12:07:54Z,2026-10-25T12:26:41Z,0.3132
 attn_share,gate3_V5_k20,cuda:1,2026-10-25T12:26:45Z,2026-10-25T12:45:34Z,0.3137
 attn_share,latency,cuda:1,2026-10-25T12:45:47Z,2026-10-25T12:46:35Z,0.0134
 attn_share,convpath_verify_bench,cuda:1,2026-10-25T12:46:39Z,2026-10-25T12:47:26Z,0.0129
+attn_share,latency,cuda:1,2026-10-25T12:48:18Z,2026-10-25T12:49:06Z,0.0133
+attn_share,convpath_verify_bench,cuda:1,2026-10-25T12:49:09Z,2026-10-25T12:49:56Z,0.0129

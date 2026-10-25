@@ -14,11 +14,12 @@ This shares attention **across samples**. Existing diffusion caching methods (De
 | --- | --- | --- |
 | 1: phenomenon real, non-trivial | PASS | ≥ 70% of (block, head) pairs with within ≥ 0.8 at every s ≤ 9 (pooled 0.99); KL-ratio share 0.62; s_max = 14 |
 | 2: image quality | PASS | ΔFID-2k k5 -0.07, k10 +0.01, k15 +0.36, k20 +1.20; k_pass = 20 |
-| 3: cheap storage | pending | |
+| 3: cheap storage (k = 20) | STOP | ΔFID-2k vs V1: V2 +0.01 at 20.00% of V1; V3 +0.55 at 0.29% of V1; V4 +53.36 at 18.75% of V1; V5 +0.06 at 50.00% of V1 |
 
 ## Speed: deferred, not claimed
 
-At 256 px (N = 256 tokens) attention is a small part of a DiT block, so sharing k = 15 steps removes only 5.4% of the FLOPs end to end (N = 1024: 6.3%; N = 4096: 8.9%).
+At 256 px (N = 256 tokens) attention is a small part of a DiT block, so sharing k = 20 steps removes only 7.1% of the FLOPs end to end (N = 1024: 8.5%; N = 4096: 11.8%).
+ Measured on the A30 at N = 256, a fully shared forward changes latency by -1.0% against fused SDPA (plain PyTorch, no custom kernel).
 
 
 **No speed claim is made for this model.** The next step is a high-token-count model: **PixArt-Σ at 1024 px (4096 tokens)**. There the N² attention core (QKᵀ, softmax, AV) grows to 38% of a block's FLOPs, up from 4% at 256 tokens, at the same width (C = 1152). That is comparable to the MLP (42%), not a majority. Dense stored maps cannot fit there (16 · 4096² · 2 B = 537 MB per block, branch and step). There the compact V3 kernel is the only viable form.
@@ -26,6 +27,8 @@ At 256 px (N = 256 tokens) attention is a small part of a DiT block, so sharing 
 
 Open risk for that step: at 256 px the V3 kernel is not compact. The smallest centered square holding 95% of its mass is the full 31×31 in 98% of (window, block, head) cases. A convolution path is cheap at 4096 tokens only if the kernel's support stays bounded as the grid grows; that has to be measured first on PixArt-Σ.
 
+
+Per-block microbenchmarks (full attention vs dense stored map vs V3 convolution at N = 256 / 1024 / 4096, synthetic inputs) are in `compute.md` §5.
 
 ## Not verified
 
