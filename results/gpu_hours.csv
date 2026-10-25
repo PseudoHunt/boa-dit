@@ -125,3 +125,4 @@ deflate,eval_latent_deflate_dc_r1_w4,cuda:0,2026-10-25T14:42:02Z,2026-10-25T14:4
 deflate,g1b,cuda:0,2026-10-25T14:47:42Z,2026-10-25T14:50:53Z,0.0530
 deflate,quant_deflate_c_rstar_w4,cuda:0,2026-10-25T14:51:17Z,2026-10-25T14:56:28Z,0.0866
 deflate,eval_latent_deflate_c_rstar_w4,cuda:0,2026-10-25T14:56:48Z,2026-10-25T15:02:19Z,0.0920
+gateA,fp_grams,cuda:0,2026-10-25T15:02:23Z,2026-10-25T15:07:02Z,0.0773
