@@ -1,0 +1,6 @@
+[submodule "external/DiT"]
+	path = external/DiT
+	url = https://github.com/facebookresearch/DiT.git
+[submodule "external/boa"]
+	path = external/boa
+	url = https://github.com/PseudoHunt/boa-kronecker-gap.git

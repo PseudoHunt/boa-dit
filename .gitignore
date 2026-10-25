@@ -1,0 +1,5 @@
+results/stage*/ckpt_*
+ckpt/
+*.npz
+__pycache__/
+*.log.big
