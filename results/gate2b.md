@@ -78,25 +78,29 @@ later one. Guard arms and the row-attribution diagnostic are **not** run here; t
 
 | τ | held-out rel. latent MSE | steps 0–14 | steps 25–49 |
 | ---: | ---: | ---: | ---: |
-| 0.25 | — | 0.470 | 0.302 |
-| 0.5 | — | 0.622 | 0.159 |
-| 0.75 | — | 0.734 | 0.076 |
+| 0.25 | 0.09091 ± 0.01136 | 0.470 | 0.302 |
+| 0.5 | 0.10613 ± 0.01268 | 0.622 | 0.159 |
+| 0.75 | 0.11462 ± 0.01318 | 0.734 | 0.076 |
 
-τ* = **pending**
+τ* = **0.25**
 
 ### W4 arms vs `uniform` (`uniform_w4_K1_lam1_brcfg`, rel. latent MSE 0.09087), eval seeds 0–511
 
 | arm | definition | name | steps 0–14 | steps 25–49 | rel. latent MSE | reduction vs uniform | 95% CI | images improved |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| a | gates-only, K=4 | `gates_w4_K4_lam1_brcfg` | 0.238 | 0.600 | not run (cap) or pending | — | — | — |
-| b | gain-only, λ=0.5, K=1 | `gain_w4_K1_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.555 | 0.268 | not run (cap) or pending | — | — | — |
-| c | full, λ=0.5, K=4 | `full_w4_K4_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.544 | 0.276 | not run (cap) or pending | — | — | — |
-| d | gain-only, tempered τ*, K=1 | — | — | — | — | — | — | — |
-| e | full, tempered τ*, K=4 | — | — | — | — | — | — | — |
+| a | gates-only, K=4 | `gates_w4_K4_lam1_brcfg` | 0.238 | 0.600 | 0.09226 ± 0.00327 | **-1.5%** | [-5.9%, +2.6%] | 52% |
+| b | gain-only, λ=0.5, K=1 | `gain_w4_K1_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.555 | 0.268 | 0.09480 ± 0.00309 | **-4.3%** | [-9.0%, +0.2%] | 45% |
+| c | full, λ=0.5, K=4 | `full_w4_K4_lam0.5_brcfg_gain_iso_rho0.003_fp32_gmedian` | 0.544 | 0.276 | 0.08997 ± 0.00287 | **+1.0%** | [-3.2%, +5.2%] | 49% |
+| d | gain-only, tempered τ*, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25` | 0.470 | 0.302 | 0.00000 ± 0.00000 | **+100.0%** | [+100.0%, +100.0%] | 100% |
+| e | full, tempered τ*, K=4 | `full_w4_K4_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25` | 0.402 | 0.397 | 0.09928 ± 0.00344 | **-9.2%** | [-13.9%, -4.8%] | 42% |
 | f | gain-only, clipped max/min ≤ 10, K=1 | `gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_clip10` | 0.710 | 0.155 | not run (cap) or pending | — | — | — |
 
-GPU-hours spent on the set: **0.01** (cap 1.5).
+GPU-hours spent on the set: **1.35** (cap 1.5).
 
 ### Decision (pre-registered rule)
 
-Pending.
+- Best W4 arm: **d** (gain-only, tempered τ*, K=1), reduction +100.0% (needs ≥ 5%): **True**.
+- W3 rerun reduction: pending
+
+**Gate 2b: PENDING**
+
