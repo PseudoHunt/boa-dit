@@ -1,0 +1,18 @@
+{
+ "arm": "static-8",
+ "bits": 3,
+ "n": 2000,
+ "fid": 73.91143605357473,
+ "extra_bits_per_param": 0.14814814814814814,
+ "stage": "gateA",
+ "run": "fid2000_static-8_w3",
+ "device": "cuda:0",
+ "config": {
+  "arm": "static-8",
+  "bits": 3
+ },
+ "git_sha": "6165f78e7f1765b4792fd3762207436ae15aa324",
+ "start_utc": "2026-10-25T15:20:43Z",
+ "wall_s": 1333.9456768035889,
+ "gpu_hours": 0.3705404657787747
+}
