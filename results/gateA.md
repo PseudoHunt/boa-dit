@@ -70,14 +70,14 @@ running total would pass 3.5, remaining non-rule arms are skipped and recorded a
 | time2-16 | 0.593 | 0.06934 ± 0.00285 | **+23.7%** [+21.1, +26.4] | 88% |
 | time2-32 | 1.185 | 0.06548 ± 0.00282 | **+27.9%** [+24.9, +30.9] | 88% |
 | time3-16 | 0.889 | 0.06993 ± 0.00293 | **+23.0%** [+20.3, +25.8] | 88% |
-| static-48 | — | not run (cap) or pending | — | — |
+| static-48 | 0.889 | 0.06130 ± 0.00270 | **+32.5%** [+29.4, +35.7] | 90% |
 
 Equal-budget and rank comparisons (reduction of the first arm vs the second):
 
 | comparison | reduction (95% CI) | images improved |
 | --- | --- | ---: |
 | time2-16 vs static-32 | **-6.6%** [-9.3, -4.0] | 33% |
-| time3-16 vs static-48 | pending / not run | — |
+| time3-16 vs static-48 | **-14.1%** [-17.8, -10.7] | 28% |
 | time2-32 vs static-32 | **-0.7%** [-2.5, +1.2] | 51% |
 | static-32 vs static-16 | **+7.7%** [+5.4, +10.0] | 70% |
 
@@ -85,21 +85,21 @@ Equal-budget and rank comparisons (reduction of the first arm vs the second):
 
 | arm | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |
 | --- | ---: | ---: | --- | ---: |
-| static-16 | — | not run (cap) or pending | — | — |
+| static-16 | 0.296 | 0.16496 ± 0.00408 | **+58.2%** [+56.8, +59.6] | 100% |
 | static-32 | 0.593 | 0.12509 ± 0.00353 | **+68.3%** [+66.9, +69.7] | 100% |
 | time2-16 | 0.593 | 0.14897 ± 0.00392 | **+62.2%** [+60.8, +63.7] | 100% |
-| time2-32 | — | not run (cap) or pending | — | — |
-| time3-16 | — | not run (cap) or pending | — | — |
-| static-48 | — | not run (cap) or pending | — | — |
+| time2-32 | 1.185 | 0.12547 ± 0.00352 | **+68.2%** [+66.8, +69.6] | 100% |
+| time3-16 | 0.889 | 0.14629 ± 0.00389 | **+62.9%** [+61.5, +64.4] | 100% |
+| static-48 | 0.889 | 0.11886 ± 0.00351 | **+69.9%** [+68.5, +71.3] | 100% |
 
 Equal-budget and rank comparisons (reduction of the first arm vs the second):
 
 | comparison | reduction (95% CI) | images improved |
 | --- | --- | ---: |
 | time2-16 vs static-32 | **-19.1%** [-21.9, -16.6] | 15% |
-| time3-16 vs static-48 | pending / not run | — |
-| time2-32 vs static-32 | pending / not run | — |
-| static-32 vs static-16 | pending / not run | — |
+| time3-16 vs static-48 | **-23.1%** [-26.0, -20.3] | 13% |
+| time2-32 vs static-32 | **-0.3%** [-2.1, +1.1] | 48% |
+| static-32 vs static-16 | **+24.2%** [+22.2, +26.1] | 90% |
 
 ### Captured weighted residual energy (mean over the 112 linears; fraction of ‖E H½‖²_F)
 
@@ -129,8 +129,9 @@ Equal-budget and rank comparisons (reduction of the first arm vs the second):
 ### GPU-hours (items 1–3, since the pivot started)
 
 - item 1 (FID anchors): 0.95
-- item 3 (Gate A): 0.87
-- **total: 1.82** (cap 3.5)
+- item 2: 0.37
+- item 3 (Gate A): 1.30
+- **total: 2.62** (cap 3.5)
 
 ### Decision (pre-registered rule)
 
