@@ -148,9 +148,9 @@ Row sets: `gate` = top-100 by RTN-W4 row output error × mean gate energy; `err`
 | set | bits | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |
 | --- | --- | ---: | ---: | --- | ---: |
 | gate | W4 | 0.0036 | 0.09493 | **-4.5%** [-5.3, -3.7] | 15% |
-| err | W4 | — | pending | — | — |
-| gate | W3 | — | pending | — | — |
-| err | W3 | — | pending | — | — |
+| err | W4 | 0.0038 | 0.09494 | **-4.5%** [-5.4, -3.7] | 14% |
+| gate | W3 | 0.0045 | 0.42930 | **-8.8%** [-9.1, -8.5] | 0% |
+| err | W3 | 0.0047 | 0.42822 | **-8.5%** [-8.8, -8.2] | 0% |
 
 ### FID-2k anchors (item 1, `results/stage2/fid_anchors.json`)
 
@@ -163,9 +163,9 @@ Row sets: `gate` = top-100 by RTN-W4 row output error × mean gate energy; `err`
 ### GPU-hours (items 1–3, since the pivot started)
 
 - item 1 (FID anchors): 0.95
-- item 2: 0.44
+- item 2: 0.66
 - item 3 (Gate A): 1.30
-- **total: 2.69** (cap 3.5)
+- **total: 2.91** (cap 3.5)
 
 ### Decision (pre-registered rule)
 
