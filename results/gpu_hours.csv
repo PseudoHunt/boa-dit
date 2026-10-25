@@ -22,3 +22,5 @@ stage2,eval_latent_rtn_w4,cuda:0,2026-10-25T06:33:16Z,2026-10-25T06:43:20Z,0.167
 stage2,quant_rtn_w3,cuda:0,2026-10-25T06:43:37Z,2026-10-25T06:43:39Z,0.0006
 stage1,gain_iso_rho0.001_fp32,cuda:0,2026-10-25T06:11:34Z,2026-10-25T06:43:47Z,0.5370
 stage2,eval_latent_rtn_w3,cuda:0,2026-10-25T06:43:43Z,2026-10-25T06:48:35Z,0.0812
+stage2,quant_uniform_w3_K1_lam1_brcfg,cuda:0,2026-10-25T06:48:53Z,2026-10-25T06:55:18Z,0.1070
+stage2,rtn_w4_diagnostics(estimate: 3 ad-hoc scripts; not auto-logged),cuda:1,2026-10-25T06:50:00Z,2026-10-25T07:00:00Z,0.1500
