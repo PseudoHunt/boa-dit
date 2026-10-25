@@ -130,6 +130,14 @@ def main():
              f"different-class {np.median(A['within_diffclass'][early]):.3f}.")
     L.append(f"- Branch agreement (s ≤ 9): {np.median(A['branch_cos_median'][early]):.3f}; offset-kernel "
              f"reconstruction (s ≤ 9): {np.median(A['kernel_cos_median'][early]):.3f}.")
+    e = A["ent_median"][early]
+    L.append(f"- Caveat, near-uniformity: at s ≤ 9 the median row entropy is {np.median(e):.3f} of uniform, i.e. a "
+             f"median KL(P‖U) of only {np.median((1 - e) * np.log(256)):.3f} nats; the KL ratio says the mean map explains "
+             f"most of that small deviation, not that the deviation is large. Blocks with head-median KL ratio < 1.5 at "
+             f"every s ≤ 9 (attention ≈ uniform there): "
+             f"{[b for b in range(A['kl_ratio_median'].shape[1]) if (np.median(A['kl_ratio_median'][early, b], -1) < 1.5).all()]}. "
+             f"Whether the stored map is worth more than a uniform map is tested directly by the extra Gate 2 control "
+             f"arm `k10-uniform`.")
     L.append(f"\n**Gate 1: {v['verdict']}**\n")
     path = os.path.join(OUT, "gate1.md")
     pre = open(path).read().split(MARK)[0]
