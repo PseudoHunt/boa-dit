@@ -1,0 +1,21 @@
+{
+ "name": "deflate_c_rstar_w3",
+ "n": 2000,
+ "fid": 101.30278249775097,
+ "stage": "deflate",
+ "run": "fid2000_deflate_c_rstar_w3",
+ "device": "cuda:1",
+ "config": {
+  "ref": false,
+  "name": "deflate_c_rstar_w3",
+  "n": 2000,
+  "stage": "deflate",
+  "device": "cuda:1",
+  "carry": true,
+  "grid": "ckpt/deflate_grids/deflate_c_rstar_w3.pt"
+ },
+ "git_sha": "13fee6fe0fd903687bd7fa150f7e3143796d1081",
+ "start_utc": "2026-10-25T15:21:24Z",
+ "wall_s": 1330.3697860240936,
+ "gpu_hours": 0.3695471627844705
+}
