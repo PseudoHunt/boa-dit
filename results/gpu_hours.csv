@@ -14,3 +14,4 @@ stage1,probe_gates,cuda:0,2026-10-25T06:02:27Z,2026-10-25T06:05:10Z,0.0453
 stage1,probe_attn,cuda:0,2026-10-25T06:06:23Z,2026-10-25T06:06:43Z,0.0056
 stage1,gain_iso_rho0.003,cuda:1,2026-10-25T06:05:50Z,2026-10-25T06:09:30Z,0.0611
 stage1,gain_iso_rho0.0001,cuda:0,2026-10-25T06:05:50Z,2026-10-25T06:09:43Z,0.0645
+stage2,quant_gates_w4_K4_lam1_brcfg_dev,cuda:0,2026-10-25T06:13:26Z,2026-10-25T06:16:54Z,0.0579
