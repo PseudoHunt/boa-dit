@@ -116,3 +116,5 @@ deflate,quant_deflate_dc_rstar_w4,cuda:0,2026-10-25T14:00:53Z,2026-10-25T14:06:2
 deflate,quant_deflate_dc_rstar_w3,cuda:1,2026-10-25T14:00:53Z,2026-10-25T14:06:24Z,0.0919
 deflate,eval_latent_deflate_dc_rstar_w3,cuda:1,2026-10-25T14:06:52Z,2026-10-25T14:12:23Z,0.0920
 deflate,eval_latent_deflate_dc_rstar_w4,cuda:0,2026-10-25T14:06:51Z,2026-10-25T14:12:25Z,0.0928
+deflate,fid2000_deflate_dc_rstar_w3,cuda:1,2026-10-25T14:12:26Z,2026-10-25T14:35:25Z,0.3832
+deflate,fid2000_deflate_dc_rstar_w4,cuda:0,2026-10-25T14:12:27Z,2026-10-25T14:35:31Z,0.3844
