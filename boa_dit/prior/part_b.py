@@ -89,6 +89,8 @@ def b1(dev):
                 hf.remove(); hq.remove()
             print(f"block {l} done", flush=True)
         rec = run.record()
+    atomic_torch_save({"acc": {k: {kk: (vv.cpu() if torch.is_tensor(vv) else vv) for kk, vv in a.items()} for k, a in acc.items()},
+                       "rec": rec}, DBAR + ".raw")                                 # raw accumulators before any analysis
     offs = offsets(16).to(dev)
     flat = offs.flatten()
     cnt = torch.zeros(961, device=dev).index_add_(0, flat, torch.ones(flat.shape[0], device=dev))
@@ -99,7 +101,7 @@ def b1(dev):
         shared = (Db * Db).sum((-1, -2)) / (a["sq"] / a["n"])
         shared_step = a["step_shared_num"] / a["step_shared_den"]
         sv = torch.linalg.svdvals(Db.double())                                         # [H, 256]
-        e = (sv ** 2).cumsum(-1) / (sv ** 2).sum(-1)
+        e = (sv ** 2).cumsum(-1) / (sv ** 2).sum(-1, keepdim=True)
         kap = torch.zeros(H, 961, device=dev).index_add_(1, flat, Db.reshape(H, -1)) / cnt
         R = kap[:, offs]
         kc = (R * Db).sum((-1, -2)) / (R.norm(dim=(-1, -2)) * Db.norm(dim=(-1, -2)))
