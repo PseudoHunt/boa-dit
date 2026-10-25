@@ -39,7 +39,10 @@ def main():
          f"{np.median(A['within_sameclass'][e]):.3f} vs different class {np.median(A['within_diffclass'][e]):.3f}) and "
          f"branch-independent (cond vs uncond mean map {np.median(A['branch_cos_median'][e]):.3f}). They are close to "
          f"translation-invariant: a 31×31 offset kernel per head rebuilds the mean map at cosine "
-         f"{np.median(A['kernel_cos_median'][e]):.3f}.\n",
+         f"{np.median(A['kernel_cos_median'][e]):.3f}." + (
+             f" In images, the kernel form (V3, {v3['V3']['bytes'] / 1e6:.1f} MB for all {v3['k_pass']} shared steps) is "
+             f"{v3['V3']['delta_vs_V1']:+.2f} FID-2k from the full per-step maps "
+             f"({v3['V3']['fid2k'] - fp:+.2f} vs FP)." if v3 and v3.get("V3", {}).get("fid2k") else "") + "\n",
          "This shares attention **across samples**. Existing diffusion caching methods (DeepCache, TeaCache, FORA, "
          "Δ-DiT, ToCa, and PAB, which broadcasts attention across steps in video DiTs) reuse computation across adjacent "
          "steps of one sample, and ToMe-SD merges tokens spatially. As far as we know, the cross-sample axis is untaken.\n",
@@ -57,6 +60,15 @@ def main():
     else:
         L.append("| 3: cheap storage | pending | |")
     L.append("")
+    if v3 and "verdict" in v3:
+        L.append(f"Gate 3 notes: V3 misses the +0.5 bar by {v3['V3']['delta_vs_V1'] - 0.5:.2f} FID-2k, at "
+                 f"{100 * v3['V3']['frac_of_V1']:.2f}% of V1's size. V2 and V4 cannot meet the ≤ 10% size condition on "
+                 f"their own ({100 * v3['V2']['frac_of_V1']:.0f}% and {100 * v3['V4']['frac_of_V1']:.1f}%). Top-32 "
+                 f"sparsification (V4) breaks the model ({v3['V4']['delta_vs_V1']:+.1f} FID-2k), consistent with the "
+                 "near-uniform floor that holds about half of each kernel's mass. V2 (windowed, "
+                 f"{v3['V2']['delta_vs_V1']:+.2f}) and V5 (branch-shared, {v3['V5']['delta_vs_V1']:+.2f}) are each "
+                 "nearly free. Their combination would be exactly 10% of V1; it was not run, because Gate 3 had already "
+                 "failed. It is the obvious next storage test.\n")
     L.append("## Speed: deferred, not claimed\n")
     if c:
         fr = {n: c["per_N"][n]["variants"]["V1/V2 dense stored map"]["end_to_end_frac_saved"] for n in c["per_N"]}
@@ -87,8 +99,13 @@ def main():
                  "grows; that has to be measured first on PixArt-Σ.")
     L.append("\n")
     if cv:
-        L.append("Per-block microbenchmarks (full attention vs dense stored map vs V3 convolution at N = 256 / 1024 / "
-                 "4096, synthetic inputs) are in `compute.md` §5.\n")
+        r = cv["bench"]["per_N"]
+        f4 = r["4096"]["ms_block_attention_sublayer"]
+        L.append(f"Per-block microbenchmarks (`compute.md` §5; synthetic inputs, A30): at N = 4096 a dense stored map "
+                 f"applied to all rows takes {f4['V1 dense stored map']:.1f} ms vs {f4['full attention (fused SDPA)']:.1f} ms "
+                 f"for fused attention, but needs 537 MB per block-step. The V3 convolution takes "
+                 f"{f4['V3 conv (31x31 depthwise)']:.0f} ms in PyTorch/cuDNN. **A fast kernel-form implementation does not "
+                 "exist yet**; it is a prerequisite for the PixArt-Σ step, along with bounded kernel support.\n")
     L.append("## Not verified\n")
     L.append("- Text-to-image models (PixArt-Σ): text cross-attention and prompts may change how image-independent "
              "early self-attention is.")

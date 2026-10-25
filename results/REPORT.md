@@ -120,3 +120,20 @@
   Caveat recorded there: early maps are close to uniform by entropy, so Gate 2 adds a uniform-map control arm
   (`k10-uniform`, outside the verdict) and an `fp` check arm (patched model, sharing off).
 - About 4 GPU-minutes of smoke tests (parity, 32-seed arm runs) are not in gpu_hours.csv.
+
+## 2026-10-25 — CLOSE: sample-independent attention (Gate 3 STOP)
+- Gate 1 PASS (s_max 14). Gate 2 PASS: ΔFID-2k vs FP 23.89: k5 -0.07, k10 +0.01,
+  k15 +0.36, k20 +1.20; k_pass 20; uniform-map control +20.97.
+  Label accuracy is flat across the six arms (every CI for Δ vs FP includes 0); the control changes it by
+  -21.7 points.
+- Gate 3 **STOP** (k = 20): no variant met both conditions. V3 kernel +0.55 at 0.29% of V1
+  (bar +0.5); V2 +0.01 at 20%; V4 +53.4; V5 +0.06. V2 + V5 (exactly 10%) not run (gate already failed).
+- Compute: a fully shared forward at N = 256 is +1.0% latency in plain PyTorch; per block at N = 4096,
+  one dense map takes 11.1 ms vs 27.3 ms for fused attention; the V3 cuDNN depthwise conv takes 783 ms.
+  V3 kernel support is full (31×31) in 98% of cases. No speed claim; next step PixArt-Σ 1024 px (see SUMMARY.md).
+- Bug caught: the first latency runs recorded CUDA events on cuda:0 while the work ran on cuda:1, so those numbers
+  (pushed by the heartbeat) were invalid. They were rerun with the device pinned; only the rerun is in compute.json and convpath.json.
+- Unlogged: about 4 GPU-minutes of smoke tests. GPU-hours: 4.47 of 5.0.
+- `results/attn_share/SUMMARY.md` written. Heavy processes stopped; nothing is running. The instance can be shut down
+  once this commit is on GitHub. Checkpoints and maps under `ckpt/` and `results/attn_share/maps/` are not in git.
+

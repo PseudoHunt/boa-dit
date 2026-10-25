@@ -46,7 +46,7 @@ Plainly: at N = 256 the saving is small (a few percent end to end even at k = 20
 | explicit softmax (no sharing) | 404.0 | 402.4 |
 | shared map, V-only projection | 318.6 | 317.6 |
 
-Realized saving per shared forward: -1.0% (FLOPs estimate for a fully shared forward: 17.9%). The gap is plain PyTorch: the stored map is materialized and applied with an unfused batched matmul, while the baseline uses fused SDPA.
+Realized saving per shared forward: -1.0% (FLOPs estimate for a fully shared forward: 17.9%). Cause of the gap: the share path used for image generation (`attn.py`) expands the stored map to every row (expand + cat, 64 × 16 × 256² fp16 = 134 MB per block call) before a batched matmul. Applied once per head to all rows ([H, N, N] @ [H, N, rows · hd]), the same map is faster than fused SDPA (§5). Earlier timings in this file's history (before commit 'fix device pinning') were invalid: CUDA events were recorded on cuda:0 while the work ran on cuda:1.
 
 ## 5. Per-block attention sublayer: full attention vs V1 (dense map) vs V3 (convolution)
 
@@ -65,6 +65,8 @@ Synthetic inputs, random weights, fp16, batch 16 rows; ms for the whole batch (p
 | 4096 | full attention (fused SDPA) | 122.14 | 27.25 | 19.30 |
 | 4096 | V1 dense stored map | 60.40 | 11.11 | 7.47 |
 | 4096 | V3 conv (31x31 depthwise) | 30.81 | 783.34 | 780.49 |
+
+Reading: V1 (one dense map applied to all rows) is 1.5× faster than fused attention per block at N = 256, 1.8× at 1024 and 2.5× at 4096. The V3 convolution has the fewest FLOPs at N = 4096 but runs 29× slower than full attention there: PyTorch/cuDNN depthwise convolution with a 31×31 kernel in fp16 is far from peak throughput. An FFT or implicit-GEMM formulation is untested. As measured, the convolution path is not a speedup at any N.
 
 ## 6. Effective support of the V3 kernel
 

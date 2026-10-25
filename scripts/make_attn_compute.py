@@ -67,8 +67,11 @@ def main():
         base, sh = t["baseline (fused SDPA)"]["median_ms"], t["shared map, V-only projection"]["median_ms"]
         fl = c["per_N"]["256"]["variants"]["V1/V2 dense stored map"]["block_frac_removed"]
         L.append(f"\nRealized saving per shared forward: {100 * (1 - sh / base):+.1f}% (FLOPs estimate for a fully shared "
-                 f"forward: {100 * fl:.1f}%). The gap is plain PyTorch: the stored map is materialized and applied with "
-                 "an unfused batched matmul, while the baseline uses fused SDPA.\n")
+                 f"forward: {100 * fl:.1f}%). Cause of the gap: the share path used for image generation "
+                 "(`attn.py`) expands the stored map to every row (expand + cat, 64 × 16 × 256² fp16 = 134 MB per block "
+                 "call) before a batched matmul. Applied once per head to all rows ([H, N, N] @ [H, N, rows · hd]), the "
+                 "same map is faster than fused SDPA (§5). Earlier timings in this file's history (before commit "
+                 "'fix device pinning') were invalid: CUDA events were recorded on cuda:0 while the work ran on cuda:1.\n")
     else:
         L.append("Pending.\n")
     L.append("## 5. Per-block attention sublayer: full attention vs V1 (dense map) vs V3 (convolution)\n")
@@ -90,6 +93,15 @@ def main():
         L.append("")
     else:
         L.append("Pending.\n")
+    if cv:
+        r = cv["bench"]["per_N"]
+        sp = lambda n, k: r[n]["ms_block_attention_sublayer"]["full attention (fused SDPA)"] / r[n]["ms_block_attention_sublayer"][k]
+        L.append(f"Reading: V1 (one dense map applied to all rows) is {sp('256', 'V1 dense stored map'):.1f}× faster than "
+                 f"fused attention per block at N = 256, {sp('1024', 'V1 dense stored map'):.1f}× at 1024 and "
+                 f"{sp('4096', 'V1 dense stored map'):.1f}× at 4096. The V3 convolution has the fewest FLOPs at N = 4096 "
+                 f"but runs {1 / sp('4096', 'V3 conv (31x31 depthwise)'):.0f}× slower than full attention there: PyTorch/"
+                 "cuDNN depthwise convolution with a 31×31 kernel in fp16 is far from peak throughput. An FFT or "
+                 "implicit-GEMM formulation is untested. As measured, the convolution path is not a speedup at any N.\n")
     L.append("## 6. Effective support of the V3 kernel\n")
     if ks:
         for br, d in ks["per_branch"].items():

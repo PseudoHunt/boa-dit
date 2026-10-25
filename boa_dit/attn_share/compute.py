@@ -68,6 +68,7 @@ def analytic(k_values=(10, 15)):
 
 @torch.no_grad()
 def measure(dev, iters=30):
+    torch.cuda.set_device(dev)          # CUDA events and synchronize() act on the current device
     from boa_dit.attn_share.attn import CTRL, patch
     from boa_dit.model import load_dit
     from boa_dit.sample import CTX

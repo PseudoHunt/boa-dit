@@ -76,6 +76,7 @@ def timeit(fn, iters=20):
 
 @torch.no_grad()
 def bench(dev, B=16):
+    torch.cuda.set_device(dev)          # CUDA events and synchronize() act on the current device
     torch.manual_seed(0)
     Wqkv = torch.randn(3 * C, C, device=dev, dtype=torch.half) * C ** -0.5
     Wp = torch.randn(C, C, device=dev, dtype=torch.half) * C ** -0.5
