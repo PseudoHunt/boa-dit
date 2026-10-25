@@ -1,0 +1,2 @@
+results/attn_share/artifacts/V1_*.pt filter=lfs diff=lfs merge=lfs -text
+results/attn_share/artifacts/V2_*.pt filter=lfs diff=lfs merge=lfs -text
