@@ -1,0 +1,16 @@
+{
+ "arm": "full",
+ "seconds_per_video": 345.0410304069519,
+ "gpu_free_gb_before": 19.12933349609375,
+ "clip_vitl14_8frames": 34.023990631103516,
+ "latent_psnr_vs_stock": 35.905460357666016,
+ "step0_latent_rel_diff_vs_stock": 5.3561794629786164e-05,
+ "stage": "feas_video",
+ "run": "arm_full",
+ "device": "cuda:1",
+ "config": {},
+ "git_sha": "a2e455fbcb6f08e272f643dc18575d6f06e5c51d",
+ "start_utc": "2026-10-25T17:05:22Z",
+ "wall_s": 361.6885025501251,
+ "gpu_hours": 0.10046902848614586
+}
