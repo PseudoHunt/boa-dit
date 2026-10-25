@@ -14,7 +14,7 @@ from make_gateA import paired  # noqa: E402
 R = os.path.join(ROOT, "results")
 OUT = os.path.join(R, "deflate")
 MARK = "\n---\n\n## Results (appended by `scripts/make_deflate_g2.py`)\n"
-ARMS = [("DC-r*", "dc", "star"), ("DC-1", "dc", "1"), ("C-r*", "c", "star"), ("WSVD-r*", "wsvd", "star")]
+ARMS = [("DC-r*", "dc", "star"), ("DC-1", "dc", "1"), ("C-r*", "c", "star"), ("HEIG-8", "heig", "8"), ("WSVD-r*", "wsvd", "star")]
 TYPES = ["attn.qkv", "attn.proj", "mlp.fc1", "mlp.fc2"]
 
 
@@ -34,16 +34,28 @@ def main():
     uni = {b: load(os.path.join(R, "stage2", "eval", f"latent_uniform_w{b}_K1_lam1_brcfg.json")) for b in (4, 3)}
     ufid = {4: fa["uniform W4"]["fid2k"], 3: fa["uniform W3"]["fid2k"]}
     s32 = {b: load(os.path.join(R, "stageA", "eval", f"latent_static-32_w{b}.json")) for b in (4, 3)}
-    L = [MARK, f"Reused: uniform W4 / W3 (FID-2k {ufid[4]:.2f} / {ufid[3]:.2f}; FP {fp:.2f}); Gate A static-32 (latent MSE "
-         "only, 0.593 extra bits/param). Reductions are 1 − relMSE(arm) / relMSE(uniform), with paired bootstrap 95% CIs over "
-         "the 512 images (positive = better).\n",
-         "| arm | bits | extra bits/param | rel latent MSE | vs uniform | FID-2k | Δ vs FP |",
-         "| --- | --- | ---: | ---: | --- | ---: | ---: |"]
+    s8 = {b: load(os.path.join(R, "stageA", "eval", f"latent_static-8_w{b}.json")) for b in (4, 3)}
+    s8f = {b: load(os.path.join(R, "stageA", "eval", f"fid2000_static-8_w{b}.json")) for b in (4, 3)}
+    L = [MARK, f"Reused: uniform W4 / W3 (FID-2k {ufid[4]:.2f} / {ufid[3]:.2f}; FP {fp:.2f}). static-8 = Gate A's static "
+         "low-rank residual correction at rank 8 (same code path as static-32; rebuilt Grams), the matched-rank baseline. "
+         "Effective bits per weight = weight bits + extra bits (fp16 carry or correction factors) per quantized weight; "
+         "per-channel scale/zero are common to every arm and not counted. Reductions are 1 − relMSE(arm) / relMSE(uniform), "
+         "with paired bootstrap 95% CIs over the 512 images (positive = better). WSVD-r* was dropped for budget (reviewer "
+         "priority order).\n",
+         "| arm | bits | extra bits/weight | effective bits/weight | rel latent MSE | latent MSE @ eff. bits | vs uniform | FID-2k | Δ vs FP |",
+         "| --- | --- | ---: | ---: | ---: | --- | --- | ---: | ---: |"]
     rows = {}
     for b in (4, 3):
-        L.append(f"| uniform | W{b} | 0 | {uni[b]['rel_mse_mean']:.5f} | — | {ufid[b]:.2f} | {ufid[b] - fp:+.2f} |")
-        L.append(f"| Gate A static-32 | W{b} | 0.593 | {s32[b]['rel_mse_mean']:.5f} | "
-                 f"{100 * paired(s32[b], uni[b])[0]:+.1f}% [{100 * paired(s32[b], uni[b])[1]:+.1f}, {100 * paired(s32[b], uni[b])[2]:+.1f}] | — | — |")
+        L.append(f"| uniform | W{b} | 0 | {b:.2f} | {uni[b]['rel_mse_mean']:.5f} | {uni[b]['rel_mse_mean']:.4f} @ {b:.2f} | — | "
+                 f"{ufid[b]:.2f} | {ufid[b] - fp:+.2f} |")
+        if s8[b]:
+            e8 = s8[b]["extra_bits_per_param"]
+            red = paired(s8[b], uni[b])
+            L.append(f"| static-8 | W{b} | {e8:.4f} | {b + e8:.3f} | {s8[b]['rel_mse_mean']:.5f} | {s8[b]['rel_mse_mean']:.4f} @ {b + e8:.2f} | "
+                     f"{100 * red[0]:+.1f}% [{100 * red[1]:+.1f}, {100 * red[2]:+.1f}] | "
+                     + (f"{s8f[b]['fid']:.2f} | {s8f[b]['fid'] - fp:+.2f} |" if s8f[b] else "— | — |"))
+        else:
+            L.append(f"| static-8 | W{b} | — | — | pending | — | — | — | — |")
         for lab, mode, r in ARMS:
             for damp in ("", "_damp0.05"):
                 n, q, lat, fid = arm(mode, r, b, damp)
@@ -51,11 +63,26 @@ def main():
                     continue
                 rows[(lab + damp, b)] = (q, lat, fid)
                 red = paired(lat, uni[b]) if lat else None
-                L.append(f"| {lab}{' (damp 0.05)' if damp else ''} | W{b} | {q['extra_bits_per_param']:.4f} | "
-                         + (f"{lat['rel_mse_mean']:.5f} | {100 * red[0]:+.1f}% [{100 * red[1]:+.1f}, {100 * red[2]:+.1f}]" if lat else "pending | —")
+                eb = q["extra_bits_per_param"] if q else float("nan")
+                L.append(f"| {lab}{' (damp 0.05)' if damp else ''} | W{b} | {eb:.4f} | {b + eb:.3f} | "
+                         + (f"{lat['rel_mse_mean']:.5f} | {lat['rel_mse_mean']:.4f} @ {b + eb:.2f} | "
+                            f"{100 * red[0]:+.1f}% [{100 * red[1]:+.1f}, {100 * red[2]:+.1f}]" if lat else "pending | — | —")
                          + (f" | {fid['fid']:.2f} | {fid['fid'] - fp:+.2f} |" if fid else " | — | — |"))
     L.append("")
     g = lambda lab, b: rows.get((lab, b), (None, None, None))
+    L.append("### Matched-bits reading\n")
+    for b in (4, 3):
+        q, lat, fid = g("DC-r*", b)
+        if lat and s8[b]:
+            red = paired(lat, s8[b])
+            L.append(f"- W{b}: DC-8 ({b + q['extra_bits_per_param']:.2f} bits/weight) vs static-8 ({b + s8[b]['extra_bits_per_param']:.2f}): "
+                     f"latent MSE {lat['rel_mse_mean']:.5f} vs {s8[b]['rel_mse_mean']:.5f}, DC-8 vs static-8 {100 * red[0]:+.1f}% "
+                     f"[{100 * red[1]:+.1f}, {100 * red[2]:+.1f}]" + (f"; FID-2k {fid['fid']:.2f} vs {s8f[b]['fid']:.2f}" if fid and s8f[b] else "") + ".")
+        if lat and s32[b]:
+            L.append(f"- W{b}: DC-8 at {b + q['extra_bits_per_param']:.2f} bits/weight: latent MSE {lat['rel_mse_mean']:.5f}; Gate A static-32 at its "
+                     f"own {b + 0.593:.2f} bits/weight: {s32[b]['rel_mse_mean']:.5f} (not matched; static-32 spends "
+                     f"{0.593 / q['extra_bits_per_param']:.1f}× the extra bits).")
+    L.append("")
     v = {}
     dc4, dc3 = g("DC-r*", 4), g("DC-r*", 3)
     if dc3[2] is not None and dc4[2] is not None and dc4[1] is not None:
@@ -65,10 +92,15 @@ def main():
              "fid_dc_w3": dc3[2]["fid"], "fid_dc_w4": dc4[2]["fid"],
              "relmse_ratio_w4": dc4[1]["rel_mse_mean"] / uni[4]["rel_mse_mean"]}
         L.append("### Verdict\n")
-        L.append(f"- Route A: FID-2k(DC-r*, W3) = {dc3[2]['fid']:.2f} (≤ 45: **{rA}**).")
-        L.append(f"- Route B: FID-2k(DC-r*, W4) = {dc4[2]['fid']:.2f} (≤ 28.5: {dc4[2]['fid'] <= 28.5}) and relMSE ratio vs uniform "
+        e3, e4 = 3 + dc3[0]["extra_bits_per_param"], 4 + dc4[0]["extra_bits_per_param"]
+        v.update({"eff_bits_w3": e3, "eff_bits_w4": e4})
+        L.append(f"- Route A: DC-r* W3 + carry, {e3:.2f} bits/weight: FID-2k {dc3[2]['fid']:.2f} (≤ 45: **{rA}**).")
+        L.append(f"- Route B: DC-r* W4 + carry, {e4:.2f} bits/weight: FID-2k {dc4[2]['fid']:.2f} (≤ 28.5: {dc4[2]['fid'] <= 28.5}) and relMSE ratio vs uniform "
                  f"{v['relmse_ratio_w4']:.3f} (≤ 0.90: {v['relmse_ratio_w4'] <= 0.90}) → **{rB}**.")
-        L.append(f"\n**G2: {v['verdict']}**\n")
+        L.append(f"\n**G2: {v['verdict']}**" + (f" via Route B (W4 + carry, {e4:.2f} bits/weight, FID-2k {dc4[2]['fid']:.2f})" if rB else "")
+                 + (f" via Route A (W3 + carry, {e3:.2f} bits/weight, FID-2k {dc3[2]['fid']:.2f})" if rA else "") + ".\n")
+        L.append("Verdict written 2026-10-25 from the two DC-r* FIDs, the only inputs to the rule. The ablation and baseline "
+                 "rows were still running and do not enter it.\n")
     L.append("### Findings (not stop rules)\n")
     for b in (4, 3):
         d, c = g("DC-r*", b)[1], g("C-r*", b)[1]

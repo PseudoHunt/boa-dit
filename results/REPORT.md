@@ -169,3 +169,15 @@
 - Uniform control (Gate 2): k10 +20.97 FID-2k, −21.7 label-accuracy points; no k15 uniform arm was run. Recorded in
   SUMMARY.md: the floor alone does not work.
 - GPU: truncation smoke 0.02 h (plus one 0.02 h failed attempt), PixArt rerun 0.05 h.
+
+## 2026-10-25 — Deflate-and-carry: G1 PASS (sanity), G2 PASS (Route B)
+- New handoff (budget 9 A30-h). With approval, 66 GB of closed-project checkpoints were deleted for disk.
+- G1 (`results/deflate/G1.md`): PASS (G2 proceeds); r* = 8 (the cap, in 106/112 layers); mechanism FAIL (token mean ≠ adaLN
+  shift; 22 high-share layers, 1 clears cos 0.9).
+- G2 (`results/deflate/G2.md`, pre-registered): **PASS** via Route B: DC-r* W4 + carry, 4.14 bits/weight, FID-2k
+  27.91 (≤ 28.5), relMSE ratio vs uniform 0.799 (≤ 0.90). Route A failed: DC-r* W3 + carry, 3.14 bits/weight,
+  FID-2k 65.19 (needs ≤ 45; uniform W3 130.91). Caveat: the W4 FID gain (−1.2) is of the order of FID-2k noise; G3's FP
+  seed-to-seed arm will give the spread.
+- Pipeline check: quantize_dc at r = 0 reproduces the uniform arm bit-exactly (block 0). Drift ≤ 1.13× uniform (no damping arm).
+- Reviewer additions in progress: static-8 matched-rank baseline (Gate A FP Grams rebuilt), HEIG-8, effective-bits table,
+  G1 corrections (requires a rerun of the G1 pass; Grams were not stored). WSVD-r* dropped for budget, per reviewer priority.
