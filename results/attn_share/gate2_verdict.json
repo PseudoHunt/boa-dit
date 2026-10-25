@@ -1,3 +1,13 @@
 {
- "fp_fid2k": 23.888380079814056
+ "fp_fid2k": 23.888380079814056,
+ "delta_fid": {
+  "5": -0.0736956409006666,
+  "10": 0.009599542287332952,
+  "15": 0.3633862539883239,
+  "20": 1.1994925098206863
+ },
+ "pass": true,
+ "k_pass": 20,
+ "k5_over_1": false,
+ "verdict": "PASS (provisional: the uniform-control FID has not landed)"
 }
