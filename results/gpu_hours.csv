@@ -95,3 +95,4 @@ attn_share,label_acc_k10-onemap,cuda:0,2026-10-25T11:46:40Z,2026-10-25T11:51:38Z
 attn_share,label_acc_k5,cuda:1,2026-10-25T11:47:50Z,2026-10-25T11:52:46Z,0.0821
 attn_share,label_acc_k10-uniform,cuda:0,2026-10-25T11:51:42Z,2026-10-25T11:56:38Z,0.0824
 attn_share,label_acc_k10,cuda:1,2026-10-25T11:52:50Z,2026-10-25T11:57:46Z,0.0825
+attn_share,label_acc_k15,cuda:1,2026-10-25T11:57:50Z,2026-10-25T12:02:48Z,0.0826
