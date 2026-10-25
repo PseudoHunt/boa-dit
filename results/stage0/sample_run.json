@@ -1,0 +1,35 @@
+{
+ "repeat_bitwise_equal": true,
+ "repeat_max_abs_diff": 0.0,
+ "timing_bs": 32,
+ "s_per_image": 0.5009815916419029,
+ "png_labels": [
+  850,
+  473,
+  837,
+  811,
+  726,
+  670,
+  445,
+  944
+ ],
+ "stage": "stage0",
+ "run": "sample",
+ "device": "cuda:0",
+ "config": {
+  "seeds": "0-7",
+  "cfg": 1.5,
+  "steps": 50,
+  "bs": 8,
+  "device": "cuda:0",
+  "out": "/home/boa-dit/results/stage0/fp_latents.pt",
+  "png": true,
+  "check_repeat": true,
+  "resume": false,
+  "timing_bs": 32
+ },
+ "git_sha": "8fa05790d06c90f5399e02471820819ff5916476",
+ "start_utc": "2026-10-25T05:48:45Z",
+ "wall_s": 35.38511395454407,
+ "gpu_hours": 0.009829198320706686
+}
