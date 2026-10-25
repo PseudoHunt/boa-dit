@@ -21,6 +21,12 @@ def main():
     grid = lambda k: np.array([[L_[f"b{b}.{t}"][k] for t in TYPES] for b in range(28)], dtype=float)
     share, r, eo, en = grid("mean_energy_share"), grid("r"), grid("erased_old"), grid("erased_new")
     cosm, v1u1 = grid("cos_xbar_p_median"), grid("abs_cos_v1_u1")
+    gbp = os.path.join(OUT, "g1b.json")
+    lnc = {}
+    if os.path.exists(gbp):
+        gbl = json.load(open(gbp))["layers"]
+        for t in ("attn.qkv", "mlp.fc1"):
+            lnc[t] = float(np.median([gbl[f"b{b}.{t}"]["cos_xbar_ln_scale_mean_median"] for b in range(28)]))
     stop = float((share < 0.3).mean()) > 0.8
     hi = share >= 0.5
     mech_all = bool((cosm[hi] >= 0.9).all()) if hi.any() else False
@@ -78,10 +84,16 @@ def main():
              "The token-mean subspace is not low-rank in most layers.")
     L.append(f"- Mechanism: median cos(x̄_s, p_s) ≥ 0.9 in {int((cosm[hi] >= 0.9).sum())} of {v['n_high_share']} high-share layers → "
              f"**mechanism {'PASS' if mech_all else 'FAIL'}**. The token mean is not the adaLN shift. The other term, the token mean "
-             "of LayerNorm(x)·(1 + scale), explains it only partly (see Corrections: median cosine 0.31 for qkv, 0.59 for fc1). "
-             "This changes the explanation, not the method (handoff §1); G2 proceeds.")
-    L.append("- In the early fc2 layers (blocks 0–3) the old damping erases 3,000–4,000 of 4,608 directions, and deflation "
-             "barely changes that (share 0.09–0.28). Only block 27 fc2 (share 0.995) has its erased count cut sharply.\n")
+             + (f"of LayerNorm(x)·(1 + scale), explains it only partly (see Corrections: median cosine {lnc['attn.qkv']:.2f} for qkv, "
+               f"{lnc['mlp.fc1']:.2f} for fc1). " if lnc else "of LayerNorm(x)·(1 + scale), has not been checked yet. ")
+             + "This changes the explanation, not the method (handoff §1); G2 proceeds.")
+    e03 = [L_[f"b{b}.mlp.fc2"] for b in range(4)]
+    b27 = L_["b27.mlp.fc2"]
+    L.append(f"- In the early fc2 layers (blocks 0–3) the old damping erases {min(x['erased_old'] for x in e03)}–"
+             f"{max(x['erased_old'] for x in e03)} of {e03[0]['d_in']} directions, and deflation barely changes that (after: "
+             f"{min(x['erased_new'] for x in e03)}–{max(x['erased_new'] for x in e03)}; share "
+             f"{min(x['mean_energy_share'] for x in e03):.2f}–{max(x['mean_energy_share'] for x in e03):.2f}). Only block 27 fc2 "
+             f"(share {b27['mean_energy_share']:.3f}) has its erased count cut sharply ({b27['erased_old']} → {b27['erased_new']}).\n")
     gb = json.load(open(os.path.join(OUT, "g1b.json"))) if os.path.exists(os.path.join(OUT, "g1b.json")) else None
     if gb:
         B_ = gb["layers"]
