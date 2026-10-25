@@ -1,0 +1,35 @@
+{
+ "seeds": "0-31",
+ "k": 10,
+ "metric": "rel. latent MSE vs FP, mean over 32 images",
+ "arms": {
+  "V1_perstep": {
+   "rel_mse_mean": 0.016117321327328682,
+   "rel_mse_median": 0.00770604470744729
+  },
+  "V3_full": {
+   "rel_mse_mean": 0.021940723061561584,
+   "rel_mse_median": 0.012824174016714096
+  },
+  "two_part_K9": {
+   "rel_mse_mean": 0.02861836366355419,
+   "rel_mse_median": 0.016244711354374886
+  },
+  "two_part_K15": {
+   "rel_mse_mean": 0.027873096987605095,
+   "rel_mse_median": 0.015458587557077408
+  },
+  "uniform": {
+   "rel_mse_mean": 0.26361146569252014,
+   "rel_mse_median": 0.23216849565505981
+  }
+ },
+ "stage": "attn_share",
+ "run": "truncation_smoke",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "ececd556302a45fd1dd9b7bd78f32a453529a54a",
+ "start_utc": "2026-10-25T13:36:22Z",
+ "wall_s": 83.2042715549469,
+ "gpu_hours": 0.023112297654151917
+}
