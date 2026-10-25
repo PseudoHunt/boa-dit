@@ -1,0 +1,9 @@
+{
+ "per_call_logits_fp16_vs_fp32_max_rel": 0.0006915838457643986,
+ "per_call_output_explicit_vs_sdpa_max_rel": 0.002851218217983842,
+ "per_call_output_sdpa_math_vs_default_max_rel": 0.0009460737928748131,
+ "tolerance": 0.001,
+ "images_identical_to_stock": false,
+ "n_images": 8,
+ "note": "stock uses fused F.scaled_dot_product_attention; token identity with an explicit path cannot hold under discrete top-k/top-p sampling. All arms use the explicit path; 'full' is the reference, and a 'stock' arm checks statistical equivalence."
+}
