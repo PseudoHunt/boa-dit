@@ -4,3 +4,4 @@ ckpt/
 __pycache__/
 *.log.big
 logs/
+results/attn_share/maps/
