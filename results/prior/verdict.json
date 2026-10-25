@@ -12,5 +12,14 @@
   "fid_ok": null,
   "pass": false
  },
+ "criterion2": {
+  "blocks_qualifying": [],
+  "shared_ok": false,
+  "recovered_fraction": -0.5212826480475821,
+  "recovered_ok": false,
+  "recovered_fpin": null,
+  "recovered_r16": null,
+  "pass": false
+ },
  "verdict": "STOP before Part C"
 }

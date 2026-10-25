@@ -85,14 +85,35 @@ Integrity: base reproduces the stored W4 per-image errors on seeds 0–127 (max 
 | A6 | Q,K FP, blocks 0–4, all steps | 0.08948 | +3.0% [+1.2, +5.1] | — | — | — |
 | A7 | Q,K FP, blocks 0–4, steps < 14 | 0.09255 | -0.3% [-0.9, +0.3] | — | — | — |
 | | *Part B arms below; same base* | | | | | |
+| B2 | W4 + deployed D̄, blocks 0–4, steps < 14 | 0.09211 | +0.2% [+0.1, +0.3] | — | — | — |
 
 Shares need not add up: routing (Q,K) and value errors interact.
 - Q,K vs V: A1 removes 6.5%, A4 removes 25.0% → **V (values) dominates**.
 - Early vs late routing: A2 (steps < 14) -0.4%, A3 (steps ≥ 14) 7.0%.
 
+### Part B1 (median over the 16 heads; cond branch; shared = ‖D̄‖² / mean ‖D‖² over the bucket's 160 (image, step) samples; per-step version in brackets)
+
+| block | def | bucket 0 | bucket 1 | bucket 2 | bucket 7 | bucket 8 | bucket 9 | branch cos (b0) | rank-16 energy (b0) | kernel cos (b0) |
+| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | deployed | 0.07 [0.07] | 0.06 [0.06] | 0.06 [0.06] | 0.09 [0.10] | 0.11 [0.11] | 0.11 [0.13] | 0.74 | 0.94 | 0.26 |
+| 0 | fpin | 0.07 [0.07] | 0.07 [0.07] | 0.06 [0.06] | 0.10 [0.10] | 0.12 [0.12] | 0.12 [0.14] | 0.70 | 0.95 | 0.24 |
+| 1 | deployed | 0.18 [0.18] | 0.18 [0.18] | 0.17 [0.18] | 0.12 [0.12] | 0.13 [0.13] | 0.12 [0.14] | 0.85 | 0.97 | 0.28 |
+| 1 | fpin | 0.17 [0.17] | 0.15 [0.15] | 0.12 [0.13] | 0.14 [0.14] | 0.16 [0.16] | 0.12 [0.15] | 0.86 | 0.96 | 0.33 |
+| 2 | deployed | 0.04 [0.04] | 0.04 [0.04] | 0.04 [0.04] | 0.08 [0.08] | 0.07 [0.07] | 0.06 [0.07] | 0.97 | 0.75 | 0.26 |
+| 2 | fpin | 0.04 [0.04] | 0.04 [0.04] | 0.04 [0.04] | 0.08 [0.08] | 0.07 [0.07] | 0.06 [0.07] | 0.97 | 0.75 | 0.27 |
+| 3 | deployed | 0.08 [0.09] | 0.09 [0.09] | 0.10 [0.10] | 0.12 [0.12] | 0.10 [0.10] | 0.10 [0.11] | 0.91 | 0.98 | 0.44 |
+| 3 | fpin | 0.10 [0.10] | 0.10 [0.10] | 0.10 [0.11] | 0.11 [0.11] | 0.15 [0.15] | 0.14 [0.16] | 0.74 | 0.96 | 0.40 |
+| 4 | deployed | 0.12 [0.12] | 0.11 [0.11] | 0.17 [0.18] | 0.11 [0.11] | 0.10 [0.11] | 0.10 [0.11] | 0.88 | 0.95 | 0.42 |
+| 4 | fpin | 0.14 [0.14] | 0.12 [0.12] | 0.12 [0.12] | 0.20 [0.20] | 0.24 [0.25] | 0.24 [0.24] | 0.82 | 0.97 | 0.41 |
+| 13 | deployed | 0.20 [0.21] | 0.13 [0.14] | 0.07 [0.08] | 0.04 [0.04] | 0.04 [0.05] | 0.04 [0.05] | 0.82 | 1.00 | 0.53 |
+| 13 | fpin | 0.20 [0.20] | 0.15 [0.15] | 0.08 [0.08] | 0.05 [0.05] | 0.06 [0.06] | 0.06 [0.06] | 0.87 | 1.00 | 0.47 |
+
+Rank energy of D̄ (bucket 0, deployed, cond; median over heads), rank 4 / 8 / 16 / 32: b0 0.90 / 0.92 / 0.94 / 0.97; b1 0.85 / 0.93 / 0.97 / 0.99; b2 0.54 / 0.62 / 0.75 / 0.88; b3 0.88 / 0.94 / 0.98 / 0.99; b4 0.77 / 0.89 / 0.95 / 0.97; b13 0.94 / 0.99 / 1.00 / 1.00.
+
 ### Verdict
 
 1. Routing error large: A1 removes 6.5% [3.0, 11.1] (needs ≥ 30%, CI > 20%): **False**; FID-2k gain pending → **criterion 1 False**.
+2. Shared and repairable: blocks 0–4 with median shared ≥ 0.5 in each of buckets 0–2: [] (needs ≥ 3): **False**; B2 recovered fraction -0.52 of A7's gain (needs ≥ 0.50): **False**) → **criterion 2 False**.
 
 **STOP before Part C**: the shared-prior quantization mechanism is not supported on DiT-XL/2.
 
