@@ -77,11 +77,36 @@ def main():
     L.append(f"- r_l = 8 (the cap) in {int((r == 8).sum())} of 112 layers; **r\\* = {v['r_star']}** (`configs/deflate_r.json`). "
              "The token-mean subspace is not low-rank in most layers.")
     L.append(f"- Mechanism: median cos(x̄_s, p_s) ≥ 0.9 in {int((cosm[hi] >= 0.9).sum())} of {v['n_high_share']} high-share layers → "
-             f"**mechanism {'PASS' if mech_all else 'FAIL'}**. The token mean is not the adaLN shift. A likely cause (not measured): the "
-             "token mean of LayerNorm(x)·(1 + scale) is itself large. This changes the explanation, not the method (handoff "
-             "§1); G2 proceeds.")
+             f"**mechanism {'PASS' if mech_all else 'FAIL'}**. The token mean is not the adaLN shift. The other term, the token mean "
+             "of LayerNorm(x)·(1 + scale), explains it only partly (see Corrections: median cosine 0.31 for qkv, 0.59 for fc1). "
+             "This changes the explanation, not the method (handoff §1); G2 proceeds.")
     L.append("- In the early fc2 layers (blocks 0–3) the old damping erases 3,000–4,000 of 4,608 directions, and deflation "
              "barely changes that (share 0.09–0.28). Only block 27 fc2 (share 0.995) has its erased count cut sharply.\n")
+    gb = json.load(open(os.path.join(OUT, "g1b.json"))) if os.path.exists(os.path.join(OUT, "g1b.json")) else None
+    if gb:
+        B_ = gb["layers"]
+        L.append("### Corrections (reviewer item 4; added after the verdict, which is unchanged; `g1b.json`, a deterministic rerun of the same pass)\n")
+        L.append("| layer | tr(H_mean) captured by r = 8 | tr(H) captured by top-8 eig of H | cos(x̄, mean of LN(x)⊙(1+scale)) | "
+                 "‖x̄‖² in top-8 channels | in top-32 channels |")
+        L.append("| --- | ---: | ---: | ---: | ---: | ---: |")
+        for t in TYPES:
+            ks = [f"b{b}.{t}" for b in range(28)]
+            cm = [B_[k]["cos_xbar_ln_scale_mean_median"] for k in ks if "cos_xbar_ln_scale_mean_median" in B_[k]]
+            L.append(f"| {t} | {np.median([L_[k]['top8_frac'] for k in ks]):.3f} | {np.median([B_[k]['top8_frac_H'] for k in ks]):.3f} | "
+                     + (f"{np.median(cm):.3f}" if cm else "— (input not modulated)") + f" | "
+                     f"{np.median([B_[k]['xbar_energy_top8_channels_median'] for k in ks]):.3f} | "
+                     f"{np.median([B_[k]['xbar_energy_top32_channels_median'] for k in ks]):.3f} |")
+        L.append("\n(Medians over the 28 blocks; per-sample quantities are first reduced by their median over samples.)\n")
+        L.append("Top eigenvector of H_var, fc2:\n")
+        L.append("| block | energy in largest channel (index) | energy in top 8 channels | reading |")
+        L.append("| --- | ---: | ---: | --- |")
+        for b in (0, 1, 2, 3, 27):
+            r_ = B_[f"b{b}.mlp.fc2"]
+            t1, t8 = r_["hvar_top_eigvec_top1_channel_frac"], r_["hvar_top_eigvec_top8_channel_frac"]
+            rd = "near one-hot (outlier channel)" if t1 >= 0.5 else ("concentrated in a few channels" if t8 >= 0.5 else "dense")
+            L.append(f"| {b} | {t1:.3f} ({r_['hvar_top_eigvec_top1_channel']}) | {t8:.3f} | {rd} |")
+        L.append("\nReading rule (set here): near one-hot if the largest channel holds ≥ 50% of the eigenvector's energy; a few "
+                 "channels if the top 8 hold ≥ 50%; otherwise dense.\n")
     path = os.path.join(OUT, "G1.md")
     pre = open(path).read().split(MARK)[0]
     atomic_write_text(path, pre + "\n".join(L) + "\n")
