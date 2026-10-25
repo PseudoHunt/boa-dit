@@ -1,0 +1,224 @@
+{
+ "model": "uniform_w4_K1_lam1_brcfg",
+ "n_seeds": 64,
+ "base_rel_mse": 0.09924645721912384,
+ "blocks": {
+  "0": {
+   "rel_mse": 0.09790727496147156,
+   "contribution": 0.0013391822576522827,
+   "contribution_share": 0.013493501581251621
+  },
+  "1": {
+   "rel_mse": 0.09738831222057343,
+   "contribution": 0.001858144998550415,
+   "contribution_share": 0.01872253231704235
+  },
+  "2": {
+   "rel_mse": 0.07606098800897598,
+   "contribution": 0.023185469210147858,
+   "contribution_share": 0.23361508548259735
+  },
+  "3": {
+   "rel_mse": 0.09952400624752045,
+   "contribution": -0.00027754902839660645,
+   "contribution_share": -0.0027965635526925325
+  },
+  "4": {
+   "rel_mse": 0.09727610647678375,
+   "contribution": 0.001970350742340088,
+   "contribution_share": 0.01985310949385166
+  },
+  "5": {
+   "rel_mse": 0.09755328297615051,
+   "contribution": 0.0016931742429733276,
+   "contribution_share": 0.0170602984726429
+  },
+  "6": {
+   "rel_mse": 0.09674414992332458,
+   "contribution": 0.0025023072957992554,
+   "contribution_share": 0.02521306462585926
+  },
+  "7": {
+   "rel_mse": 0.09531789273023605,
+   "contribution": 0.003928564488887787,
+   "contribution_share": 0.039583925157785416
+  },
+  "8": {
+   "rel_mse": 0.0965755358338356,
+   "contribution": 0.0026709213852882385,
+   "contribution_share": 0.026912007480859756
+  },
+  "9": {
+   "rel_mse": 0.0954340398311615,
+   "contribution": 0.0038124173879623413,
+   "contribution_share": 0.0384136363863945
+  },
+  "10": {
+   "rel_mse": 0.09309492260217667,
+   "contribution": 0.006151534616947174,
+   "contribution_share": 0.061982411891222
+  },
+  "11": {
+   "rel_mse": 0.09380635619163513,
+   "contribution": 0.0054401010274887085,
+   "contribution_share": 0.05481405928730965
+  },
+  "12": {
+   "rel_mse": 0.09542183578014374,
+   "contribution": 0.0038246214389801025,
+   "contribution_share": 0.03853660449385643
+  },
+  "13": {
+   "rel_mse": 0.09794633835554123,
+   "contribution": 0.001300118863582611,
+   "contribution_share": 0.01309990230947733
+  },
+  "14": {
+   "rel_mse": 0.096499502658844,
+   "contribution": 0.002746954560279846,
+   "contribution_share": 0.0276781115680933
+  },
+  "15": {
+   "rel_mse": 0.09778709709644318,
+   "contribution": 0.001459360122680664,
+   "contribution_share": 0.014704405330121517
+  },
+  "16": {
+   "rel_mse": 0.09860830754041672,
+   "contribution": 0.0006381496787071228,
+   "contribution_share": 0.006429949309676886
+  },
+  "17": {
+   "rel_mse": 0.09946709126234055,
+   "contribution": -0.00022063404321670532,
+   "contribution_share": -0.0022230923641473055
+  },
+  "18": {
+   "rel_mse": 0.09951740503311157,
+   "contribution": -0.00027094781398773193,
+   "contribution_share": -0.0027300501242280006
+  },
+  "19": {
+   "rel_mse": 0.09954643994569778,
+   "contribution": -0.0002999827265739441,
+   "contribution_share": -0.0030226039234548807
+  },
+  "20": {
+   "rel_mse": 0.09859594702720642,
+   "contribution": 0.0006505101919174194,
+   "contribution_share": 0.006554492749273777
+  },
+  "21": {
+   "rel_mse": 0.09972643852233887,
+   "contribution": -0.00047998130321502686,
+   "contribution_share": -0.0048362561501562595
+  },
+  "22": {
+   "rel_mse": 0.10015767067670822,
+   "contribution": -0.0009112134575843811,
+   "contribution_share": -0.009181319735944271
+  },
+  "23": {
+   "rel_mse": 0.09869959950447083,
+   "contribution": 0.0005468577146530151,
+   "contribution_share": 0.005510098300874233
+  },
+  "24": {
+   "rel_mse": 0.09917016327381134,
+   "contribution": 7.62939453125e-05,
+   "contribution_share": 0.0007687321631237864
+  },
+  "25": {
+   "rel_mse": 0.09888491779565811,
+   "contribution": 0.00036153942346572876,
+   "contribution_share": 0.003642844734713435
+  },
+  "26": {
+   "rel_mse": 0.09766881167888641,
+   "contribution": 0.0015776455402374268,
+   "contribution_share": 0.01589624024927616
+  },
+  "27": {
+   "rel_mse": 0.10543907433748245,
+   "contribution": -0.006192617118358612,
+   "contribution_share": -0.06239635497331619
+  }
+ },
+ "layers": {
+  "b2.attn.qkv": {
+   "rel_mse": 0.07879360020160675,
+   "contribution": 0.02045285701751709,
+   "contribution_share": 0.20608147978782654
+  },
+  "b2.attn.proj": {
+   "rel_mse": 0.09818941354751587,
+   "contribution": 0.0010570436716079712,
+   "contribution_share": 0.010650694370269775
+  },
+  "b2.mlp.fc1": {
+   "rel_mse": 0.09567373245954514,
+   "contribution": 0.003572724759578705,
+   "contribution_share": 0.03599851205945015
+  },
+  "b2.mlp.fc2": {
+   "rel_mse": 0.09933743625879288,
+   "contribution": -9.097903966903687e-05,
+   "contribution_share": -0.0009166981326416135
+  },
+  "b10.attn.qkv": {
+   "rel_mse": 0.0995841771364212,
+   "contribution": -0.0003377199172973633,
+   "contribution_share": -0.003402841044589877
+  },
+  "b10.attn.proj": {
+   "rel_mse": 0.09932489693164825,
+   "contribution": -7.843971252441406e-05,
+   "contribution_share": -0.0007903527584858239
+  },
+  "b10.mlp.fc1": {
+   "rel_mse": 0.09689763188362122,
+   "contribution": 0.0023488253355026245,
+   "contribution_share": 0.023666590452194214
+  },
+  "b10.mlp.fc2": {
+   "rel_mse": 0.09498690813779831,
+   "contribution": 0.004259549081325531,
+   "contribution_share": 0.04291890189051628
+  },
+  "b11.attn.qkv": {
+   "rel_mse": 0.09939470142126083,
+   "contribution": -0.0001482442021369934,
+   "contribution_share": -0.0014936976367607713
+  },
+  "b11.attn.proj": {
+   "rel_mse": 0.09822259098291397,
+   "contribution": 0.0010238662362098694,
+   "contribution_share": 0.010316400788724422
+  },
+  "b11.mlp.fc1": {
+   "rel_mse": 0.09750811755657196,
+   "contribution": 0.0017383396625518799,
+   "contribution_share": 0.017515381798148155
+  },
+  "b11.mlp.fc2": {
+   "rel_mse": 0.09721529483795166,
+   "contribution": 0.00203116238117218,
+   "contribution_share": 0.020465843379497528
+  }
+ },
+ "top3_blocks": [
+  2,
+  10,
+  11
+ ],
+ "stage": "item2",
+ "run": "attribution_w4",
+ "device": "cuda:0",
+ "config": {
+  "n": 64
+ },
+ "git_sha": "b5f8693d3446e71329a14dc76d27a13ddbf3ca0f",
+ "start_utc": "2026-10-25T09:43:02Z",
+ "wall_s": 1322.2968549728394,
+ "gpu_hours": 0.3673046819368998
+}
