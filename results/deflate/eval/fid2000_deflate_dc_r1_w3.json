@@ -1,0 +1,21 @@
+{
+ "name": "deflate_dc_r1_w3",
+ "n": 2000,
+ "fid": 104.56661365927079,
+ "stage": "deflate",
+ "run": "fid2000_deflate_dc_r1_w3",
+ "device": "cuda:1",
+ "config": {
+  "ref": false,
+  "name": "deflate_dc_r1_w3",
+  "n": 2000,
+  "stage": "deflate",
+  "device": "cuda:1",
+  "carry": true,
+  "grid": "ckpt/deflate_grids/deflate_dc_r1_w3.pt"
+ },
+ "git_sha": "61e50de2f6862272215040b7ea64f4ae8be38870",
+ "start_utc": "2026-10-25T14:47:18Z",
+ "wall_s": 1358.224140882492,
+ "gpu_hours": 0.37728448357847
+}
