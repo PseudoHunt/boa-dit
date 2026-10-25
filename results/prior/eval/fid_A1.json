@@ -1,0 +1,18 @@
+{
+ "arm": "A1",
+ "n": 2000,
+ "label_acc_512": 0.77734375,
+ "class_changed_frac_512": 0.197265625,
+ "fid2k": 28.07901385069829,
+ "stage": "prior",
+ "run": "fid_A1",
+ "device": "cuda:1",
+ "config": {
+  "arm": "A1",
+  "n": 2000
+ },
+ "git_sha": "1dfd8a89245ce43976f2a093f812126a0af022e8",
+ "start_utc": "2026-10-25T15:54:23Z",
+ "wall_s": 1142.298617362976,
+ "gpu_hours": 0.3173051714897156
+}
