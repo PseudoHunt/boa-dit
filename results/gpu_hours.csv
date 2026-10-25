@@ -109,3 +109,4 @@ attn_share,pixart_stats_estimate,cuda:0,2026-10-25T13:21:57Z,2026-10-25T13:22:30
 attn_share,pixart_stats,cuda:0,2026-10-25T13:22:51Z,2026-10-25T13:28:52Z,0.1002
 attn_share,truncation_smoke(FAILED),cuda:0,2026-10-25T13:34:41Z,2026-10-25T13:36:04Z,0.0231
 attn_share,truncation_smoke,cuda:0,2026-10-25T13:36:22Z,2026-10-25T13:37:45Z,0.0231
+attn_share,pixart_truncation,cuda:0,2026-10-25T13:38:32Z,2026-10-25T13:41:39Z,0.0520

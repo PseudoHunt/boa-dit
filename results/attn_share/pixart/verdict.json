@@ -38,5 +38,10 @@
   "sdpa_math_vs_sdpa_default_rel_fro_max": 0.0005722542991861701,
   "fp16_ulp_rel_at_max": 0.0009765625,
   "note": "hidden states are fp16 throughout PixArt (DiT harness had an fp32 residual stream); 1e-3 relative to the max is ~1 fp16 ulp. The math-backend SDPA gives the noise floor between two correct implementations."
+ },
+ "C_addendum": {
+  "K_min_median": "none",
+  "K_min_p90": "none",
+  "holds": false
  }
 }

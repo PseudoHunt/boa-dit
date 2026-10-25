@@ -101,6 +101,7 @@ Plots: `heatmaps.png`, `cross_attention_control.png`, `fp_grid.jpg` (16 FP image
 - **A** sample-independence: ≥ 70% of pairs with within ≥ 0.8 at every s ≤ 7: **False** (pooled 0.607); KL ratio ≥ 3 among clearing triples: 0.782 (needs ≥ 0.5) → **A False**.
 - **B** prompt-independence: diff/same ≥ 0.9 in 0.897 of triples (needs ≥ 0.7; median ratio 1.000) → **B True**.
 - **C** compact residual (floor = min κ): median 95% side 127 tokens (needs ≤ 13); ≤ 21 in 0.005 (needs ≥ 0.9); full 127 in 0.624 → **C False**. Robustness, floor = median κ: median side 127, ≤ 21 in 0.005. Floor share of κ's mass: median 0.05 (min floor), 0.44 (median floor).
+- **C under the dated addendum** (truncation K_min, cosine ≥ 0.98; `truncation.json`): median K_min **none**, p90 **none** (needs ≤ 13 / ≤ 21) → **C False**. K_min ≤ 13 in 14.3% of kernels; even the full 127 × 127 kernel stays below 0.98 in 83% (median full-kernel cosine 0.923). Median cosine by K: 5: 0.677, 9: 0.753, 13: 0.804, 21: 0.862, 31: 0.892, 63: 0.911, 127: 0.923. The residual is smooth (low-frequency energy ≥ 0.9 in 79% of kernels). The rerun reproduced the stored κ to 8.8e-07. Secondary, pre-registered 95%-mass side: median 127.
 - s_max = **2** (contiguous from 0: 2).
 
 **STOP: the phenomenon is specific to class-conditional DiT (A or B failed)**
