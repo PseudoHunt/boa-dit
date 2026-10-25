@@ -19,7 +19,7 @@ from boa_dit.attn_share.attn import CTRL, patch
 from boa_dit.common import CKPT_DIR, RESULTS, Run, atomic_torch_save, atomic_write_json
 from boa_dit.eval_fid import REF_STATS, fid_from_stats, inception_stats
 from boa_dit.eval_latent_mse import fp_reference, per_image
-from boa_dit.model import decode, load_dit, load_vae, make_diffusion
+from boa_dit.model import decode, labels_for_seeds, load_dit, load_vae, make_diffusion
 from boa_dit.sample import sample_seeds
 
 OUT = os.path.join(RESULTS, "attn_share")
@@ -137,6 +137,12 @@ def inception_score(imgs_u8_nchw, dev, splits=10, bs=100):
     return float(np.mean(scores)), float(np.std(scores))
 
 
+def label_acc(top1):
+    """ResNet-50 top-1 accuracy against the conditioning label y of seeds 0..len-1."""
+    y = torch.as_tensor(labels_for_seeds(list(range(len(top1)))))
+    return float((top1 == y).float().mean())
+
+
 def fp_top1(dev):
     path = os.path.join(OUT, "fp_resnet_top1_512.json")
     if not os.path.exists(path):
@@ -193,6 +199,7 @@ def main():
                "is_note": "torchvision Inception-v3, 10 splits of 200; not comparable to published IS",
                "rel_mse_mean_512": float(rel.mean()), "rel_mse_median_512": float(rel.median()),
                "class_changed_frac_512": float((top1 != ref_top1).float().mean()),
+               "label_acc_512": label_acc(top1), "top1_512": top1.tolist(),
                "rel_mse_per_image": rel.tolist(), **run.record()}
     atomic_write_json(out_json, res)
     os.remove(part)
