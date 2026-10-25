@@ -56,3 +56,86 @@ Estimates from measured costs: FID anchors ≈ 0.9, block/layer attribution ≈ 
 Gate A corrections + 10 evals ≈ 0.9, static-48 × 2 ≈ 0.17; total ≈ 2.9. Gate A arms run in this order so the rule's
 arms finish first: time2-16 and static-32 (W4, W3), then static-16, time2-32, time3-16, then static-48. If the
 running total would pass 3.5, remaining non-rule arms are skipped and recorded as "not run (cap)".
+
+---
+
+## Results (appended after the runs by `scripts/make_gateA.py`)
+
+### W4 (base `uniform_w4_K1_lam1_brcfg`, uncorrected rel. latent MSE 0.09087)
+
+| arm | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |
+| --- | ---: | ---: | --- | ---: |
+| static-16 | 0.296 | 0.07046 ± 0.00286 | **+22.5%** [+19.9, +25.0] | 89% |
+| static-32 | 0.593 | 0.06506 ± 0.00279 | **+28.4%** [+25.4, +31.5] | 88% |
+| time2-16 | 0.593 | 0.06934 ± 0.00285 | **+23.7%** [+21.1, +26.4] | 88% |
+| time2-32 | 1.185 | 0.06548 ± 0.00282 | **+27.9%** [+24.9, +30.9] | 88% |
+| time3-16 | 0.889 | 0.06993 ± 0.00293 | **+23.0%** [+20.3, +25.8] | 88% |
+| static-48 | — | not run (cap) or pending | — | — |
+
+Equal-budget and rank comparisons (reduction of the first arm vs the second):
+
+| comparison | reduction (95% CI) | images improved |
+| --- | --- | ---: |
+| time2-16 vs static-32 | **-6.6%** [-9.3, -4.0] | 33% |
+| time3-16 vs static-48 | pending / not run | — |
+| time2-32 vs static-32 | **-0.7%** [-2.5, +1.2] | 51% |
+| static-32 vs static-16 | **+7.7%** [+5.4, +10.0] | 70% |
+
+### W3 (base `uniform_w3_K1_lam1_brcfg`, uncorrected rel. latent MSE 0.39457)
+
+| arm | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |
+| --- | ---: | ---: | --- | ---: |
+| static-16 | — | not run (cap) or pending | — | — |
+| static-32 | 0.593 | 0.12509 ± 0.00353 | **+68.3%** [+66.9, +69.7] | 100% |
+| time2-16 | 0.593 | 0.14897 ± 0.00392 | **+62.2%** [+60.8, +63.7] | 100% |
+| time2-32 | — | not run (cap) or pending | — | — |
+| time3-16 | — | not run (cap) or pending | — | — |
+| static-48 | — | not run (cap) or pending | — | — |
+
+Equal-budget and rank comparisons (reduction of the first arm vs the second):
+
+| comparison | reduction (95% CI) | images improved |
+| --- | --- | ---: |
+| time2-16 vs static-32 | **-19.1%** [-21.9, -16.6] | 15% |
+| time3-16 vs static-48 | pending / not run | — |
+| time2-32 vs static-32 | pending / not run | — |
+| static-32 vs static-16 | pending / not run | — |
+
+### Captured weighted residual energy (mean over the 112 linears; fraction of ‖E H½‖²_F)
+
+| bits | regime | rank 16 | rank 32 | rank 48 |
+| --- | --- | ---: | ---: | ---: |
+| W4 | static.0 | 0.184 | 0.255 | 0.308 |
+| W4 | time2.0 | 0.221 | 0.309 | 0.373 |
+| W4 | time2.1 | 0.190 | 0.263 | 0.317 |
+| W4 | time3.0 | 0.292 | 0.407 | 0.485 |
+| W4 | time3.1 | 0.203 | 0.284 | 0.345 |
+| W4 | time3.2 | 0.194 | 0.267 | 0.322 |
+| W3 | static.0 | 0.203 | 0.276 | 0.329 |
+| W3 | time2.0 | 0.249 | 0.339 | 0.403 |
+| W3 | time2.1 | 0.207 | 0.282 | 0.336 |
+| W3 | time3.0 | 0.327 | 0.441 | 0.517 |
+| W3 | time3.1 | 0.226 | 0.310 | 0.371 |
+| W3 | time3.2 | 0.210 | 0.286 | 0.340 |
+
+### FID-2k anchors (item 1, `results/stage2/fid_anchors.json`)
+
+| model | FID-2k | rel. latent MSE (512) |
+| --- | ---: | ---: |
+| FP | 23.89 | 0.0000 |
+| uniform W4 | 29.11 | 0.0909 |
+| uniform W3 | 130.91 | 0.3946 |
+
+### GPU-hours (items 1–3, since the pivot started)
+
+- item 1 (FID anchors): 0.95
+- item 3 (Gate A): 0.87
+- **total: 1.82** (cap 3.5)
+
+### Decision (pre-registered rule)
+
+- W4: time2-16 vs static-32 -6.6% [-9.3, -4.0] (needs ≥ 5%, CI > 0): **False**; time2-16 vs uniform +23.7% (needs ≥ 15%): **True** → fail
+- W3: time2-16 vs static-32 -19.1% [-21.9, -16.6] (needs ≥ 10%, CI > 0): **False**; time2-16 vs uniform +62.2% (needs ≥ 15%): **True** → fail
+
+**Gate A: STOP**
+
