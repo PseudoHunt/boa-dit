@@ -106,6 +106,22 @@ def main():
                  f"for fused attention, but needs 537 MB per block-step. The V3 convolution takes "
                  f"{f4['V3 conv (31x31 depthwise)']:.0f} ms in PyTorch/cuDNN. **A fast kernel-form implementation does not "
                  "exist yet**; it is a prerequisite for the PixArt-Σ step, along with bounded kernel support.\n")
+    kr = load("kernel_residual_support.json")
+    if kr:
+        L.append("## Residual-kernel support (floor removed)\n")
+        L.append("From the saved V3 kernels (`artifacts/V3_kernels_k20.pt`), per (block, head, window), k = 20; "
+                 "κ_res = (κ − floor)₊; side = smallest centered square holding 95% of κ_res's mass (full = 31). "
+                 "Rule: compact iff median side ≤ 9 and ≥ 90% of kernels ≤ 15. Source: `kernel_residual_support.json`.\n")
+        L.append("| branch | floor | floor share (median [p10, p90]) | median side | ≤ 9×9 | ≤ 15×15 | full 31×31 | verdict |")
+        L.append("| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |")
+        for br, d in kr["per_branch"].items():
+            for how, r in d.items():
+                L.append(f"| {br} | {how}(κ) | {100 * r['floor_share_median']:.0f}% [{100 * r['floor_share_p10']:.0f}, "
+                         f"{100 * r['floor_share_p90']:.0f}] | {r['side_median']:.0f} | {100 * r['frac_side_le_9']:.1f}% | "
+                         f"{100 * r['frac_side_le_15']:.1f}% | {100 * r['frac_side_31']:.1f}% | {r['verdict']} |")
+        L.append(f"\n**Verdict: {kr['verdict']}.** It holds whether the floor is the minimum or the median of κ. On DiT-XL/2 "
+                 "at 256 px, the non-uniform part of early attention is spread over the whole 16×16 grid, not concentrated "
+                 "in a small window. A \"global mean of V + small convolution\" form does not reproduce these maps here.\n")
     L.append("## Not verified\n")
     L.append("- Text-to-image models (PixArt-Σ): text cross-attention and prompts may change how image-independent "
              "early self-attention is.")

@@ -32,6 +32,19 @@ Open risk for that step: at 256 px the V3 kernel is not compact. The smallest ce
 
 Per-block microbenchmarks (`compute.md` §5; synthetic inputs, A30): at N = 4096 a dense stored map applied to all rows takes 11.1 ms vs 27.3 ms for fused attention, but needs 537 MB per block-step. The V3 convolution takes 783 ms in PyTorch/cuDNN. **A fast kernel-form implementation does not exist yet**; it is a prerequisite for the PixArt-Σ step, along with bounded kernel support.
 
+## Residual-kernel support (floor removed)
+
+From the saved V3 kernels (`artifacts/V3_kernels_k20.pt`), per (block, head, window), k = 20; κ_res = (κ − floor)₊; side = smallest centered square holding 95% of κ_res's mass (full = 31). Rule: compact iff median side ≤ 9 and ≥ 90% of kernels ≤ 15. Source: `kernel_residual_support.json`.
+
+| branch | floor | floor share (median [p10, p90]) | median side | ≤ 9×9 | ≤ 15×15 | full 31×31 | verdict |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| cond | min(κ) | 36% [0, 86] | 31 | 0.3% | 0.3% | 97.7% | residual not compact |
+| cond | median(κ) | 83% [14, 100] | 31 | 0.3% | 0.3% | 91.7% | residual not compact |
+| uncond | min(κ) | 39% [0, 87] | 31 | 0.3% | 0.3% | 97.9% | residual not compact |
+| uncond | median(κ) | 85% [14, 100] | 31 | 0.3% | 0.3% | 91.4% | residual not compact |
+
+**Verdict: residual not compact.** It holds whether the floor is the minimum or the median of κ. On DiT-XL/2 at 256 px, the non-uniform part of early attention is spread over the whole 16×16 grid, not concentrated in a small window. A "global mean of V + small convolution" form does not reproduce these maps here.
+
 ## Not verified
 
 - Text-to-image models (PixArt-Σ): text cross-attention and prompts may change how image-independent early self-attention is.
