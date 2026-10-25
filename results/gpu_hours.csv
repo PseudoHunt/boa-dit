@@ -16,3 +16,4 @@ stage1,gain_iso_rho0.003,cuda:1,2026-10-25T06:05:50Z,2026-10-25T06:09:30Z,0.0611
 stage1,gain_iso_rho0.0001,cuda:0,2026-10-25T06:05:50Z,2026-10-25T06:09:43Z,0.0645
 stage2,quant_gates_w4_K4_lam1_brcfg_dev,cuda:0,2026-10-25T06:13:26Z,2026-10-25T06:16:54Z,0.0579
 stage2,quant_gates_w4_K4_lam1_brcfg_dev,cuda:0,2026-10-25T06:20:26Z,2026-10-25T06:22:13Z,0.0299
+stage1,gain_iso_rho0.003_fp32,cuda:1,2026-10-25T06:11:34Z,2026-10-25T06:31:34Z,0.3333
