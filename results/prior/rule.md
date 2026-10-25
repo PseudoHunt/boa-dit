@@ -77,15 +77,17 @@ Integrity: base reproduces the stored W4 per-image errors on seeds 0–127 (max 
 | arm | what is FP | rel latent MSE | share of base error removed (95% CI) | FID-2k | label acc | changed class |
 | --- | --- | ---: | --- | ---: | ---: | ---: |
 | base | nothing | 0.09226 | — | 29.11 | pending | pending |
-| A1 | Q,K FP, all blocks, all steps | 0.08625 | +6.5% [+3.0, +11.1] | — | — | — |
+| A1 | Q,K FP, all blocks, all steps | 0.08625 | +6.5% [+3.0, +11.1] | 28.08 | 77.7% | 19.7% |
 | A2 | Q,K FP, all blocks, steps < 14 | 0.09262 | -0.4% [-1.3, +0.5] | — | — | — |
 | A3 | Q,K FP, all blocks, steps ≥ 14 | 0.08580 | +7.0% [+3.2, +11.7] | — | — | — |
-| A4 | V FP, all blocks, all steps | 0.06917 | +25.0% [+18.5, +31.6] | — | — | — |
+| A4 | V FP, all blocks, all steps | 0.06917 | +25.0% [+18.5, +31.6] | 26.32 | 81.1% | 17.6% |
 | A5 | Q,K FP, block 2, all steps | 0.09052 | +1.9% [+0.0, +3.9] | — | — | — |
 | A6 | Q,K FP, blocks 0–4, all steps | 0.08948 | +3.0% [+1.2, +5.1] | — | — | — |
 | A7 | Q,K FP, blocks 0–4, steps < 14 | 0.09255 | -0.3% [-0.9, +0.3] | — | — | — |
 | | *Part B arms below; same base* | | | | | |
-| B2 | W4 + deployed D̄, blocks 0–4, steps < 14 | 0.09211 | +0.2% [+0.1, +0.3] | — | — | — |
+| B2 | W4 + deployed D̄, blocks 0–4, steps < 14 | 0.09211 | +0.2% [+0.1, +0.3] | 29.07 | 76.6% | 21.5% |
+| B2_fpin | W4 + FP-input D̄ | 0.09210 | +0.2% [+0.1, +0.3] | — | — | — |
+| B2_r16 | W4 + deployed D̄ at rank 16 | 0.09211 | +0.2% [+0.1, +0.3] | — | — | — |
 
 Shares need not add up: routing (Q,K) and value errors interact.
 - Q,K vs V: A1 removes 6.5%, A4 removes 25.0% → **V (values) dominates**.
@@ -112,8 +114,8 @@ Rank energy of D̄ (bucket 0, deployed, cond; median over heads), rank 4 / 8 / 1
 
 ### Verdict
 
-1. Routing error large: A1 removes 6.5% [3.0, 11.1] (needs ≥ 30%, CI > 20%): **False**; FID-2k gain pending → **criterion 1 False**.
-2. Shared and repairable: blocks 0–4 with median shared ≥ 0.5 in each of buckets 0–2: [] (needs ≥ 3): **False**; B2 recovered fraction -0.52 of A7's gain (needs ≥ 0.50): **False**) → **criterion 2 False**.
+1. Routing error large: A1 removes 6.5% [3.0, 11.1] (needs ≥ 30%, CI > 20%): **False**; FID-2k gain +1.03 (needs ≥ 2.61): **False** → **criterion 1 False**.
+2. Shared and repairable: blocks 0–4 with median shared ≥ 0.5 in each of buckets 0–2: [] (needs ≥ 3): **False**; B2 recovered fraction -0.52 of A7's gain (needs ≥ 0.50): **False** (FP-input D̄: -0.55; rank 16: -0.52) → **criterion 2 False**.
 
 **STOP before Part C**: the shared-prior quantization mechanism is not supported on DiT-XL/2.
 

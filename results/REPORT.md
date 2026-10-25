@@ -191,3 +191,8 @@
 - Criterion 1 (latent part) lands: A1 removes 6.5% [3.0, 11.1] of the W4 error (needs ≥ 30%, CI > 20%) → fails.
   A2 (Q,K FP only at steps < 14) removes -0.4% [-1.3, 0.5]: the early routing error does not matter for the
   final latent. Parts A and B finish as specified; Part C will not run.
+
+## 2026-10-25 — Premise check stopped by the user before its last arms
+- Verdict as far as measured (`results/prior/rule.md`, generated): criterion 1 fails (A1 removes 6.5% [3.0, 11.1] of the W4
+  error; V restoration, A4, removes 25.0%), criterion 2 fails (shared fraction 0.04–0.18 in blocks 0–4, buckets 0–2; B2 latent
+  equal to base). STOP before Part C. Not run: FID-2k/labels for A1/A4/A6/base, B2 FID, B2 variants; SUMMARY.md not written.

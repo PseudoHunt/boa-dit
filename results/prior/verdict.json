@@ -6,10 +6,10 @@
    0.1109376467348983
   ],
   "latent_ok": 0.0,
-  "A1_fid2k": null,
-  "fid_gain": null,
+  "A1_fid2k": 28.07901385069829,
+  "fid_gain": 1.032530824052344,
   "fid_needed": 2.610772337375316,
-  "fid_ok": null,
+  "fid_ok": false,
   "pass": false
  },
  "criterion2": {
@@ -17,8 +17,8 @@
   "shared_ok": false,
   "recovered_fraction": -0.5212826480475821,
   "recovered_ok": false,
-  "recovered_fpin": null,
-  "recovered_r16": null,
+  "recovered_fpin": -0.5506852857512283,
+  "recovered_r16": -0.5159555210757694,
   "pass": false
  },
  "verdict": "STOP before Part C"
