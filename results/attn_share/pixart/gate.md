@@ -46,6 +46,18 @@ thresholds then apply to the measured pairs.
 Residual-kernel support there was not compact: the 95% square was the full 31 × 31 grid in about 98% of kernels
 (`../kernel_residual_support.json`). C is therefore the condition most likely to fail.
 
+## Addendum, 2026-10-25 (after the results below were computed and published)
+Change to condition C, requested by the reviewer: C is now judged on **K_min** from a functional truncation test.
+Per (block, head, step ≤ 7) cond kernel κ and side K ∈ {5, 9, 13, 21, 31, 63, 127}: floor f_K = mean of κ over the
+cells outside the centered K × K square; κ_K = κ inside the square and f_K outside; rebuild the row-normalized map and
+take its cosine to M (median over rows). K_min = the smallest K with cosine ≥ 0.98. **C holds iff median K_min ≤ 13
+and the 90th percentile ≤ 21 tokens.** The 95%-mass side is reported alongside as a secondary number.
+Reason: the 95%-mass side is biased by far cells. Each is averaged over few token pairs and clipped to non-negative
+noise, and they make up most of the kernel's cells.
+Honest timing: this addendum was written after the PixArt statistics, including the 95%-mass side and the overall
+verdict, had been computed and pushed (commit d587a31). It is therefore not a blind pre-registration of C. It was
+written before any K_min was computed for PixArt. The overall verdict cannot change, because A failed.
+
 ---
 
 ## Results (appended by `scripts/make_pixart_gate.py`)
