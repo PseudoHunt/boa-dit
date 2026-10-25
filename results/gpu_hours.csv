@@ -42,3 +42,4 @@ stage2,quant_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.5,cuda:1,
 stage2,eval_latent_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.5,cuda:1,2026-10-25T07:46:39Z,2026-10-25T07:47:29Z,0.0139
 stage2,quant_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.75,cuda:0,2026-10-25T07:43:37Z,2026-10-25T07:50:00Z,0.1062
 stage2,eval_latent_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.75,cuda:0,2026-10-25T07:50:03Z,2026-10-25T07:50:53Z,0.0138
+stage2,eval_latent_gain_w4_K1_lam1_brcfg_gain_iso_rho0.003_fp32_gmedian_tau0.25,cuda:0,2026-10-25T07:51:00Z,2026-10-25T07:55:58Z,0.0826
