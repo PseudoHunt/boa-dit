@@ -1,0 +1,42 @@
+{
+ "frac_pairs_within_ge_0.8_per_step": [
+  0.8794642857142857,
+  0.828125,
+  0.7522321428571429,
+  0.6696428571428571,
+  0.5491071428571429,
+  0.4375,
+  0.3861607142857143,
+  0.35044642857142855,
+  0.32589285714285715,
+  0.31026785714285715
+ ],
+ "A_agreement_every_step_0_7": false,
+ "A_pooled_frac_s0_7": 0.6065848214285714,
+ "A_kl_share_among_clearing": 0.7824287028518859,
+ "A": false,
+ "B_frac_ratio_ge_0.9": 0.8973214285714286,
+ "B_ratio_median": 1.000014635015251,
+ "B": true,
+ "C_side_min_median": 127.0,
+ "C_frac_side_le_21": 0.004743303571428571,
+ "C_frac_side_le_13": 0.004464285714285714,
+ "C_frac_full_127": 0.6241629464285714,
+ "C_side_median_floor_median": 127.0,
+ "C_frac_side_le_21_median_floor": 0.004743303571428571,
+ "C": false,
+ "floor_share_min_median": 0.05352715216577053,
+ "floor_share_median_median": 0.4440470486879349,
+ "s_max": 2,
+ "s_max_contiguous": 2,
+ "verdict": "STOP: the phenomenon is specific to class-conditional DiT (A or B failed)",
+ "parity": {
+  "explicit_vs_sdpa_max_rel": 0.003706754418089986,
+  "tolerance": 0.001,
+  "explicit_vs_sdpa_rel_fro_max": 0.0005796331097371876,
+  "sdpa_math_vs_sdpa_default_max_rel": 0.004118616227060556,
+  "sdpa_math_vs_sdpa_default_rel_fro_max": 0.0005722542991861701,
+  "fp16_ulp_rel_at_max": 0.0009765625,
+  "note": "hidden states are fp16 throughout PixArt (DiT harness had an fp32 residual stream); 1e-3 relative to the max is ~1 fp16 ulp. The math-backend SDPA gives the noise floor between two correct implementations."
+ }
+}

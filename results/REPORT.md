@@ -137,3 +137,19 @@
 - `results/attn_share/SUMMARY.md` written. Heavy processes stopped; nothing is running. The instance can be shut down
   once this commit is on GitHub. Checkpoints and maps under `ckpt/` and `results/attn_share/maps/` are not in git.
 
+
+## 2026-10-25 — Pre-shutdown items + PixArt-Σ 1024 diagnostic (STOP)
+- Artifacts preserved: V3 kernels in git (`results/attn_share/artifacts/V3_kernels_k20.pt`); V2 windowed maps (470 MB)
+  and V1 per-step maps s0–19 (2 × 1.17 GB) via git LFS, verified on GitHub as LFS pointers. Gate 3 JSONs were already in git.
+- DiT-XL/2 residual-kernel support (`results/attn_share/kernel_residual_support.json`): residual not compact. The
+  floor-subtracted 95% square is the full 31 × 31 in about 98% of kernels (min floor) and 91% (median floor).
+- PixArt-Σ 1024 (`results/attn_share/pixart/`; pre-registered in commit 30f4bef): **STOP: the phenomenon is specific to class-conditional DiT (A or B failed)**.
+  A False (agreement ≥ 70% only at s = 0–2); B True (median diff/same ratio 1.000; cross-attn
+  control about 0.08); C False (median residual side 127 of 127). Prompt-independence holds; the shared
+  window is short and the residual is not compact. §3 and §4 were not run (STOP); their code is ready.
+- Parity tolerance note: 1e-3 is below the fp16 noise floor of this model (two PyTorch SDPA backends differ by
+  4.1e-03); the processor (3.7e-3) was accepted as equivalent, and the tolerance was not changed.
+- Environment fixes: T5 fp32 → fp16 conversion per shard (disk quota); `sentencepiece` installed; T5 loaded explicitly
+  in fp16 (transformers 5 ignored `torch_dtype`); prompt encoding under no_grad.
+- All heavy processes are stopped. The instance can be shut down after this push. Not in git: ckpt/ (BoA checkpoints, PixArt
+  latents and kappa.pt, about 0.6 GB) and the PixArt weights in /home/jl_fs.
