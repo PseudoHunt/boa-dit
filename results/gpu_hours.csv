@@ -165,3 +165,4 @@ feas_var,arm_positional25,cuda:0,2026-10-25T16:56:39Z,2026-10-25T16:58:47Z,0.035
 feas_var,arm_random25,cuda:0,2026-10-25T16:58:47Z,2026-10-25T17:01:13Z,0.0406
 feas_video,stats,cuda:1,2026-10-25T16:58:59Z,2026-10-25T17:04:28Z,0.0912
 feas_video,arm_full,cuda:1,2026-10-25T17:05:22Z,2026-10-25T17:11:23Z,0.1005
+feas_video,arm_window10,cuda:1,2026-10-25T17:11:24Z,2026-10-25T17:18:35Z,0.1196
