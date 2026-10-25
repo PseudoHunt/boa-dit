@@ -73,6 +73,7 @@ Plots: `gate1_heatmaps.png` (within / entropy / KL ratio over block × step), `g
 - s_max = **14** (contiguous from s = 0: 14).
 - Class vs noise (s ≤ 9, median over pairs): same-class 0.974, different-class 0.956.
 - Branch agreement (s ≤ 9): 0.998; offset-kernel reconstruction (s ≤ 9): 0.983.
+- Caveat, near-uniformity: at s ≤ 9 the median row entropy is 0.976 of uniform, i.e. a median KL(P‖U) of only 0.131 nats; the KL ratio says the mean map explains most of that small deviation, not that the deviation is large. Blocks with head-median KL ratio < 1.5 at every s ≤ 9 (attention ≈ uniform there): [0, 1, 2]. Whether the stored map is worth more than a uniform map is tested directly by the extra Gate 2 control arm `k10-uniform`.
 
 **Gate 1: PASS**
 
