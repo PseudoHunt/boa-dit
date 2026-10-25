@@ -15,12 +15,13 @@ ResNet-50 label accuracy (top-1 vs the conditioning label y, seeds 0–511): FP 
 | k15-sel | s < 15, heads with Gate 1 within ≥ 0.8 | 24.06 | +0.17 | 84.8 ± 4.9 | 0.0451 / 0.0164 | 8.6% | pending | — | 0.33 |
 | k10-onemap | s < 10, single map M[·,·,5] | 23.94 | +0.05 | 85.5 ± 5.5 | 0.0233 / 0.0068 | 6.4% | pending | — | 0.32 |
 | k10-uniform | control (not in verdict): s < 10, uniform 1/256 maps | 44.86 | +20.97 | 47.9 ± 3.2 | 0.2624 / 0.2271 | 34.0% | pending | — | 0.32 |
-| fp | check (not in verdict): patched model, sharing off | pending | — | — | — | — | — | — | — |
+| fp | check (not in verdict): patched model, sharing off | 23.89 | +0.00 | 86.4 ± 4.5 | 0.0000 / 0.0000 | 0.0% | 87.5% | +0.0 [+0.0, +0.0] | 0.32 |
 
 Reading of the rule (fixed 2026-10-25T10:12Z in commit aa9b67c, before any Gate 2 arm finished): PASS iff FID(k10) ≤ FP + 1.0 and FID(k15) ≤ FP + 2.0. `k_pass` = largest k ∈ {5, 10, 15, 20} whose FID is within its bar: +1.0 for k ≤ 10 and +2.0 for k ≥ 15 (k20 is held to the k15 bar). STOP if k5 already exceeds +1.0.
 
 - ΔFID k10 = +0.01 (≤ +1.0: **True**); ΔFID k15 = +0.36 (≤ +2.0: **True**); ΔFID k5 = -0.07.
 - k_pass = **20**.
+- Check: the patched model with sharing off reproduces FID-2k 23.89 (anchor 23.89); rel. latent MSE vs the FP reference 0.0e+00.
 - Control: uniform maps over the same window give FID-2k 44.86 vs 23.90 for the stored maps (rel. latent MSE 0.2624 vs 0.0226).
 
 **Gate 2: PASS**
