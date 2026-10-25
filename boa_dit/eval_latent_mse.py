@@ -16,8 +16,12 @@ from boa_dit.model import decode, load_dit, load_vae, make_diffusion
 from boa_dit.sample import sample_seeds
 
 EVAL_SEEDS = list(range(512))
-FP_LAT = os.path.join(CKPT_DIR, "fp_eval_latents.pt")
-FP_PIX = os.path.join(CKPT_DIR, "fp_eval_pixels64.pt")
+HELDOUT_START = 1032   # held-out calibration seeds 1032..1095 (used for calibration-time choices only)
+
+
+def fp_paths(seed_start):
+    tag = "" if seed_start == 0 else f"_s{seed_start}"
+    return (os.path.join(CKPT_DIR, f"fp_eval_latents{tag}.pt"), os.path.join(CKPT_DIR, f"fp_eval_pixels64{tag}.pt"))
 
 
 def per_image(xq, xf):
@@ -30,10 +34,12 @@ def per_image(xq, xf):
 
 
 @torch.no_grad()
-def fp_reference(dev, bs=32, n_pix=64):
+def fp_reference(dev, bs=32, n_pix=64, seed_start=0, n=512):
+    FP_LAT, FP_PIX = fp_paths(seed_start)
     if not os.path.exists(FP_LAT):
         model, diffusion = load_dit(dev), make_diffusion(50)
-        x = sample_seeds(model, diffusion, EVAL_SEEDS, 1.5, bs, partial=FP_LAT + ".partial", resume=True)
+        x = sample_seeds(model, diffusion, list(range(seed_start, seed_start + n)), 1.5, bs,
+                         partial=FP_LAT + ".partial", resume=True)
         atomic_torch_save(x, FP_LAT)
         os.remove(FP_LAT + ".partial")
         del model
@@ -51,16 +57,19 @@ def main():
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--n", type=int, default=512)
     ap.add_argument("--stage", default="stage2")
+    ap.add_argument("--seed_start", type=int, default=0, help="0 = eval seeds; 1032 = held-out calibration seeds")
     a = ap.parse_args()
     dev = a.device
-    xf, pf = fp_reference(dev)
+    seeds = list(range(a.seed_start, a.seed_start + a.n))
+    xf, pf = fp_reference(dev, seed_start=a.seed_start, n=a.n if a.seed_start else 512)
     xf = xf[:a.n]
-    out_json = os.path.join(RESULTS, a.stage, "eval", f"latent_{a.name}.json")
+    tag = "" if a.seed_start == 0 else f"_heldout{a.seed_start}n{a.n}"
+    out_json = os.path.join(RESULTS, a.stage, "eval", f"latent_{a.name}{tag}.json")
     with Run(a.stage, f"eval_latent_{a.name}", dev, vars(a)) as run:
         model, diffusion = load_dit(dev), make_diffusion(50)
         model.load_state_dict(torch.load(os.path.join(CKPT_DIR, f"ckpt_{a.name}", "model.pt")))
-        part = os.path.join(CKPT_DIR, f"ckpt_{a.name}", f"eval_latents_{a.n}.partial")
-        xq = sample_seeds(model, diffusion, EVAL_SEEDS[:a.n], 1.5, 32, partial=part, resume=True)
+        part = os.path.join(CKPT_DIR, f"ckpt_{a.name}", f"eval_latents_{a.seed_start}_{a.n}.partial")
+        xq = sample_seeds(model, diffusion, seeds, 1.5, 32, partial=part, resume=True)
         rel, mse, psnr = per_image(xq, xf)
         del model
         torch.cuda.empty_cache()
@@ -70,7 +79,7 @@ def main():
         pmse = (pq - pf[:n_pix].float()).flatten(1).pow(2).mean(1)
         ppsnr = 10 * torch.log10(255.0 ** 2 / pmse)
         sem = float(rel.std() / math.sqrt(len(rel)))
-        res = {"name": a.name, "n": a.n, "rel_mse_mean": float(rel.mean()), "rel_mse_sem": sem,
+        res = {"name": a.name, "n": a.n, "seed_start": a.seed_start, "rel_mse_mean": float(rel.mean()), "rel_mse_sem": sem,
                "rel_mse_median": float(rel.median()), "latent_psnr_mean": float(psnr.mean()),
                "latent_mse_mean": float(mse.mean()),
                "pixel_mse_mean_64": float(pmse.mean()), "pixel_psnr_mean_64": float(ppsnr.mean()),

@@ -68,21 +68,43 @@ def normalize(p):
     return p / p.sum()
 
 
-def bucket_weights(mode, layer, block, gates, gain, S, B, K, lam=1.0, Lam=None, seed=0):
+_RG_CACHE = {}
+
+
+def row_groups_cached(gates, block, gi, K, seed=0):
+    """row_groups is deterministic (seeded k-means); cache it per (block, gate, K, seed)."""
+    key = (block, gi, K, seed)
+    if key not in _RG_CACHE:
+        _RG_CACHE[key] = row_groups(gates[block, gi], K, seed)
+    return _RG_CACHE[key]
+
+
+def clip_ratio(p, r):
+    """Raise the floor so max/min across buckets <= r, renormalize."""
+    p = normalize(p)
+    return normalize(np.maximum(p, p.max() / r))
+
+
+def bucket_weights(mode, layer, block, gates, gain, S, B, K, lam=1.0, Lam=None, seed=0, tau=1.0, clip=0.0):
     """Returns (groups, P): groups = list of (row_index_array, p[B]) for rows to quantize with BoA;
-    `dead_rows` (RTN) are returned as the group with p=None. For non-grouped layers a single group of all rows."""
+    `dead_rows` (RTN) are returned as the group with p=None. For non-grouped layers a single group of all rows.
+    tau: tempered gain, p ∝ (g_t^2)^tau per step before bucket averaging. clip > 0: max/min of p across buckets
+    clipped to `clip` (applied to the normalized weight before the lambda mix)."""
     gname = GATE_FOR[layer]
     gi = 0 if gname == "msa" else 1
     curves = gates[block, gi]                                   # [S, D]
-    gain_b = bucket_mean(gain, B) if gain is not None else None
+    gain_b = bucket_mean(gain ** tau, B) if gain is not None else None
     uni = np.full(B, 1.0 / B)
 
     def mix(p):
-        return (1 - lam) / B + lam * normalize(p)
+        p = normalize(p)
+        if clip > 0:
+            p = clip_ratio(p, clip)
+        return (1 - lam) / B + lam * p
 
     out = []
     if layer in ROW_GROUPED and mode in ("gates", "full"):
-        labels, _ = row_groups(curves, K, seed)
+        labels, _ = row_groups_cached(gates, block, gi, K, seed)
         dead = np.where(labels == -1)[0]
         if len(dead):
             out.append((dead, None))

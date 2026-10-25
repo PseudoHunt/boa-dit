@@ -89,7 +89,14 @@ def main():
     elif saturated:
         verdict = "PASS" if cut[3] >= 0.10 else "STOP"
     else:
-        verdict = "PASS" if (cut[3] >= 0.10 or cut[4] >= 0.05) else ("STOP" if (cut[3] <= 0 and cut[4] <= 0) else "NO-PASS (between thresholds; human decision)")
+        # Handoff 5.5: PASS if >= 10% at W3 or >= 5% at W4; STOP if `full` is no better than `uniform`
+        # at either bit-width, or worse. A regression at any bit-width is therefore a STOP.
+        if cut[3] >= 0.10 or cut[4] >= 0.05:
+            verdict = "PASS"
+        elif min(cut.values()) < 0 or max(cut.values()) <= 0:
+            verdict = "STOP"
+        else:
+            verdict = "NO-PASS (improves at both bit-widths but below thresholds; human decision)"
     L.append(f"\n**Gate 2: {verdict}**\n")
     atomic_write_text(os.path.join(ROOT, "results", "gate2.md"), "\n".join(L))
     print(verdict, cut)

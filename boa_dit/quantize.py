@@ -33,6 +33,10 @@ def run_name(a):
         n += f"_{a.gain_tag}"
     if a.gain_stat != "mean" and a.weighting in ("gain", "full"):
         n += f"_g{a.gain_stat}"
+    if getattr(a, "tau", 1.0) != 1.0 and a.weighting in ("gain", "full"):
+        n += f"_tau{a.tau:g}"
+    if getattr(a, "clip_ratio", 0.0) > 0:
+        n += f"_clip{a.clip_ratio:g}"
     return n + (a.suffix or "")
 
 
@@ -60,6 +64,8 @@ def main():
     ap.add_argument("--branch", default="cfg", choices=["cfg", "equal"])
     ap.add_argument("--gain_tag", default="gain_iso_rho0.01")
     ap.add_argument("--gain_stat", default="mean", choices=["mean", "median"])
+    ap.add_argument("--tau", type=float, default=1.0, help="tempered gain: p ∝ (g_t^2)^tau")
+    ap.add_argument("--clip_ratio", type=float, default=0.0, help=">0: clip max/min of p across buckets")
     ap.add_argument("--adaln_bits", type=int, default=8)
     ap.add_argument("--groupsize", type=int, default=-1, help="-1 = per-channel (only option implemented)")
     ap.add_argument("--n_calib", type=int, default=32)
@@ -118,7 +124,8 @@ def main():
                 for ln in LINEARS:
                     lin = block_linear(blk, ln)
                     Lam = dmq_lambda(lin, means, ln, B, a.bits, a.branch, a.cfg) if a.weighting == "dmq" else None
-                    groups = W.bucket_weights(a.weighting, ln, l, gates, gain, S, B, a.K, a.lam, Lam)
+                    groups = W.bucket_weights(a.weighting, ln, l, gates, gain, S, B, a.K, a.lam, Lam,
+                                              tau=a.tau, clip=a.clip_ratio)
                     glog, solve = [], []
                     for rows, p in groups:
                         if p is None:   # dead channels: round to nearest, skip BoA
@@ -134,7 +141,7 @@ def main():
                     del solve
                     blog[ln] = {"groups": glog, **({"dmq_Lambda": Lam} if Lam is not None else {})}
                     if ln in W.ROW_GROUPED and a.weighting in ("gates", "full"):
-                        labels, cents = W.row_groups(gates[l, 0 if W.GATE_FOR[ln] == "msa" else 1], a.K)
+                        labels, cents = W.row_groups_cached(gates, l, 0 if W.GATE_FOR[ln] == "msa" else 1, a.K)
                         atomic_write_json(os.path.join(RESULTS, "stage2", "rowgroups", f"K{a.K}", f"block{l}_{ln}.json"),
                                           {"labels": labels.tolist(),
                                            "centroids": None if cents is None else cents.tolist()})
