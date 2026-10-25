@@ -181,3 +181,10 @@
 - Pipeline check: quantize_dc at r = 0 reproduces the uniform arm bit-exactly (block 0). Drift ≤ 1.13× uniform (no damping arm).
 - Reviewer additions in progress: static-8 matched-rank baseline (Gate A FP Grams rebuilt), HEIG-8, effective-bits table,
   G1 corrections (requires a rerun of the G1 pass; Grams were not stored). WSVD-r* dropped for budget, per reviewer priority.
+
+## 2026-10-25 — Premise check (shared positional prior): first number
+- New handoff (`results/prior/rule.md`, pre-registered). Rebuild skipped: same instance, ckpt intact. The base arm reproduces
+  the stored W4 per-image rel. latent MSE on seeds 0–127 exactly (max abs diff 0.0e+00).
+- Criterion 1, first number: A1 (FP Q,K in all blocks, all steps) rel. latent MSE 0.0863 vs base 0.0923 →
+  share of base error removed 0.065 (needs ≥ 0.30). CI and FID-2k to follow.
+- The deflate project was stopped mid-G2 at the user's request (G2 verdict PASS via Route B stands; G3/G4 not run).
