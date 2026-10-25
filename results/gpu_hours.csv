@@ -2,3 +2,5 @@ stage,run,device,start_utc,end_utc,gpu_hours
 stage0,sample(FAILED),cuda:0,2026-10-25T05:48:23Z,2026-10-25T05:48:23Z,0.0000
 stage0,sample,cuda:0,2026-10-25T05:48:45Z,2026-10-25T05:49:21Z,0.0098
 stage0,sample,cuda:0,2026-10-25T05:50:23Z,2026-10-25T05:50:56Z,0.0092
+stage0,sample,cuda:0,2026-10-25T05:51:19Z,2026-10-25T05:51:52Z,0.0092
+stage0,sample,cuda:0,2026-10-25T05:52:07Z,2026-10-25T05:52:40Z,0.0092
