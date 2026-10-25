@@ -65,3 +65,26 @@ Runs only if criteria 1 and 2 both pass. Done as in the handoff.
 If 1 or 2 fails: STOP before Part C, and `SUMMARY.md` states that the shared-prior quantization mechanism is not
 supported on DiT-XL/2. If 3 fails: the mechanism is specific to the class-conditional model. If all pass: write the
 summary with the three numbers up front, then stop. Each number is entered in REPORT.md as it lands.
+
+---
+
+## Results (appended by `scripts/make_prior.py`)
+
+Integrity: base reproduces the stored W4 per-image errors on seeds 0–127 (max abs diff 0.0e+00). Base rel. latent MSE (0–127) 0.09226; base FID-2k 29.11 (anchor, reused); FP 23.89.
+
+### Part A (share of base error = 1 − relMSE(arm)/relMSE(base); paired bootstrap 95% CI, seeds 0–127)
+
+| arm | what is FP | rel latent MSE | share of base error removed (95% CI) | FID-2k | label acc | changed class |
+| --- | --- | ---: | --- | ---: | ---: | ---: |
+| base | nothing | 0.09226 | — | 29.11 | pending | pending |
+| A1 | Q,K FP, all blocks, all steps | 0.08625 | +6.5% [+3.0, +11.1] | — | — | — |
+| A2 | Q,K FP, all blocks, steps < 14 | 0.09262 | -0.4% [-1.3, +0.5] | — | — | — |
+
+Shares need not add up: routing (Q,K) and value errors interact.
+
+### Verdict
+
+1. Routing error large: A1 removes 6.5% [3.0, 11.1] (needs ≥ 30%, CI > 20%): **False**; FID-2k gain pending → **criterion 1 False**.
+
+**STOP before Part C**: the shared-prior quantization mechanism is not supported on DiT-XL/2.
+

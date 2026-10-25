@@ -1,0 +1,16 @@
+{
+ "criterion1": {
+  "A1_share": 0.06510387114922445,
+  "A1_ci": [
+   0.029647379503990656,
+   0.1109376467348983
+  ],
+  "latent_ok": 0.0,
+  "A1_fid2k": null,
+  "fid_gain": null,
+  "fid_needed": 2.610772337375316,
+  "fid_ok": null,
+  "pass": false
+ },
+ "verdict": "STOP before Part C"
+}

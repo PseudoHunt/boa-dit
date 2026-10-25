@@ -188,3 +188,6 @@
 - Criterion 1, first number: A1 (FP Q,K in all blocks, all steps) rel. latent MSE 0.0863 vs base 0.0923 →
   share of base error removed 0.065 (needs ≥ 0.30). CI and FID-2k to follow.
 - The deflate project was stopped mid-G2 at the user's request (G2 verdict PASS via Route B stands; G3/G4 not run).
+- Criterion 1 (latent part) lands: A1 removes 6.5% [3.0, 11.1] of the W4 error (needs ≥ 30%, CI > 20%) → fails.
+  A2 (Q,K FP only at steps < 14) removes -0.4% [-1.3, 0.5]: the early routing error does not matter for the
+  final latent. Parts A and B finish as specified; Part C will not run.
