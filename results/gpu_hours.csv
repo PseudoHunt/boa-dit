@@ -64,3 +64,4 @@ stage2,fid2000_uniform_w4_K1_lam1_brcfg,cuda:0,2026-10-25T09:04:30Z,2026-10-25T0
 gateA,eval_static-32_w3,cuda:1,2026-10-25T09:18:43Z,2026-10-25T09:23:54Z,0.0864
 gateA,lowrank_build_w4,cuda:1,2026-10-25T09:23:58Z,2026-10-25T09:23:58Z,0.0001
 gateA,eval_static-16_w4,cuda:1,2026-10-25T09:24:11Z,2026-10-25T09:29:22Z,0.0864
+gateA,eval_time2-32_w4,cuda:1,2026-10-25T09:29:22Z,2026-10-25T09:34:37Z,0.0875
