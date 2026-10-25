@@ -44,7 +44,7 @@ def main():
                  f"{r['rel_mse_mean_512']:.4f} / {r['rel_mse_median_512']:.4f} | {100 * r['class_changed_frac_512']:.1f}% | "
                  f"{r['gpu_hours']:.2f} |")
     L.append("")
-    L.append("Reading of the rule (fixed before the arms finished, 2026-10-25T10:35Z): PASS iff FID(k10) ≤ FP + 1.0 "
+    L.append("Reading of the rule (fixed 2026-10-25T10:12Z in commit aa9b67c, before any Gate 2 arm finished): PASS iff FID(k10) ≤ FP + 1.0 "
              "and FID(k15) ≤ FP + 2.0. `k_pass` = largest k ∈ {5, 10, 15, 20} whose FID is within its bar: +1.0 for "
              "k ≤ 10 and +2.0 for k ≥ 15 (k20 is held to the k15 bar). STOP if k5 already exceeds +1.0.\n")
     v = {"fp_fid2k": fp_fid}
