@@ -98,6 +98,13 @@ def main():
         else:
             verdict = "NO-PASS (improves at both bit-widths but below thresholds; human decision)"
     L.append(f"\n**Gate 2: {verdict}**\n")
+    if verdict == "STOP" and os.path.exists(os.path.join(ROOT, "results", "gate2b.md")):
+        L.append("**Deviation from the handoff: the STOP note is deferred, not written.** On review, the human authorized one "
+                 "pre-registered W4 diagnostic set (Gate 2b, capped at 1.5 GPU-hours, decision rule fixed in advance) "
+                 "before the final STOP: see `results/gate2b.md`. Reason given by the human: the RTN result showed that a few "
+                 "rows (block 27 fc2) dominate the error, which the Gate 2 premise did not anticipate. Diagnostic that "
+                 "motivates the set (from the Stage 2 analysis): the `full` weight was very peaked (the gain alone puts 81% "
+                 "of its weight on steps 0–14 and 3.5% on steps 25–49). The Gate 2 verdict itself is unchanged.\n")
     atomic_write_text(os.path.join(ROOT, "results", "gate2.md"), "\n".join(L))
     print(verdict, cut)
 

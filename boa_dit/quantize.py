@@ -107,7 +107,7 @@ def main():
                 blk = model.blocks[l]
                 bfile = os.path.join(ck, f"block{l}.pt")
                 if a.resume and os.path.exists(bfile):
-                    blk.load_state_dict(torch.load(bfile))
+                    blk.load_state_dict(torch.load(bfile, map_location="cpu"))
                     run_block(blk, X, C, S, N, B, write_back=True)    # replay to get next inputs
                     print(f"block {l}: resumed", flush=True)
                     continue

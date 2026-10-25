@@ -242,7 +242,7 @@ def main():
     with Run("stage1", "probe_gates", dev, vars(args)) as run:
         cache = os.path.join(CKPT_DIR, "stage1_collect.pt")
         if args.reuse and os.path.exists(cache):
-            gates, trace, grams, tok = torch.load(cache)
+            gates, trace, grams, tok = torch.load(cache, map_location="cpu")
         else:
             gates, trace, grams, tok = collect(model, diffusion, STAGE1_SEEDS, args.cfg, dev, B)
             atomic_torch_save((gates, trace, {k: v.cpu() for k, v in grams.items()}, tok), cache)

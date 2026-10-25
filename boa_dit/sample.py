@@ -68,7 +68,7 @@ def sample_seeds(model, diffusion, seeds, cfg=1.5, bs=32, partial=None, resume=F
     labels = labels_for_seeds(seeds) if labels is None else labels
     done = {}
     if partial and resume and os.path.exists(partial):
-        done = torch.load(partial)
+        done = torch.load(partial, map_location="cpu")
     for b in range(0, len(seeds), bs):
         if b in done:
             continue

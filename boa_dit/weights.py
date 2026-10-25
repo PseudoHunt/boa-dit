@@ -24,7 +24,7 @@ def load_gain(tag, S=50, B=10, stat="mean"):
 
 
 def load_gates():
-    g = torch.load(os.path.join(RESULTS, "stage1", "gates.pt"))["gates"]   # [28, 2, 2, S, D]
+    g = torch.load(os.path.join(RESULTS, "stage1", "gates.pt"), map_location="cpu")["gates"]   # [28, 2, 2, S, D]
     return g.mean(2).double().numpy()                                       # branch-averaged [28, 2(msa,mlp), S, D]
 
 

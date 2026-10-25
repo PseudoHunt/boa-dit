@@ -8,7 +8,7 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
-from boa_dit.common import atomic_savefig, atomic_write_text  # noqa: E402
+from boa_dit.common import atomic_savefig, atomic_write_json, atomic_write_text  # noqa: E402
 
 S1 = os.path.join(ROOT, "results", "stage1")
 CHOICE = json.load(open(os.path.join(ROOT, "configs", "gain_choice.json")))
@@ -22,6 +22,8 @@ def gain_runs():
     runs = {}
     for p in sorted(glob.glob(os.path.join(S1, "gain_*.json"))):
         d = json.load(open(p))
+        if "tag" not in d:
+            continue
         runs[d["tag"]] = d
     return runs
 
@@ -74,6 +76,8 @@ def main():
     L.append(f"**Chosen for Stage 2:** `{CHOICE['tag']}`, estimator `{CHOICE['stat']}`. {CHOICE['why']}\n")
     L.append(f"Chosen curve: max/median = {g.max() / np.median(g):.2f}, monotone non-increasing: "
              f"{bool(np.all(np.diff(g) <= 0))}.\n")
+    L.append("Approved (RESPONSE to the Stage 2 report, item 1): the fp32 median-over-seeds curve is the method's weight. "
+             "Both curves are kept in `results/stage1/gain.json`; steps where mean/median > 3 are marked as bifurcation steps.\n")
     L.append("![gain](stage1/gain.png)\n")
 
     # ---------- 4.2 gates
@@ -162,13 +166,32 @@ def main():
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    fig, axs = plt.subplots(1, 2, figsize=(14, 4.8), sharey=True)
-    for ax, en in zip(axs, ("ratio_of_means", "median_of_ratios")):
+    # gain.json: the method's weight (approved: fp32, median over seeds) plus the mean curve, and bifurcation steps
+    em = estimators(chosen)
+    ratio = em["ratio_of_means"] / em["median_of_ratios"]
+    bif = [int(i) for i in np.where(ratio > 3)[0]]
+    atomic_write_json(os.path.join(S1, "gain.json"), {
+        "source_run": CHOICE["tag"], "method_weight": "median_of_ratios",
+        "step_convention": chosen["step_convention"], "timesteps": chosen["timesteps"],
+        "gain2_median": em["median_of_ratios"].tolist(), "gain2_mean": em["ratio_of_means"].tolist(),
+        "mean_over_median": ratio.tolist(), "bifurcation_steps": bif,
+        "bifurcation_rule": "steps where ratio-of-means / median-of-ratios > 3"})
+
+    fig, axs = plt.subplots(1, 3, figsize=(20, 4.8))
+    ax = axs[0]
+    for i in bif:
+        ax.axvspan(i - 0.5, i + 0.5, color="tab:red", alpha=0.15, lw=0)
+    ax.plot(em["ratio_of_means"], marker=".", label="mean over seeds (ratio of means)")
+    ax.plot(em["median_of_ratios"], marker=".", label="median over seeds (method weight)")
+    ax.set_yscale("log"); ax.set_xlabel("sampling step i (0 = noisiest)"); ax.set_ylabel("‖Δx₀‖² / ‖D‖²")
+    ax.set_title(f"{CHOICE['tag']}: shaded = bifurcation steps (mean/median > 3), n = {len(bif)}")
+    ax.legend(fontsize=8)
+    for ax, en in zip(axs[1:], ("ratio_of_means", "median_of_ratios")):
         for tag, d in runs.items():
             ls = "-" if d.get("forward") == "fp32" else ":"
             ax.plot(estimators(d)[en], ls, marker=".", label=f"{tag}")
-        ax.set_yscale("log"); ax.set_title(f"gain2 per step — {en}"); ax.set_xlabel("sampling step i (0 = noisiest)")
-    axs[0].set_ylabel("‖Δx₀‖² / ‖D‖²"); axs[1].legend(fontsize=7)
+        ax.set_yscale("log"); ax.set_title(f"all runs — {en}"); ax.set_xlabel("sampling step i (0 = noisiest)")
+    axs[2].legend(fontsize=7)
     fig.tight_layout(); atomic_savefig(fig, os.path.join(S1, "gain.png")); plt.close(fig)
     print(verdict)
 

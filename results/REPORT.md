@@ -63,3 +63,25 @@
   set". I followed the second: guard arms and row attribution are NOT run. Note: row attribution as specified (swap
   each of 112 layers back to FP, 64 seeds each) costs ~1 GPU-hour, not ~10 min. Please say whether guard arms
   should run if Gate 2b ends in STOP.
+
+## 2026-10-25 — FINAL STOP (Gate 2b failed under the pre-registered rule)
+- Gate 2b (`results/gate2b.md`, pre-registered in commit 6a01d0a before any arm ran). W4 reduction in rel. latent
+  MSE vs `uniform` (0.09087), eval seeds 0-511, paired bootstrap 95% CI:
+  a gates-only K4 -1.5% [-5.9, +2.6]; b gain lambda 0.5 -4.3% [-9.0, +0.2]; c full lambda 0.5 +1.0% [-3.2, +5.2];
+  d gain tempered tau*=0.25 +1.9% [-2.0, +5.6]; e full tempered tau*=0.25 -9.2% [-13.9, -4.8]; f not run (cap).
+  tau* chosen on held-out seeds 1032-1095: 0.25 (0.0909) < 0.5 (0.1061) < 0.75 (0.1146), i.e. the flatter the
+  better.
+- Best arm d +1.9% < 5% -> no W3 rerun -> **STOP**. No further arms run.
+- Reading: once the time weight is flattened enough to stop hurting (tau 0.25, lambda 0.5), it no longer helps at
+  W4 either; every arm's CI includes 0 or is negative. Adding the K=4 gate row groups made things worse in both
+  paired comparisons (e vs d: -9.2% vs +1.9%; Gate 2 full vs gain-only is consistent). The one positive signal in
+  the whole POC is at W3 (Gate 2 full +6.5% vs uniform, +12.7% vs pooled) and the CFG branch weights (uniform vs
+  pooled: +6.6% W3, +1.8% W4), neither of which met a pre-registered bar.
+- Headline diagnostic: the fp32 median gain puts 81.0% of its weight on steps 0-14 and 3.5% on steps 25-49.
+- GPU-hours: Gate 2b set 1.44 (cap 1.5); project total 4.36 of 12.
+- **Infrastructure bug found (affects any future work on this instance):** GPU peer-to-peer copies are silently
+  wrong (cuda:1 -> cuda:0 `copy_`/`.to()` returns bad data, no error, peer access reported available). It invalidated
+  the first arm-d eval (FP vs FP, rel. MSE 0); caught, quarantined (`results/stage2/eval_invalid/`), fixed (all
+  checkpoint loads go via CPU and are verified), and rerun. No other result crossed GPUs.
+- **Open decisions for a human:** (1) guard arms + row attribution: the two RESPONSEs conflict; under the later one
+  nothing more runs. (2) Whether the W3/branch-weight signal is worth a separate, newly pre-registered question.

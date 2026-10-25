@@ -12,7 +12,7 @@ import numpy as np
 import torch
 
 from boa_dit.common import CKPT_DIR, RESULTS, Run, atomic_torch_save, atomic_write_json
-from boa_dit.model import decode, load_dit, load_vae, make_diffusion
+from boa_dit.model import decode, load_dit, load_quant_state, load_vae, make_diffusion
 from boa_dit.sample import sample_seeds
 
 EVAL_SEEDS = list(range(512))
@@ -43,11 +43,11 @@ def fp_reference(dev, bs=32, n_pix=64, seed_start=0, n=512):
         atomic_torch_save(x, FP_LAT)
         os.remove(FP_LAT + ".partial")
         del model
-    xf = torch.load(FP_LAT)
+    xf = torch.load(FP_LAT, map_location="cpu")
     if not os.path.exists(FP_PIX):
         vae = load_vae(dev)
         atomic_torch_save(decode(vae, xf[:n_pix].to(dev)), FP_PIX)
-    return xf, torch.load(FP_PIX)
+    return xf, torch.load(FP_PIX, map_location="cpu")
 
 
 @torch.no_grad()
@@ -67,7 +67,7 @@ def main():
     out_json = os.path.join(RESULTS, a.stage, "eval", f"latent_{a.name}{tag}.json")
     with Run(a.stage, f"eval_latent_{a.name}", dev, vars(a)) as run:
         model, diffusion = load_dit(dev), make_diffusion(50)
-        model.load_state_dict(torch.load(os.path.join(CKPT_DIR, f"ckpt_{a.name}", "model.pt")))
+        load_quant_state(model, os.path.join(CKPT_DIR, f"ckpt_{a.name}", "model.pt"))
         part = os.path.join(CKPT_DIR, f"ckpt_{a.name}", f"eval_latents_{a.seed_start}_{a.n}.partial")
         xq = sample_seeds(model, diffusion, seeds, 1.5, 32, partial=part, resume=True)
         rel, mse, psnr = per_image(xq, xf)

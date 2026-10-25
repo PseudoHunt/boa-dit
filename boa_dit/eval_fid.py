@@ -46,13 +46,13 @@ def compute_ref(device):
 @torch.no_grad()
 def generate_and_score(name, n, device, bs=32, stage="stage2"):
     """FID-n of model `name` ('fp' or ckpt/ckpt_<name>/model.pt). Seeds 0..n-1, cfg 1.5, DDIM-50."""
-    from boa_dit.model import decode, load_dit, load_vae, make_diffusion
+    from boa_dit.model import decode, load_dit, load_quant_state, load_vae, make_diffusion
     from boa_dit.sample import sample_seeds
     model, diffusion = load_dit(device), make_diffusion(50)
     cdir = os.path.join(CKPT_DIR, f"ckpt_{name}")
     os.makedirs(cdir, exist_ok=True)
     if name != "fp":
-        model.load_state_dict(torch.load(os.path.join(cdir, "model.pt")))
+        load_quant_state(model, os.path.join(cdir, "model.pt"))
     part = os.path.join(cdir, f"fid{n}_latents.partial")
     x = sample_seeds(model, diffusion, list(range(n)), 1.5, bs, partial=part, resume=True)
     del model

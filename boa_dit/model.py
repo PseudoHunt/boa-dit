@@ -24,6 +24,21 @@ def load_dit(device, dtype=torch.float32):
     return model.to(device=device, dtype=dtype)
 
 
+@torch.no_grad()
+def load_quant_state(model, path):
+    """Load a saved state dict via CPU and verify it landed.
+
+    GPU peer-to-peer copies on this host are silently wrong (cuda:1 -> cuda:0 `copy_` returns bad data with no
+    error), and torch.load without map_location restores tensors onto the GPU they were saved from. Always go
+    through CPU, then check every tensor actually matches.
+    """
+    sd = torch.load(path, map_location="cpu")
+    model.load_state_dict(sd)
+    for k, v in model.state_dict().items():
+        assert torch.equal(v.cpu(), sd[k]), f"state dict did not load correctly: {k}"
+    return model
+
+
 def load_vae(device):
     from diffusers.models import AutoencoderKL
     vae = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-ema").to(device).eval()

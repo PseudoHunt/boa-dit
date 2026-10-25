@@ -73,7 +73,7 @@ def main():
         x0_restart = ddim_sample(model, diffusion, noise, labels, args.cfg, start_step=S // 2,
                                  x_init=states[S // 2], amp=amp)
         restart_exact = bool(torch.equal(x0, x0_restart))
-        done = torch.load(partial) if (args.resume and os.path.exists(partial)) else {}
+        done = torch.load(partial, map_location="cpu") if (args.resume and os.path.exists(partial)) else {}
         for i in range(S):
             if i in done:
                 continue
