@@ -79,8 +79,16 @@ Integrity: base reproduces the stored W4 per-image errors on seeds 0–127 (max 
 | base | nothing | 0.09226 | — | 29.11 | pending | pending |
 | A1 | Q,K FP, all blocks, all steps | 0.08625 | +6.5% [+3.0, +11.1] | — | — | — |
 | A2 | Q,K FP, all blocks, steps < 14 | 0.09262 | -0.4% [-1.3, +0.5] | — | — | — |
+| A3 | Q,K FP, all blocks, steps ≥ 14 | 0.08580 | +7.0% [+3.2, +11.7] | — | — | — |
+| A4 | V FP, all blocks, all steps | 0.06917 | +25.0% [+18.5, +31.6] | — | — | — |
+| A5 | Q,K FP, block 2, all steps | 0.09052 | +1.9% [+0.0, +3.9] | — | — | — |
+| A6 | Q,K FP, blocks 0–4, all steps | 0.08948 | +3.0% [+1.2, +5.1] | — | — | — |
+| A7 | Q,K FP, blocks 0–4, steps < 14 | 0.09255 | -0.3% [-0.9, +0.3] | — | — | — |
+| | *Part B arms below; same base* | | | | | |
 
 Shares need not add up: routing (Q,K) and value errors interact.
+- Q,K vs V: A1 removes 6.5%, A4 removes 25.0% → **V (values) dominates**.
+- Early vs late routing: A2 (steps < 14) -0.4%, A3 (steps ≥ 14) 7.0%.
 
 ### Verdict
 
