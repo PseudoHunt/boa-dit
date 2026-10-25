@@ -1,0 +1,14 @@
+{
+ "arm": "stock",
+ "seconds_per_video": 158.4552607536316,
+ "gpu_free_gb_before": 19.12933349609375,
+ "clip_vitl14_8frames": 33.96882629394531,
+ "stage": "feas_video",
+ "run": "arm_stock",
+ "device": "cuda:1",
+ "config": {},
+ "git_sha": "362e86fef4347f97b7438b85c8f7c08d25e33501",
+ "start_utc": "2026-10-25T16:50:07Z",
+ "wall_s": 186.4494185447693,
+ "gpu_hours": 0.0517915051513248
+}
