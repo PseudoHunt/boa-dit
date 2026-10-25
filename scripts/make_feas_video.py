@@ -59,6 +59,18 @@ def main():
         S.append(f"**Verdict (PSNR part of the rule): {v}.** The visual check of `frames.png` is stated below.\n")
         S.append(f"- Gap 1, oracle vs full: oracle-10 latent PSNR {po:.1f} dB (headroom needs ≥ 30 dB).")
         S.append(f"- Gap 2, window vs oracle: window-10 {pw:.1f} dB ({pw - po:+.1f} dB vs oracle); random-10 {pr:.1f} dB.\n")
+        S.append("**Visual check (`frames.png`, my reading, written after looking at the grid):**")
+        S.append("- full is visually identical to stock.")
+        S.append("- oracle-10 keeps the scene, composition, motion and image quality with no artifacts, but renders a different "
+                 "version of the video (a smaller dog, slightly different pose). Its PSNR shortfall is identity drift, not "
+                 "visible degradation: the same mode-switch caveat that latent MSE had on DiT. Under the pre-registered rule "
+                 "(PSNR ≥ 30 dB **and** no visible degradation) it still fails, and the verdict stands.")
+        S.append("- window-10 is visibly degraded: the scene changes (two dogs, a different sun), the frames lose temporal "
+                 "coherence, and by frame 48 the dog is gone and the frame is washed out.")
+        S.append("- random-10 collapses into blocky noise.")
+        S.append("- Reading: at a 10% budget, locality alone (the Sliding Tile premise) is far from the oracle, while the oracle "
+                 "keeps quality but not identity. A content-aware selector at a higher budget (for example 20–25%) would be the "
+                 "natural next measurement; that is not run here.\n")
     S.append("| arm | latent PSNR vs full (dB) | CLIP ViT-L/14 (8 frames) | seconds per video |")
     S.append("| --- | ---: | ---: | ---: |")
     for a in ["stock"] + ARMS:

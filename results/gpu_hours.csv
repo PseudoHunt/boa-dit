@@ -168,3 +168,4 @@ feas_video,arm_full,cuda:1,2026-10-25T17:05:22Z,2026-10-25T17:11:23Z,0.1005
 feas_video,arm_window10,cuda:1,2026-10-25T17:11:24Z,2026-10-25T17:18:35Z,0.1196
 feas_video,arm_random10,cuda:1,2026-10-25T17:18:36Z,2026-10-25T17:24:49Z,0.1036
 feas_video,arm_oracle10(FAILED),cuda:1,2026-10-25T17:24:49Z,2026-10-25T17:24:50Z,0.0001
+feas_video,arm_oracle10,cuda:1,2026-10-25T17:25:45Z,2026-10-25T18:13:55Z,0.8027

@@ -205,3 +205,14 @@
   neither "room for a selector" (needs ≥ 3 points, non-overlapping) nor "captured by the fixed rule" (≤ 1.5).
 - Deviations: batch 16 (memory); per-batch seeds (VAR API); stock uses fused SDPA, so token identity is impossible; all arms
   share one explicit path, and the stock arm confirms statistical equivalence.
+
+## 2026-10-25 — Feasibility Part C (CogVideoX-2B, 480p) done; both parts closed
+- Summary: `results/feasibility/video/SUMMARY.md`. Latent PSNR vs full: oracle-10 27.3 dB, window-10 22.1 dB,
+  random-10 23.2 dB; full vs stock 35.9 dB (kernel noise over 50 steps). CLIP: full 34.02, oracle 32.98,
+  window 30.27, random 23.32.
+- Verdict: no headroom at 10% under the rule (oracle-10 < 30 dB). Visually, oracle-10 keeps quality but changes the rendition
+  (identity drift); window-10 is visibly degraded; random-10 collapses. Locality is weak (18–44% of top-10% mass in the window);
+  top-10% sets are stable step to step (Jaccard 0.85).
+- Deviations: chunked masked SDPA for all arms (the fully explicit softmax would have exceeded the cap); oracle-10 OOM in the
+  shared process, rerun alone (2873 s).
+- All heavy processes are stopped. The instance can be shut down after this push.

@@ -1,10 +1,22 @@
 # Part C — CogVideoX-2B (480p, 49 frames): query-aware key selection, feasibility summary
 
+**Verdict (PSNR part of the rule): no headroom at 10% (oracle-10 below 30 dB).** The visual check of `frames.png` is stated below.
+
+- Gap 1, oracle vs full: oracle-10 latent PSNR 27.3 dB (headroom needs ≥ 30 dB).
+- Gap 2, window vs oracle: window-10 22.1 dB (-5.3 dB vs oracle); random-10 23.2 dB.
+
+**Visual check (`frames.png`, my reading, written after looking at the grid):**
+- full is visually identical to stock.
+- oracle-10 keeps the scene, composition, motion and image quality with no artifacts, but renders a different version of the video (a smaller dog, slightly different pose). Its PSNR shortfall is identity drift, not visible degradation: the same mode-switch caveat that latent MSE had on DiT. Under the pre-registered rule (PSNR ≥ 30 dB **and** no visible degradation) it still fails, and the verdict stands.
+- window-10 is visibly degraded: the scene changes (two dogs, a different sun), the frames lose temporal coherence, and by frame 48 the dog is gone and the frame is washed out.
+- random-10 collapses into blocky noise.
+- Reading: at a 10% budget, locality alone (the Sliding Tile premise) is far from the oracle, while the oracle keeps quality but not identity. A content-aware selector at a higher budget (for example 20–25%) would be the natural next measurement; that is not run here.
+
 | arm | latent PSNR vs full (dB) | CLIP ViT-L/14 (8 frames) | seconds per video |
 | --- | ---: | ---: | ---: |
 | stock | — (reference) | 33.97 | 158 |
 | full | 35.9 (vs stock) | 34.02 | 345 |
-| oracle10 | pending | | |
+| oracle10 | 27.3 | 32.98 | 2873 |
 | window10 | 22.1 | 30.27 | 415 |
 | random10 | 23.2 | 23.32 | 357 |
 
@@ -22,4 +34,4 @@ Parity: full vs stock latents after step 0, relative difference 5.4e-05 (toleran
 
 Step stability (top-10% sets, step 10 vs 11, prompt 1): Jaccard 0.85. High stability is the caching headroom that TeaCache and PAB already exploit.
 
-GPU-hours (Part C, logged): 0.47 of 2.5. About 0.25 h of timing tests were not logged. Facts and deviations: `model_facts.md`. Rule: `../rule.md`.
+GPU-hours (Part C, logged): 1.27 of 2.5. About 0.25 h of timing tests were not logged. Facts and deviations: `model_facts.md`. Rule: `../rule.md`.
