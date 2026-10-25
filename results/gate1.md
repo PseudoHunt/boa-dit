@@ -38,6 +38,8 @@ Stage 1 seeds 2000–2015 (16 images, both CFG branches), cfg 1.5, DDIM-50. Step
 
 Chosen curve: max/median = 17.01, monotone non-increasing: False.
 
+Approved (RESPONSE to the Stage 2 report, item 1): the fp32 median-over-seeds curve is the method's weight. Both curves are kept in `results/stage1/gain.json`; steps where mean/median > 3 are marked as bifurcation steps.
+
 ![gain](stage1/gain.png)
 
 ## 4.2 Gate energies
