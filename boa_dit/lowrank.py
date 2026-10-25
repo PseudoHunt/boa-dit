@@ -21,7 +21,7 @@ T3 = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath
                                  "time3_split.json")))["bucket_to_regime"]
 REGIMES = {"static": [0] * 10, "time2": [0] * 5 + [1] * 5, "time3": T3}
 ARMS = {"time2-16": ("time2", 16), "static-32": ("static", 32), "static-16": ("static", 16),
-        "time2-32": ("time2", 32), "time3-16": ("time3", 16), "static-48": ("static", 48)}
+        "time2-32": ("time2", 32), "time3-16": ("time3", 16), "static-48": ("static", 48), "static-8": ("static", 8)}
 ORDER = ["time2-16", "static-32", "static-16", "time2-32", "time3-16", "static-48"]
 KMAX = 48
 OUT = os.path.join(RESULTS, "stageA")
@@ -31,8 +31,8 @@ def base_name(bits):
     return f"uniform_w{bits}_K1_lam1_brcfg"
 
 
-def corr_path(bits):
-    return os.path.join(CKPT_DIR, f"lowrank_w{bits}.pt")
+def corr_path(bits, regimes=None):
+    return os.path.join(CKPT_DIR, f"lowrank_w{bits}.pt" if regimes is None else f"lowrank_w{bits}_{'_'.join(regimes)}.pt")
 
 
 @torch.no_grad()
@@ -58,8 +58,9 @@ def factor(E, H, k, dev):
 
 
 @torch.no_grad()
-def build(bits, dev):
-    path = corr_path(bits)
+def build(bits, dev, regimes=None):
+    """regimes=None: all of REGIMES (Gate A); else only those (e.g. ['static'] for the G2 static-8 baseline)."""
+    path = corr_path(bits, regimes)
     if os.path.exists(path):
         return torch.load(path, map_location="cpu")
     W_fp = load_dit("cpu")
@@ -71,6 +72,8 @@ def build(bits, dev):
         for ln in LINEARS:
             E = block_linear(W_fp.blocks[l], ln).weight.data - block_linear(Q.blocks[l], ln).weight.data
             for rname, b2r in REGIMES.items():
+                if regimes is not None and rname not in regimes:
+                    continue
                 for r in sorted(set(b2r)):
                     H = G[ln][[b for b in range(10) if b2r[b] == r]].mean(0)
                     L, R, cap = factor(E, H, KMAX, dev)
@@ -79,7 +82,7 @@ def build(bits, dev):
         del G
         print(f"block {l} factored", flush=True)
     atomic_torch_save(corr, path)
-    atomic_write_json(os.path.join(OUT, f"captured_energy_w{bits}.json"),
+    atomic_write_json(os.path.join(OUT, f"captured_energy_w{bits}{'' if regimes is None else '_' + '_'.join(regimes)}.json"),
                       {"note": "fraction of ||E H^1/2||_F^2 captured at rank 16/32/48", "per_layer_regime": captured})
     return corr
 
@@ -122,10 +125,14 @@ def main():
     ap.add_argument("--bits", type=int, required=True)
     ap.add_argument("--arms", default=",".join(ORDER))
     ap.add_argument("--device", default="cuda:1")
+    ap.add_argument("--regimes", default=None, help="comma list: build only these regimes (e.g. static)")
+    ap.add_argument("--fid", action="store_true", help="also FID-2k (seeds 0-1999) for each arm, grid of seeds 0-15")
     a = ap.parse_args()
     dev = a.device
+    torch.cuda.set_device(dev)
+    regimes = a.regimes.split(",") if a.regimes else None
     with Run("gateA", f"lowrank_build_w{a.bits}", dev, vars(a)):
-        corr = build(a.bits, dev)
+        corr = build(a.bits, dev, regimes)
     xf, pf = fp_reference(dev)
     model, diffusion = load_dit(dev), make_diffusion(50)
     load_quant_state(model, os.path.join(CKPT_DIR, f"ckpt_{base_name(a.bits)}", "model.pt"))
@@ -149,6 +156,38 @@ def main():
         atomic_write_json(out_json, res)
         os.remove(part)
         print(f"{arm} W{a.bits}: rel MSE {res['rel_mse_mean']:.5f}", flush=True)
+    if a.fid:
+        for arm in a.arms.split(","):
+            fid_arm(model, diffusion, corr, arm, a.bits, dev)
+
+
+@torch.no_grad()
+def fid_arm(model, diffusion, corr, arm, bits, dev):
+    """FID-2k on seeds 0-1999 with the correction attached (same protocol as eval_fid); grid of seeds 0-15."""
+    import numpy as np
+    from boa_dit.eval_fid import REF_STATS, fid_from_stats, inception_stats
+    out_json = os.path.join(OUT, "eval", f"fid2000_{arm}_w{bits}.json")
+    if os.path.exists(out_json):
+        return
+    rname, k = ARMS[arm]
+    with Run("gateA", f"fid2000_{arm}_w{bits}", dev, {"arm": arm, "bits": bits}) as run:
+        c = Corrector(model, corr, rname, k, dev)
+        part = os.path.join(CKPT_DIR, f"lowrank_{arm}_w{bits}_fid2k.partial")
+        try:
+            x = sample_seeds(model, diffusion, list(range(2000)), 1.5, 32, partial=part, resume=True, log=False)
+        finally:
+            c.remove()
+        vae = load_vae(dev)
+        imgs = decode(vae, x.to(dev))
+        os.makedirs(os.path.join(CKPT_DIR, "deflate_grids"), exist_ok=True)
+        atomic_torch_save(imgs[:16].clone(), os.path.join(CKPT_DIR, "deflate_grids", f"{arm}_w{bits}.pt"))
+        mu, sig = inception_stats(imgs.permute(0, 2, 3, 1).numpy(), dev)
+        ref = np.load(REF_STATS)
+        res = {"arm": arm, "bits": bits, "n": 2000, "fid": fid_from_stats(mu, sig, ref["mu"], ref["sigma"]),
+               "extra_bits_per_param": extra_bits(rname, k), **run.record()}
+    atomic_write_json(out_json, res)
+    os.remove(part)
+    print(f"{arm} W{bits}: FID-2k {res['fid']:.2f}", flush=True)
 
 
 if __name__ == "__main__":

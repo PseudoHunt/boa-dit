@@ -63,7 +63,7 @@ def arm_name(a):
 @torch.no_grad()
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", required=True, choices=["dc", "c", "wsvd"])
+    ap.add_argument("--mode", required=True, choices=["dc", "c", "wsvd", "heig"])
     ap.add_argument("--r", default="star", help="'star' = r_l per layer from configs/deflate_r.json, or an integer")
     ap.add_argument("--bits", type=int, required=True)
     ap.add_argument("--damp", type=float, default=0.01, help="total damping as a fraction of mean diag (solver adds 0.01)")
@@ -121,12 +121,14 @@ def main():
                 Wf = block_linear(W_fp.blocks[l], ln).weight.data.to(dev).float()
                 if a.mode == "wsvd":
                     V = torch.linalg.svd(Wf.double(), full_matrices=False)[2][:r].T     # [d_in, r]
+                elif a.mode == "heig":                                            # top-r eigenvectors of the full H
+                    V = eigh64(H)[1].flip(1)[:, :r]
                 elif a.mode == "c":
                     V = v_from[key]["V"].to(dev).double()
                 else:
                     Hm = W.combine(means_m, ln, p_uni, B, "cfg", CFG).double()
                     V = eigh64(Hm)[1].flip(1)[:, :r]
-                if a.mode in ("dc", "wsvd"):
+                if a.mode in ("dc", "wsvd", "heig"):
                     P = torch.eye(H.shape[0], device=dev, dtype=torch.float64) - V @ V.T
                     Hs = P @ H @ P
                 else:
