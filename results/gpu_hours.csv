@@ -97,3 +97,4 @@ attn_share,label_acc_k10-uniform,cuda:0,2026-10-25T11:51:42Z,2026-10-25T11:56:38
 attn_share,label_acc_k10,cuda:1,2026-10-25T11:52:50Z,2026-10-25T11:57:46Z,0.0825
 attn_share,label_acc_k15,cuda:1,2026-10-25T11:57:50Z,2026-10-25T12:02:48Z,0.0826
 attn_share,label_acc_k20,cuda:1,2026-10-25T12:02:51Z,2026-10-25T12:07:50Z,0.0829
+attn_share,gate3_V2_k20,cuda:0,2026-10-25T11:56:42Z,2026-10-25T12:15:46Z,0.3179
