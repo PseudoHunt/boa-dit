@@ -1,0 +1,119 @@
+{
+ "assumptions": "Attention sharing, Section 4: FLOPs accounting (analytic) and measured forward latency (--measure, idle GPU).\n\nFLOPs = 2 x multiply-accumulates for matmuls; softmax counted as 5 ops per score (max, sub, exp, sum, div).\nPer image, per CFG branch, one forward. DiT-XL/2: C = 1152, 16 heads, MLP ratio 4, 28 blocks, patch 2, 4 latent\nchannels in / 8 out. N = 256, 1024, 4096 tokens (256 px, 512 px, 1024 px or a short video at the same patch size).",
+ "per_N": {
+  "256": {
+   "block_flops": {
+    "adaLN (per image, not per token)": 15925248,
+    "qkv: Q+K projections": 1358954496,
+    "qkv: V projection": 679477248,
+    "QK^T": 150994944,
+    "softmax": 5242880,
+    "AV (dense map)": 150994944,
+    "output projection": 679477248,
+    "fc1": 2717908992,
+    "fc2": 2717908992
+   },
+   "block_total": 8476884992,
+   "model_total_per_branch": 237389643776,
+   "variants": {
+    "V1/V2 dense stored map": {
+     "block_frac_removed": 0.17874399870116817,
+     "end_to_end_frac_saved": {
+      "10": 0.03574324834492986,
+      "15": 0.05361487251739478
+     }
+    },
+    "V4 sparse top-32": {
+     "block_frac_removed": 0.19432998059483406,
+     "end_to_end_frac_saved": {
+      "10": 0.03885996065735973,
+      "15": 0.058289940986039596
+     }
+    },
+    "V3 offset kernel (direct 31x31 conv)": {
+     "block_frac_removed": 0.12968990390190727,
+     "end_to_end_frac_saved": {
+      "10": 0.02593395289732692,
+      "15": 0.038900929345990376
+     }
+    }
+   }
+  },
+  "1024": {
+   "block_flops": {
+    "adaLN (per image, not per token)": 15925248,
+    "qkv: Q+K projections": 5435817984,
+    "qkv: V projection": 2717908992,
+    "QK^T": 2415919104,
+    "softmax": 83886080,
+    "AV (dense map)": 2415919104,
+    "output projection": 2717908992,
+    "fc1": 10871635968,
+    "fc2": 10871635968
+   },
+   "block_total": 37546557440,
+   "model_total_per_branch": 1051425406976,
+   "variants": {
+    "V1/V2 dense stored map": {
+     "block_frac_removed": 0.21135421484862502,
+     "end_to_end_frac_saved": {
+      "10": 0.04226594625348861,
+      "15": 0.06339891938023291
+     }
+    },
+    "V4 sparse top-32": {
+     "block_frac_removed": 0.27368806891074593,
+     "end_to_end_frac_saved": {
+      "10": 0.05473127289695935,
+      "15": 0.08209690934543902
+     }
+    },
+    "V3 offset kernel (direct 31x31 conv)": {
+     "block_frac_removed": 0.21531291727394117,
+     "end_to_end_frac_saved": {
+      "10": 0.04305759502217677,
+      "15": 0.06458639253326515
+     }
+    }
+   }
+  },
+  "4096": {
+   "block_flops": {
+    "adaLN (per image, not per token)": 15925248,
+    "qkv: Q+K projections": 21743271936,
+    "qkv: V projection": 10871635968,
+    "QK^T": 38654705664,
+    "softmax": 1342177280,
+    "AV (dense map)": 38654705664,
+    "output projection": 10871635968,
+    "fc1": 43486543872,
+    "fc2": 43486543872
+   },
+   "block_total": 209127145472,
+   "model_total_per_branch": 5856021610496,
+   "variants": {
+    "V1/V2 dense stored map": {
+     "block_frac_removed": 0.2952278373075502,
+     "end_to_end_frac_saved": {
+      "10": 0.05904091383616253,
+      "15": 0.08856137075424378
+     }
+    },
+    "V4 sparse top-32": {
+     "block_frac_removed": 0.4786220862437077,
+     "end_to_end_frac_saved": {
+      "10": 0.09571687281156131,
+      "15": 0.14357530921734196
+     }
+    },
+    "V3 offset kernel (direct 31x31 conv)": {
+     "block_frac_removed": 0.43669953278364615,
+     "end_to_end_frac_saved": {
+      "10": 0.08733302293750977,
+      "15": 0.13099953440626463
+     }
+    }
+   }
+  }
+ }
+}

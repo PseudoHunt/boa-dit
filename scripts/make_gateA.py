@@ -100,6 +100,37 @@ def main():
             v = np.array([x for k, x in ce.items() if k.endswith("." + rg)]).mean(0)
             L.append(f"| W{b} | {rg} | {v[0]:.3f} | {v[1]:.3f} | {v[2]:.3f} |")
     L.append("")
+    ra = load(os.path.join(RES, "stage2", "row_attribution.json"))
+    if ra:
+        L.append("### Item 2a — attribution (uniform W4; one block / layer swapped back to FP; seeds 0–63)\n")
+        L.append(f"Base rel. latent MSE on these 64 seeds {ra['base_rel_mse']:.4f}. Share = (base − swapped) / base; the "
+                 f"28 block shares sum to {sum(v['contribution_share'] for v in ra['blocks'].values()):.3f} "
+                 "(errors do not add exactly).\n")
+        top = sorted(ra["blocks"], key=lambda b: -ra["blocks"][b]["contribution_share"])[:8]
+        L.append("| block | " + " | ".join(top) + " |")
+        L.append("| --- |" + " ---: |" * len(top))
+        L.append("| share | " + " | ".join(f"{ra['blocks'][b]['contribution_share']:+.3f}" for b in top) + " |\n")
+        L.append("| layer (top-3 blocks) | share |")
+        L.append("| --- | ---: |")
+        for k, v in ra["layers"].items():
+            L.append(f"| {k} | {v['contribution_share']:+.3f} |")
+        L.append("")
+    gr = load(os.path.join(RES, "stage2", "guard_rows.json"))
+    if gr:
+        L.append("### Item 2b — guard arms (top-100 rows kept at W8 RTN on top of `uniform`; seeds 0–511)\n")
+        L.append(f"Row sets: `gate` = top-100 by RTN-W4 row output error × mean gate energy; `err` = top-100 by the "
+                 f"error alone; overlap {gr['overlap_gate_vs_err']} rows.\n")
+        L.append("| set | bits | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |")
+        L.append("| --- | --- | ---: | ---: | --- | ---: |")
+        for b in (4, 3):
+            for s in ("gate", "err"):
+                r = load(os.path.join(RES, "stage2", "eval", f"latent_guard_{s}_w{b}.json"))
+                if r is None:
+                    L.append(f"| {s} | W{b} | — | pending | — | — |")
+                    continue
+                c, imp = fmt(paired(r, uniform(b)))
+                L.append(f"| {s} | W{b} | {r['extra_bits_per_param']:.4f} | {r['rel_mse_mean']:.5f} | {c} | {imp} |")
+        L.append("")
     fa = load(os.path.join(RES, "stage2", "fid_anchors.json"))
     if fa:
         L.append("### FID-2k anchors (item 1, `results/stage2/fid_anchors.json`)\n")

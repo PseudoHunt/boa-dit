@@ -118,6 +118,40 @@ Equal-budget and rank comparisons (reduction of the first arm vs the second):
 | W3 | time3.1 | 0.226 | 0.310 | 0.371 |
 | W3 | time3.2 | 0.210 | 0.286 | 0.340 |
 
+### Item 2a — attribution (uniform W4; one block / layer swapped back to FP; seeds 0–63)
+
+Base rel. latent MSE on these 64 seeds 0.0992. Share = (base − swapped) / base; the 28 block shares sum to 0.595 (errors do not add exactly).
+
+| block | 2 | 10 | 11 | 7 | 12 | 9 | 14 | 8 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| share | +0.234 | +0.062 | +0.055 | +0.040 | +0.039 | +0.038 | +0.028 | +0.027 |
+
+| layer (top-3 blocks) | share |
+| --- | ---: |
+| b2.attn.qkv | +0.206 |
+| b2.attn.proj | +0.011 |
+| b2.mlp.fc1 | +0.036 |
+| b2.mlp.fc2 | -0.001 |
+| b10.attn.qkv | -0.003 |
+| b10.attn.proj | -0.001 |
+| b10.mlp.fc1 | +0.024 |
+| b10.mlp.fc2 | +0.043 |
+| b11.attn.qkv | -0.001 |
+| b11.attn.proj | +0.010 |
+| b11.mlp.fc1 | +0.018 |
+| b11.mlp.fc2 | +0.020 |
+
+### Item 2b — guard arms (top-100 rows kept at W8 RTN on top of `uniform`; seeds 0–511)
+
+Row sets: `gate` = top-100 by RTN-W4 row output error × mean gate energy; `err` = top-100 by the error alone; overlap 41 rows.
+
+| set | bits | extra bits/param | rel. latent MSE | vs uniform (95% CI) | images improved |
+| --- | --- | ---: | ---: | --- | ---: |
+| gate | W4 | 0.0036 | 0.09493 | **-4.5%** [-5.3, -3.7] | 15% |
+| err | W4 | — | pending | — | — |
+| gate | W3 | — | pending | — | — |
+| err | W3 | — | pending | — | — |
+
 ### FID-2k anchors (item 1, `results/stage2/fid_anchors.json`)
 
 | model | FID-2k | rel. latent MSE (512) |
@@ -129,9 +163,9 @@ Equal-budget and rank comparisons (reduction of the first arm vs the second):
 ### GPU-hours (items 1–3, since the pivot started)
 
 - item 1 (FID anchors): 0.95
-- item 2: 0.37
+- item 2: 0.44
 - item 3 (Gate A): 1.30
-- **total: 2.62** (cap 3.5)
+- **total: 2.69** (cap 3.5)
 
 ### Decision (pre-registered rule)
 
