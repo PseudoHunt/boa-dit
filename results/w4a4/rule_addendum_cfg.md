@@ -22,3 +22,18 @@ PSNR/LPIPS vs the corrected base (`rule_addendum_screen.md`), and are designed o
   - v = x_u + w_eff·(x_c − x_u) with **w_eff = 7.5** (4.5·√(14/5) ≈ 7.53, rounded as given), so that the median
     layer-level ratio matches the network-level 14.
   - One value, no sweep. Everything else as in CFG.
+
+## K and CFG+K (added 2026-10-26, before either ran)
+- **PixArt band-gain table** (`band_gain.json`, design set, corrected base's error energy): G(band 1)/G(band 4) peaks
+  at about 2.5× at steps 2–6 and is about 1 from step 12. That is much weaker directionality than DiT-XL/2 (5–20×).
+- **K:** a spectral token filter on the 64×64 grid (`configs/w4a4_kfilter.json`).
+  - √G is interpolated in latent radius between the band-1 and band-2 centroids, pooled over probed steps 0–8, and
+    normalized so the least-amplified frequency = 1. The maximum gain is 1.36.
+  - H_K = the Gram of the filtered image-token inputs, trace-rescaled. It replaces the Gram for L₁ and the GPTQ metric
+    only, the same placement as CFG.
+  - Only image-token inputs are filtered. The cross-attention K/V take caption inputs and are 16-bit anyway.
+- **CFG+K:** the same filter applied to v.
+- **Bits:** both at the base's bits.
+- **Advance rule:** MJHQ-64 ≥ +0.3 dB with the CI excluding 0, and LPIPS not worse.
+  - CFG+K counts as a combination only if it beats the better of CFG and K by ≥ 0.2 dB (CI excluding 0).
+  - Caveat: on the 64×64 token grid, bands 3–4 are within-patch frequencies, which a token filter cannot shape.

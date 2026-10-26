@@ -30,6 +30,14 @@ CROSS_KV = ("attn2.to_k", "attn2.to_v")
 N_SUB_ROWS, N_SUB_TOK = 1024, 64
 
 
+def token_filter(x, gain):
+    """x [b, 4096, d] image-token activations; per-frequency gain [64, 64] on the 64x64 token grid (real, symmetric)."""
+    b, T, d = x.shape
+    g = int(T ** 0.5)
+    X = torch.fft.fft2(x.reshape(b, g, g, d), dim=(1, 2))
+    return torch.fft.ifft2(X * gain[None, :, :, None], dim=(1, 2)).real.reshape(b, T, d)
+
+
 class StopForward(Exception):
     pass
 
@@ -43,11 +51,26 @@ class LayerStats:
         self.Xs = torch.zeros(len(rows_sel) * tok_sel.shape[1], d, device=dev, dtype=torch.bfloat16)
         self.C = None                                                         # E[x_fp x~^T] (X3 asymmetric target)
         self.Hcfg, self.ncfg = None, 0                                        # E[v v^T], v = w x_c + (1 - w) x_u (CFG arm)
+        self.Hk, self.nk = None, 0                                            # K arm: filtered-input Gram
 
-    def add_cfg(self, x, w):
-        """x [b, T, d]: calibration rows come in (uncond, cond) pairs (cache order prompt, step, branch)."""
+    def add_k(self, x, gain):
+        z = token_filter(x.float(), gain).reshape(-1, x.shape[-1])
+        torch.backends.cuda.matmul.allow_tf32 = True
+        try:
+            g = z.T @ z
+        finally:
+            torch.backends.cuda.matmul.allow_tf32 = False
+        self.Hk = g if self.Hk is None else self.Hk + g
+        self.nk += z.shape[0]
+
+    def add_cfg(self, x, w, kfilt=None):
+        """x [b, T, d]: calibration rows come in (uncond, cond) pairs (cache order prompt, step, branch).
+        kfilt: optional token-grid gain [64, 64] applied to v (CFG+K)."""
         xf = x.float()
-        v = (w * xf[1::2] + (1 - w) * xf[0::2]).reshape(-1, x.shape[-1])
+        v = w * xf[1::2] + (1 - w) * xf[0::2]
+        if kfilt is not None:
+            v = token_filter(v, kfilt)
+        v = v.reshape(-1, x.shape[-1])
         torch.backends.cuda.matmul.allow_tf32 = True
         try:
             g = v.T @ v
@@ -89,6 +112,9 @@ class LayerStats:
         if self.Hcfg is not None:                                             # rescaled to the per-branch Gram's trace
             Hc = self.Hcfg / self.ncfg
             out["Hcfg"] = Hc * (out["H0"].diagonal().sum() / Hc.diagonal().sum())
+        if self.Hk is not None:
+            Hk = self.Hk / self.nk
+            out["Hcfg"] = Hk * (out["H0"].diagonal().sum() / Hk.diagonal().sum())   # same slot: replaces L1 / metric Gram
         return out
 
 
@@ -121,6 +147,7 @@ def solve(method, a, W, st, li):
 
 
 R_CFG = {}
+KGAIN = {}
 
 
 def arm_name(a):
@@ -140,6 +167,8 @@ def arm_name(a):
             n += f"_{tag}"
     if getattr(a, "cfg", False) and getattr(a, "cfg_w", 4.5) != 4.5:
         n += f"amp{a.cfg_w:g}"
+    if getattr(a, "kfilter", None):
+        n += "_k"
     return n + (a.suffix or "")
 
 
@@ -155,6 +184,7 @@ def main():
     ap.add_argument("--r_config", default=None, help="per-layer ranks (json {'r': {layer_index: r}}); X2")
     ap.add_argument("--cfg", action="store_true", help="H_cfg (v = w x_c + (1 - w) x_u) for the GPTQ metric and L1")
     ap.add_argument("--cfg_w", type=float, default=4.5, help="w in v (CFG-amp: 7.5)")
+    ap.add_argument("--kfilter", default=None, help="K arm: token-grid gain json (with --cfg: CFG+K, filter applied to v)")
     ap.add_argument("--kv16", action="store_true", help="cross-attn K/V stay 16-bit (deepcompressor skips attn_add)")
     ap.add_argument("--fc2_unsigned", action="store_true", help="post-GELU fc2 input: shifted unsigned A4 (deepcompressor)")
     ap.add_argument("--range_search", action="store_true", help="weight group scale shrink search in [0.8, 1] inside GPTQ")
@@ -167,6 +197,9 @@ def main():
     dev = a.device
     torch.cuda.set_device(dev)
     SV.OPTS["range_search"] = a.range_search
+    if a.kfilter:
+        import json as _j
+        KGAIN["g"] = torch.tensor(_j.load(open(a.kfilter))["gain"], dtype=torch.float32, device=a.device)
     if a.r_config:
         import json
         R_CFG.update({int(k): int(v) for k, v in json.load(open(a.r_config))["r"].items()})
@@ -200,8 +233,11 @@ def main():
                 for ln in targets:
                     def pre(mod, inp, ln=ln):
                         stats[ln].add(inp[0], cur_rows)
+                        kg = KGAIN.get("g") if (a.kfilter and inp[0].shape[1] == 4096) else None
                         if a.cfg:
-                            stats[ln].add_cfg(inp[0], a.cfg_w)
+                            stats[ln].add_cfg(inp[0], a.cfg_w, kg)
+                        elif kg is not None:
+                            stats[ln].add_k(inp[0], kg)
                         if asym:
                             stats[ln].add_cross(fp_in[ln], inp[0])
                         if ln == last:
