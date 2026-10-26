@@ -284,3 +284,4 @@ w4a4,quant_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:06:32Z,2026-10-26T15:34:
 w4a4,screen_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:34:14Z,2026-10-26T15:40:35Z,0.1057
 objective,layer_attrib,cuda:0,2026-10-26T14:08:54Z,2026-10-26T15:50:13Z,1.6885
 w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:40:38Z,2026-10-26T15:52:52Z,0.2041
+w4a4,caches_embeds+design,cuda:1,2026-10-26T15:57:25Z,2026-10-26T15:59:47Z,0.0394
