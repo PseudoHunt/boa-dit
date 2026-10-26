@@ -35,7 +35,7 @@ pending
 ## Reads (screen stage)
 
 ## Compute
-A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **5.29** of 14. caches 0.14, cfg 0.05, coherence 0.43, dc 0.75, debug 1.05, dtype 0.20, gen256 1.09, gen64 0.20, quant 1.03, screen 0.35.
+A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **6.88** of 14. band 0.56, caches 0.18, cfg 0.17, coherence 0.43, dc 0.75, debug 1.05, dtype 0.20, gen256 1.09, gen64 0.40, quant 1.49, screen 0.56.
 
 ## Deviations (recorded as they happened)
 - Gram GEMMs use TF32 inputs (fp32 storage and accumulation), the only TF32 use; pre-registered as fp32. Reason: fp32 Grams made calibration ~42 min/arm (fc2's 4,608² Gram dominated); with TF32, 28 min/arm.
