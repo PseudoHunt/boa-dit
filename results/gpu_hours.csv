@@ -273,3 +273,5 @@ objective,eval_latent_deflate_heig_r8_w4_hkpooled,cuda:0,2026-10-26T13:30:06Z,20
 w4a4,debug_base_split,cuda:1,2026-10-26T13:16:59Z,2026-10-26T13:43:52Z,0.4480
 deflate,quant_deflate_heig_r8_w4_hkbucket,cuda:0,2026-10-26T13:42:54Z,2026-10-26T13:48:52Z,0.0994
 objective,eval_latent_deflate_heig_r8_w4_hkbucket,cuda:0,2026-10-26T13:49:12Z,2026-10-26T13:54:43Z,0.0922
+gate1,downstream_per_block,cuda:0,2026-10-26T13:54:47Z,2026-10-26T13:57:01Z,0.0372
+objective,arm_spectra,cuda:0,2026-10-26T13:57:17Z,2026-10-26T13:58:50Z,0.0259
