@@ -298,3 +298,4 @@ w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:06:40Z,2026-
 objective,layer_attrib,cuda:0,2026-10-26T15:55:09Z,2026-10-26T17:12:24Z,1.2874
 deflate,quant_deflate_heig_ralloclatent_w4,cuda:0,2026-10-26T17:14:16Z,2026-10-26T17:19:46Z,0.0917
 objective,eval_latent_deflate_heig_ralloclatent_w4,cuda:0,2026-10-26T17:20:08Z,2026-10-26T17:25:44Z,0.0933
+deflate,quant_deflate_heig_rallocenergy_w4,cuda:0,2026-10-26T17:26:07Z,2026-10-26T17:31:35Z,0.0911
