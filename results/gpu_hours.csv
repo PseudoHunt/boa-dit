@@ -249,3 +249,4 @@ w4a4,screen_hsvd_r4_b0.5_rep2,cuda:1,2026-10-26T11:54:12Z,2026-10-26T12:00:21Z,0
 w4a4,screen_fp,cuda:1,2026-10-26T12:00:23Z,2026-10-26T12:02:39Z,0.0377
 w4a4,"dc_ptq_svdq_r32 (deepcompressor; PREEMPTED by the objective phase, partial; hand-logged)",cuda:0,2026-10-26T11:36:48Z,2026-10-26T12:06:58Z,0.5030
 objective,d4_proxy,cuda:0,2026-10-26T12:09:07Z,2026-10-26T12:15:14Z,0.1019
+objective,d1_guidance,cuda:0,2026-10-26T12:15:30Z,2026-10-26T12:17:42Z,0.0368
