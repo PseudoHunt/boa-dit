@@ -265,3 +265,4 @@ objective,d4_proxy_extra,cuda:0,2026-10-26T13:08:00Z,2026-10-26T13:09:12Z,0.0202
 w4a4,debug_base_identity+qsnr(FAILED),cuda:1,2026-10-26T13:15:49Z,2026-10-26T13:15:56Z,0.0020
 w4a4,debug_base_identity+qsnr,cuda:1,2026-10-26T13:16:17Z,2026-10-26T13:16:36Z,0.0052
 objective,d2b_band_oracle,cuda:0,2026-10-26T13:15:02Z,2026-10-26T13:19:51Z,0.0802
+w4a4,cfg_branch_hsvd_r4_b0.5,cuda:0,2026-10-26T13:19:54Z,2026-10-26T13:22:58Z,0.0512
