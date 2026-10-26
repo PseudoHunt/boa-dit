@@ -14,6 +14,7 @@ Determinism: the base screened twice gives identical per-triple values.
 ## Base validation (MJHQ-256, 1024², PSNR / LPIPS-VGG vs the bf16 image)
 | method | ours PSNR | ours LPIPS | paper PSNR | paper LPIPS |
 | --- | ---: | ---: | ---: | ---: |
+| H-SVDQuant r4 (ours) | 12.57 | 0.631 | 16.47 | 0.386 |
 ## ρ diagnostic (base model, FP-reference inputs)
 pending
 
@@ -34,7 +35,7 @@ pending
 ## Reads (screen stage)
 
 ## Compute
-A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **1.99** of 14. caches 0.14, dc 0.75, gen256 0.31, quant 0.55, screen 0.24.
+A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **5.29** of 14. caches 0.14, cfg 0.05, coherence 0.43, dc 0.75, debug 1.05, dtype 0.20, gen256 1.09, gen64 0.20, quant 1.03, screen 0.35.
 
 ## Deviations (recorded as they happened)
 - Gram GEMMs use TF32 inputs (fp32 storage and accumulation), the only TF32 use; pre-registered as fp32. Reason: fp32 Grams made calibration ~42 min/arm (fc2's 4,608² Gram dominated); with TF32, 28 min/arm.
