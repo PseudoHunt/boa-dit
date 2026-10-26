@@ -138,6 +138,8 @@ def arm_name(a):
     for f, tag in (("kv16", "kv16"), ("fc2_unsigned", "u2"), ("range_search", "rs"), ("cfg", "cfg")):
         if getattr(a, f, False):
             n += f"_{tag}"
+    if getattr(a, "cfg", False) and getattr(a, "cfg_w", 4.5) != 4.5:
+        n += f"amp{a.cfg_w:g}"
     return n + (a.suffix or "")
 
 
@@ -151,7 +153,8 @@ def main():
     ap.add_argument("--lam_A", type=float, default=0.05)
     ap.add_argument("--suffix", default="")
     ap.add_argument("--r_config", default=None, help="per-layer ranks (json {'r': {layer_index: r}}); X2")
-    ap.add_argument("--cfg", action="store_true", help="H_cfg (v = 4.5 x_c - 3.5 x_u) for the GPTQ metric and L1")
+    ap.add_argument("--cfg", action="store_true", help="H_cfg (v = w x_c + (1 - w) x_u) for the GPTQ metric and L1")
+    ap.add_argument("--cfg_w", type=float, default=4.5, help="w in v (CFG-amp: 7.5)")
     ap.add_argument("--kv16", action="store_true", help="cross-attn K/V stay 16-bit (deepcompressor skips attn_add)")
     ap.add_argument("--fc2_unsigned", action="store_true", help="post-GELU fc2 input: shifted unsigned A4 (deepcompressor)")
     ap.add_argument("--range_search", action="store_true", help="weight group scale shrink search in [0.8, 1] inside GPTQ")
@@ -198,7 +201,7 @@ def main():
                     def pre(mod, inp, ln=ln):
                         stats[ln].add(inp[0], cur_rows)
                         if a.cfg:
-                            stats[ln].add_cfg(inp[0], 4.5)
+                            stats[ln].add_cfg(inp[0], a.cfg_w)
                         if asym:
                             stats[ln].add_cross(fp_in[ln], inp[0])
                         if ln == last:
