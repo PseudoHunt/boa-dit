@@ -287,3 +287,4 @@ w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:40:38Z,2026-10-26T15:52:
 w4a4,caches_embeds+design,cuda:1,2026-10-26T15:57:25Z,2026-10-26T15:59:47Z,0.0394
 w4a4,cfg_branch_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:59:50Z,2026-10-26T16:02:56Z,0.0516
 w4a4,cfg_layer_ratio_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T16:05:52Z,2026-10-26T16:09:50Z,0.0661
+w4a4,band_gain_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T16:02:59Z,2026-10-26T16:36:47Z,0.5634
