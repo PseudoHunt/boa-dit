@@ -1,0 +1,2003 @@
+{
+ "prompt_set": "design (held-out calibration prompts 32-63, rule_addendum_design.md)",
+ "arm": "hsvd_r4_b0.5_kv16_u2_rs",
+ "w": 4.5,
+ "rule": "greedy on e_k = lambda_k ||v_k^T E||^2, cap 32, params = r4-everywhere (rule_addendum_cfg.md 2026-10-26)",
+ "cfg": {
+  "params": 2841984,
+  "target": 2838528,
+  "ratio": 1.0012175324675325,
+  "within_2pct": true,
+  "captured_share": 0.08005015261670974,
+  "captured_share_r4": 0.030302034854392774,
+  "captured_over_r4": 2.6417418170550735,
+  "n_zero": 127,
+  "n_at_cap": 18,
+  "by_type": {
+   "attn1.to_q": {
+    "mean": 0.39285714285714285,
+    "median": 0.0,
+    "min": 0,
+    "max": 1,
+    "total_rank": 11,
+    "share_of_rank": 0.011470281543274244,
+    "share_of_branch_params": 0.008917713822456425,
+    "share_of_total_e": 0.04627057748789595
+   },
+   "attn1.to_k": {
+    "mean": 0.6428571428571429,
+    "median": 1.0,
+    "min": 0,
+    "max": 1,
+    "total_rank": 18,
+    "share_of_rank": 0.018769551616266946,
+    "share_of_branch_params": 0.014592622618565058,
+    "share_of_total_e": 0.051874183686998386
+   },
+   "attn1.to_v": {
+    "mean": 0.2857142857142857,
+    "median": 0.0,
+    "min": 0,
+    "max": 1,
+    "total_rank": 8,
+    "share_of_rank": 0.008342022940563087,
+    "share_of_branch_params": 0.0064856100526955816,
+    "share_of_total_e": 0.03975032369734496
+   },
+   "attn1.to_out.0": {
+    "mean": 4.821428571428571,
+    "median": 2.0,
+    "min": 0,
+    "max": 26,
+    "total_rank": 135,
+    "share_of_rank": 0.14077163712200208,
+    "share_of_branch_params": 0.10944466963923793,
+    "share_of_total_e": 0.09468133682487588
+   },
+   "attn2.to_q": {
+    "mean": 21.571428571428573,
+    "median": 32.0,
+    "min": 0,
+    "max": 32,
+    "total_rank": 604,
+    "share_of_rank": 0.629822732012513,
+    "share_of_branch_params": 0.48966355897851643,
+    "share_of_total_e": 0.6576376580723006
+   },
+   "attn2.to_out.0": {
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0,
+    "max": 0,
+    "total_rank": 0,
+    "share_of_rank": 0.0,
+    "share_of_branch_params": 0.0,
+    "share_of_total_e": 6.620043969240604e-05
+   },
+   "ff.net.0.proj": {
+    "mean": 6.535714285714286,
+    "median": 0.5,
+    "min": 0,
+    "max": 25,
+    "total_rank": 183,
+    "share_of_rank": 0.1908237747653806,
+    "share_of_branch_params": 0.37089582488852857,
+    "share_of_total_e": 0.06998348103852664
+   },
+   "ff.net.2": {
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0,
+    "max": 0,
+    "total_rank": 0,
+    "share_of_rank": 0.0,
+    "share_of_branch_params": 0.0,
+    "share_of_total_e": 0.039736238752365115
+   }
+  }
+ },
+ "control_G": {
+  "params": 2838528,
+  "target": 2838528,
+  "ratio": 1.0,
+  "within_2pct": true,
+  "captured_share": 0.058775978585671296,
+  "captured_share_r4": 0.014326915121444524,
+  "captured_over_r4": 4.102486689384753,
+  "n_zero": 171,
+  "n_at_cap": 29,
+  "by_type": {
+   "attn1.to_q": {
+    "mean": 0.07142857142857142,
+    "median": 0.0,
+    "min": 0,
+    "max": 1,
+    "total_rank": 2,
+    "share_of_rank": 0.0018034265103697023,
+    "share_of_branch_params": 0.0016233766233766235,
+    "share_of_total_e": 0.05539875187542119
+   },
+   "attn1.to_k": {
+    "mean": 0.32142857142857145,
+    "median": 0.0,
+    "min": 0,
+    "max": 2,
+    "total_rank": 9,
+    "share_of_rank": 0.008115419296663661,
+    "share_of_branch_params": 0.007305194805194805,
+    "share_of_total_e": 0.061928724262021596
+   },
+   "attn1.to_v": {
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0,
+    "max": 0,
+    "total_rank": 0,
+    "share_of_rank": 0.0,
+    "share_of_branch_params": 0.0,
+    "share_of_total_e": 0.04872805434473387
+   },
+   "attn1.to_out.0": {
+    "mean": 16.892857142857142,
+    "median": 24.0,
+    "min": 0,
+    "max": 32,
+    "total_rank": 473,
+    "share_of_rank": 0.4265103697024346,
+    "share_of_branch_params": 0.38392857142857145,
+    "share_of_total_e": 0.14052986054004826
+   },
+   "attn2.to_q": {
+    "mean": 19.392857142857142,
+    "median": 32.0,
+    "min": 0,
+    "max": 32,
+    "total_rank": 543,
+    "share_of_rank": 0.4896302975653742,
+    "share_of_branch_params": 0.4407467532467532,
+    "share_of_total_e": 0.5645860369391947
+   },
+   "attn2.to_out.0": {
+    "mean": 0.0,
+    "median": 0.0,
+    "min": 0,
+    "max": 0,
+    "total_rank": 0,
+    "share_of_rank": 0.0,
+    "share_of_branch_params": 0.0,
+    "share_of_total_e": 0.00015415023451877886
+   },
+   "ff.net.0.proj": {
+    "mean": 2.892857142857143,
+    "median": 0.0,
+    "min": 0,
+    "max": 24,
+    "total_rank": 81,
+    "share_of_rank": 0.07303877366997295,
+    "share_of_branch_params": 0.1643668831168831,
+    "share_of_total_e": 0.07237364944345955
+   },
+   "ff.net.2": {
+    "mean": 0.03571428571428571,
+    "median": 0.0,
+    "min": 0,
+    "max": 1,
+    "total_rank": 1,
+    "share_of_rank": 0.0009017132551848512,
+    "share_of_branch_params": 0.002029220779220779,
+    "share_of_total_e": 0.05630077236060212
+   }
+  }
+ },
+ "control_ranks_scored_under_cfg": {
+  "captured_share": 0.07728833134552969,
+  "captured_over_r4": 2.550598721073198
+ },
+ "attn2_to_q_share_of_rank_cfg": 0.629822732012513,
+ "attn2_to_q_takes_most": true,
+ "per_layer": {
+  "0.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0169938067173397,
+   "top4_share_cfg": 0.05722195957635342,
+   "top32_share_cfg": 0.3219774490626942,
+   "top4_share_G": 0.05722195957635342
+  },
+  "0.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.019199023912680517,
+   "top4_share_cfg": 0.06560238495187391,
+   "top32_share_cfg": 0.36628018144295216,
+   "top4_share_G": 0.06560238495187391
+  },
+  "0.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.018124089686944147,
+   "top4_share_cfg": 0.06654772622145624,
+   "top32_share_cfg": 0.367354422629726,
+   "top4_share_G": 0.06654772622145624
+  },
+  "0.attn1.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.03700095133070548,
+   "top4_share_cfg": 0.11520415658133881,
+   "top32_share_cfg": 0.5192150466836857,
+   "top4_share_G": 0.11520415658133881
+  },
+  "0.attn2.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.11650607978374883,
+   "top4_share_cfg": 0.22456041371522037,
+   "top32_share_cfg": 0.6655188171670785,
+   "top4_share_G": 0.22456041371522037
+  },
+  "0.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.058016963951482654,
+   "top4_share_cfg": 0.20237887954073464,
+   "top32_share_cfg": 0.8667156890071036,
+   "top4_share_G": 0.19892301673491106
+  },
+  "0.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.06451395359480612,
+   "top4_share_cfg": 0.18109208842428698,
+   "top32_share_cfg": 0.4938653015614434,
+   "top4_share_G": 0.10148309542941011
+  },
+  "0.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01784485781424226,
+   "top4_share_cfg": 0.05106621765345751,
+   "top32_share_cfg": 0.23035542049048896,
+   "top4_share_G": 0.03973947543865468
+  },
+  "1.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.03551888766632203,
+   "top4_share_cfg": 0.10599611601706736,
+   "top32_share_cfg": 0.3363449079162837,
+   "top4_share_G": 0.05054519916966325
+  },
+  "1.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.03233800534695811,
+   "top4_share_cfg": 0.10137385323728916,
+   "top32_share_cfg": 0.32396846684989766,
+   "top4_share_G": 0.05125090817196198
+  },
+  "1.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02589547240297358,
+   "top4_share_cfg": 0.08241382920005698,
+   "top32_share_cfg": 0.2981200405497927,
+   "top4_share_G": 0.035578913578479615
+  },
+  "1.attn1.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.049611638432574996,
+   "top4_share_cfg": 0.15350823177935055,
+   "top32_share_cfg": 0.45641956946308193,
+   "top4_share_G": 0.056810881648426355
+  },
+  "1.attn2.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04604118298208742,
+   "top4_share_cfg": 0.1335951143546085,
+   "top32_share_cfg": 0.40119135084823715,
+   "top4_share_G": 0.06969339699201266
+  },
+  "1.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.06023587298549882,
+   "top4_share_cfg": 0.20948461049251457,
+   "top32_share_cfg": 0.8698496506275935,
+   "top4_share_G": 0.20983714364858444
+  },
+  "1.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04717204247283052,
+   "top4_share_cfg": 0.08685558974812342,
+   "top32_share_cfg": 0.2864621959504442,
+   "top4_share_G": 0.10744368018949244
+  },
+  "1.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02138673619210988,
+   "top4_share_cfg": 0.07539566605790353,
+   "top32_share_cfg": 0.2863565484066095,
+   "top4_share_G": 0.08065700204667965
+  },
+  "2.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.03354780933910875,
+   "top4_share_cfg": 0.08527952571621238,
+   "top32_share_cfg": 0.2825359346468647,
+   "top4_share_G": 0.060997222571625834
+  },
+  "2.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.033642200693422934,
+   "top4_share_cfg": 0.08026114207546228,
+   "top32_share_cfg": 0.2837935731524549,
+   "top4_share_G": 0.06563905723421917
+  },
+  "2.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02226052367236799,
+   "top4_share_cfg": 0.05786929579955541,
+   "top32_share_cfg": 0.22610722580515835,
+   "top4_share_G": 0.05709283855377193
+  },
+  "2.attn1.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 1,
+   "top1_share_cfg": 0.03826685837700044,
+   "top4_share_cfg": 0.12465788614905313,
+   "top32_share_cfg": 0.5072424793910638,
+   "top4_share_G": 0.2929684858106801
+  },
+  "2.attn2.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.037929659560800875,
+   "top4_share_cfg": 0.08963972691648797,
+   "top32_share_cfg": 0.3517801115845369,
+   "top4_share_G": 0.08392774362499444
+  },
+  "2.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.09749764726493033,
+   "top4_share_cfg": 0.2549569496364925,
+   "top32_share_cfg": 0.7771330928003076,
+   "top4_share_G": 0.23237500801363087
+  },
+  "2.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.05495593459413257,
+   "top4_share_cfg": 0.0972432369376824,
+   "top32_share_cfg": 0.3093657608196069,
+   "top4_share_G": 0.10329633603772835
+  },
+  "2.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 1,
+   "top1_share_cfg": 0.13795491338759147,
+   "top4_share_cfg": 0.373921788312197,
+   "top32_share_cfg": 0.7668138765584712,
+   "top4_share_G": 0.4042955723833976
+  },
+  "3.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02213198782384757,
+   "top4_share_cfg": 0.07153478959194402,
+   "top32_share_cfg": 0.2964244208718225,
+   "top4_share_G": 0.051777111234053264
+  },
+  "3.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02007868856059298,
+   "top4_share_cfg": 0.06708796284292992,
+   "top32_share_cfg": 0.29041942570889834,
+   "top4_share_G": 0.05098456153015449
+  },
+  "3.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02118199059026073,
+   "top4_share_cfg": 0.06731691874671292,
+   "top32_share_cfg": 0.28963116627971414,
+   "top4_share_G": 0.05404243322088568
+  },
+  "3.attn1.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.035291618094530026,
+   "top4_share_cfg": 0.06700337798839509,
+   "top32_share_cfg": 0.24822605998892475,
+   "top4_share_G": 0.024962984074038443
+  },
+  "3.attn2.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04459893564331685,
+   "top4_share_cfg": 0.1102610759543651,
+   "top32_share_cfg": 0.32661050034369693,
+   "top4_share_G": 0.0457711483410239
+  },
+  "3.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.046945218359428484,
+   "top4_share_cfg": 0.168874647384428,
+   "top32_share_cfg": 0.5693785331962592,
+   "top4_share_G": 0.16964458343229963
+  },
+  "3.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04230272852346351,
+   "top4_share_cfg": 0.0811257659613916,
+   "top32_share_cfg": 0.2946417861356757,
+   "top4_share_G": 0.06325115785019791
+  },
+  "3.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01881244873763048,
+   "top4_share_cfg": 0.0438940783150731,
+   "top32_share_cfg": 0.162939669918759,
+   "top4_share_G": 0.008523096495014827
+  },
+  "4.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.02804079535591365,
+   "top4_share_cfg": 0.0733910247354628,
+   "top32_share_cfg": 0.27720947644785504,
+   "top4_share_G": 0.03466118468952735
+  },
+  "4.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.026556550910996613,
+   "top4_share_cfg": 0.07152771407568215,
+   "top32_share_cfg": 0.275270718523889,
+   "top4_share_G": 0.031295539377430875
+  },
+  "4.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.028994777656416386,
+   "top4_share_cfg": 0.07101192276390271,
+   "top32_share_cfg": 0.2780792971015425,
+   "top4_share_G": 0.030397405501374625
+  },
+  "4.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.03360769860965704,
+   "top4_share_cfg": 0.061159819702881334,
+   "top32_share_cfg": 0.2154450996221478,
+   "top4_share_G": 0.017171692119344138
+  },
+  "4.attn2.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.028581597085775918,
+   "top4_share_cfg": 0.07566012613808648,
+   "top32_share_cfg": 0.31744136710696835,
+   "top4_share_G": 0.03361329490601183
+  },
+  "4.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04514189228372794,
+   "top4_share_cfg": 0.15934520519783282,
+   "top32_share_cfg": 0.6427993365748366,
+   "top4_share_G": 0.15804122495666276
+  },
+  "4.ff.net.0.proj": {
+   "r_cfg": 14,
+   "r_G": 0,
+   "top1_share_cfg": 0.03909887796772389,
+   "top4_share_cfg": 0.11682831165084463,
+   "top32_share_cfg": 0.39429413405532576,
+   "top4_share_G": 0.023125792286553527
+  },
+  "4.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01388696701610555,
+   "top4_share_cfg": 0.03831827733670794,
+   "top32_share_cfg": 0.15452877996662717,
+   "top4_share_G": 0.004497540979438666
+  },
+  "5.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.034947349251939944,
+   "top4_share_cfg": 0.07422955346647543,
+   "top32_share_cfg": 0.27463088520627066,
+   "top4_share_G": 0.013927427627461507
+  },
+  "5.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.0357806117035335,
+   "top4_share_cfg": 0.07485149359340085,
+   "top32_share_cfg": 0.2790067759358393,
+   "top4_share_G": 0.01668228818893429
+  },
+  "5.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.031559497873129276,
+   "top4_share_cfg": 0.07238458244027798,
+   "top32_share_cfg": 0.27300261286232,
+   "top4_share_G": 0.016345284195647552
+  },
+  "5.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.04380993335789813,
+   "top4_share_cfg": 0.11183939999480984,
+   "top32_share_cfg": 0.46003839152657383,
+   "top4_share_G": 0.023712934354421848
+  },
+  "5.attn2.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.03160010529804239,
+   "top4_share_cfg": 0.0815484552140787,
+   "top32_share_cfg": 0.33251166773861407,
+   "top4_share_G": 0.02017259135476881
+  },
+  "5.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04028153062360591,
+   "top4_share_cfg": 0.14796120403033286,
+   "top32_share_cfg": 0.5984801094082907,
+   "top4_share_G": 0.14438367589102052
+  },
+  "5.ff.net.0.proj": {
+   "r_cfg": 22,
+   "r_G": 0,
+   "top1_share_cfg": 0.037749534082710624,
+   "top4_share_cfg": 0.105407349483391,
+   "top32_share_cfg": 0.3877107380267686,
+   "top4_share_G": 0.01604471901952537
+  },
+  "5.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.013373465893194547,
+   "top4_share_cfg": 0.03625528022392024,
+   "top32_share_cfg": 0.15017257567816172,
+   "top4_share_G": 0.006604214680955852
+  },
+  "6.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.027585730971372267,
+   "top4_share_cfg": 0.06522890490110372,
+   "top32_share_cfg": 0.26620145391598865,
+   "top4_share_G": 0.018183526112228142
+  },
+  "6.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.025163253447263178,
+   "top4_share_cfg": 0.06372882010027657,
+   "top32_share_cfg": 0.26647017955371777,
+   "top4_share_G": 0.028371448148494988
+  },
+  "6.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.03370739796489529,
+   "top4_share_cfg": 0.06877080855220036,
+   "top32_share_cfg": 0.2629985516243374,
+   "top4_share_G": 0.015251276921879322
+  },
+  "6.attn1.to_out.0": {
+   "r_cfg": 6,
+   "r_G": 1,
+   "top1_share_cfg": 0.02448017176510514,
+   "top4_share_cfg": 0.05817608061050742,
+   "top32_share_cfg": 0.2332596766745223,
+   "top4_share_G": 0.012733920994948878
+  },
+  "6.attn2.to_q": {
+   "r_cfg": 3,
+   "r_G": 0,
+   "top1_share_cfg": 0.02659254372832807,
+   "top4_share_cfg": 0.06898221885337229,
+   "top32_share_cfg": 0.24821414011703966,
+   "top4_share_G": 0.012838375833855392
+  },
+  "6.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.03021621060626691,
+   "top4_share_cfg": 0.1093143331205358,
+   "top32_share_cfg": 0.4949823233935241,
+   "top4_share_G": 0.10946340692644191
+  },
+  "6.ff.net.0.proj": {
+   "r_cfg": 15,
+   "r_G": 0,
+   "top1_share_cfg": 0.029449576021025298,
+   "top4_share_cfg": 0.08008983935134778,
+   "top32_share_cfg": 0.2943709168720606,
+   "top4_share_G": 0.010126103087522266
+  },
+  "6.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.007831490595213072,
+   "top4_share_cfg": 0.02098012330926323,
+   "top32_share_cfg": 0.09168509632846326,
+   "top4_share_G": 0.003180430718898959
+  },
+  "7.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.024511122759681123,
+   "top4_share_cfg": 0.05303025178388833,
+   "top32_share_cfg": 0.23195147255379045,
+   "top4_share_G": 0.010096593085696715
+  },
+  "7.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.026665869645522002,
+   "top4_share_cfg": 0.05463821880536952,
+   "top32_share_cfg": 0.23618667187003475,
+   "top4_share_G": 0.011980311424245708
+  },
+  "7.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.024716955776905136,
+   "top4_share_cfg": 0.05278211319553342,
+   "top32_share_cfg": 0.226350258983174,
+   "top4_share_G": 0.00867688183683961
+  },
+  "7.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.028937651283383013,
+   "top4_share_cfg": 0.07142895988600245,
+   "top32_share_cfg": 0.31686195351950164,
+   "top4_share_G": 0.013608599045381121
+  },
+  "7.attn2.to_q": {
+   "r_cfg": 3,
+   "r_G": 0,
+   "top1_share_cfg": 0.02296484903502816,
+   "top4_share_cfg": 0.05434721371558409,
+   "top32_share_cfg": 0.22022314684007877,
+   "top4_share_G": 0.010709767068141062
+  },
+  "7.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.13256157948210165,
+   "top4_share_cfg": 0.25921045992813224,
+   "top32_share_cfg": 0.5735725309608452,
+   "top4_share_G": 0.25906549217632874
+  },
+  "7.ff.net.0.proj": {
+   "r_cfg": 18,
+   "r_G": 0,
+   "top1_share_cfg": 0.028479046179547583,
+   "top4_share_cfg": 0.07673188205926688,
+   "top32_share_cfg": 0.3112604462732709,
+   "top4_share_G": 0.00863722918997663
+  },
+  "7.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.008187120928430682,
+   "top4_share_cfg": 0.021976793429790434,
+   "top32_share_cfg": 0.09760064627567445,
+   "top4_share_G": 0.0035821603449296166
+  },
+  "8.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.02561515707864797,
+   "top4_share_cfg": 0.0523663197944775,
+   "top32_share_cfg": 0.22091655451480854,
+   "top4_share_G": 0.013737119107906553
+  },
+  "8.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 2,
+   "top1_share_cfg": 0.027843450550841666,
+   "top4_share_cfg": 0.05540511350679053,
+   "top32_share_cfg": 0.2249941074203578,
+   "top4_share_G": 0.025015015535105226
+  },
+  "8.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.022721872247315377,
+   "top4_share_cfg": 0.047910852901625216,
+   "top32_share_cfg": 0.2074460033871489,
+   "top4_share_G": 0.007640996106410229
+  },
+  "8.attn1.to_out.0": {
+   "r_cfg": 7,
+   "r_G": 0,
+   "top1_share_cfg": 0.029128461140992806,
+   "top4_share_cfg": 0.0717578294664635,
+   "top32_share_cfg": 0.26964182409748433,
+   "top4_share_G": 0.013530737426794155
+  },
+  "8.attn2.to_q": {
+   "r_cfg": 8,
+   "r_G": 0,
+   "top1_share_cfg": 0.02269723043962339,
+   "top4_share_cfg": 0.0543342860453513,
+   "top32_share_cfg": 0.20934384440495568,
+   "top4_share_G": 0.009906759283269465
+  },
+  "8.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.04017389799723957,
+   "top4_share_cfg": 0.14027860661974773,
+   "top32_share_cfg": 0.5551285242992346,
+   "top4_share_G": 0.13215671677062096
+  },
+  "8.ff.net.0.proj": {
+   "r_cfg": 18,
+   "r_G": 0,
+   "top1_share_cfg": 0.026774104379251918,
+   "top4_share_cfg": 0.07159552704221153,
+   "top32_share_cfg": 0.2989196756797766,
+   "top4_share_G": 0.009946757846682
+  },
+  "8.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.007809585828012042,
+   "top4_share_cfg": 0.02320351526690686,
+   "top32_share_cfg": 0.10177473925879471,
+   "top4_share_G": 0.005367504527830466
+  },
+  "9.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.018766204313731893,
+   "top4_share_cfg": 0.04686621531425661,
+   "top32_share_cfg": 0.19385191444039532,
+   "top4_share_G": 0.009778309195543731
+  },
+  "9.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.0199126928277972,
+   "top4_share_cfg": 0.04764677233532411,
+   "top32_share_cfg": 0.19236258359120514,
+   "top4_share_G": 0.012409286424355463
+  },
+  "9.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01870501453520642,
+   "top4_share_cfg": 0.04543167423340877,
+   "top32_share_cfg": 0.19021859939738717,
+   "top4_share_G": 0.009615270017560785
+  },
+  "9.attn1.to_out.0": {
+   "r_cfg": 5,
+   "r_G": 3,
+   "top1_share_cfg": 0.02254062596134347,
+   "top4_share_cfg": 0.05499469382259811,
+   "top32_share_cfg": 0.23104836566722897,
+   "top4_share_G": 0.01262960825633195
+  },
+  "9.attn2.to_q": {
+   "r_cfg": 13,
+   "r_G": 0,
+   "top1_share_cfg": 0.01938176414362908,
+   "top4_share_cfg": 0.050676260436103356,
+   "top32_share_cfg": 0.20054564166700073,
+   "top4_share_G": 0.011140539513956218
+  },
+  "9.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.11270115341858539,
+   "top4_share_cfg": 0.21986576961146587,
+   "top32_share_cfg": 0.5684264791830675,
+   "top4_share_G": 0.22127159455806386
+  },
+  "9.ff.net.0.proj": {
+   "r_cfg": 21,
+   "r_G": 3,
+   "top1_share_cfg": 0.026901714306673312,
+   "top4_share_cfg": 0.07376110894667616,
+   "top32_share_cfg": 0.2920545391226087,
+   "top4_share_G": 0.012878644182787153
+  },
+  "9.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.006754830041493378,
+   "top4_share_cfg": 0.021358350317181404,
+   "top32_share_cfg": 0.09848098224302217,
+   "top4_share_G": 0.006025019035275418
+  },
+  "10.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.021423917588623068,
+   "top4_share_cfg": 0.045703033968944734,
+   "top32_share_cfg": 0.19899647542129278,
+   "top4_share_G": 0.009369084570606126
+  },
+  "10.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01873031809069979,
+   "top4_share_cfg": 0.0432593535587311,
+   "top32_share_cfg": 0.19342106100422105,
+   "top4_share_G": 0.009409515121837268
+  },
+  "10.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01792379538410903,
+   "top4_share_cfg": 0.042732997909585145,
+   "top32_share_cfg": 0.1929176624076815,
+   "top4_share_G": 0.00878045286962475
+  },
+  "10.attn1.to_out.0": {
+   "r_cfg": 7,
+   "r_G": 32,
+   "top1_share_cfg": 0.029794575028181242,
+   "top4_share_cfg": 0.08696400658317917,
+   "top32_share_cfg": 0.3672469448419591,
+   "top4_share_G": 0.038200845370605294
+  },
+  "10.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 8,
+   "top1_share_cfg": 0.0174896410850431,
+   "top4_share_cfg": 0.04843113970027482,
+   "top32_share_cfg": 0.2161970393313172,
+   "top4_share_G": 0.016127651862584136
+  },
+  "10.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.034549607037227946,
+   "top4_share_cfg": 0.10487456564363452,
+   "top32_share_cfg": 0.47498480819353833,
+   "top4_share_G": 0.10263155704811149
+  },
+  "10.ff.net.0.proj": {
+   "r_cfg": 25,
+   "r_G": 23,
+   "top1_share_cfg": 0.02472498087986035,
+   "top4_share_cfg": 0.06350116815164202,
+   "top32_share_cfg": 0.28236560551257806,
+   "top4_share_G": 0.018887097666377053
+  },
+  "10.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.007407539609964007,
+   "top4_share_cfg": 0.025038634388823755,
+   "top32_share_cfg": 0.12373589357011404,
+   "top4_share_G": 0.010027914725127268
+  },
+  "11.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01852536607479018,
+   "top4_share_cfg": 0.044510651663965596,
+   "top32_share_cfg": 0.1962964469896621,
+   "top4_share_G": 0.012320100288565077
+  },
+  "11.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.017253821961722753,
+   "top4_share_cfg": 0.0439282432720011,
+   "top32_share_cfg": 0.1971568614416,
+   "top4_share_G": 0.013288978404775598
+  },
+  "11.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.017989424014625853,
+   "top4_share_cfg": 0.04535015967578388,
+   "top32_share_cfg": 0.19629718455705095,
+   "top4_share_G": 0.011943488748445391
+  },
+  "11.attn1.to_out.0": {
+   "r_cfg": 17,
+   "r_G": 32,
+   "top1_share_cfg": 0.021815304014601574,
+   "top4_share_cfg": 0.06101410965954616,
+   "top32_share_cfg": 0.28074089495065163,
+   "top4_share_G": 0.02614089317306532
+  },
+  "11.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 23,
+   "top1_share_cfg": 0.013329626690819711,
+   "top4_share_cfg": 0.03989645293769847,
+   "top32_share_cfg": 0.18832096881318275,
+   "top4_share_G": 0.014273755573926463
+  },
+  "11.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0811414002589382,
+   "top4_share_cfg": 0.24175548903396646,
+   "top32_share_cfg": 0.5947941196534561,
+   "top4_share_G": 0.24282191412501655
+  },
+  "11.ff.net.0.proj": {
+   "r_cfg": 21,
+   "r_G": 24,
+   "top1_share_cfg": 0.017794789995583978,
+   "top4_share_cfg": 0.053544771345378675,
+   "top32_share_cfg": 0.24473508892234963,
+   "top4_share_G": 0.01733105678883393
+  },
+  "11.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0072729248436737065,
+   "top4_share_cfg": 0.021476121424654927,
+   "top32_share_cfg": 0.10764057459329558,
+   "top4_share_G": 0.00960617352061558
+  },
+  "12.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.013701369108765486,
+   "top4_share_cfg": 0.035797724187582765,
+   "top32_share_cfg": 0.17415576317095166,
+   "top4_share_G": 0.013517158045878108
+  },
+  "12.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01568976067365491,
+   "top4_share_cfg": 0.03720748728754708,
+   "top32_share_cfg": 0.17773333721894072,
+   "top4_share_G": 0.012931927212215477
+  },
+  "12.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01365821123339848,
+   "top4_share_cfg": 0.03552516920116223,
+   "top32_share_cfg": 0.17607599613705804,
+   "top4_share_G": 0.012186635020484997
+  },
+  "12.attn1.to_out.0": {
+   "r_cfg": 26,
+   "r_G": 32,
+   "top1_share_cfg": 0.022904422204981463,
+   "top4_share_cfg": 0.057694306906656875,
+   "top32_share_cfg": 0.2626363661999307,
+   "top4_share_G": 0.027591313015093474
+  },
+  "12.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.011870993589257568,
+   "top4_share_cfg": 0.04139071148829027,
+   "top32_share_cfg": 0.18240212604067135,
+   "top4_share_G": 0.01564085864020357
+  },
+  "12.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.029858205400262676,
+   "top4_share_cfg": 0.10216901476465529,
+   "top32_share_cfg": 0.48910266431572397,
+   "top4_share_G": 0.09967021291787365
+  },
+  "12.ff.net.0.proj": {
+   "r_cfg": 15,
+   "r_G": 14,
+   "top1_share_cfg": 0.01653491755917669,
+   "top4_share_cfg": 0.04314399117425325,
+   "top32_share_cfg": 0.20009020863999674,
+   "top4_share_G": 0.017766562314855853
+  },
+  "12.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.006384490282245193,
+   "top4_share_cfg": 0.01978910009661867,
+   "top32_share_cfg": 0.09395515857437994,
+   "top4_share_G": 0.010951228609298948
+  },
+  "13.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010451133415570753,
+   "top4_share_cfg": 0.030648378647050795,
+   "top32_share_cfg": 0.15040045696972607,
+   "top4_share_G": 0.013559240135410775
+  },
+  "13.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010928637852969705,
+   "top4_share_cfg": 0.031093539527011604,
+   "top32_share_cfg": 0.1509854833853139,
+   "top4_share_G": 0.012955485802795975
+  },
+  "13.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011183277804804624,
+   "top4_share_cfg": 0.03028586615569691,
+   "top32_share_cfg": 0.15210587941686385,
+   "top4_share_G": 0.013221877871832469
+  },
+  "13.attn1.to_out.0": {
+   "r_cfg": 10,
+   "r_G": 32,
+   "top1_share_cfg": 0.019995477030800058,
+   "top4_share_cfg": 0.049383058416525745,
+   "top32_share_cfg": 0.20953262239759593,
+   "top4_share_G": 0.022620004512219443
+  },
+  "13.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.010034313075616723,
+   "top4_share_cfg": 0.03290333513424314,
+   "top32_share_cfg": 0.1527494349301237,
+   "top4_share_G": 0.015045153169122165
+  },
+  "13.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.11502371012928998,
+   "top4_share_cfg": 0.22726021635278248,
+   "top32_share_cfg": 0.6078219574488223,
+   "top4_share_G": 0.22725192889308343
+  },
+  "13.ff.net.0.proj": {
+   "r_cfg": 10,
+   "r_G": 11,
+   "top1_share_cfg": 0.013746225468480523,
+   "top4_share_cfg": 0.03879167174840506,
+   "top32_share_cfg": 0.18217249130225688,
+   "top4_share_G": 0.01645051777670335
+  },
+  "13.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.005514383390701262,
+   "top4_share_cfg": 0.014553500221663745,
+   "top32_share_cfg": 0.07876288982719006,
+   "top4_share_G": 0.008809968110913748
+  },
+  "14.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012950836309193973,
+   "top4_share_cfg": 0.03215695944956111,
+   "top32_share_cfg": 0.14438740003522169,
+   "top4_share_G": 0.011966779947157426
+  },
+  "14.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.014511842085640861,
+   "top4_share_cfg": 0.03292202426631611,
+   "top32_share_cfg": 0.14884843532453648,
+   "top4_share_G": 0.014262771277162738
+  },
+  "14.attn1.to_v": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01348770138407783,
+   "top4_share_cfg": 0.031918922239454056,
+   "top32_share_cfg": 0.14691769704823202,
+   "top4_share_G": 0.013144757799863935
+  },
+  "14.attn1.to_out.0": {
+   "r_cfg": 11,
+   "r_G": 32,
+   "top1_share_cfg": 0.01941977209388322,
+   "top4_share_cfg": 0.05270221444159878,
+   "top32_share_cfg": 0.22102069390426618,
+   "top4_share_G": 0.026412987443616108
+  },
+  "14.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.010761125225930299,
+   "top4_share_cfg": 0.03272578305339153,
+   "top32_share_cfg": 0.15612684200001908,
+   "top4_share_G": 0.017313533592035
+  },
+  "14.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0697669030187818,
+   "top4_share_cfg": 0.22768439711030303,
+   "top32_share_cfg": 0.5810507596697142,
+   "top4_share_G": 0.2280507653757265
+  },
+  "14.ff.net.0.proj": {
+   "r_cfg": 1,
+   "r_G": 6,
+   "top1_share_cfg": 0.013456545193341756,
+   "top4_share_cfg": 0.03583742640170516,
+   "top32_share_cfg": 0.1766801129983792,
+   "top4_share_G": 0.0186370302174314
+  },
+  "14.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0045035115179419315,
+   "top4_share_cfg": 0.014425475083636383,
+   "top32_share_cfg": 0.08031134322964843,
+   "top4_share_G": 0.010892471684486255
+  },
+  "15.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01325640856244952,
+   "top4_share_cfg": 0.029530889480063296,
+   "top32_share_cfg": 0.13380634172976047,
+   "top4_share_G": 0.012956683638161175
+  },
+  "15.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 1,
+   "top1_share_cfg": 0.012534059887857458,
+   "top4_share_cfg": 0.028726009767855557,
+   "top32_share_cfg": 0.13462482361175496,
+   "top4_share_G": 0.015978894934663316
+  },
+  "15.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011662018739192107,
+   "top4_share_cfg": 0.0269972892287877,
+   "top32_share_cfg": 0.13044950567347008,
+   "top4_share_G": 0.012563655837070333
+  },
+  "15.attn1.to_out.0": {
+   "r_cfg": 18,
+   "r_G": 32,
+   "top1_share_cfg": 0.01745426545781653,
+   "top4_share_cfg": 0.03828717907399905,
+   "top32_share_cfg": 0.18490027156588593,
+   "top4_share_G": 0.025172152214827548
+  },
+  "15.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.009403373743039001,
+   "top4_share_cfg": 0.027140451580377208,
+   "top32_share_cfg": 0.12482529725831791,
+   "top4_share_G": 0.013674346092715194
+  },
+  "15.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.09011730426685723,
+   "top4_share_cfg": 0.20102418005809827,
+   "top32_share_cfg": 0.5606249072334452,
+   "top4_share_G": 0.20392627336131466
+  },
+  "15.ff.net.0.proj": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01204604908966022,
+   "top4_share_cfg": 0.028719897497228655,
+   "top32_share_cfg": 0.1358326644338942,
+   "top4_share_G": 0.013175811799481569
+  },
+  "15.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004398443527809822,
+   "top4_share_cfg": 0.011077474750492339,
+   "top32_share_cfg": 0.060484714286622776,
+   "top4_share_G": 0.008135648991966915
+  },
+  "16.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.012482289442959149,
+   "top4_share_cfg": 0.02564493499705204,
+   "top32_share_cfg": 0.10578437114332703,
+   "top4_share_G": 0.010422020544377198
+  },
+  "16.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.011336349499884497,
+   "top4_share_cfg": 0.023347471711294907,
+   "top32_share_cfg": 0.10417911994352506,
+   "top4_share_G": 0.011420485964830338
+  },
+  "16.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011180332685844941,
+   "top4_share_cfg": 0.02313239683449476,
+   "top32_share_cfg": 0.10501620303346663,
+   "top4_share_G": 0.01000162501576429
+  },
+  "16.attn1.to_out.0": {
+   "r_cfg": 3,
+   "r_G": 32,
+   "top1_share_cfg": 0.008902598609095943,
+   "top4_share_cfg": 0.025706302247059228,
+   "top32_share_cfg": 0.11457512151289835,
+   "top4_share_G": 0.013351792894310965
+  },
+  "16.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.008145664866243307,
+   "top4_share_cfg": 0.022846516170156386,
+   "top32_share_cfg": 0.09281571149243309,
+   "top4_share_G": 0.011370940178514135
+  },
+  "16.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.12757898238283272,
+   "top4_share_cfg": 0.35254957683257776,
+   "top32_share_cfg": 0.6282018298269384,
+   "top4_share_G": 0.3464909176811034
+  },
+  "16.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010673296017105949,
+   "top4_share_cfg": 0.024319493331324035,
+   "top32_share_cfg": 0.10609101281786391,
+   "top4_share_G": 0.010344869632495896
+  },
+  "16.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.00441635624511101,
+   "top4_share_cfg": 0.010063802776487581,
+   "top32_share_cfg": 0.04306134074657234,
+   "top4_share_G": 0.005300569932698741
+  },
+  "17.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01145725773382286,
+   "top4_share_cfg": 0.021069876234608327,
+   "top32_share_cfg": 0.09413995520952392,
+   "top4_share_G": 0.01368177134119003
+  },
+  "17.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.010514118211676322,
+   "top4_share_cfg": 0.019564167513489602,
+   "top32_share_cfg": 0.09023541412791539,
+   "top4_share_G": 0.011073009089671066
+  },
+  "17.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010617870066415062,
+   "top4_share_cfg": 0.019848767638628827,
+   "top32_share_cfg": 0.09043236486609241,
+   "top4_share_G": 0.009082162483828987
+  },
+  "17.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 27,
+   "top1_share_cfg": 0.016988113669476394,
+   "top4_share_cfg": 0.03129337834779975,
+   "top32_share_cfg": 0.13003700974699037,
+   "top4_share_G": 0.0217565375031238
+  },
+  "17.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.007475036733467168,
+   "top4_share_cfg": 0.020907937022909627,
+   "top32_share_cfg": 0.08517112075416365,
+   "top4_share_G": 0.0123917428389963
+  },
+  "17.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.07329136337555163,
+   "top4_share_cfg": 0.16198616416976833,
+   "top32_share_cfg": 0.46010216836635015,
+   "top4_share_G": 0.15421956691587785
+  },
+  "17.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.009489274121149777,
+   "top4_share_cfg": 0.022732227420892027,
+   "top32_share_cfg": 0.09426018542668818,
+   "top4_share_G": 0.009121755957545039
+  },
+  "17.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.003958282015769923,
+   "top4_share_cfg": 0.009626640046848222,
+   "top32_share_cfg": 0.04079711865797328,
+   "top4_share_G": 0.004639807534338502
+  },
+  "18.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011055015521693386,
+   "top4_share_cfg": 0.021814299822221238,
+   "top32_share_cfg": 0.08475063371662092,
+   "top4_share_G": 0.010505448456172935
+  },
+  "18.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 1,
+   "top1_share_cfg": 0.011572771766333506,
+   "top4_share_cfg": 0.023553661959011377,
+   "top32_share_cfg": 0.09066203736550302,
+   "top4_share_G": 0.014533956593920904
+  },
+  "18.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010393533813722492,
+   "top4_share_cfg": 0.0209580857155008,
+   "top32_share_cfg": 0.08544662304981379,
+   "top4_share_G": 0.007527078900623379
+  },
+  "18.attn1.to_out.0": {
+   "r_cfg": 2,
+   "r_G": 2,
+   "top1_share_cfg": 0.013538150508913407,
+   "top4_share_cfg": 0.028496114362764207,
+   "top32_share_cfg": 0.10425887716167077,
+   "top4_share_G": 0.011249726224065072
+  },
+  "18.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.008897101445112304,
+   "top4_share_cfg": 0.021025280022864214,
+   "top32_share_cfg": 0.08592743504724973,
+   "top4_share_G": 0.014844270689518992
+  },
+  "18.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.032653543932825824,
+   "top4_share_cfg": 0.10870522263219742,
+   "top32_share_cfg": 0.41990947980293086,
+   "top4_share_G": 0.10523398198435205
+  },
+  "18.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01022129955372932,
+   "top4_share_cfg": 0.021779603221578403,
+   "top32_share_cfg": 0.08453767746751002,
+   "top4_share_G": 0.008927925378762172
+  },
+  "18.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004571940958434347,
+   "top4_share_cfg": 0.011836148193067436,
+   "top32_share_cfg": 0.047081477221043576,
+   "top4_share_G": 0.006934888881213806
+  },
+  "19.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 1,
+   "top1_share_cfg": 0.0134121365537296,
+   "top4_share_cfg": 0.022857231099531625,
+   "top32_share_cfg": 0.08329543021200499,
+   "top4_share_G": 0.013626301176867495
+  },
+  "19.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 2,
+   "top1_share_cfg": 0.01296864330325701,
+   "top4_share_cfg": 0.021677980181972086,
+   "top32_share_cfg": 0.0831912445474967,
+   "top4_share_G": 0.015374007614148385
+  },
+  "19.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010951488746802228,
+   "top4_share_cfg": 0.018934657701097767,
+   "top32_share_cfg": 0.07818874171684499,
+   "top4_share_G": 0.010218443263850668
+  },
+  "19.attn1.to_out.0": {
+   "r_cfg": 4,
+   "r_G": 32,
+   "top1_share_cfg": 0.010967809582000452,
+   "top4_share_cfg": 0.02275359802178545,
+   "top32_share_cfg": 0.09101341497199711,
+   "top4_share_G": 0.011080981276122717
+  },
+  "19.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.010117397535472951,
+   "top4_share_cfg": 0.022736763751871246,
+   "top32_share_cfg": 0.09473877074312127,
+   "top4_share_G": 0.01686416721225357
+  },
+  "19.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.37751164607920473,
+   "top4_share_cfg": 0.4902601990170787,
+   "top32_share_cfg": 0.7214137543221406,
+   "top4_share_G": 0.480037277121493
+  },
+  "19.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010614521869390459,
+   "top4_share_cfg": 0.022460945423878057,
+   "top32_share_cfg": 0.08195270821226885,
+   "top4_share_G": 0.009886038607245917
+  },
+  "19.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004943014450279809,
+   "top4_share_cfg": 0.0110570824204814,
+   "top32_share_cfg": 0.04485645575724537,
+   "top4_share_G": 0.005160789565566855
+  },
+  "20.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.013430941782288111,
+   "top4_share_cfg": 0.024125408036482252,
+   "top32_share_cfg": 0.09003138978667549,
+   "top4_share_G": 0.012702078817179078
+  },
+  "20.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.012359687458948656,
+   "top4_share_cfg": 0.024915100423407117,
+   "top32_share_cfg": 0.09152108177814473,
+   "top4_share_G": 0.015267922721007817
+  },
+  "20.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011924135349414573,
+   "top4_share_cfg": 0.022036085970754404,
+   "top32_share_cfg": 0.08472544110058558,
+   "top4_share_G": 0.008808341777944949
+  },
+  "20.attn1.to_out.0": {
+   "r_cfg": 2,
+   "r_G": 32,
+   "top1_share_cfg": 0.01470231420550555,
+   "top4_share_cfg": 0.0312620839935595,
+   "top32_share_cfg": 0.12648404805896357,
+   "top4_share_G": 0.017986024321376463
+  },
+  "20.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.01109822169777989,
+   "top4_share_cfg": 0.025489001518297402,
+   "top32_share_cfg": 0.09938061755668358,
+   "top4_share_G": 0.01629908510199218
+  },
+  "20.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.3668307402921756,
+   "top4_share_cfg": 0.45889752515446647,
+   "top32_share_cfg": 0.676545350798854,
+   "top4_share_G": 0.45302498064067087
+  },
+  "20.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011177785557268812,
+   "top4_share_cfg": 0.025487383543960036,
+   "top32_share_cfg": 0.09302649501237502,
+   "top4_share_G": 0.01077310636848923
+  },
+  "20.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004123462900696397,
+   "top4_share_cfg": 0.010308391573488134,
+   "top32_share_cfg": 0.03944393125527717,
+   "top4_share_G": 0.00365378251645437
+  },
+  "21.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012161074529730427,
+   "top4_share_cfg": 0.02566292725580204,
+   "top32_share_cfg": 0.09318174252072718,
+   "top4_share_G": 0.016113434044303782
+  },
+  "21.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.013294710803061804,
+   "top4_share_cfg": 0.026066793372755893,
+   "top32_share_cfg": 0.09483282574950712,
+   "top4_share_G": 0.017960365412573297
+  },
+  "21.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012222130545437582,
+   "top4_share_cfg": 0.02552204523092835,
+   "top32_share_cfg": 0.08657211722580294,
+   "top4_share_G": 0.009481356067032772
+  },
+  "21.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 2,
+   "top1_share_cfg": 0.02532127928484184,
+   "top4_share_cfg": 0.0555529451375314,
+   "top32_share_cfg": 0.1881042217449415,
+   "top4_share_G": 0.029903741268769688
+  },
+  "21.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.01287476199959627,
+   "top4_share_cfg": 0.027290255126443293,
+   "top32_share_cfg": 0.09937805094248549,
+   "top4_share_G": 0.016338119261359398
+  },
+  "21.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.09070272965570987,
+   "top4_share_cfg": 0.1977562425329663,
+   "top32_share_cfg": 0.552998197161901,
+   "top4_share_G": 0.18969516202267248
+  },
+  "21.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011000635155968634,
+   "top4_share_cfg": 0.02288536732572076,
+   "top32_share_cfg": 0.08491270217857037,
+   "top4_share_G": 0.010405076458166873
+  },
+  "21.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0038441482076190365,
+   "top4_share_cfg": 0.009147107504661089,
+   "top32_share_cfg": 0.03598820049840152,
+   "top4_share_G": 0.004343803079740827
+  },
+  "22.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.015540895427478725,
+   "top4_share_cfg": 0.026641360470323748,
+   "top32_share_cfg": 0.09685972157449263,
+   "top4_share_G": 0.015438726783977048
+  },
+  "22.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012743399523612819,
+   "top4_share_cfg": 0.022966008985241013,
+   "top32_share_cfg": 0.09132249770987579,
+   "top4_share_G": 0.015122631408326178
+  },
+  "22.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012314004106805611,
+   "top4_share_cfg": 0.021465286613553722,
+   "top32_share_cfg": 0.08376240079931839,
+   "top4_share_G": 0.010787900578743856
+  },
+  "22.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.021579752791369748,
+   "top4_share_cfg": 0.04431891033565184,
+   "top32_share_cfg": 0.15034783705474164,
+   "top4_share_G": 0.018193704752046163
+  },
+  "22.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.012706357982073401,
+   "top4_share_cfg": 0.02763573478033611,
+   "top32_share_cfg": 0.09993962572162189,
+   "top4_share_G": 0.015091897454428304
+  },
+  "22.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.17252007837722988,
+   "top4_share_cfg": 0.3241999033292557,
+   "top32_share_cfg": 0.6033491552996064,
+   "top4_share_G": 0.31926151788165447
+  },
+  "22.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01193159478686027,
+   "top4_share_cfg": 0.021653886928136412,
+   "top32_share_cfg": 0.08409074341106337,
+   "top4_share_G": 0.010897293108439872
+  },
+  "22.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004632283404797382,
+   "top4_share_cfg": 0.010096609351558764,
+   "top32_share_cfg": 0.039611910132278855,
+   "top4_share_G": 0.00444693842630503
+  },
+  "23.attn1.to_q": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01463261667599062,
+   "top4_share_cfg": 0.02485126156209681,
+   "top32_share_cfg": 0.08816323346878233,
+   "top4_share_G": 0.012516581256871565
+  },
+  "23.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.013706077889333274,
+   "top4_share_cfg": 0.025080518682615092,
+   "top32_share_cfg": 0.09250504856893867,
+   "top4_share_G": 0.014722018735525996
+  },
+  "23.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.012230870862351771,
+   "top4_share_cfg": 0.02143127270092481,
+   "top32_share_cfg": 0.0794518534421575,
+   "top4_share_G": 0.011768249437936345
+  },
+  "23.attn1.to_out.0": {
+   "r_cfg": 7,
+   "r_G": 32,
+   "top1_share_cfg": 0.008572674390863398,
+   "top4_share_cfg": 0.022352606436462842,
+   "top32_share_cfg": 0.10519539064667667,
+   "top4_share_G": 0.0209515495212883
+  },
+  "23.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.012476249340803243,
+   "top4_share_cfg": 0.026948791113511266,
+   "top32_share_cfg": 0.09432551148741398,
+   "top4_share_G": 0.015497322804342352
+  },
+  "23.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.08666329525862558,
+   "top4_share_cfg": 0.18867649825121718,
+   "top32_share_cfg": 0.533389620990814,
+   "top4_share_G": 0.16991646388103993
+  },
+  "23.ff.net.0.proj": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.01251580534475657,
+   "top4_share_cfg": 0.0236217395370109,
+   "top32_share_cfg": 0.08150787390463729,
+   "top4_share_G": 0.015470983549792516
+  },
+  "23.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004363030436490589,
+   "top4_share_cfg": 0.009864302906499712,
+   "top32_share_cfg": 0.03759304685828071,
+   "top4_share_G": 0.004607553531153473
+  },
+  "24.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.014855230610130232,
+   "top4_share_cfg": 0.02413172297228867,
+   "top32_share_cfg": 0.08656106032570281,
+   "top4_share_G": 0.011697772419958053
+  },
+  "24.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.014199650748933758,
+   "top4_share_cfg": 0.023618247620031854,
+   "top32_share_cfg": 0.08523403228309694,
+   "top4_share_G": 0.012409235167657585
+  },
+  "24.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.014550972516505122,
+   "top4_share_cfg": 0.022211144201895097,
+   "top32_share_cfg": 0.07932914391139817,
+   "top4_share_G": 0.01030370071477166
+  },
+  "24.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 32,
+   "top1_share_cfg": 0.00893482611451951,
+   "top4_share_cfg": 0.0180737404155805,
+   "top32_share_cfg": 0.08654461896440308,
+   "top4_share_G": 0.014557164938089803
+  },
+  "24.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.013061122033681628,
+   "top4_share_cfg": 0.0263176253071198,
+   "top32_share_cfg": 0.08710418533160892,
+   "top4_share_G": 0.013070770128568998
+  },
+  "24.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.10830546025699285,
+   "top4_share_cfg": 0.22060390061316218,
+   "top32_share_cfg": 0.5662056347987366,
+   "top4_share_G": 0.22739936180804984
+  },
+  "24.ff.net.0.proj": {
+   "r_cfg": 1,
+   "r_G": 0,
+   "top1_share_cfg": 0.015131973133154335,
+   "top4_share_cfg": 0.026851071888487926,
+   "top32_share_cfg": 0.0925690452208444,
+   "top4_share_G": 0.016490136621039125
+  },
+  "24.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.00548219329644012,
+   "top4_share_cfg": 0.012100529147285134,
+   "top32_share_cfg": 0.040318166863025535,
+   "top4_share_G": 0.004485775861110961
+  },
+  "25.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 1,
+   "top1_share_cfg": 0.01386582031139107,
+   "top4_share_cfg": 0.029198296997865872,
+   "top32_share_cfg": 0.10563544547287633,
+   "top4_share_G": 0.02419402741872057
+  },
+  "25.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 2,
+   "top1_share_cfg": 0.014426254403730287,
+   "top4_share_cfg": 0.030788536683467985,
+   "top32_share_cfg": 0.11330628399979424,
+   "top4_share_G": 0.0288401861218804
+  },
+  "25.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.014062182693469575,
+   "top4_share_cfg": 0.024326718954960472,
+   "top32_share_cfg": 0.0798313307794801,
+   "top4_share_G": 0.008775131981324588
+  },
+  "25.attn1.to_out.0": {
+   "r_cfg": 1,
+   "r_G": 21,
+   "top1_share_cfg": 0.01570031135775018,
+   "top4_share_cfg": 0.027977769884788225,
+   "top32_share_cfg": 0.11076352219290907,
+   "top4_share_G": 0.01895319080604155
+  },
+  "25.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.011981248759984747,
+   "top4_share_cfg": 0.02541755748255904,
+   "top32_share_cfg": 0.09069982922136485,
+   "top4_share_G": 0.013098705749246792
+  },
+  "25.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.056895062362626425,
+   "top4_share_cfg": 0.16112589638346808,
+   "top32_share_cfg": 0.6096470532773288,
+   "top4_share_G": 0.17128767626181773
+  },
+  "25.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.013346714273498754,
+   "top4_share_cfg": 0.023937208030771623,
+   "top32_share_cfg": 0.08557393459404235,
+   "top4_share_G": 0.016011709079946847
+  },
+  "25.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.005747969828529628,
+   "top4_share_cfg": 0.01153910769965389,
+   "top32_share_cfg": 0.04026241349401463,
+   "top4_share_G": 0.005323486122876535
+  },
+  "26.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.013184473968428269,
+   "top4_share_cfg": 0.022746741413676632,
+   "top32_share_cfg": 0.08364163724321139,
+   "top4_share_G": 0.01572849801756433
+  },
+  "26.attn1.to_k": {
+   "r_cfg": 1,
+   "r_G": 1,
+   "top1_share_cfg": 0.012931001546515122,
+   "top4_share_cfg": 0.023410578663428567,
+   "top32_share_cfg": 0.08564083496041532,
+   "top4_share_G": 0.01758285375048193
+  },
+  "26.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01289456126346867,
+   "top4_share_cfg": 0.02190674050772753,
+   "top32_share_cfg": 0.0782718043021431,
+   "top4_share_G": 0.010768360813608779
+  },
+  "26.attn1.to_out.0": {
+   "r_cfg": 2,
+   "r_G": 32,
+   "top1_share_cfg": 0.009441274638671067,
+   "top4_share_cfg": 0.021094619191261543,
+   "top32_share_cfg": 0.10920373536114418,
+   "top4_share_G": 0.019842150619585802
+  },
+  "26.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.011513794072788533,
+   "top4_share_cfg": 0.023191879909976645,
+   "top32_share_cfg": 0.08083949307507882,
+   "top4_share_G": 0.01169658123147475
+  },
+  "26.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.06984229944039122,
+   "top4_share_cfg": 0.2302093528449969,
+   "top32_share_cfg": 0.7579484903949711,
+   "top4_share_G": 0.2323511921902399
+  },
+  "26.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011280010961796613,
+   "top4_share_cfg": 0.02072841998911484,
+   "top32_share_cfg": 0.08144966036090977,
+   "top4_share_G": 0.023114008500030394
+  },
+  "26.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.004081690403787919,
+   "top4_share_cfg": 0.008337338283633134,
+   "top32_share_cfg": 0.03829366239858688,
+   "top4_share_G": 0.007510340269378625
+  },
+  "27.attn1.to_q": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0115245905113644,
+   "top4_share_cfg": 0.02261957635617912,
+   "top32_share_cfg": 0.0830577320134801,
+   "top4_share_G": 0.018535801925719304
+  },
+  "27.attn1.to_k": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.010527025101417134,
+   "top4_share_cfg": 0.019501676976883695,
+   "top32_share_cfg": 0.07789604887718007,
+   "top4_share_G": 0.014472027459364328
+  },
+  "27.attn1.to_v": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.01176779996334843,
+   "top4_share_cfg": 0.019735113558666608,
+   "top32_share_cfg": 0.07817231105029274,
+   "top4_share_G": 0.017423891117582857
+  },
+  "27.attn1.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 32,
+   "top1_share_cfg": 0.006686013315221553,
+   "top4_share_cfg": 0.023607949340821804,
+   "top32_share_cfg": 0.15743151677971925,
+   "top4_share_G": 0.029522660827858194
+  },
+  "27.attn2.to_q": {
+   "r_cfg": 32,
+   "r_G": 32,
+   "top1_share_cfg": 0.012562789840883262,
+   "top4_share_cfg": 0.023897010818515047,
+   "top32_share_cfg": 0.08672942131652539,
+   "top4_share_G": 0.013787139361663314
+  },
+  "27.attn2.to_out.0": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.07466756332653647,
+   "top4_share_cfg": 0.23878081142986596,
+   "top32_share_cfg": 0.9409753577119031,
+   "top4_share_G": 0.3236922076089875
+  },
+  "27.ff.net.0.proj": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.011600468167092981,
+   "top4_share_cfg": 0.019979005462324412,
+   "top32_share_cfg": 0.07386138651923484,
+   "top4_share_G": 0.01358685620551302
+  },
+  "27.ff.net.2": {
+   "r_cfg": 0,
+   "r_G": 0,
+   "top1_share_cfg": 0.0025475710869621417,
+   "top4_share_cfg": 0.005178880900408219,
+   "top32_share_cfg": 0.02379602106903106,
+   "top4_share_G": 0.0034235210944868048
+  }
+ },
+ "stage": "w4a4",
+ "run": "cfg_alloc_greedy",
+ "device": "cuda:1",
+ "config": {
+  "arm": "hsvd_r4_b0.5_kv16_u2_rs",
+  "device": "cuda:1"
+ },
+ "git_sha": "33fc0d01b5e36c2efedbad3ca8958581766e2337",
+ "start_utc": "2026-10-26T17:57:00Z",
+ "wall_s": 127.45911598205566,
+ "gpu_hours": 0.03540530999501546
+}

@@ -310,3 +310,4 @@ w4a4,screen_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17
 w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:55:52Z,2026-10-26T17:55:59Z,0.0018
 w4a4,screen_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:05Z,2026-10-26T17:56:12Z,0.0018
 w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:14Z,2026-10-26T17:56:21Z,0.0019
+w4a4,cfg_alloc_greedy,cuda:1,2026-10-26T17:57:00Z,2026-10-26T17:59:07Z,0.0354
