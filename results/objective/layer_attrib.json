@@ -998,10 +998,44 @@
     0.003007649779768703
    ],
    "rel_mse": 0.06579393148422241
+  },
+  "b27.mlp.fc2": {
+   "band1_contribution": 0.00014298260386258477,
+   "latent_share": 0.00035533395568854154,
+   "latent_ci": [
+    -0.0007219261433225154,
+    0.0015215626939399179
+   ],
+   "rel_mse": 0.06572975218296051
   }
  },
  "base": {
   "band1_energy": 45696.76957686394,
   "rel_mse_seeds0_63": 0.06575311649794457
- }
+ },
+ "top10": [
+  "b10.mlp.fc2",
+  "b11.mlp.fc2",
+  "b12.mlp.fc2",
+  "b14.attn.qkv",
+  "b9.mlp.fc2",
+  "b13.mlp.fc2",
+  "b11.mlp.fc1",
+  "b8.mlp.fc2",
+  "b10.mlp.fc1",
+  "b14.mlp.fc2"
+ ],
+ "concentration_top10": 0.35749073170754875,
+ "flat_stop": false,
+ "spearman_band1_vs_latent": 0.6194006901971504,
+ "stage": "objective",
+ "run": "layer_attrib",
+ "device": "cuda:0",
+ "config": {
+  "device": "cuda:0"
+ },
+ "git_sha": "a5b1935452355ff9934efd7171968ba5188eb1c3",
+ "start_utc": "2026-10-26T14:08:54Z",
+ "wall_s": 6078.482877492905,
+ "gpu_hours": 1.6884674659702512
 }
