@@ -233,3 +233,4 @@ gate1,fid5000_fp,cuda:1,2026-10-26T09:18:59Z,2026-10-26T10:05:12Z,0.7703
 gate1,fid5000_ts_heig8_vv1_fc1v1_dsf_w4(STOPPED by request; start/end from queue log),cuda:1,2026-10-26T10:05:12Z,2026-10-26T10:25:07Z,0.3322
 engine,sensitivity,cuda:1,2026-10-26T10:31:10Z,2026-10-26T10:37:31Z,0.1060
 engine,quant_engB_err_asym_heig8_w4,cuda:1,2026-10-26T10:41:14Z,2026-10-26T10:41:51Z,0.0103
+engine,quant_engB_err_asym_heig8_w4,cuda:1,2026-10-26T10:42:43Z,2026-10-26T10:43:41Z,0.0160
