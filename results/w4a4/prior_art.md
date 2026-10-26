@@ -50,3 +50,45 @@ network-sensitivity factor F_l:
 | ρ | 2.30 | 0.18 | 0.015 | 0.029 |
 
 Away from block 2, GPTQ-plus-carry already leaves its error where the output is insensitive.
+
+## Assumed H-SVDQuant protocol (our corrected base, 2026-10-26)
+The paper states that it uses SVDQuant's setup and gives no further detail. This is the setup we adopt and match to
+deepcompressor's PixArt-Σ INT4 config (checked by reading its code; the run did not complete).
+
+**Quantized layers, per block (8 of 10 linears, 224 in total):**
+- attn1 to_q / to_k / to_v / to_out.0, attn2 to_q / to_out.0, ff.net.0.proj (fc1), ff.net.2 (fc2).
+- **Kept 16-bit:** the cross-attention K/V projections (attn2 to_k / to_v). deepcompressor treats them as `add`
+  projections and skips them (`attn_add`).
+- Also 16-bit: proj_out, adaln_single, caption_projection, pos_embed, T5, VAE.
+
+**Weights:**
+- INT4 symmetric (−8..7), groups of 64 along the input dimension, per output channel.
+- The group scale comes from a per-(row, group) shrink search in [0.8, 1.0] (21 points) inside GPTQ, minimizing the
+  metric-diagonal-weighted group error. This approximates deepcompressor's OutputsError range search, `max_shrink` 0.2.
+
+**Activations:**
+- INT4 per token, groups of 64, dynamic.
+- Symmetric for every input except the post-GELU fc2 input. That input is shifted by 0.1701/d per channel to make it
+  non-negative, quantized unsigned (0..15, scale max/15), and the shift is subtracted exactly. This is deepcompressor's
+  `shift_activations` + `allow_unsigned`.
+
+**Method:** H-SVDQuant r4 (Alg. 1), λ_A = 0.05, κ_A = 7, two outer iterations, β = ½.
+
+**Bits per weight over the quantized layers only:**
+
+| counted | bits/weight |
+| --- | ---: |
+| with the 16-bit group scales (16/64) | 4.337 |
+| without the group scales: weights + branch | 4.087 (rank-4 branch = 0.087) |
+
+**MJHQ-64:** PSNR 17.22 dB, LPIPS 0.452 vs bf16. The paper prints 16.47 dB / 0.386 on MJHQ. The protocol offset waits
+on the SVDQuant-r32 reproduction.
+
+**Single-change deltas vs the original base (12.40 dB / 0.634), MJHQ-64:**
+
+| change | Δ PSNR | Δ LPIPS |
+| --- | ---: | ---: |
+| K/V at 16-bit | +4.12 dB | −0.146 |
+| unsigned fc2 | +0.21 dB | −0.002 |
+| range search | −0.08 dB | +0.000 |
+| all three, recalibrated (the corrected base) | **+4.82 dB** | −0.182 |
