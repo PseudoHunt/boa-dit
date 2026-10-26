@@ -255,3 +255,4 @@ objective,d2_frequency,cuda:0,2026-10-26T12:17:46Z,2026-10-26T12:25:26Z,0.1278
 deflate,quant_deflate_heig_r8_w4_cfgsolve,cuda:0,2026-10-26T12:25:53Z,2026-10-26T12:32:28Z,0.1097
 objective,eval_latent_deflate_heig_r8_w4_cfgsolve,cuda:0,2026-10-26T12:32:51Z,2026-10-26T12:38:22Z,0.0921
 deflate,quant_deflate_heig_r8_w4_cfgfull,cuda:0,2026-10-26T12:38:49Z,2026-10-26T12:45:24Z,0.1098
+objective,eval_latent_deflate_heig_r8_w4_cfgfull,cuda:0,2026-10-26T12:45:45Z,2026-10-26T12:51:16Z,0.0920
