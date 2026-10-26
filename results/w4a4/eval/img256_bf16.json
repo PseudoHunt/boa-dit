@@ -1,0 +1,16 @@
+{
+ "arm": "bf16",
+ "n": 256,
+ "stage": "w4a4",
+ "run": "gen256_bf16",
+ "device": "cuda:1",
+ "config": {
+  "arm": "bf16",
+  "n": 256,
+  "device": "cuda:1"
+ },
+ "git_sha": "6355e8f0b5e857d7094f61cb55131355e9f03f14",
+ "start_utc": "2026-10-26T12:02:42Z",
+ "wall_s": 1110.0353605747223,
+ "gpu_hours": 0.30834315571520066
+}
