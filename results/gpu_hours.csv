@@ -251,3 +251,4 @@ w4a4,"dc_ptq_svdq_r32 (deepcompressor; PREEMPTED by the objective phase, partial
 objective,d4_proxy,cuda:0,2026-10-26T12:09:07Z,2026-10-26T12:15:14Z,0.1019
 objective,d1_guidance,cuda:0,2026-10-26T12:15:30Z,2026-10-26T12:17:42Z,0.0368
 w4a4,gen256_bf16,cuda:1,2026-10-26T12:02:42Z,2026-10-26T12:21:12Z,0.3083
+objective,d2_frequency,cuda:0,2026-10-26T12:17:46Z,2026-10-26T12:25:26Z,0.1278
