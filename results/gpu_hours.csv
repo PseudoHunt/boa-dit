@@ -236,3 +236,4 @@ engine,quant_engB_err_asym_heig8_w4,cuda:1,2026-10-26T10:41:14Z,2026-10-26T10:41
 engine,quant_engB_err_asym_heig8_w4,cuda:1,2026-10-26T10:42:43Z,2026-10-26T10:43:41Z,0.0160
 engine,attribution_blocks,cuda:0,2026-10-26T10:29:19Z,2026-10-26T10:52:06Z,0.3796
 engine,attribution_layers,cuda:0,2026-10-26T10:52:22Z,2026-10-26T11:01:55Z,0.1591
+w4a4,caches_embeds+calib+screen,cuda:1,2026-10-26T11:01:05Z,2026-10-26T11:09:29Z,0.1400
