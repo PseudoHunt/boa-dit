@@ -95,7 +95,7 @@ Bucket-mean ρ for blocks 2 / 10 / 20 / 27: 2.304 / 0.181 / 0.015 / 0.029; sprea
 | arm | what | rel. latent MSE | vs heig-8 | earns a place (≥ 5%, CI > 0) |
 | --- | --- | ---: | --- | --- |
 | heig-8 | base | 0.06797 | — | — |
-| CFG-solve | H_cfg in the solve, subspace from H_cur | pending | pending | — |
+| CFG-solve | H_cfg in the solve, subspace from H_cur | 0.07270 | -7.0% [-13.0, -1.2] | no |
 | CFG-full | H_cfg in the solve and the top-8 subspace | pending | pending | — |
 | H_K | token-blurred Gram (σ above) in the solve and the subspace | pending | pending | — |
 
@@ -106,7 +106,7 @@ Bucket-mean ρ for blocks 2 / 10 / 20 / 27: 2.304 / 0.181 / 0.015 / 0.029; sprea
 4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, and the engine line closes.
 
 ## Compute
-A30-hours, stage `objective`: **0.27** of 2.
+A30-hours, stage `objective`: **0.36** of 2.
 
 ## Deviations
 - D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are exactly the pipeline's (fp32).
