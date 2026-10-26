@@ -253,3 +253,4 @@ objective,d1_guidance,cuda:0,2026-10-26T12:15:30Z,2026-10-26T12:17:42Z,0.0368
 w4a4,gen256_bf16,cuda:1,2026-10-26T12:02:42Z,2026-10-26T12:21:12Z,0.3083
 objective,d2_frequency,cuda:0,2026-10-26T12:17:46Z,2026-10-26T12:25:26Z,0.1278
 deflate,quant_deflate_heig_r8_w4_cfgsolve,cuda:0,2026-10-26T12:25:53Z,2026-10-26T12:32:28Z,0.1097
+objective,eval_latent_deflate_heig_r8_w4_cfgsolve,cuda:0,2026-10-26T12:32:51Z,2026-10-26T12:38:22Z,0.0921
