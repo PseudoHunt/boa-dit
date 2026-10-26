@@ -43,7 +43,8 @@ def mjhq_sets():
 
 def prompt_sets():
     m = mjhq_sets()
-    return {"calib": calib_prompts(32), "screen": m["screen"], "mjhq1k": m["mjhq1k"]}
+    return {"calib": calib_prompts(32), "screen": m["screen"], "mjhq1k": m["mjhq1k"],
+            "design": calib_prompts(64)[32:64]}    # held-out calibration prompts (rule_addendum_design.md)
 
 
 @torch.no_grad()

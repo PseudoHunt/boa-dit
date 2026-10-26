@@ -69,11 +69,11 @@ def calib(dev, bs=8):
 
 
 @torch.no_grad()
-def screen(dev, bs=8):
-    path = os.path.join(CK, "screen_cache.pt")
+def screen(dev, bs=8, which="screen"):
+    path = os.path.join(CK, f"{which}_cache.pt")
     if os.path.exists(path):
         return
-    e = load_embeds("screen")
+    e = load_embeds(which)
     n = len(e["prompts"])
     pipe = load_pipe(dev)
     rec = {k: [] for k in ("latent", "t", "prompt", "branch", "step", "eps")}
@@ -114,7 +114,8 @@ def main():
     torch.cuda.set_device(a.device)
     with Run("w4a4", f"caches_{a.what.replace(',', '+')}", a.device, vars(a)):
         for w in a.what.split(","):
-            {"embeds": embed_all, "calib": calib, "screen": screen}[w](a.device)
+            {"embeds": embed_all, "calib": calib, "screen": screen,
+             "design": lambda d: screen(d, which="design")}[w](a.device)
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ def install(tr, name):
         blk = tr.transformer_blocks[int(l)]
         lin = block_linear(blk, ln)
         g = lambda k: None if q[k] is None else q[k].to(dev)
-        set_module(blk, ln, QLinear(lin, g("R"), g("L1"), g("L2"), g("d")))
+        set_module(blk, ln, QLinear(lin, g("R"), g("L1"), g("L2"), g("d"), act_shift=g("act_shift") if "act_shift" in q else None))
     return len(qs)
 
 

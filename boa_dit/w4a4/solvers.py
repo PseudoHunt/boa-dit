@@ -24,11 +24,16 @@ def psd_pow(A, p):
     return ((V * e.pow(p)) @ V.T).to(A.dtype)
 
 
+RANGE_GRID = torch.linspace(0.8, 1.0, 21)
+
+
 @torch.no_grad()
-def gptq(T, M, eps_frac=0.01, block=128):
+def gptq(T, M, eps_frac=0.01, block=128, range_search=None):
     """GPTQ (lazy batches) of target T [c_in, c_out] under metric M [c_in, c_in]: rows of T^T quantized with INT4
     symmetric groups of 64 along c_in, group scale from the current (updated) group columns when the group starts.
     Cholesky of M + eps I, eps = eps_frac * mean diag. Returns R^ [c_in, c_out] (dequantized)."""
+    if range_search is None:
+        range_search = OPTS["range_search"]
     W = T.T.contiguous().float().clone()                                    # [c_out, c_in]
     n = W.shape[1]
     Ms = (M.double() + M.double().T) / 2
@@ -39,7 +44,7 @@ def gptq(T, M, eps_frac=0.01, block=128):
             Hinv = torch.cholesky_inverse(torch.linalg.cholesky(Ms + frac * Ms.diagonal().mean() * eye))
             U = torch.linalg.cholesky(Hinv, upper=True).float()
             break
-        except RuntimeError:
+        except torch.linalg.LinAlgError:                                    # only a failed factorization retries
             frac *= 10
     else:
         raise RuntimeError("GPTQ metric not positive-definite even at damping %g" % frac)
@@ -53,7 +58,20 @@ def gptq(T, M, eps_frac=0.01, block=128):
         s = None
         for i in range(i2 - i1):
             if (i1 + i) % GS == 0:
-                s = W1[:, i:i + GS].abs().amax(1).clamp_min(1e-8) / QMAX
+                Wg = W1[:, i:i + GS]
+                s = Wg.abs().amax(1).clamp_min(1e-8) / QMAX
+                if range_search:                                             # per (row, group) shrink in [0.8, 1]
+                    dg = Ms.diagonal()[i1 + i:i1 + i + GS].float()
+                    best, bs = None, s
+                    for p in RANGE_GRID.tolist():
+                        sp = s * p
+                        e = ((Wg - torch.clamp(torch.round(Wg / sp[:, None]), QMIN, QMAX) * sp[:, None]).pow(2) * dg).sum(1)
+                        if best is None:
+                            best, bs = e, sp
+                        else:
+                            m = e < best
+                            best, bs = torch.where(m, e, best), torch.where(m, sp, bs)
+                    s = bs
             w = W1[:, i]
             q = torch.clamp(torch.round(w / s), QMIN, QMAX) * s
             Q[:, i1 + i] = q
@@ -72,19 +90,39 @@ def rtn(Wt):
     return q_weight(Wt.T).T
 
 
+OPTS = {"range_search": False, "unsigned": False}   # set by the driver (unsigned: per layer, the post-GELU fc2 input)
+
+
+def act_shift(d, n, dev):
+    from boa_dit.w4a4.fake import GELU_MIN
+    return GELU_MIN / d if d is not None else torch.full((n,), GELU_MIN, device=dev)
+
+
+def qa(Xt, d=None):
+    if not OPTS["unsigned"]:
+        return q_act(Xt)
+    from boa_dit.w4a4.fake import q_act_unsigned
+    return q_act_unsigned(Xt, act_shift(d, Xt.shape[-1], Xt.device))
+
+
 def output_mse(Wt, Xs, d, L1, L2, R):
     """W4A4 output MSE on the token subsample: y_fp = X W vs X~ L1 L2 + Q_A(X~) R^ (bias cancels)."""
     X = Xs.float()
     yf = X @ Wt
     Xt = X / d if d is not None else X
-    y = q_act(Xt) @ R
+    y = qa(Xt) @ R
     if L1 is not None and L1.shape[1]:
         y = y + (Xt @ L1) @ L2
     return float((y - yf).pow(2).mean())
 
 
-def act_surrogate(Xt, kappa=7.0):
-    """(s_A)_i = E_t[max_{j in G(i)} X~_tj^2] / (12 kappa^2), groups of 64 channels."""
+def act_surrogate(Xt, kappa=7.0, d=None):
+    """(s_A)_i = E_t[max_{j in G(i)} X~_tj^2] / (12 kappa^2), groups of 64 channels. Unsigned mode (shifted post-GELU
+    input): the step is max(u)/15 with u = X~ + shift, so (s_A)_i = E_t[max_j u_tj^2] / (12 * 15^2)."""
+    if OPTS["unsigned"]:
+        u = (Xt.float() + act_shift(d, Xt.shape[-1], Xt.device)).clamp_min(0)
+        g = u.reshape(u.shape[0], -1, GS).pow(2).amax(-1)
+        return (g.mean(0) / (12 * 15.0 ** 2)).repeat_interleave(GS)
     g = Xt.float().reshape(Xt.shape[0], -1, GS).pow(2).amax(-1)              # [T, c_in/64]
     return (g.mean(0) / (12 * kappa ** 2)).repeat_interleave(GS)
 
@@ -141,7 +179,7 @@ def hsvdquant(W, st, r=4, lam_A=0.05, kappa=7.0, tau_frac=1e-2, eps_frac=0.01, k
         Wtil = d[:, None] * Wt
         Ht = H0 / d[:, None] / d[None, :]
         Xt = Xs.float() / d
-        sA = act_surrogate(Xt, kappa)
+        sA = act_surrogate(Xt, kappa, d)
         Ht_reg = Ht + tau_frac * Ht.diagonal().mean() * torch.eye(Ht.shape[0], device=Ht.device)
         L1 = subspace(Ht_reg, Wtil, r, kind, beta)
         L2_0 = refit_L2(L1, Ht, Wtil) if r else None

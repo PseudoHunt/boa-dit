@@ -16,6 +16,19 @@ def q_int4(x, dim_groups=GS):
     return (torch.clamp(torch.round(g / s), QMIN, QMAX) * s).reshape(sh)
 
 
+GELU_MIN = 0.1701   # GELU(tanh) >= -0.17004 elementwise
+
+
+def q_act_unsigned(X, shift):
+    """Shifted unsigned INT4 per token, groups of 64 (deepcompressor's shift_activations + allow_unsigned for post-GELU
+    inputs): u = X + shift >= 0, levels 0..15, scale = max(u)/15, then the shift is subtracted exactly."""
+    u = (X.float() + shift).clamp_min(0)
+    sh = u.shape
+    g = u.reshape(*sh[:-1], sh[-1] // GS, GS)
+    s = g.amax(-1, keepdim=True).clamp_min(1e-8) / 15.0
+    return (torch.clamp(torch.round(g / s), 0, 15) * s).reshape(sh) - shift
+
+
 def q_weight(W):
     """W [c_out, c_in]: groups of 64 along c_in."""
     return q_int4(W)
@@ -30,7 +43,7 @@ class QLinear(nn.Module):
     """W4A4 linear with optional smoothing and 16-bit low-rank branch. R is the fake-quantized residual weight
     (dequantized, stored bf16); L1 [c_in, r], L2 [r, c_out] in bf16; d [c_in] or None."""
 
-    def __init__(self, lin, R, L1=None, L2=None, d=None, act_quant=True):
+    def __init__(self, lin, R, L1=None, L2=None, d=None, act_quant=True, act_shift=None):
         super().__init__()
         self.register_buffer("R", R.to(torch.bfloat16))
         self.register_buffer("bias", None if lin.bias is None else lin.bias.detach().to(torch.bfloat16))
@@ -38,12 +51,18 @@ class QLinear(nn.Module):
         self.register_buffer("L2", None if L2 is None else L2.to(torch.bfloat16))
         self.register_buffer("d", None if d is None else d.float())
         self.act_quant = act_quant
+        self.register_buffer("act_shift", None if act_shift is None else act_shift.float())   # unsigned mode
         self.in_features, self.out_features = lin.in_features, lin.out_features
 
     def forward(self, x):
         dt = x.dtype
         xs = x.float() if self.d is None else x.float() / self.d
-        xq = q_act(xs) if self.act_quant else xs
+        if not self.act_quant:
+            xq = xs
+        elif self.act_shift is not None:
+            xq = q_act_unsigned(xs, self.act_shift)
+        else:
+            xq = q_act(xs)
         y = torch.nn.functional.linear(xq.to(torch.bfloat16), self.R, self.bias)
         if self.L1 is not None and self.L1.shape[1] > 0:
             y = y + (xs.to(torch.bfloat16) @ self.L1) @ self.L2

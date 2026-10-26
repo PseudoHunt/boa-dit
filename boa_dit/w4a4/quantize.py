@@ -119,6 +119,9 @@ def arm_name(a):
             n = n.replace("hsvd_", "hsvdB4_", 1)
         elif a.order != "fwd" or a.target != "sym":
             n += f"_{a.order}_{a.target}"
+    for f, tag in (("kv16", "kv16"), ("fc2_unsigned", "u2"), ("range_search", "rs")):
+        if getattr(a, f, False):
+            n += f"_{tag}"
     return n + (a.suffix or "")
 
 
@@ -132,6 +135,9 @@ def main():
     ap.add_argument("--lam_A", type=float, default=0.05)
     ap.add_argument("--suffix", default="")
     ap.add_argument("--r_config", default=None, help="per-layer ranks (json {'r': {layer_index: r}}); X2")
+    ap.add_argument("--kv16", action="store_true", help="cross-attn K/V stay 16-bit (deepcompressor skips attn_add)")
+    ap.add_argument("--fc2_unsigned", action="store_true", help="post-GELU fc2 input: shifted unsigned A4 (deepcompressor)")
+    ap.add_argument("--range_search", action="store_true", help="weight group scale shrink search in [0.8, 1] inside GPTQ")
     ap.add_argument("--order", choices=["fwd", "err"], default="fwd")
     ap.add_argument("--target", choices=["sym", "asym"], default="sym")
     ap.add_argument("--blocks", type=int, default=28)
@@ -140,6 +146,7 @@ def main():
     a = ap.parse_args()
     dev = a.device
     torch.cuda.set_device(dev)
+    SV.OPTS["range_search"] = a.range_search
     if a.r_config:
         import json
         R_CFG.update({int(k): int(v) for k, v in json.load(open(a.r_config))["r"].items()})
@@ -205,6 +212,10 @@ def main():
                 for ln in names:
                     li = l * len(LAYERS) + LAYERS.index(ln)
                     lin = block_linear(blk, ln)
+                    if a.kv16 and ln in CROSS_KV:                              # stays 16-bit
+                        info["layers"][f"{l}.{ln}"] = {"kept_16bit": True}
+                        continue
+                    SV.OPTS["unsigned"] = a.fc2_unsigned and ln == "ff.net.2"
                     st = stats[ln].finish()
                     torch.cuda.synchronize(); ts = time.time()
                     SV.GPTQ_DAMP.clear()
@@ -213,7 +224,9 @@ def main():
                     if a.method == "hsvd" and a.r == 0 and a.r_config is None:     # X2's spectra (side output)
                         inf["alloc"] = SV.alloc_spectrum(lin.weight.float(), st)
                     torch.cuda.synchronize(); s = time.time() - ts
-                    set_module(blk, ln, QLinear(lin, q["R"], q["L1"], q["L2"], q["d"]))
+                    shift = SV.act_shift(q["d"], lin.in_features, lin.weight.device) if SV.OPTS["unsigned"] else None
+                    set_module(blk, ln, QLinear(lin, q["R"], q["L1"], q["L2"], q["d"], act_shift=shift))
+                    q["act_shift"] = shift
                     qstate[f"{l}.{ln}"] = {k: (None if v is None else v.detach().cpu()) for k, v in q.items()}
                     info["layers"][f"{l}.{ln}"] = {**inf, "solve_s": s, "n_tokens": st["n_tokens"]}
                     info["solve_s"][ln] += s
@@ -253,11 +266,14 @@ def main():
                     set_module(blk, ln, QLinear(lin, R))
                     qstate[f"{l}.{ln}"] = {"R": R.cpu(), "L1": None, "L2": None, "d": None}
         info["quant_wall_s"] = time.time() - t0
+        qlayers = [ln for ln in LAYERS if not (a.kv16 and ln in CROSS_KV)]
         n_par = sum(block_linear(tr.transformer_blocks[0], ln).in_features * block_linear(tr.transformer_blocks[0], ln).out_features
-                    for ln in LAYERS) * 28
+                    for ln in qlayers) * 28
         br = sum(0 if v["L1"] is None else v["L1"].numel() + v["L2"].numel() for v in qstate.values())
         info["branch_params"] = br
-        info["bits_per_weight"] = 4 + 16 / 64 + 16 * br / n_par
+        info["bits_per_weight"] = 4 + 16 / 64 + 16 * br / n_par          # over the quantized layers, incl. group scales
+        info["bits_per_weight_no_scales"] = 4 + 16 * br / n_par
+        info["quantized_layers_per_block"] = qlayers
         if a.blocks == 28:
             atomic_torch_save(qstate, os.path.join(CK, f"q_{name}.pt"))
         info.update(run.record())

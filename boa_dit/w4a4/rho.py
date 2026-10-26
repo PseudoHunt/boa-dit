@@ -1,4 +1,4 @@
-"""ρ diagnostic on PixArt-Σ (rule.md): blocks 2, 9, 18, 27; 32 screening rows (prompts 0-15 x 2 branches) x steps
+"""ρ diagnostic on PixArt-Σ (rule.md): blocks 2, 9, 18, 27; 32 design-cache rows (held-out calibration prompts 0-15 x 2 branches) x steps
 2, 10, 18. F_l = E_t[J_t^T J_t] from block-l output to the 8-channel transformer output through the FP suffix, by 64
 random probes; e_t = base model block-l output - FP block-l output on FP-reference block inputs.
 rho = sum_t e_t^T F e_t / (sum_t ||e_t||^2 tr(F)/1152); spread = lmax/lmedian. Gate: rho >= 1 and spread >= 10 for
@@ -57,15 +57,15 @@ def main():
     a = ap.parse_args()
     dev = a.device
     torch.cuda.set_device(dev)
-    out = {"arm": a.arm, "blocks": {}}
+    out = {"prompt_set": "design (held-out calibration prompts 32-63, rule_addendum_design.md)", "arm": a.arm, "blocks": {}}
     with Run("w4a4", f"rho_{a.arm}", dev, vars(a)) as run:
         pipe = load_pipe(dev)
         tr = pipe.transformer.float()                                         # fp32 suffix for the probes
         del pipe.vae
         q = copy.deepcopy(tr).to(torch.bfloat16)
         install(q, a.arm)
-        c = torch.load(os.path.join(CK, "screen_cache.pt"), map_location="cpu")
-        e = load_embeds("screen")
+        c = torch.load(os.path.join(CK, "design_cache.pt"), map_location="cpu")
+        e = load_embeds("design")
         acc = {l: [] for l in BLOCKS}
         for s in STEPS:
             idx = [j for j in range(len(c["t"])) if int(c["prompt"][j]) < 16 and int(c["step"][j]) == s]
