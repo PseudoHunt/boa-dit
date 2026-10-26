@@ -305,3 +305,8 @@ objective,arm_spectra,cuda:0,2026-10-26T17:37:49Z,2026-10-26T17:39:50Z,0.0336
 w4a4,dc_bridge_svdq_dc_r32(FAILED),cuda:0,2026-10-26T17:40:18Z,2026-10-26T17:42:49Z,0.0418
 w4a4,screen_hsvd_r4_b0.5_kv16_u2_rs_cfg,cuda:1,2026-10-26T17:36:58Z,2026-10-26T17:43:19Z,0.1057
 w4a4,cfg_alloc_greedy(FAILED),cuda:0,2026-10-26T17:44:28Z,2026-10-26T17:44:36Z,0.0020
+w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs_cfg,cuda:1,2026-10-26T17:43:22Z,2026-10-26T17:55:36Z,0.2039
+w4a4,screen_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:55:43Z,2026-10-26T17:55:49Z,0.0019
+w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:55:52Z,2026-10-26T17:55:59Z,0.0018
+w4a4,screen_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:05Z,2026-10-26T17:56:12Z,0.0018
+w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:14Z,2026-10-26T17:56:21Z,0.0019
