@@ -49,7 +49,7 @@ def block_cases(fp_block, arm_block, carry, l, X, C, w):
 
 
 @torch.no_grad()
-def per_block(dev):
+def per_block(dev, labels=None, out_path=None):
     from boa_dit.calib import capture_block0_inputs
     from boa_dit.deflate.carry import install
     from boa_dit.twosided.quantize_ts import run_block_cur
@@ -59,8 +59,8 @@ def per_block(dev):
     out = {}
     with Run("gate1", "downstream_per_block", dev, {}) as run:
         fp = load_dit(dev)
-        for lab in PER_BLOCK:
-            name = ARMS[lab]
+        for lab in labels or PER_BLOCK:
+            name = ARMS.get(lab, lab)
             if not os.path.exists(os.path.join(CKPT_DIR, f"ckpt_{name}", "model.pt")):
                 out[lab] = "missing"
                 continue
@@ -79,7 +79,7 @@ def per_block(dev):
             del m, X, C
             torch.cuda.empty_cache()
         out.update(run.record())
-    atomic_write_json(os.path.join(RESULTS, "gate1", "downstream_per_block.json"), out)
+    atomic_write_json(out_path or os.path.join(RESULTS, "gate1", "downstream_per_block.json"), out)
 
 
 @torch.no_grad()
@@ -87,11 +87,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--all_blocks", action="store_true")
+    ap.add_argument("--arms", default=None, help="comma list of arm names (or labels) for --all_blocks")
+    ap.add_argument("--out", default=None)
     a = ap.parse_args()
     dev = a.device
     torch.cuda.set_device(dev)
     if a.all_blocks:
-        return per_block(dev)
+        return per_block(dev, a.arms.split(",") if a.arms else None, a.out)
     diffusion = make_diffusion(50)
     S = diffusion.num_timesteps
     out = {}

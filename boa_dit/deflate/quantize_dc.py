@@ -55,9 +55,70 @@ class MeanGramAccumulator:
         return ({k: v / self.n[k] for k, v in self.G.items()}, {k: v / self.n[k] for k, v in self.Gm.items()})
 
 
+def token_blur(sigma, dev, g=16):
+    """[256, 256] circular Gaussian blur over the 16x16 token grid, exact response exp(-2 pi^2 sigma^2 |f|^2)."""
+    f = torch.fft.fftfreq(g, dtype=torch.float64)
+    h = torch.exp(-2 * torch.pi ** 2 * sigma ** 2 * (f[:, None] ** 2 + f[None, :] ** 2))
+    eye = torch.eye(g * g, dtype=torch.float64).reshape(g * g, g, g)
+    Bm = torch.fft.ifft2(torch.fft.fft2(eye) * h).real.reshape(g * g, g * g)   # column j = blur of unit impulse j
+    return Bm.T.contiguous().float().to(dev)
+
+
+class BlurGramAccumulator(MeanGramAccumulator):
+    """Objective D2 arm H_K: Grams of token-grid-blurred layer inputs, H_K = sum X^T B^T B X."""
+
+    def __init__(self, block, dev, sigma):
+        self.Bm = token_blur(sigma, dev)
+        super().__init__(block, dev)
+
+    def _hook(self, ln):
+        base = super()._hook(ln)
+
+        @torch.autocast("cuda", enabled=False)
+        def h(mod, inp):
+            x = inp[0].float()
+            base(mod, (torch.einsum("ij,njd->nid", self.Bm, x),))
+        return h
+
+
+class CfgGramAccumulator(MeanGramAccumulator):
+    """Objective D1 arms: also E[v v^T], v = w x_c + (1 - w) x_u (cond slab of a step first, then its uncond slab)."""
+
+    def __init__(self, block, dev, w=1.5):
+        self.w, self.xc, self.Gv, self.nv = w, {}, {}, {}
+        super().__init__(block, dev)
+
+    def _hook(self, ln):
+        base = super()._hook(ln)
+
+        @torch.autocast("cuda", enabled=False)
+        def h(mod, inp):
+            base(mod, inp)
+            b, br = self.cur
+            x = inp[0].reshape(-1, inp[0].shape[-1]).float()
+            if br == 0:
+                self.xc[ln] = x
+                return
+            v = self.w * self.xc.pop(ln) + (1 - self.w) * x
+            g = v.T @ v
+            key = (ln, b)
+            if key in self.Gv:
+                self.Gv[key] += g; self.nv[key] += v.shape[0]
+            else:
+                self.Gv[key], self.nv[key] = g, v.shape[0]
+        return h
+
+    def cfg_hessian(self, ln, B):
+        return sum(self.Gv[(ln, b)] / self.nv[(ln, b)] for b in range(B)) / B
+
+
 def arm_name(a):
     lab = json.load(open(a.r_config)).get("label", "alloc") if getattr(a, "r_config", None) else a.r
     n = f"deflate_{a.mode}_r{lab}_w{a.bits}"
+    if getattr(a, "blur_sigma", 0.0):
+        n += "_hk"
+    if getattr(a, "hess", "cur") == "cfg":
+        n += "_cfgfull" if a.subspace_hess == "cfg" else "_cfgsolve"
     return n + (f"_damp{a.damp:g}" if a.damp != 0.01 else "")
 
 
@@ -67,6 +128,9 @@ def main():
     ap.add_argument("--mode", required=True, choices=["dc", "c", "wsvd", "heig"])
     ap.add_argument("--r", default="star", help="'star' = r_l per layer from configs/deflate_r.json, or an integer")
     ap.add_argument("--bits", type=int, required=True)
+    ap.add_argument("--hess", choices=["cur", "cfg"], default="cur", help="objective D1: H_cfg = E[v v^T] in the solve")
+    ap.add_argument("--subspace_hess", choices=["cur", "cfg"], default="cur", help="objective D1: Hessian for the heig subspace")
+    ap.add_argument("--blur_sigma", type=float, default=0.0, help="objective D2 arm H_K: token-grid blur sigma (tokens)")
     ap.add_argument("--r_config", default=None, help="per-layer rank file (with --r star); arm named r'alloc'")
     ap.add_argument("--damp", type=float, default=0.01, help="total damping as a fraction of mean diag (solver adds 0.01)")
     ap.add_argument("--device", default="cuda:0")
@@ -107,12 +171,14 @@ def main():
                 continue
             tb = time.time()
             rtn_(blk.adaLN_modulation[1], 8)
-            acc = MeanGramAccumulator(blk, dev)
+            acc = (CfgGramAccumulator(blk, dev) if a.hess == "cfg" else
+                   BlurGramAccumulator(blk, dev, a.blur_sigma) if a.blur_sigma else MeanGramAccumulator(blk, dev))
             try:
                 run_block(blk, X, C, S, N, B, acc=acc)
             finally:
                 acc.remove()
             means, means_m = acc.means()
+            Hcfg = {ln: acc.cfg_hessian(ln, B).double() for ln in LINEARS} if a.hess == "cfg" else None
             del acc
             cb = {}
             for ln in LINEARS:
@@ -124,7 +190,7 @@ def main():
                 if a.mode == "wsvd":
                     V = torch.linalg.svd(Wf.double(), full_matrices=False)[2][:r].T     # [d_in, r]
                 elif a.mode == "heig":                                            # top-r eigenvectors of the full H
-                    V = eigh64(H)[1].flip(1)[:, :r]
+                    V = eigh64(Hcfg[ln] if a.subspace_hess == "cfg" else H)[1].flip(1)[:, :r]
                 elif a.mode == "c":
                     V = v_from[key]["V"].to(dev).double()
                 else:
@@ -132,7 +198,8 @@ def main():
                     V = eigh64(Hm)[1].flip(1)[:, :r]
                 if a.mode in ("dc", "wsvd", "heig"):
                     P = torch.eye(H.shape[0], device=dev, dtype=torch.float64) - V @ V.T
-                    Hs = P @ H @ P
+                    Hsolve = Hcfg[ln] if a.hess == "cfg" else H
+                    Hs = P @ Hsolve @ P
                 else:
                     Hs = H
                 if a.damp != 0.01:
