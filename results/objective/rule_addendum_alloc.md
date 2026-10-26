@@ -20,3 +20,9 @@
   - FID-5k only for the winner, and only if it beats heig-8 by ≥ 5% with the CI excluding 0.
 - **Budget:** this item is about 1.5 A30-h, taking the objective phase to about 3 h against its 2 h cap. That was
   accepted in the request ("about 1 h").
+
+**Correction (2026-10-26, before any allocation arm was evaluated).** The first attribution run used eval seeds 0–63.
+That would fit the allocation on the test set, so it was voided (`layer_attrib_VOID_eval_seeds0_63.json`; the two arm
+builds were stopped and deleted before evaluation). The attribution reruns on seeds **1100–1163**, which are disjoint
+from eval 0–511, calibration 1000–1031 and held-out 1032–1047. The FP trajectory, FP latents and heig-8 baseline for
+those seeds are computed in the run. Everything else is as above.
