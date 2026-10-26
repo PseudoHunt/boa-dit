@@ -37,3 +37,16 @@ PSNR/LPIPS vs the corrected base (`rule_addendum_screen.md`), and are designed o
 - **Advance rule:** MJHQ-64 ≥ +0.3 dB with the CI excluding 0, and LPIPS not worse.
   - CFG+K counts as a combination only if it beats the better of CFG and K by ≥ 0.2 dB (CI excluding 0).
   - Caveat: on the 64×64 token grid, bands 3–4 are within-patch frequencies, which a token filter cannot shape.
+
+## Addendum (2026-10-26, before any CFG-alloc arm ran): CFG-alloc corrected rule (user)
+Supersedes the proportional rule (r ∝ ‖E v‖²; files renamed `*_SUPERSEDED_proportional.json`; no arm was built from it).
+- Per quantized layer: H_cfg = Σ vvᵀ (v = 4.5 x_c − 3.5 x_u, paired FP layer inputs), rescaled to the trace of the per-branch Gram
+  G = ½(Σ x_c x_cᵀ + Σ x_u x_uᵀ). (λ_k, v_k) = eigenpairs of the rescaled H_cfg. E = the corrected base's effective residual
+  D⁻¹(R̂ + L₁L₂) − Wᵀ (as in cfg_layer_ratio). e_k = λ_k ‖v_kᵀE‖² (Σ_k e_k = tr(EᵀH_cfg E)).
+- Greedy: repeatedly give one more rank to the layer whose next unused direction (its e_k sorted descending) has the largest e_k;
+  cap 32; stop when total branch parameters Σ r_l (c_in + c_out) reach r4-everywhere (±2%).
+- Reported: rank distribution by layer type; share of Σ e_k captured (top-r_l e_k per layer) vs r4-everywhere (top 4 per layer).
+  If attn2.to_q does not take most of the rank under H_cfg, the report says so (its guided error is not low-rank).
+- Control: same greedy rule with (λ_k, v_k) from the per-branch Gram G; the arm built with the per-branch Gram.
+- Statistics: design set (held-out calibration prompts 32–63), all 10 cached steps, 512 random tokens per row (same tokens in both branches).
+- Arms: `hsvd_rw4a4_cfgalloc_greedy_b0.5_kv16_u2_rs_cfg` and control `hsvd_rw4a4_cfgalloc_greedy_ctl_b0.5_kv16_u2_rs`; MJHQ-64 paired screen vs the corrected base, same advance rule.
