@@ -34,8 +34,77 @@ pending
 
 ## Reads (screen stage)
 
+## Base debugging (user checklist)
+1. **Fold identity** (no quantization anywhere, fp32): max rel. error 1.4e-06, median 5.9e-07 → the fold is correct.
+3. **Activation QSNR at A4** (on X̃ = X/D, as the quantizer sees it; raw X for reference):
+
+| layer type | smoothed mean dB | min dB | raw mean dB |
+| --- | ---: | ---: | ---: |
+| attn1.to_q | 17.6 | 14.9 | 14.8 |
+| attn1.to_k | 16.7 | 15.0 | 14.8 |
+| attn1.to_v | 17.9 | 14.4 | 14.8 |
+| attn1.to_out.0 | 19.1 | 17.8 | 17.9 |
+| attn2.to_q | 17.8 | 15.2 | 16.9 |
+| attn2.to_k | 16.6 | 15.8 | 13.7 |
+| attn2.to_v | 18.3 | 17.3 | 13.7 |
+| attn2.to_out.0 | 18.9 | 18.0 | 18.7 |
+| ff.net.0.proj | 17.3 | 14.8 | 14.9 |
+| ff.net.2 | 15.7 | 14.1 | 14.7 |
+
+2./4. **Split and single-change deltas, MJHQ-64** (PSNR / LPIPS-VGG vs bf16; paired vs the original base):
+
+| variant | PSNR | LPIPS | step proxy |
+| --- | ---: | ---: | ---: |
+| original base, W4A4 | 12.40 | 0.634 | 0.00297 |
+| W4A16 (weights + branch only) | 12.69 | 0.583 | 0.00059 |
+| W16A4 (activations only, no branch) | 17.11 | 0.493 | 0.00353 |
+| single change: cross-attn K/V 16-bit (eval-time) | 16.52 | 0.488 | 0.00290 |
+| single change: unsigned fc2 (eval-time) | 12.61 | 0.632 | 0.00260 |
+| single change: weight range search (rebuilt) | 12.32 | 0.634 | 0.00281 |
+| **corrected base: all three, rebuilt** | 17.22 | 0.452 | 0.00237 |
+| control: fp16 pipeline, no quantization | 21.27 | 0.238 | — |
+
+**Proxy blindness check** (64 screening prompts × 10 steps): step-coherent C moves 1.08×, the rest I 1.01×, total 1.02× (base / K/V-16), while the image moves +4.1 dB. → screen switched to MJHQ-64 images (`rule_addendum_screen.md`).
+
+## Design-set measurements (held-out calibration prompts 32–63; `rule_addendum_design.md`)
+- Guidance, network level (corrected base, w = 4.5): ‖δ_g‖²/mean branch = **14.0**, r = 0.62; split shared +7% / difference +119% / cross -26%.
+- Guidance, layer level: median ‖E v‖²/mean branch 5.0 (p10 2.2, p90 40.5); 66% of layers ≥ 4 holding 58% of the guided error. CFG-partial not triggered.
+
+| layer type | median ratio | min | max | share of guided error |
+| --- | ---: | ---: | ---: | ---: |
+| attn1.to_q | 4.80 | 1.00 | 6.92 | 0.07 |
+| attn1.to_k | 4.85 | 1.00 | 7.05 | 0.07 |
+| attn1.to_v | 4.86 | 1.00 | 6.59 | 0.06 |
+| attn1.to_out.0 | 3.83 | 1.00 | 8.18 | 0.16 |
+| attn2.to_q | 4.76 | 1.00 | 6.72 | 0.46 |
+| attn2.to_out.0 | 40.50 | 40.48 | 40.51 | 0.00 |
+| ff.net.0.proj | 5.01 | 2.01 | 7.63 | 0.10 |
+| ff.net.2 | 3.79 | 1.04 | 8.30 | 0.08 |
+
+Band-gain table (FP sampler, design prompts 0–15, injection at the corrected base's error energy; bit-exact continuation True):
+
+| step | G band 1 | band 2 | band 3 | band 4 | white | b1/b4 | S band 1 | S 2 | S 3 | S 4 |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 10.8 | 9.48 | 8.31 | 7.61 | 8.84 | 1.42 | 0.24 | 0.25 | 0.25 | 0.25 |
+| 2 | 15 | 5.7 | 6.35 | 6.01 | 9.76 | 2.49 | 0.25 | 0.25 | 0.25 | 0.25 |
+| 4 | 10.3 | 4.15 | 3.62 | 3.97 | 6.19 | 2.58 | 0.25 | 0.25 | 0.25 | 0.25 |
+| 6 | 4.81 | 2.31 | 2.19 | 1.94 | 3.2 | 2.48 | 0.27 | 0.24 | 0.24 | 0.24 |
+| 8 | 2.32 | 1.29 | 1.29 | 1.32 | 1.67 | 1.75 | 0.31 | 0.23 | 0.23 | 0.23 |
+| 10 | 1.17 | 0.698 | 0.635 | 0.678 | 0.761 | 1.72 | 0.36 | 0.22 | 0.21 | 0.21 |
+| 12 | 0.41 | 0.349 | 0.345 | 0.365 | 0.359 | 1.12 | 0.37 | 0.23 | 0.21 | 0.20 |
+| 14 | 0.174 | 0.169 | 0.17 | 0.188 | 0.179 | 0.93 | 0.36 | 0.23 | 0.21 | 0.20 |
+| 16 | 0.0833 | 0.0868 | 0.0904 | 0.107 | 0.0937 | 0.78 | 0.33 | 0.23 | 0.22 | 0.22 |
+| 18 | 0.0557 | 0.0475 | 0.0466 | 0.0497 | 0.0482 | 1.12 | 0.29 | 0.24 | 0.23 | 0.24 |
+
+CFG-alloc ranks (∝ ‖E v‖², cap 32, params = r4 total × 1.000): attn1.to_q mean 2.5 (6% of params); attn1.to_k mean 2.8 (6% of params); attn1.to_v mean 2.1 (5% of params); attn1.to_out.0 mean 6.2 (14% of params); attn2.to_q mean 13.5 (31% of params); attn2.to_out.0 mean 0.0 (0% of params); ff.net.0.proj mean 3.8 (22% of params); ff.net.2 mean 2.9 (17% of params)
+
+## Arms on the corrected base — MJHQ-64 paired screen (advance: ≥ +0.3 dB, CI > 0, LPIPS not worse)
+| arm | PSNR | ΔPSNR vs base [95% CI] | ΔLPIPS [95% CI] | step proxy | band-1 proxy | advances |
+| --- | ---: | --- | --- | ---: | ---: | --- |
+| corrected base | 17.22 | — | — | 0.00237 | 6.85e-04 | — |
+
 ## Compute
-A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **6.88** of 14. band 0.56, caches 0.18, cfg 0.17, coherence 0.43, dc 0.75, debug 1.05, dtype 0.20, gen256 1.09, gen64 0.40, quant 1.49, screen 0.56.
+A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **7.26** of 14. band 0.56, caches 0.18, cfg 0.17, coherence 0.43, dc 0.75, debug 1.05, dtype 0.20, gen256 1.09, gen64 0.41, quant 1.86, screen 0.56.
 
 ## Deviations (recorded as they happened)
 - Gram GEMMs use TF32 inputs (fp32 storage and accumulation), the only TF32 use; pre-registered as fp32. Reason: fp32 Grams made calibration ~42 min/arm (fc2's 4,608² Gram dominated); with TF32, 28 min/arm.
