@@ -42,6 +42,19 @@ class LayerStats:
         self.rows_sel, self.tok_sel = rows_sel, tok_sel                       # row id -> slot, token positions
         self.Xs = torch.zeros(len(rows_sel) * tok_sel.shape[1], d, device=dev, dtype=torch.bfloat16)
         self.C = None                                                         # E[x_fp x~^T] (X3 asymmetric target)
+        self.Hcfg, self.ncfg = None, 0                                        # E[v v^T], v = w x_c + (1 - w) x_u (CFG arm)
+
+    def add_cfg(self, x, w):
+        """x [b, T, d]: calibration rows come in (uncond, cond) pairs (cache order prompt, step, branch)."""
+        xf = x.float()
+        v = (w * xf[1::2] + (1 - w) * xf[0::2]).reshape(-1, x.shape[-1])
+        torch.backends.cuda.matmul.allow_tf32 = True
+        try:
+            g = v.T @ v
+        finally:
+            torch.backends.cuda.matmul.allow_tf32 = False
+        self.Hcfg = g if self.Hcfg is None else self.Hcfg + g
+        self.ncfg += v.shape[0]
 
     def add_cross(self, x_fp, x):
         a, b = x_fp.float().reshape(-1, x_fp.shape[-1]), x.float().reshape(-1, x.shape[-1])
@@ -73,6 +86,9 @@ class LayerStats:
         out = {"H0": self.H / self.n, "amax": self.amax, "Xs": self.Xs, "n_tokens": self.n}
         if self.C is not None:
             out["C"] = self.C / self.n
+        if self.Hcfg is not None:                                             # rescaled to the per-branch Gram's trace
+            Hc = self.Hcfg / self.ncfg
+            out["Hcfg"] = Hc * (out["H0"].diagonal().sum() / Hc.diagonal().sum())
         return out
 
 
@@ -100,7 +116,7 @@ def solve(method, a, W, st, li):
             q, inf = SV.hsvdquant(Wt.T.float(), st, r=r, lam_A=a.lam_A, kind=a.subspace, beta=a.beta)
             inf["target_shift"] = float((Wt.T.float() - W).norm() / W.norm())
             return q, inf
-        return SV.hsvdquant(W, st, r=r, lam_A=a.lam_A, kind=a.subspace, beta=a.beta)
+        return SV.hsvdquant(W, st, r=r, lam_A=a.lam_A, kind=a.subspace, beta=a.beta, Hsolve=st.get("Hcfg"))
     raise ValueError(method)
 
 
@@ -119,7 +135,7 @@ def arm_name(a):
             n = n.replace("hsvd_", "hsvdB4_", 1)
         elif a.order != "fwd" or a.target != "sym":
             n += f"_{a.order}_{a.target}"
-    for f, tag in (("kv16", "kv16"), ("fc2_unsigned", "u2"), ("range_search", "rs")):
+    for f, tag in (("kv16", "kv16"), ("fc2_unsigned", "u2"), ("range_search", "rs"), ("cfg", "cfg")):
         if getattr(a, f, False):
             n += f"_{tag}"
     return n + (a.suffix or "")
@@ -135,6 +151,7 @@ def main():
     ap.add_argument("--lam_A", type=float, default=0.05)
     ap.add_argument("--suffix", default="")
     ap.add_argument("--r_config", default=None, help="per-layer ranks (json {'r': {layer_index: r}}); X2")
+    ap.add_argument("--cfg", action="store_true", help="H_cfg (v = 4.5 x_c - 3.5 x_u) for the GPTQ metric and L1")
     ap.add_argument("--kv16", action="store_true", help="cross-attn K/V stay 16-bit (deepcompressor skips attn_add)")
     ap.add_argument("--fc2_unsigned", action="store_true", help="post-GELU fc2 input: shifted unsigned A4 (deepcompressor)")
     ap.add_argument("--range_search", action="store_true", help="weight group scale shrink search in [0.8, 1] inside GPTQ")
@@ -180,6 +197,8 @@ def main():
                 for ln in targets:
                     def pre(mod, inp, ln=ln):
                         stats[ln].add(inp[0], cur_rows)
+                        if a.cfg:
+                            stats[ln].add_cfg(inp[0], 4.5)
                         if asym:
                             stats[ln].add_cross(fp_in[ln], inp[0])
                         if ln == last:

@@ -160,8 +160,10 @@ def deflate(H, A):
 
 @torch.no_grad()
 def hsvdquant(W, st, r=4, lam_A=0.05, kappa=7.0, tau_frac=1e-2, eps_frac=0.01, kind="beta", beta=0.5, iters=2,
-              smooth=True):
-    """H-SVDQuant, Algorithm 1 (handoff §3). W [c_out, c_in] (nn.Linear layout). Returns dict for QLinear + info."""
+              smooth=True, Hsolve=None):
+    """H-SVDQuant, Algorithm 1 (handoff §3). W [c_out, c_in] (nn.Linear layout). Returns dict for QLinear + info.
+    Hsolve (CFG arm): replaces the input Gram for L1 and the GPTQ metric (through H~_perp) only; smoothing D, the
+    surrogate, the L2 refit and the scoring keep the per-branch H0."""
     Wt = W.T.float()                                                         # [c_in, c_out]
     H0, Xs = st["H0"].float(), st["Xs"]
     A_prev, L2_prev, best = None, None, None
@@ -180,10 +182,11 @@ def hsvdquant(W, st, r=4, lam_A=0.05, kappa=7.0, tau_frac=1e-2, eps_frac=0.01, k
         Ht = H0 / d[:, None] / d[None, :]
         Xt = Xs.float() / d
         sA = act_surrogate(Xt, kappa, d)
-        Ht_reg = Ht + tau_frac * Ht.diagonal().mean() * torch.eye(Ht.shape[0], device=Ht.device)
+        Hs = Ht if Hsolve is None else Hsolve.float() / d[:, None] / d[None, :]
+        Ht_reg = Hs + tau_frac * Hs.diagonal().mean() * torch.eye(Hs.shape[0], device=Hs.device)
         L1 = subspace(Ht_reg, Wtil, r, kind, beta)
         L2_0 = refit_L2(L1, Ht, Wtil) if r else None
-        Hperp = deflate(Ht, L1) if r else Ht
+        Hperp = deflate(Hs, L1) if r else Hs
         if lam_A > 0:
             MQ = Hperp + lam_A * torch.diag(sA)
             TQ = pinv_psd(MQ) @ (Hperp @ Wtil)
@@ -193,7 +196,7 @@ def hsvdquant(W, st, r=4, lam_A=0.05, kappa=7.0, tau_frac=1e-2, eps_frac=0.01, k
         R = gptq(TQ, MQ, eps_frac)
         L2 = refit_L2(L1, Ht, Wtil - R) if r else None
         score = output_mse(Wt, Xs, d, L1 if r else None, L2, R)
-        it = {"k": k + 1, "output_mse": score, "trace_ratio_Hperp": float(Hperp.diagonal().sum() / Ht.diagonal().sum()),
+        it = {"k": k + 1, "output_mse": score, "trace_ratio_Hperp": float(Hperp.diagonal().sum() / Hs.diagonal().sum()),
               "d_range": [float(d.min()), float(d.max())]}
         info["iters"].append(it)
         if best is None or score < best["score"]:

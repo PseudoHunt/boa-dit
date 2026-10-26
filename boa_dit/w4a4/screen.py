@@ -45,6 +45,9 @@ def run_screen(tr, fp_blocks, arm, dev, bs=32, n_q=0):
     e = load_embeds("screen")
     R = len(c["t"])
     rel = torch.zeros(R)
+    rel_b1 = torch.zeros(R)
+    from boa_dit.w4a4.band_gain import band_masks
+    m1 = band_masks()[0].to(dev)
     dt = next(tr.parameters()).dtype
     for i in range(0, R, bs):
         sl = slice(i, min(R, i + bs))
@@ -54,8 +57,10 @@ def run_screen(tr, fp_blocks, arm, dev, bs=32, n_q=0):
         ref = c["eps"][sl].to(dev).float()[:, :4]
         q = o.float()[:, :4]
         rel[sl] = ((q - ref).flatten(1).pow(2).sum(1) / ref.flatten(1).pow(2).sum(1)).cpu()
+        P = torch.fft.fft2((q - ref).double()).abs().pow(2)                  # band-1 proxy: error restricted to band 1
+        rel_b1[sl] = (P[..., m1].sum(-1).sum(1) / (128 * 128) / ref.double().flatten(1).pow(2).sum(1)).float().cpu()
     res = {"arm": arm, "n_quantized_layers": n_q, "n_triples": R, "rel_mse_mean": float(rel.mean()),
-           "rel_mse_per_triple": rel.tolist(),
+           "rel_mse_per_triple": rel.tolist(), "rel_mse_band1_mean": float(rel_b1.mean()), "rel_mse_band1_per_triple": rel_b1.tolist(),
            "by_step": {int(s): float(rel[c["step"] == s].mean()) for s in sorted(set(c["step"].tolist()))}}
     if fp_blocks is not None:                                                # per-block table on FP-reference inputs
         sel = [j for j in range(R) if int(c["prompt"][j]) in BLOCK_ROWS["prompts"] and int(c["step"][j]) in BLOCK_ROWS["steps"]]
