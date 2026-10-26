@@ -161,8 +161,10 @@ def main():
     L.append("4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If "
              "none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, "
              "and the engine line closes.")
-    tot = sum(float(r[5]) for r in csv.reader(open(os.path.join(RES, "gpu_hours.csv"))) if len(r) >= 6 and r[0] == "objective")
-    L.append(f"\n## Compute\nA30-hours, stage `objective`: **{tot:.2f}** of 2.\n")
+    arm_quant = ("quant_deflate_heig_r8_w4_cfgsolve", "quant_deflate_heig_r8_w4_cfgfull", "quant_deflate_heig_r8_w4_hk")
+    tot = sum(float(r[5]) for r in csv.reader(open(os.path.join(RES, "gpu_hours.csv")))
+              if len(r) >= 6 and (r[0] == "objective" or (r[0] == "deflate" and r[1].startswith(arm_quant))))
+    L.append(f"\n## Compute\nA30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **{tot:.2f}** of 2.\n")
     L.append("## Deviations\n- D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are "
              "exactly the pipeline's (fp32).\n- H_K: the σ fit and its token-grid limitation are above.")
     atomic_write_text(os.path.join(O, "REPORT.md"), "\n".join(L) + "\n")

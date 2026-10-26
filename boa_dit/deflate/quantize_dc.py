@@ -24,6 +24,7 @@ from boa_dit.qutils import boa_gptq_groups, rtn_
 from boa_dit.quantize import CALIB_SEEDS, block_state
 
 N_PARAMS = 445_906_944
+SPEC = {}
 
 
 class MeanGramAccumulator:
@@ -81,6 +82,31 @@ class BlurGramAccumulator(MeanGramAccumulator):
         return h
 
 
+def spectral_blur(gain, dev, g=16):
+    """[256, 256] circular filter on the 16x16 token grid with per-frequency gain `gain` [16, 16] (fftfreq layout)."""
+    h = torch.as_tensor(gain, dtype=torch.float64)
+    eye = torch.eye(g * g, dtype=torch.float64).reshape(g * g, g, g)
+    Bm = torch.fft.ifft2(torch.fft.fft2(eye) * h).real.reshape(g * g, g * g)
+    return Bm.T.contiguous().float().to(dev)
+
+
+class SpectralGramAccumulator(MeanGramAccumulator):
+    """Objective D2(c) arms: Grams of spectrally filtered layer inputs, per bucket filter B_b (the row's bucket)."""
+
+    def __init__(self, block, dev, gains):
+        self.Bs = [spectral_blur(gm, dev) for gm in gains]
+        super().__init__(block, dev)
+
+    def _hook(self, ln):
+        base = super()._hook(ln)
+
+        @torch.autocast("cuda", enabled=False)
+        def h(mod, inp):
+            Bm = self.Bs[self.cur[0]]
+            base(mod, (torch.einsum("ij,njd->nid", Bm, inp[0].float()),))
+        return h
+
+
 class CfgGramAccumulator(MeanGramAccumulator):
     """Objective D1 arms: also E[v v^T], v = w x_c + (1 - w) x_u (cond slab of a step first, then its uncond slab)."""
 
@@ -117,6 +143,8 @@ def arm_name(a):
     n = f"deflate_{a.mode}_r{lab}_w{a.bits}"
     if getattr(a, "blur_sigma", 0.0):
         n += "_hk"
+    if getattr(a, "spectral", None):
+        n += "_hk" + json.load(open(a.spectral)).get("label", os.path.splitext(os.path.basename(a.spectral))[0].split("_")[-1])
     if getattr(a, "hess", "cur") == "cfg":
         n += "_cfgfull" if a.subspace_hess == "cfg" else "_cfgsolve"
     return n + (f"_damp{a.damp:g}" if a.damp != 0.01 else "")
@@ -130,6 +158,7 @@ def main():
     ap.add_argument("--bits", type=int, required=True)
     ap.add_argument("--hess", choices=["cur", "cfg"], default="cur", help="objective D1: H_cfg = E[v v^T] in the solve")
     ap.add_argument("--subspace_hess", choices=["cur", "cfg"], default="cur", help="objective D1: Hessian for the heig subspace")
+    ap.add_argument("--spectral", default=None, help="objective D2(c): per-bucket token-grid filter gains (json)")
     ap.add_argument("--blur_sigma", type=float, default=0.0, help="objective D2 arm H_K: token-grid blur sigma (tokens)")
     ap.add_argument("--r_config", default=None, help="per-layer rank file (with --r star); arm named r'alloc'")
     ap.add_argument("--damp", type=float, default=0.01, help="total damping as a fraction of mean diag (solver adds 0.01)")
@@ -143,6 +172,7 @@ def main():
     ck = os.path.join(CKPT_DIR, f"ckpt_{name}")
     os.makedirs(ck, exist_ok=True)
     os.makedirs(os.path.join(QUANT, name), exist_ok=True)
+    SPEC.update(json.load(open(a.spectral)) if a.spectral else {})
     rcfg = json.load(open(a.r_config or os.path.join(ROOT, "configs", "deflate_r.json")))["r_per_layer"]
     r_of = (lambda key: rcfg[key]) if a.r == "star" else (lambda key: int(a.r))
     v_from = None
@@ -172,7 +202,8 @@ def main():
             tb = time.time()
             rtn_(blk.adaLN_modulation[1], 8)
             acc = (CfgGramAccumulator(blk, dev) if a.hess == "cfg" else
-                   BlurGramAccumulator(blk, dev, a.blur_sigma) if a.blur_sigma else MeanGramAccumulator(blk, dev))
+                   BlurGramAccumulator(blk, dev, a.blur_sigma) if a.blur_sigma else
+                   SpectralGramAccumulator(blk, dev, SPEC["gain"]) if a.spectral else MeanGramAccumulator(blk, dev))
             try:
                 run_block(blk, X, C, S, N, B, acc=acc)
             finally:
