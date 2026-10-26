@@ -243,3 +243,4 @@ w4a4,quant_hsvd_r4_b0.5,cuda:1,2026-10-26T11:15:48Z,2026-10-26T11:18:01Z,0.0371
 w4a4,dc_collect_calib128 (deepcompressor; hand-logged from run_svdq.log),cuda:0,2026-10-26T11:19:28Z,2026-10-26T11:34:29Z,0.2503
 w4a4,quant_svdq_r32(FAILED),cuda:0,2026-10-26T11:36:08Z,2026-10-26T11:36:17Z,0.0024
 w4a4,screen_svdq_r32(FAILED),cuda:0,2026-10-26T11:36:20Z,2026-10-26T11:36:27Z,0.0020
+w4a4,quant_hsvd_r4_b0.5,cuda:1,2026-10-26T11:19:49Z,2026-10-26T11:47:55Z,0.4683
