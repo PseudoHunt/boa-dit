@@ -54,30 +54,33 @@ class LayerStats:
         self.Hk, self.nk = None, 0                                            # K arm: filtered-input Gram
 
     def add_k(self, x, gain):
-        z = token_filter(x.float(), gain).reshape(-1, x.shape[-1])
-        torch.backends.cuda.matmul.allow_tf32 = True
-        try:
-            g = z.T @ z
-        finally:
-            torch.backends.cuda.matmul.allow_tf32 = False
-        self.Hk = g if self.Hk is None else self.Hk + g
-        self.nk += z.shape[0]
+        for j in range(x.shape[0]):                                           # one sample at a time (FFT buffers)
+            z = token_filter(x[j:j + 1].float(), gain).reshape(-1, x.shape[-1])
+            torch.backends.cuda.matmul.allow_tf32 = True
+            try:
+                g = z.T @ z
+            finally:
+                torch.backends.cuda.matmul.allow_tf32 = False
+            self.Hk = g if self.Hk is None else self.Hk + g
+            self.nk += z.shape[0]
+            del z, g
 
     def add_cfg(self, x, w, kfilt=None):
         """x [b, T, d]: calibration rows come in (uncond, cond) pairs (cache order prompt, step, branch).
         kfilt: optional token-grid gain [64, 64] applied to v (CFG+K)."""
-        xf = x.float()
-        v = w * xf[1::2] + (1 - w) * xf[0::2]
-        if kfilt is not None:
-            v = token_filter(v, kfilt)
-        v = v.reshape(-1, x.shape[-1])
-        torch.backends.cuda.matmul.allow_tf32 = True
-        try:
-            g = v.T @ v
-        finally:
-            torch.backends.cuda.matmul.allow_tf32 = False
-        self.Hcfg = g if self.Hcfg is None else self.Hcfg + g
-        self.ncfg += v.shape[0]
+        for j in range(0, x.shape[0], 2):                                     # one (uncond, cond) pair at a time (memory)
+            v = w * x[j + 1:j + 2].float() + (1 - w) * x[j:j + 1].float()
+            if kfilt is not None:
+                v = token_filter(v, kfilt)
+            v = v.reshape(-1, x.shape[-1])
+            torch.backends.cuda.matmul.allow_tf32 = True
+            try:
+                g = v.T @ v
+            finally:
+                torch.backends.cuda.matmul.allow_tf32 = False
+            self.Hcfg = g if self.Hcfg is None else self.Hcfg + g
+            self.ncfg += v.shape[0]
+            del v, g
 
     def add_cross(self, x_fp, x):
         a, b = x_fp.float().reshape(-1, x_fp.shape[-1]), x.float().reshape(-1, x.shape[-1])
