@@ -97,7 +97,7 @@ Bucket-mean ρ for blocks 2 / 10 / 20 / 27: 2.304 / 0.181 / 0.015 / 0.029; sprea
 | heig-8 | base | 0.06797 | — | — |
 | CFG-solve | H_cfg in the solve, subspace from H_cur | 0.07270 | -7.0% [-13.0, -1.2] | no |
 | CFG-full | H_cfg in the solve and the top-8 subspace | 0.07244 | -6.6% [-12.7, -0.9] | no |
-| H_K | token-blurred Gram (σ above) in the solve and the subspace | pending | pending | — |
+| H_K | token-blurred Gram (σ above) in the solve and the subspace | 0.06989 | -2.8% [-8.8, +2.6] | no |
 
 Per-block output error (`per_block.json`; block l on the arm's own prefix, held-out seeds 1032–1047, all four linears as in the arm):
 
@@ -134,12 +134,12 @@ Per-block output error (`per_block.json`; block l on the arm's own prefix, held-
 
 ## Reads
 1. Guidance lever: FAILS. CFG loss earns a place: NO.
-2. Sampler directional: HOLDS. H_K earns a place: pending.
+2. Sampler directional: HOLDS. H_K earns a place: NO.
 3. Proxy valid: NO.
 4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, and the engine line closes.
 
 ## Compute
-A30-hours, stage `objective`: **0.45** of 2.
+A30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **0.86** of 2.
 
 ## Deviations
 - D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are exactly the pipeline's (fp32).
