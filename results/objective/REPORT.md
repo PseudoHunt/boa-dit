@@ -132,6 +132,39 @@ Per-block output error (`per_block.json`; block l on the arm's own prefix, held-
 | 26 | 8626 | 8779 | 8967 |
 | 27 | 549.6 | 546.4 | 556.3 |
 
+Per-block output error (`per_block_hk.json`; block l on the arm's own prefix, held-out seeds 1032–1047, all four linears as in the arm):
+
+| block | deflate_heig_r8_w4_hk |
+| ---: | ---: |
+| 0 | 1.678 |
+| 1 | 0.3608 |
+| 2 | 1.845 |
+| 3 | 1.045 |
+| 4 | 4.704 |
+| 5 | 10.39 |
+| 6 | 28.41 |
+| 7 | 26.9 |
+| 8 | 42.92 |
+| 9 | 75.94 |
+| 10 | 122.3 |
+| 11 | 161.4 |
+| 12 | 212.3 |
+| 13 | 274.4 |
+| 14 | 454.8 |
+| 15 | 548.1 |
+| 16 | 480.3 |
+| 17 | 556.6 |
+| 18 | 845.5 |
+| 19 | 1199 |
+| 20 | 1224 |
+| 21 | 1685 |
+| 22 | 1495 |
+| 23 | 3809 |
+| 24 | 7279 |
+| 25 | 8618 |
+| 26 | 8807 |
+| 27 | 546.3 |
+
 ## Reads
 1. Guidance lever: FAILS. CFG loss earns a place: NO.
 2. Sampler directional: HOLDS. H_K earns a place: NO.
