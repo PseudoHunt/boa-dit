@@ -5,6 +5,11 @@ Reduction vs the base (H-SVDQuant r4, β = ½) = 1 − proxy(arm)/proxy(base), p
 
 | arm | bits/weight | proxy | vs base | advances |
 | --- | ---: | ---: | --- | --- |
+| bf16 through the harness (batch-layout floor) (`fp`) | — | 0.0000 | +100.0% [+100.0, +100.0] | — |
+| **H-SVDQuant r4 (base)** (`hsvd_r4_b0.5`) | 4.340 | 0.0030 | — | — |
+| base, second run (determinism) (`hsvd_r4_b0.5_rep2`) | — | 0.0030 | +0.0% [+0.0, +0.0] | — |
+
+Determinism: the base screened twice gives identical per-triple values.
 
 ## Base validation (MJHQ-256, 1024², PSNR / LPIPS-VGG vs the bf16 image)
 | method | ours PSNR | ours LPIPS | paper PSNR | paper LPIPS |
@@ -29,7 +34,7 @@ pending
 ## Reads (screen stage)
 
 ## Compute
-A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **0.94** of 14. caches 0.14, dc 0.25, quant 0.55, screen 0.00.
+A30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **1.99** of 14. caches 0.14, dc 0.75, gen256 0.31, quant 0.55, screen 0.24.
 
 ## Deviations (recorded as they happened)
 - Gram GEMMs use TF32 inputs (fp32 storage and accumulation), the only TF32 use; pre-registered as fp32. Reason: fp32 Grams made calibration ~42 min/arm (fc2's 4,608² Gram dominated); with TF32, 28 min/arm.
