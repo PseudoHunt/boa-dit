@@ -96,17 +96,50 @@ Bucket-mean ρ for blocks 2 / 10 / 20 / 27: 2.304 / 0.181 / 0.015 / 0.029; sprea
 | --- | --- | ---: | --- | --- |
 | heig-8 | base | 0.06797 | — | — |
 | CFG-solve | H_cfg in the solve, subspace from H_cur | 0.07270 | -7.0% [-13.0, -1.2] | no |
-| CFG-full | H_cfg in the solve and the top-8 subspace | pending | pending | — |
+| CFG-full | H_cfg in the solve and the top-8 subspace | 0.07244 | -6.6% [-12.7, -0.9] | no |
 | H_K | token-blurred Gram (σ above) in the solve and the subspace | pending | pending | — |
 
+Per-block output error (`per_block.json`; block l on the arm's own prefix, held-out seeds 1032–1047, all four linears as in the arm):
+
+| block | deflate_heig_r8_w4 | deflate_heig_r8_w4_cfgsolve | deflate_heig_r8_w4_cfgfull |
+| ---: | ---: | ---: | ---: |
+| 0 | 1.555 | 1.56 | 1.972 |
+| 1 | 0.3708 | 0.462 | 0.4293 |
+| 2 | 1.709 | 2.228 | 2.175 |
+| 3 | 1.067 | 1.122 | 1.18 |
+| 4 | 4.657 | 4.794 | 5.191 |
+| 5 | 9.86 | 10.52 | 11.21 |
+| 6 | 27.13 | 29.76 | 29.08 |
+| 7 | 26.77 | 29.07 | 28.32 |
+| 8 | 42.4 | 46.55 | 45.11 |
+| 9 | 74.47 | 81.16 | 85.97 |
+| 10 | 115.5 | 123.4 | 139.5 |
+| 11 | 154.8 | 168.9 | 169.1 |
+| 12 | 203.5 | 214.9 | 222.2 |
+| 13 | 249.9 | 266.6 | 268.8 |
+| 14 | 413.5 | 445.8 | 446.2 |
+| 15 | 564.6 | 573 | 613.4 |
+| 16 | 454.9 | 479.4 | 465.7 |
+| 17 | 536.9 | 561 | 562.4 |
+| 18 | 845.4 | 914.6 | 940.4 |
+| 19 | 1167 | 1214 | 1205 |
+| 20 | 1192 | 1251 | 1278 |
+| 21 | 1614 | 1657 | 1680 |
+| 22 | 1477 | 1521 | 1521 |
+| 23 | 3680 | 3778 | 3788 |
+| 24 | 7104 | 7299 | 7370 |
+| 25 | 8227 | 8550 | 8557 |
+| 26 | 8626 | 8779 | 8967 |
+| 27 | 549.6 | 546.4 | 556.3 |
+
 ## Reads
-1. Guidance lever: FAILS. CFG loss earns a place: pending.
+1. Guidance lever: FAILS. CFG loss earns a place: NO.
 2. Sampler directional: HOLDS. H_K earns a place: pending.
 3. Proxy valid: NO.
 4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, and the engine line closes.
 
 ## Compute
-A30-hours, stage `objective`: **0.36** of 2.
+A30-hours, stage `objective`: **0.45** of 2.
 
 ## Deviations
 - D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are exactly the pipeline's (fp32).
