@@ -1,0 +1,19 @@
+{
+ "n_ref": 10000,
+ "stage": "stage0",
+ "run": "fid_ref_stats",
+ "device": "cuda:1",
+ "config": {
+  "ref": true,
+  "name": null,
+  "n": 2000,
+  "stage": "stage2",
+  "device": "cuda:1",
+  "carry": false,
+  "grid": null
+ },
+ "git_sha": "c62869b05eac71aa6717246d7f5f218ac7c52a7f",
+ "start_utc": "2026-10-26T05:18:45Z",
+ "wall_s": 33.680999755859375,
+ "gpu_hours": 0.009355833265516493
+}

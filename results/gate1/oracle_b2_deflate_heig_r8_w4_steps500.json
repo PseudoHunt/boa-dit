@@ -1,0 +1,87 @@
+{
+ "arm": "deflate_heig_r8_w4",
+ "block": 2,
+ "steps": 500,
+ "oracle_configs": [
+  {
+   "lr": 0.001,
+   "lam": 0.01,
+   "val": {
+    "mse": 13.010655937194825,
+    "rel_to_update": 0.0006889580943323343
+   },
+   "wall_s": 36.58392119407654
+  },
+  {
+   "lr": 0.001,
+   "lam": 0.1,
+   "val": {
+    "mse": 13.010649147033691,
+    "rel_to_update": 0.0006889577347704108
+   },
+   "wall_s": 36.542165994644165
+  },
+  {
+   "lr": 0.01,
+   "lam": 0.01,
+   "val": {
+    "mse": 12.237187690734864,
+    "rel_to_update": 0.0006480003431105677
+   },
+   "wall_s": 36.56029272079468
+  },
+  {
+   "lr": 0.01,
+   "lam": 0.1,
+   "val": {
+    "mse": 12.243001403808593,
+    "rel_to_update": 0.0006483081988174288
+   },
+   "wall_s": 36.5601007938385
+  }
+ ],
+ "oracle_chosen": {
+  "lr": 0.01,
+  "lam": 0.01
+ },
+ "test": {
+  "oracle": {
+   "mse": 12.378196916580201,
+   "rel_to_update": 0.0006642230989351815
+  },
+  "nearest_same_grid": {
+   "mse": 8.125122632980347,
+   "rel_to_update": 0.00043600002252974497
+  },
+  "deflate_heig_r8_w4": {
+   "mse": 1.7085162329673766,
+   "rel_to_update": 9.16802305287757e-05
+  },
+  "ts_heig8_vv1_fc1v1_w4": {
+   "mse": 2.1207745552062987,
+   "rel_to_update": 0.000113802313591824
+  },
+  "ts_uniform_vv1_fc1v1_w4": {
+   "mse": 26.69758186340332,
+   "rel_to_update": 0.0014326117671978912
+  },
+  "uniform_w4_K1_lam1_brcfg": {
+   "mse": 18.68517597198486,
+   "rel_to_update": 0.0010026602074520781
+  }
+ },
+ "oracle_vs_arm_error_ratio": 7.2449981321404024,
+ "oracle_wins_by_20pct": false,
+ "stage": "gate1",
+ "run": "oracle_b2_deflate_heig_r8_w4",
+ "device": "cuda:0",
+ "config": {
+  "arm": "deflate_heig_r8_w4",
+  "steps": 500,
+  "device": "cuda:0"
+ },
+ "git_sha": "c62869b05eac71aa6717246d7f5f218ac7c52a7f",
+ "start_utc": "2026-10-26T08:49:22Z",
+ "wall_s": 239.3001217842102,
+ "gpu_hours": 0.0664722560511695
+}

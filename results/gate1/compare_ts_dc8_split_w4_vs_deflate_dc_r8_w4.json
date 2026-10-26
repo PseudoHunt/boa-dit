@@ -1,0 +1,11 @@
+{
+ "a": "ts_dc8_split_w4",
+ "b": "deflate_dc_r8_w4",
+ "n_tensors": 292,
+ "n_differ": 0,
+ "differ": [],
+ "max_abs_diff": 0.0,
+ "n_carry": 112,
+ "n_carry_differ": 0,
+ "bit_exact": true
+}

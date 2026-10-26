@@ -11,10 +11,12 @@ from boa_dit.common import RESULTS
 from boa_dit.model import block_linear
 
 QUANT = os.path.join(RESULTS, "deflate", "quant")
+GATE1_QUANT = os.path.join(RESULTS, "gate1", "quant")   # Gate 1 engine arms (twosided/quantize_ts.py)
 
 
 def carry_path(arm):
-    return os.path.join(QUANT, arm, "carry.pt")
+    p = os.path.join(GATE1_QUANT, arm, "carry.pt")
+    return p if os.path.exists(p) else os.path.join(QUANT, arm, "carry.pt")
 
 
 @torch.no_grad()

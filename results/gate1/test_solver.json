@@ -1,0 +1,42 @@
+{
+ "1_identity_Hrow_equals_onesided": true,
+ "1b_solve_rows_onesided_equals_qutils": true,
+ "2_nrows1_vs_fork": {
+  "max_abs_diff": 0.0,
+  "frac_entries_differ": 0.0
+ },
+ "2_nrows1_vs_fork_actorder": {
+  "max_abs_diff": 0.0,
+  "frac_entries_differ": 0.0
+ },
+ "3_qkv_split_equals_fused": true,
+ "3_qkv_split_max_abs_diff": 0.0,
+ "4_fc1_objective_and_seconds": {
+  "two-sided n_rows=64": [
+   1.0904825307705144,
+   2.5873632431030273
+  ],
+  "one-sided GPTQ": [
+   2.928921999537044,
+   0.8060617446899414
+  ]
+ },
+ "4_v_objective_and_seconds": {
+  "two-sided n_rows=1": [
+   0.9075316914679417,
+   2.22564697265625
+  ],
+  "two-sided n_rows=8": [
+   1.0254185517328072,
+   0.8888041973114014
+  ],
+  "two-sided n_rows=64": [
+   1.9884577172149274,
+   1.3374238014221191
+  ],
+  "one-sided GPTQ": [
+   2.517038930764639,
+   0.5167942047119141
+  ]
+ }
+}
