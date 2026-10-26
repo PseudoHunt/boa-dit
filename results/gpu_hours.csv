@@ -277,3 +277,4 @@ gate1,downstream_per_block,cuda:0,2026-10-26T13:54:47Z,2026-10-26T13:57:01Z,0.03
 objective,arm_spectra,cuda:0,2026-10-26T13:57:17Z,2026-10-26T13:58:50Z,0.0259
 w4a4,debug_base_split,cuda:1,2026-10-26T13:44:04Z,2026-10-26T14:19:28Z,0.5900
 w4a4,quant_hsvd_r4_b0.5_rs,cuda:1,2026-10-26T14:19:32Z,2026-10-26T14:48:16Z,0.4787
+w4a4,screen_hsvd_r4_b0.5_rs,cuda:1,2026-10-26T14:48:20Z,2026-10-26T14:54:30Z,0.1028
