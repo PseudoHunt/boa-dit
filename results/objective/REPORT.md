@@ -175,7 +175,7 @@ Per-block output error (`per_block_hk.json`; block l on the arm's own prefix, he
 4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, and the engine line closes.
 
 ## Compute
-A30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **4.57** of 2.
+A30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **4.70** of 2.
 
 ## Deviations
 - D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are exactly the pipeline's (fp32).

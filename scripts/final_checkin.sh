@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Periodic check-in every 20 min while the experiment queues run; a final check-in once all have exited.
 cd "$(dirname "$0")/.." || exit 1
-Q="gpu0_alloc.sh|gpu0_alloc_spectra.sh|gpu0_after.sh|w4a4_gpu1_cfgchain.sh"
+Q="[a-z0-9_]+\.sh"
 n=0
 while ps -eo args | grep -E "bash logs/($Q)" | grep -vq grep; do
   sleep 60; n=$((n + 1))
