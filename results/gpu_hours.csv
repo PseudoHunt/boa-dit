@@ -295,3 +295,4 @@ w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:05:44Z,2026-
 w4a4,quant_hsvd_r4_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:06:17Z,2026-10-26T17:06:25Z,0.0022
 w4a4,screen_hsvd_r4_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:06:28Z,2026-10-26T17:06:37Z,0.0023
 w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:06:40Z,2026-10-26T17:06:48Z,0.0021
+objective,layer_attrib,cuda:0,2026-10-26T15:55:09Z,2026-10-26T17:12:24Z,1.2874
