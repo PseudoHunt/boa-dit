@@ -262,3 +262,4 @@ objective,eval_latent_deflate_heig_r8_w4_hk,cuda:0,2026-10-26T13:01:07Z,2026-10-
 gate1,downstream_per_block,cuda:0,2026-10-26T13:06:42Z,2026-10-26T13:07:55Z,0.0204
 w4a4,gen256_hsvd_r4_b0.5,cuda:1,2026-10-26T12:21:15Z,2026-10-26T13:08:24Z,0.7860
 objective,d4_proxy_extra,cuda:0,2026-10-26T13:08:00Z,2026-10-26T13:09:12Z,0.0202
+w4a4,debug_base_identity+qsnr(FAILED),cuda:1,2026-10-26T13:15:49Z,2026-10-26T13:15:56Z,0.0020
