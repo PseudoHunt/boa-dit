@@ -302,3 +302,4 @@ deflate,quant_deflate_heig_rallocenergy_w4,cuda:0,2026-10-26T17:26:07Z,2026-10-2
 w4a4,quant_hsvd_r4_b0.5_kv16_u2_rs_cfg,cuda:1,2026-10-26T17:06:53Z,2026-10-26T17:36:54Z,0.5002
 objective,eval_latent_deflate_heig_rallocenergy_w4,cuda:0,2026-10-26T17:31:56Z,2026-10-26T17:37:22Z,0.0904
 objective,arm_spectra,cuda:0,2026-10-26T17:37:49Z,2026-10-26T17:39:50Z,0.0336
+w4a4,dc_bridge_svdq_dc_r32(FAILED),cuda:0,2026-10-26T17:40:18Z,2026-10-26T17:42:49Z,0.0418
