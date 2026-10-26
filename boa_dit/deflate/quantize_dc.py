@@ -56,7 +56,8 @@ class MeanGramAccumulator:
 
 
 def arm_name(a):
-    n = f"deflate_{a.mode}_r{a.r}_w{a.bits}"
+    lab = json.load(open(a.r_config)).get("label", "alloc") if getattr(a, "r_config", None) else a.r
+    n = f"deflate_{a.mode}_r{lab}_w{a.bits}"
     return n + (f"_damp{a.damp:g}" if a.damp != 0.01 else "")
 
 
@@ -66,6 +67,7 @@ def main():
     ap.add_argument("--mode", required=True, choices=["dc", "c", "wsvd", "heig"])
     ap.add_argument("--r", default="star", help="'star' = r_l per layer from configs/deflate_r.json, or an integer")
     ap.add_argument("--bits", type=int, required=True)
+    ap.add_argument("--r_config", default=None, help="per-layer rank file (with --r star); arm named r'alloc'")
     ap.add_argument("--damp", type=float, default=0.01, help="total damping as a fraction of mean diag (solver adds 0.01)")
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--resume", action="store_true")
@@ -77,7 +79,7 @@ def main():
     ck = os.path.join(CKPT_DIR, f"ckpt_{name}")
     os.makedirs(ck, exist_ok=True)
     os.makedirs(os.path.join(QUANT, name), exist_ok=True)
-    rcfg = json.load(open(os.path.join(ROOT, "configs", "deflate_r.json")))["r_per_layer"]
+    rcfg = json.load(open(a.r_config or os.path.join(ROOT, "configs", "deflate_r.json")))["r_per_layer"]
     r_of = (lambda key: rcfg[key]) if a.r == "star" else (lambda key: int(a.r))
     v_from = None
     if a.mode == "c":                                                             # same V as the dc arm
