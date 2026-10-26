@@ -286,3 +286,4 @@ objective,layer_attrib,cuda:0,2026-10-26T14:08:54Z,2026-10-26T15:50:13Z,1.6885
 w4a4,gen64_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:40:38Z,2026-10-26T15:52:52Z,0.2041
 w4a4,caches_embeds+design,cuda:1,2026-10-26T15:57:25Z,2026-10-26T15:59:47Z,0.0394
 w4a4,cfg_branch_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T15:59:50Z,2026-10-26T16:02:56Z,0.0516
+w4a4,cfg_layer_ratio_hsvd_r4_b0.5_kv16_u2_rs,cuda:1,2026-10-26T16:05:52Z,2026-10-26T16:09:50Z,0.0661
