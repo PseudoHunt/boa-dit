@@ -50,6 +50,10 @@ Top 3 blocks: [8, 11, 10] with shares 10.5%, 9.2%, 8.3%. Their sum is **28.0%**;
 | block11.attn.proj | +4.6% |
 | block11.mlp.fc1 | +3.6% |
 | block11.mlp.fc2 | +5.3% |
+| block10.attn.qkv | +1.5% |
+| block10.attn.proj | +1.0% |
+| block10.mlp.fc1 | +3.4% |
+| block10.mlp.fc2 | +5.6% |
 
 ## §2 Network sensitivity F_l and the leverage ρ
 | block | step | λmax/λmedian | ρ | err energy in F's top-32 | in bottom-32 (isotropic 0.028) |

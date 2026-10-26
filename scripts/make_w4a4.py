@@ -150,6 +150,114 @@ def main():
     x = red("hsvdB4_r4_b0.5", BASE)
     if x:
         L.append(f"- Asymmetric target (B4 vs B1 = base): {fmt(x)} → {'passes screen' if passes(x) else 'does not pass'}.")
+    # ---- base debugging and the corrected base (2026-10-26 follow-ups) ----
+    dbg = load("debug", "identity_qsnr.json")
+    L.append("\n## Base debugging (user checklist)")
+    if dbg:
+        idn = dbg.get("identity", {})
+        L.append(f"1. **Fold identity** (no quantization anywhere, fp32): max rel. error {idn.get('max_rel_err', float('nan')):.1e}, "
+                 f"median {idn.get('median_rel_err', float('nan')):.1e} → the fold is correct.")
+        q = dbg.get("qsnr", {}).get("by_type", {})
+        if q:
+            L.append("3. **Activation QSNR at A4** (on X̃ = X/D, as the quantizer sees it; raw X for reference):\n")
+            L.append("| layer type | smoothed mean dB | min dB | raw mean dB |")
+            L.append("| --- | ---: | ---: | ---: |")
+            for t, v in q.items():
+                L.append(f"| {t} | {v['smoothed_mean_db']:.1f} | {v['smoothed_min_db']:.1f} | {v['raw_mean_db']:.1f} |")
+    sp = {v: load("debug", f"split_{v}.json") for v in ("w4a16", "w16a4", "kv16", "u2")}
+    ctl = load("debug", "control_fp16_unquantized.json")
+    rows64 = [("original base (W4A4)", "hsvd_r4_b0.5", None)]
+    L.append("\n2./4. **Split and single-change deltas, MJHQ-64** (PSNR / LPIPS-VGG vs bf16; paired vs the original base):\n")
+    L.append("| variant | PSNR | LPIPS | step proxy |")
+    L.append("| --- | ---: | ---: | ---: |")
+    full = load("eval", "img256_hsvd_r4_b0.5.json")
+    if full:
+        L.append(f"| original base, W4A4 | {np.mean(full['psnr_per_image'][:64]):.2f} | {np.mean(full['lpips_per_image'][:64]):.3f} | "
+                 f"{(load('screen', 'hsvd_r4_b0.5.json') or {}).get('rel_mse_mean', float('nan')):.5f} |")
+    for v, lab in (("w4a16", "W4A16 (weights + branch only)"), ("w16a4", "W16A4 (activations only, no branch)"),
+                   ("kv16", "single change: cross-attn K/V 16-bit (eval-time)"), ("u2", "single change: unsigned fc2 (eval-time)")):
+        if sp[v]:
+            L.append(f"| {lab} | {sp[v]['psnr_mean']:.2f} | {sp[v]['lpips_mean']:.3f} | {sp[v]['proxy']:.5f} |")
+    for n, lab in (("hsvd_r4_b0.5_rs", "single change: weight range search (rebuilt)"),
+                   ("hsvd_r4_b0.5_kv16_u2_rs", "**corrected base: all three, rebuilt**")):
+        js = load("eval", f"img64_{n}.json")
+        sc = load("screen", f"{n}.json")
+        if js:
+            L.append(f"| {lab} | {js['psnr_mean']:.2f} | {js['lpips_mean']:.3f} | {sc['rel_mse_mean'] if sc else float('nan'):.5f} |")
+    if ctl:
+        L.append(f"| control: fp16 pipeline, no quantization | {ctl['psnr_mean']:.2f} | {ctl['lpips_mean']:.3f} | — |")
+    coh = load("coherence.json")
+    if coh:
+        rb = coh["ratios_base_over_kv16"]["guided"]
+        L.append(f"\n**Proxy blindness check** (64 screening prompts × 10 steps): step-coherent C moves {rb['C']:.2f}×, the rest I "
+                 f"{rb['I']:.2f}×, total {rb['total']:.2f}× (base / K/V-16), while the image moves +4.1 dB. → screen switched to MJHQ-64 images "
+                 "(`rule_addendum_screen.md`).")
+    # ---- design-set measurements ----
+    cb = load("cfg_branch.json")
+    lr = load("cfg_layer_ratio.json")
+    bg = load("band_gain.json")
+    L.append("\n## Design-set measurements (held-out calibration prompts 32–63; `rule_addendum_design.md`)")
+    if cb:
+        L.append(f"- Guidance, network level (corrected base, w = 4.5): ‖δ_g‖²/mean branch = **{cb['ratio']:.1f}**, r = {cb['corr_mean']:.2f}; "
+                 f"split shared {100 * cb['split_share']['shared']:+.0f}% / difference {100 * cb['split_share']['diff']:+.0f}% / cross {100 * cb['split_share']['cross']:+.0f}%.")
+    if lr:
+        dd = lr["distribution"]
+        L.append(f"- Guidance, layer level: median ‖E v‖²/mean branch {dd['median']:.1f} (p10 {dd['p10']:.1f}, p90 {dd['p90']:.1f}); "
+                 f"{100 * dd['frac_ge_4']:.0f}% of layers ≥ 4 holding {100 * dd['share_of_guided_error_in_ratio_ge_4']:.0f}% of the guided error. "
+                 "CFG-partial not triggered.\n")
+        L.append("| layer type | median ratio | min | max | share of guided error |")
+        L.append("| --- | ---: | ---: | ---: | ---: |")
+        for t, v in lr["by_type"].items():
+            L.append(f"| {t} | {v['median']:.2f} | {v['min']:.2f} | {v['max']:.2f} | {v['share_of_guided_error']:.2f} |")
+    if bg:
+        L.append(f"\nBand-gain table (FP sampler, design prompts 0–15, injection at the corrected base's error energy; bit-exact continuation "
+                 f"{bg['continuation_bitexact']}):\n")
+        L.append("| step | G band 1 | band 2 | band 3 | band 4 | white | b1/b4 | S band 1 | S 2 | S 3 | S 4 |")
+        L.append("| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+        for k in sorted(bg["G"], key=int):
+            g = bg["G"][k]
+            L.append(f"| {k} | " + " | ".join(f"{np.mean(g[f'band{b}']):.3g}" for b in range(1, 5)) + f" | {np.mean(g['white']):.3g} | "
+                     f"{bg['ratio_b1_b4'][k]:.2f} | " + " | ".join(f"{x:.2f}" for x in bg["S"][k]) + " |")
+    ca = load("cfg_alloc.json")
+    if ca:
+        L.append(f"\nCFG-alloc ranks (∝ ‖E v‖², cap 32, params = r4 total × {ca['ratio']:.3f}): " +
+                 "; ".join(f"{t} mean {v['mean']:.1f} ({100 * v['share_of_branch_params']:.0f}% of params)" for t, v in ca["by_type"].items()))
+    # ---- arms on the corrected base: MJHQ-64 paired screen ----
+    L.append("\n## Arms on the corrected base — MJHQ-64 paired screen (advance: ≥ +0.3 dB, CI > 0, LPIPS not worse)")
+    sys.path.insert(0, ROOT)
+    try:
+        from boa_dit.w4a4.paired_img import paired as pimg
+    except Exception:
+        pimg = None
+    B = "hsvd_r4_b0.5_kv16_u2_rs"
+    L.append("| arm | PSNR | ΔPSNR vs base [95% CI] | ΔLPIPS [95% CI] | step proxy | band-1 proxy | advances |")
+    L.append("| --- | ---: | --- | --- | ---: | ---: | --- |")
+    bimg = load("eval", f"img64_{B}.json")
+    bsc = load("screen", f"{B}.json") or {}
+    if bimg:
+        L.append(f"| corrected base | {bimg['psnr_mean']:.2f} | — | — | {bsc.get('rel_mse_mean', float('nan')):.5f} | {bsc.get('rel_mse_band1_mean', float('nan')):.2e} | — |")
+    for n, lab in ((f"{B}_cfg", "CFG"), ("hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg", "CFG-alloc"),
+                   ("hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs", "CFG-alloc control (per-branch Gram)"), (f"{B}_cfgamp7.5", "CFG-amp (w_eff 7.5)"),
+                   (f"{B}_k", "K"), (f"{B}_cfg_k", "CFG+K")):
+        js = load("eval", f"img64_{n}.json")
+        if not js or pimg is None or not bimg:
+            continue
+        r = pimg(n, B, 64)
+        sc = load("screen", f"{n}.json") or {}
+        adv = r["dpsnr"] >= 0.3 and r["dpsnr_ci"][0] > 0 and r["dlpips_ci"][1] <= 0
+        L.append(f"| {lab} | {js['psnr_mean']:.2f} | {r['dpsnr']:+.2f} [{r['dpsnr_ci'][0]:+.2f}, {r['dpsnr_ci'][1]:+.2f}] | "
+                 f"{r['dlpips']:+.3f} [{r['dlpips_ci'][0]:+.3f}, {r['dlpips_ci'][1]:+.3f}] | {sc.get('rel_mse_mean', float('nan')):.5f} | "
+                 f"{sc.get('rel_mse_band1_mean', float('nan')):.2e} | {'**yes**' if adv else 'no'} |")
+    sv = load("eval", "img256_svdq_dc_r32.json")
+    bb = load("eval", f"img256_{B}.json")
+    if sv and bb:
+        off = sv["psnr_mean"] - 16.27
+        L.append(f"\n**Read 1 (base validation, MJHQ-256):** corrected base {bb['psnr_mean']:.2f} dB / {bb['lpips_mean']:.3f}; SVDQuant-r32 "
+                 f"(deepcompressor) {sv['psnr_mean']:.2f} / {sv['lpips_mean']:.3f}; protocol offset {off:+.2f} dB; offset-adjusted base "
+                 f"{bb['psnr_mean'] - off:.2f} vs paper 16.47 → {'HOLDS' if abs(bb['psnr_mean'] - off - 16.47) <= 0.5 and (bb['psnr_mean'] >= sv['psnr_mean'] or bb['lpips_mean'] <= sv['lpips_mean']) else 'FAILS'}.")
+    elif bb:
+        L.append(f"\n**Read 1:** corrected base MJHQ-256 {bb['psnr_mean']:.2f} dB / {bb['lpips_mean']:.3f}; SVDQuant-r32 reproduction pending, "
+                 "so the protocol offset is not yet applied.")
     tot, by = spent()
     L.append(f"\n## Compute\nA30-hours, stage w4a4 (from `gpu_hours.csv`, incl. hand-logged deepcompressor time): **{tot:.2f}** of 14. "
              + ", ".join(f"{k} {v:.2f}" for k, v in sorted(by.items())) + ".\n")

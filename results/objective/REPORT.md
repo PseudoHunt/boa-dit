@@ -15,7 +15,10 @@ Proxy = rel. MSE of the guided prediction vs FP on the FP trajectory (eval seeds
 | H2 | 0.00171 | 0.06818 |
 | E1 | 0.00173 | 0.06848 |
 | H4 | 0.00167 | 0.06863 |
+| H_K | 0.00181 | 0.06989 |
 | dc-8 | 0.00182 | 0.07179 |
+| CFG-full | 0.00178 | 0.07244 |
+| CFG-solve | 0.00176 | 0.07270 |
 | static-8 | 0.00180 | 0.07888 |
 | E4 | 0.00210 | 0.07896 |
 | E5 | 0.00210 | 0.08400 |
@@ -25,9 +28,9 @@ Proxy = rel. MSE of the guided prediction vs FP on the FP trajectory (eval seeds
 | E6 | 0.00193 | 0.08946 |
 | uniform | 0.00211 | 0.09087 |
 
-Spearman **0.887** over 17 arms (Pearson 0.893); the 17 stored arms alone: 0.887.
+Spearman **0.908** over 20 arms (Pearson 0.890); the 17 stored arms alone: 0.887.
 
-**Read 3: NOT VALID (between 0.8 and 0.9: no forced switch).** It orders the coarse groups right (carry arms vs uniform-base arms) but misranks arms within a few percent of each other (static-8 vs dc-8; E3/E4/E5 tie on the proxy while their latent MSEs span 0.079–0.088). A PixArt-Σ screen decision close to its 5% threshold should be confirmed on latent or image error.
+**Read 3: VALID.** It orders the coarse groups right (carry arms vs uniform-base arms) but misranks arms within a few percent of each other (static-8 vs dc-8; E3/E4/E5 tie on the proxy while their latent MSEs span 0.079–0.088). A PixArt-Σ screen decision close to its 5% threshold should be confirmed on latent or image error.
 
 ## D1 — guidance (CFG)
 Toy check: x_c = (1, 1), x_u = (1, 0), w = 4 → v = (1, 4); error on the channel where the branches differ counts 16× in ‖E v‖², against about 1× in the per-branch sum.
@@ -168,11 +171,11 @@ Per-block output error (`per_block_hk.json`; block l on the arm's own prefix, he
 ## Reads
 1. Guidance lever: FAILS. CFG loss earns a place: NO.
 2. Sampler directional: HOLDS. H_K earns a place: NO.
-3. Proxy valid: NO.
+3. Proxy valid: YES.
 4. A loss that passes read 1 or 2 AND earns a place is the first H_col replacement on the PixArt-Σ H-SVDQuant base. If none earns a place (and ρ fails, as it does), the latent error here is not steerable by a per-layer objective at W4, and the engine line closes.
 
 ## Compute
-A30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **0.86** of 2.
+A30-hours, stage `objective` plus the three arm quantizations (logged under `deflate`): **4.57** of 2.
 
 ## Deviations
 - D1's diagnostic Grams use TF32 GEMM inputs (fp32 storage and accumulation). The arms' Grams are exactly the pipeline's (fp32).

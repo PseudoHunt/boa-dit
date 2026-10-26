@@ -186,5 +186,5 @@ Oracle / heig-8 error ratio **7.245**; oracle / H4 **5.837** → oracle wins ove
 - **Locations:** Section 3 arms use `deflate/quantize_dc.py` unchanged, so their quant JSONs and carries are in `results/deflate/quant/`; their latent evals are in `results/gate1/eval/`. static-32 W3 FID-2k comes from `lowrank.py --fid` (`results/stageA/eval/`).
 
 ## Compute
-A30-hours since 2026-10-26T04:50:00Z (from `gpu_hours.csv`): **9.71** of the 8 h cap. By stage: deflate 0.49, gate1 8.80, gate1/rebuild 0.09, gateA 0.08, stage0 0.01, stage2 0.24.
+A30-hours since 2026-10-26T04:50:00Z (from `gpu_hours.csv`): **22.51** of the 8 h cap. By stage: deflate 1.21, engine 0.67, gate1 8.91, gate1/rebuild 0.09, gateA 0.08, objective 4.04, stage0 0.01, stage2 0.24, w4a4 7.26.
 
