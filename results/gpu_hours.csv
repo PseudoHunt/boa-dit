@@ -380,3 +380,4 @@ temporal,arm_s3_single8_feedback_smoke,cuda:0,2026-10-27T17:48:08Z,2026-10-27T18
 temporal,arm_s3_single8_none,cuda:0,2026-10-27T18:07:28Z,2026-10-27T18:29:11Z,0.3621
 temporal,arm_s3_single8_feedback,cuda:0,2026-10-27T18:29:33Z,2026-10-27T19:22:37Z,0.8845
 temporal,arm_s3_step8_none,cuda:0,2026-10-27T19:23:00Z,2026-10-27T19:40:03Z,0.2843
+temporal,arm_s3_single8_unif,cuda:0,2026-10-27T19:40:25Z,2026-10-27T19:57:30Z,0.2846
