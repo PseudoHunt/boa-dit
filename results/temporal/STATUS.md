@@ -1,6 +1,6 @@
-# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 17:47 UTC)
+# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 18:07 UTC)
 
-Last checkpoint: FID-2k arm 5 (feedback). Logged stage-`temporal` compute: 10.24 A30-h. Hard stop lifted (rule_feedback.md).
+Last checkpoint: PixArt smoke (2 images). Logged stage-`temporal` compute: 10.56 A30-h. Hard stop lifted (rule_feedback.md).
 
 Run from the repo root on a machine set up as in README (weights in ckpt/, PixArt in /home/jl_fs/pixart_sigma_1024). The calibration tables, smoothing scales and caches live under ckpt/temporal/ (not in git). On a fresh machine, regenerate them first: `python -m boa_dit.temporal.dit_act calib` (DiT) and `python -m boa_dit.temporal.pixart setup` plus `python -m boa_dit.temporal.pixart_b calib` then `retable_lomin` (PixArt).
 
@@ -9,7 +9,7 @@ Run from the repo root on a machine set up as in README (weights in ckpt/, PixAr
 | stage3 DiT arm 4a (cyc4a) | **done** | `python -m boa_dit.temporal.dit_act arm --kind single8 --dither cyc4a` |
 | FID-2k DiT arm 1 (single table) | **done** | `python -m boa_dit.temporal.fid_act --kind single8 --dither none` |
 | FID-2k DiT arm 5 (feedback) | **done** | `python -m boa_dit.temporal.fid_act --kind single8 --feedback` |
-| PixArt smoke (2 images, tag smoke) | pending | `python -m boa_dit.temporal.pixart_b s3 --kind single8 --feedback --n 2 --tag smoke` |
+| PixArt smoke (2 images, tag smoke) | **done** | `python -m boa_dit.temporal.pixart_b s3 --kind single8 --feedback --n 2 --tag smoke` |
 | PixArt arm: single table (+ bf16 batch-1 refs) | pending | `python -m boa_dit.temporal.pixart_b s3 --kind single8` |
 | PixArt arm: feedback | pending | `python -m boa_dit.temporal.pixart_b s3 --kind single8 --feedback` |
 | PixArt arm: per-step reference | pending | `python -m boa_dit.temporal.pixart_b s3 --kind step8` |
