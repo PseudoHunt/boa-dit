@@ -1,0 +1,18 @@
+{
+ "arm": "bp_single8_feedback",
+ "n": 2000,
+ "fid": 26.06803794841693,
+ "stage": "temporal",
+ "run": "fid2000_dit_bp_single8_feedback",
+ "device": "cuda:0",
+ "config": {
+  "kind": "single8",
+  "dither": "none",
+  "feedback": true,
+  "n": 2000
+ },
+ "git_sha": "fb741ee524f9fc462606aa8bf6ac2cc57978afb5",
+ "start_utc": "2026-10-27T16:29:11Z",
+ "wall_s": 4714.324806213379,
+ "gpu_hours": 1.3095346683926052
+}
