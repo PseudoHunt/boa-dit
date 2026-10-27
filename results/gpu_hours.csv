@@ -400,3 +400,4 @@ temporal,ext_e5_screen_all,cuda:0,2026-10-27T23:00:57Z,2026-10-27T23:04:39Z,0.06
 temporal,ext_e5_screen_fc2,cuda:0,2026-10-27T23:04:39Z,2026-10-27T23:07:34Z,0.0485
 temporal,ext_e5_screen_mlp,cuda:0,2026-10-27T23:07:34Z,2026-10-27T23:10:45Z,0.0531
 temporal,ext_e5_screen_attn,cuda:0,2026-10-27T23:10:45Z,2026-10-27T23:13:07Z,0.0394
+temporal,ext_e1_w4a4_feedback_guard_screen,cuda:0,2026-10-27T23:13:44Z,2026-10-27T23:59:10Z,0.7570

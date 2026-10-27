@@ -127,3 +127,15 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
   `ext/e1_w4a4_feedback_screen.json` holds the artifact value; true rates come from runs after this fix. The guarded arm
   stays (clipping is real, if smaller).
 - 23:00 UTC follow-on decision: E1 promising=0, PixArt flat=0, E2 best=none
+- 2026-10-27 ~23:10 UTC, **added block, recorded before any of its results** (assistant's decision; "keep running, don't
+  ask"):
+  1. **Confirmation on seeds 3100–3611 (512):** none, full, dct4 (E2) and attention-only (E5). This departs from the
+     rule above, which skipped confirmation because no R CI excluded 0. Reason: the 64-seed screen is underpowered
+     (even full feedback's CI includes 0 there, [−24.2, +1.2]), so it cannot decide. The confirmation protocol is
+     the test. Read: dct4 and attention-only are each reported as latent change vs none (paired CI) and R vs full
+     (bootstrap CI). The low-frequency hypothesis holds iff dct4's R CI lower bound is > 0 and dct4 beats rand4
+     (rand4 is not re-run; its screen value is context only).
+  2. **E1 conditional diagnostic despite a non-flat result:** base vs feedback with FP weights and the same dynamic A4
+     quantizer (W16A4, no branch), on the screen 64. It separates "A4 activation feedback fails in itself" from
+     "weight error hides it".
+  Both are labelled exploratory additions.
