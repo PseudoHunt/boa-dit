@@ -103,3 +103,11 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-27 (user: "keep running experiments, don't ask me"): **C_ext = 8 A30-h**, counted from the logged total when
+  queue B ends (written to `ext_ceiling.txt` at that moment). The post-screen choice (confirmation vs. E4/E5) is made by
+  the assistant from the screen results, using this rule fixed now, before any extension result:
+  - if E1 feedback beats the base with CI > 0 → E1 confirmation;
+  - else E4 (step count) if PixArt stage-3 feedback is flat;
+  - then E2 confirmation of the best compressed arm, if its R CI excludes 0;
+  - then E5.
+  Each choice is logged here with its trigger.
