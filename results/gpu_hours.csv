@@ -311,3 +311,63 @@ w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs_cfg(FAILED),cuda:1,2026-10-26T17:
 w4a4,screen_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:05Z,2026-10-26T17:56:12Z,0.0018
 w4a4,gen64_hsvd_rw4a4_cfgalloc_b0.5_kv16_u2_rs(FAILED),cuda:1,2026-10-26T17:56:14Z,2026-10-26T17:56:21Z,0.0019
 w4a4,cfg_alloc_greedy,cuda:1,2026-10-26T17:57:00Z,2026-10-26T17:59:07Z,0.0354
+temporal,setup_dit_fp_refs,cuda:0,2026-10-27T05:17:11Z,2026-10-27T05:22:52Z,0.0948
+temporal,a0_healing,cuda:0,2026-10-27T05:23:06Z,2026-10-27T05:24:10Z,0.0178
+temporal,rebuild_quant_deflate_heig_r8_w4,cuda:0,2026-10-27T05:24:32Z,2026-10-27T05:29:57Z,0.0904
+temporal,arm_a_check32,cuda:0,2026-10-27T05:30:12Z,2026-10-27T05:30:43Z,0.0087
+temporal,setup_pixart_embeds_design20,cuda:0,2026-10-27T05:31:20Z,2026-10-27T05:35:08Z,0.0634
+temporal,setup_pixart_bf16_refs64,cuda:0,2026-10-27T05:35:08Z,2026-10-27T05:39:44Z,0.0765
+temporal,setup_pixart_dtype_control_fp16_unquantized,cuda:0,2026-10-27T05:39:44Z,2026-10-27T05:45:01Z,0.0881
+temporal,calib_static_w16,cuda:0,2026-10-27T05:45:09Z,2026-10-27T05:55:00Z,0.1641
+temporal,b1_coherence(FAILED),cuda:0,2026-10-27T05:55:07Z,2026-10-27T05:58:53Z,0.0628
+temporal,b1_coherence,cuda:0,2026-10-27T05:59:16Z,2026-10-27T06:13:05Z,0.2302
+temporal,a1_pair,cuda:0,2026-10-27T06:13:29Z,2026-10-27T06:16:53Z,0.0567
+temporal,diag_a,cuda:0,2026-10-27T06:16:58Z,2026-10-27T06:17:30Z,0.0089
+temporal,arm_b_n512,cuda:0,2026-10-27T06:17:34Z,2026-10-27T06:23:13Z,0.0942
+temporal,arm_c_n512,cuda:0,2026-10-27T06:23:18Z,2026-10-27T06:28:57Z,0.0943
+temporal,arm_e_n512,cuda:0,2026-10-27T06:29:01Z,2026-10-27T06:34:41Z,0.0944
+temporal,arm_d_n128,cuda:0,2026-10-27T06:34:45Z,2026-10-27T06:36:34Z,0.0302
+temporal,arm_f_n128,cuda:0,2026-10-27T06:36:38Z,2026-10-27T06:38:27Z,0.0302
+temporal,dsolve_w16,cuda:0,2026-10-27T06:40:45Z,2026-10-27T06:49:15Z,0.1417
+temporal,arm_w16_a8s_none,cuda:0,2026-10-27T06:49:19Z,2026-10-27T07:05:48Z,0.2748
+temporal,arm_w16_a8s_golden,cuda:0,2026-10-27T07:05:53Z,2026-10-27T07:22:22Z,0.2748
+temporal,arm_w16_a8s_random,cuda:0,2026-10-27T07:22:26Z,2026-10-27T07:38:56Z,0.2748
+temporal,arm_w16_a8s_calibrated,cuda:0,2026-10-27T07:39:00Z,2026-10-27T07:55:29Z,0.2748
+temporal,rebuild_quant_deflate_heig_r8_w5,cuda:0,2026-10-27T07:56:05Z,2026-10-27T08:01:29Z,0.0902
+temporal,arm_w5_n512,cuda:0,2026-10-27T08:01:46Z,2026-10-27T08:07:25Z,0.0942
+temporal,rebuild_quant_deflate_heig_r8_w6,cuda:0,2026-10-27T08:07:50Z,2026-10-27T08:13:14Z,0.0898
+temporal,arm_w6_n512,cuda:0,2026-10-27T08:13:30Z,2026-10-27T08:19:10Z,0.0944
+temporal,explore_pair_extra,cuda:0,2026-10-27T08:19:38Z,2026-10-27T08:23:02Z,0.0565
+temporal,arm_k3_n512,cuda:0,2026-10-27T08:23:10Z,2026-10-27T08:29:06Z,0.0990
+temporal,arm_k4_n512,cuda:0,2026-10-27T08:29:14Z,2026-10-27T08:34:59Z,0.0958
+temporal,arm_bu_n512,cuda:0,2026-10-27T08:35:07Z,2026-10-27T08:40:49Z,0.0948
+temporal,arm_w16_a8s_period2,cuda:0,2026-10-27T08:41:02Z,2026-10-27T08:57:32Z,0.2752
+temporal,bp_calib_dit(KILLED: alpha search too slow; hand-logged from log file birth time to kill),cuda:0,2026-10-27T09:49:42Z,2026-10-27T10:21:38Z,0.5322
+temporal,fb_stage1_replay,cuda:0,2026-10-27T10:22:53Z,2026-10-27T10:29:39Z,0.1127
+temporal,bp_calib_dit,cuda:0,2026-10-27T10:29:56Z,2026-10-27T10:31:14Z,0.0218
+temporal,bp_b1_dit,cuda:0,2026-10-27T10:31:31Z,2026-10-27T10:49:43Z,0.3033
+temporal,bp_calib_pixart,cuda:0,2026-10-27T10:49:53Z,2026-10-27T10:59:41Z,0.1633
+temporal,bp_b1_pixart,cuda:0,2026-10-27T10:59:52Z,2026-10-27T11:25:18Z,0.4239
+temporal,bp_calib_dit,cuda:0,2026-10-27T11:25:47Z,2026-10-27T11:26:51Z,0.0177
+temporal,bp_calib_pixart,cuda:0,2026-10-27T11:34:54Z,2026-10-27T11:44:28Z,0.1597
+temporal,fb_matched_diag(KILLED after <1 min: started before the pre-stage-3 fixes; hand-logged),cuda:0,2026-10-27T11:49:36Z,2026-10-27T11:50:36Z,0.0150
+temporal,bpb_retable_lomin_dit,cuda:0,2026-10-27T11:51:44Z,2026-10-27T11:57:03Z,0.0886
+temporal,precheck_dit,cuda:0,2026-10-27T11:57:14Z,2026-10-27T11:57:27Z,0.0034
+temporal,bpb_retable_lomin_pixart,cuda:0,2026-10-27T11:58:10Z,2026-10-27T12:03:04Z,0.0819
+temporal,precheck_pixart,cuda:0,2026-10-27T12:03:08Z,2026-10-27T12:03:18Z,0.0027
+temporal,fb_smoke_gate,cuda:0,2026-10-27T12:05:33Z,2026-10-27T12:05:59Z,0.0072
+temporal,investigate_smoke_ablation,cuda,2026-10-27T12:06:28Z,2026-10-27T12:06:57Z,0.0082
+temporal,fb_matched_diag,cuda:0,2026-10-27T12:07:43Z,2026-10-27T12:13:28Z,0.0956
+temporal,bp_calib_dit_smoothed,cuda:0,2026-10-27T12:30:16Z,2026-10-27T12:31:34Z,0.0216
+temporal,bp_calib_dit_tablesearch(hand-logged: table search ran after the run logger exited; logger end to log-file mtime),cuda:0,2026-10-27T11:26:51Z,2026-10-27T11:34:43Z,0.1314
+temporal,bp_calib_pixart_tablesearch(hand-logged: table search ran after the run logger exited; logger end to log-file mtime),cuda:0,2026-10-27T11:44:28Z,2026-10-27T11:50:47Z,0.1055
+temporal,bp_calib_dit_smoothed_tablesearch(hand-logged: table search ran after the run logger exited; logger end to log-file mtime),cuda:0,2026-10-27T12:31:34Z,2026-10-27T12:36:50Z,0.0880
+temporal,bp_b1_dit,cuda:0,2026-10-27T12:37:10Z,2026-10-27T12:55:32Z,0.3059
+temporal,fb_smoke_gate,cuda:0,2026-10-27T12:55:42Z,2026-10-27T12:56:11Z,0.0080
+temporal,precheck_dit,cuda:0,2026-10-27T12:56:21Z,2026-10-27T12:56:34Z,0.0034
+temporal,fb_matched_diag,cuda:0,2026-10-27T12:56:44Z,2026-10-27T13:07:52Z,0.1854
+temporal,arm_dit_bp_single8_none,cuda:0,2026-10-27T13:08:02Z,2026-10-27T13:20:59Z,0.2157
+temporal,arm_dit_bp_single8_sym2,cuda:0,2026-10-27T13:21:09Z,2026-10-27T13:34:07Z,0.2159
+temporal,arm_dit_bp_single8_feedback,cuda:0,2026-10-27T13:34:24Z,2026-10-27T14:13:55Z,0.6586
+temporal,arm_dit_bp_step8_none,cuda:0,2026-10-27T14:14:06Z,2026-10-27T14:27:03Z,0.2158
+temporal,arm_dit_bp_single8_unif,cuda:0,2026-10-27T14:27:13Z,2026-10-27T14:40:11Z,0.2159

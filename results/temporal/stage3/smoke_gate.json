@@ -1,0 +1,29 @@
+{
+ "single8": {
+  "rel_mse": 0.0790255069732666,
+  "clip_rate_mean": 2.128151268645479e-05,
+  "identity": null,
+  "clamp_rate": null
+ },
+ "feedback": {
+  "rel_mse": 0.05147187411785126,
+  "clip_rate_mean": 0.0,
+  "identity": null,
+  "clamp_rate": 0.0012110512489093945
+ },
+ "gate": 0.068,
+ "pass": false,
+ "stage": "temporal",
+ "run": "fb_smoke_gate",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   0,
+   1
+  ]
+ },
+ "git_sha": "116460b713c3919f2508b6b326f4f230f7f0d679",
+ "start_utc": "2026-10-27T12:55:42Z",
+ "wall_s": 28.78895401954651,
+ "gpu_hours": 0.007996931672096252
+}
