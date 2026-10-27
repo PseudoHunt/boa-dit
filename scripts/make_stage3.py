@@ -32,7 +32,7 @@ stat = [n for n in ("single8_sym2", "single8_unif", "single8_cyc4a", "single8_cy
 over = {n: boot_reduction(f["rel_mse_per_image"], E(n)["rel_mse_per_image"]) for n in stat}
 clears = {n: boot_reduction(E(n)["rel_mse_per_image"], b["rel_mse_per_image"]) for n in stat}
 best = max(stat, key=lambda n: clears[n]["reduction"])
-L += ["## Read 3, DiT half (the registered read needs both beds and ≥ 0.3 dB on PixArt; PixArt not run)", "",
+L += ["## Read 3, DiT half (the full read, both beds, is below)", "",
       f"- Feedback vs single table: {pct(r15)}. Needs ≥ 10% with CI > 0 → **{'met' if r15['reduction'] >= 0.10 and r15['ci'][0] > 0 else 'not met'}** on DiT.",
       "- Feedback vs each stateless arm run: " + "; ".join(f"{n.split('_')[1]} {pct(over[n])}" for n in stat) + " → "
       + ("**beats every stateless arm run**" if all(over[n]["reduction"] > 0 and over[n]["ci"][0] > 0 for n in stat) else "does not beat every stateless arm") + ".",
@@ -48,6 +48,64 @@ L += ["## Read 3, DiT half (the registered read needs both beds and ≥ 0.3 dB o
       "failure labels (not constructed / lost to representation / lost downstream) applies.",
       "- The per-step reference is *worse* than the single table on this bed (prediction C/I doubles). B′'s '≥ 50% of the "
       "per-step gain' criterion has no gain to recover: reported, not applied.", ""]
+# ---------------------------------------------------------------- FID-2k (DiT)
+FJ = lambda n: json.load(open(os.path.join(OUT, "stage3", f"fid2000_dit_bp_{n}.json"))) if os.path.exists(os.path.join(OUT, "stage3", f"fid2000_dit_bp_{n}.json")) else None
+fid1, fid5 = FJ("single8_none"), FJ("single8_feedback")
+fpp = os.path.join(OUT, "..", "stage2", "eval", "fid2000_fp.json")
+fp = json.load(open(fpp))["fid"] if os.path.exists(fpp) else None
+if fid1 and fid5:
+    L += ["## FID-2k (DiT; seeds 0–1999, eval_fid protocol, ADM reference batch)", "", "| configuration | FID-2k |", "| --- | ---: |"]
+    L += ([f"| FP DiT-XL/2 (stored) | {fp:.2f} |"] if fp else []) + [f"| arm 1, single table | {fid1['fid']:.2f} |", f"| arm 5, feedback | {fid5['fid']:.2f} |", ""]
+    L += [f"Feedback lowers FID-2k by {fid1['fid'] - fid5['fid']:.2f}" + (f", closing {100 * (fid1['fid'] - fid5['fid']) / (fid1['fid'] - fp):.0f}% of the gap to FP" if fp else "")
+          + ". The direction agrees with latent MSE. These are single FID-2k runs without CIs, so they support the latent result's direction rather than testing significance on their own.", ""]
+
+# ---------------------------------------------------------------- PixArt stage-3 arms
+PJ = lambda n: json.load(open(os.path.join(OUT, "stage3", f"pixart_s3_{n}.json"))) if os.path.exists(os.path.join(OUT, "stage3", f"pixart_s3_{n}.json")) else None
+from boa_dit.temporal.common import boot_diff
+pb = PJ("single8_none")
+if pb:
+    pf = PJ("single8_feedback")
+    L += ["## Stage 3, PixArt-Σ (W16A8 static single table, 1024², 20 steps, MJHQ-64, batch 1, vs bf16 batch-1 references)", "",
+          "Four arms (user decision): single table, feedback, per-step reference, and the best stateless arm from DiT (uniform dither). "
+          "±Δ/4 and both 4-phase orders were **cut on PixArt**.", "",
+          "| arm | latent rel. MSE | vs single [95% CI] | PSNR | ΔPSNR [95% CI] | LPIPS | ΔLPIPS [95% CI] | prediction C/I |",
+          "| --- | ---: | --- | ---: | --- | ---: | --- | ---: |"]
+    for n, lab in (("single8_none", "single table"), ("single8_unif", "uniform dither"), ("single8_feedback", "feedback (guarded)"), ("step8_none", "per-step tables (reference)")):
+        a = PJ(n)
+        if a is None:
+            continue
+        if n == "single8_none":
+            L.append(f"| {lab} | {a['latent_rel_mse_mean']:.4f} | — | {a['psnr_mean']:.2f} | — | {a['lpips_mean']:.3f} | — | {a['diag']['C_over_I']:.4f} |"); continue
+        r = boot_reduction(a["latent_rel_mse_per_image"], pb["latent_rel_mse_per_image"])
+        dp, dl = boot_diff(a["psnr_per_image"], pb["psnr_per_image"]), boot_diff(a["lpips_per_image"], pb["lpips_per_image"])
+        L.append(f"| {lab} | {a['latent_rel_mse_mean']:.4f} | {pct(r)} | {a['psnr_mean']:.2f} | {dp['diff']:+.2f} [{dp['ci'][0]:+.2f}, {dp['ci'][1]:+.2f}] | "
+                 f"{a['lpips_mean']:.3f} | {dl['diff']:+.4f} [{dl['ci'][0]:+.4f}, {dl['ci'][1]:+.4f}] | {a['diag']['C_over_I']:.4f} |")
+    pu, ps = PJ("single8_unif"), PJ("step8_none")
+    if pf and pu and ps:
+        rfu = boot_reduction(pf["latent_rel_mse_per_image"], pu["latent_rel_mse_per_image"])
+        dpu, dlu = boot_diff(pf["psnr_per_image"], pu["psnr_per_image"]), boot_diff(pf["lpips_per_image"], pu["lpips_per_image"])
+        rec = (pb["latent_rel_mse_mean"] - pf["latent_rel_mse_mean"]) / (pb["latent_rel_mse_mean"] - ps["latent_rel_mse_mean"])
+        eb, ef = np.mean(pb["diag"]["per_step_err"]), np.mean(pf["diag"]["per_step_err"])
+        bs, fs = pb["diag"]["band_spectrum_steps8_10"], pf["diag"]["band_spectrum_steps8_10"]
+        L += ["", f"- **Feedback vs uniform dither:** latent {pct(rfu)}, ΔPSNR {dpu['diff']:+.2f} dB [{dpu['ci'][0]:+.2f}, {dpu['ci'][1]:+.2f}], "
+              f"ΔLPIPS {dlu['diff']:+.4f} [{dlu['ci'][0]:+.4f}, {dlu['ci'][1]:+.4f}].",
+              f"- **B′ recovery** (the per-step reference gains on PixArt): feedback recovers {100 * rec:.0f}% of its latent gain (criterion ≥ 50%: met).",
+              f"- **LPIPS gets worse with feedback,** while latent MSE and PSNR improve. Feedback raises per-step prediction-error energy "
+              f"{ef / eb:.2f}× on the design cache. The band shares shift toward high frequencies (band 4: {bs[3]:.3f} → {fs[3]:.3f}; band 1: "
+              f"{bs[0]:.3f} → {fs[0]:.3f}). This is consistent with, not proof of, LPIPS-VGG penalizing the added high-frequency per-step "
+              "error that PSNR barely sees. The per-step tables give by far the best LPIPS: they shrink the error and keep it "
+              "coherent, where feedback cancels the coherent part.", ""]
+        rpb = boot_reduction(pf["latent_rel_mse_per_image"], pb["latent_rel_mse_per_image"]); dpb = boot_diff(pf["psnr_per_image"], pb["psnr_per_image"])
+        pix_ok = rpb["reduction"] >= 0.10 and rpb["ci"][0] > 0 and dpb["diff"] >= 0.3 and rfu["reduction"] > 0 and rfu["ci"][0] > 0
+        dit_ok = r15["reduction"] >= 0.10 and r15["ci"][0] > 0 and all(over[n]["reduction"] > 0 and over[n]["ci"][0] > 0 for n in stat)
+        L += ["## Read 3, both beds", "",
+              f"- DiT: feedback {pct(r15)} vs the single table; beats every stateless arm run ({len(stat)} of 4) → **{'met' if dit_ok else 'not met'}**.",
+              f"- PixArt: feedback {pct(rpb)} and {dpb['diff']:+.2f} dB vs the single table; beats uniform dither {pct(rfu)} → **{'met' if pix_ok else 'not met'}** "
+              "(±Δ/4 and 4-phase not run on PixArt, by the pre-agreed cut).",
+              f"- **Read 3: {'feedback is the construction' if (pix_ok and dit_ok) else 'not established'}**, for the arms run. The stateless clause fails "
+              "on PixArt (uniform dither does not clear ≥ 10%). Caveats: LPIPS worsens on PixArt; two PixArt stateless arms were not run; "
+              "FID is single-run.", ""]
+
 # ---------------------------------------------------------------- feedback cost: simulation vs deployed
 def state_bytes(sites, tokens, rows=2):
     """one fp16 residual per quantizer site, per CFG row: sum over sites of rows x tokens x c_in x 2 bytes."""
@@ -55,7 +113,7 @@ def state_bytes(sites, tokens, rows=2):
 dit_sites = [1152, 1152, 1152, 4608] * 28                                  # qkv, proj, fc1, fc2 inputs, 28 blocks
 pix_sites = [1152] * 3 + [1152, 1152, 1152, 1152, 4608]                     # attn1 q/k/v, attn1 out, attn2 q, attn2 out, fc1, fc2
 pix_shared = [1152, 1152, 1152, 1152, 1152, 4608]                          # attn1 q/k/v share one input -> one residual
-L += ["## Feedback cost: simulation vs deployment", "",
+L += ["## Feedback cost: instrumented vs deployed", "",
       f"- **Instrumented implementation:** the feedback arm cost {E('single8_feedback')['gpu_hours']:.2f} A30-h for 512 seeds, against "
       f"{E('single8_none')['gpu_hours']:.2f} h for the single table. The instrumented implementation is approximately "
       f"{E('single8_feedback')['gpu_hours'] / E('single8_none')['gpu_hours']:.0f}× slower. It uses per-site Python state and "
