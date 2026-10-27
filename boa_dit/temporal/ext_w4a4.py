@@ -78,16 +78,25 @@ class QLinearFB(QLinear):
             self.stats += torch.stack([clipped.double(), torch.zeros((), device=dev, dtype=torch.float64),
                                        torch.tensor(float(xs.numel()), device=dev, dtype=torch.float64), torch.zeros((), device=dev, dtype=torch.float64)])
             xq = q
-        else:                                                                 # feedback
+        else:                                                                 # feedback (feedback_guard: post-hoc, see rule_extension.md)
             if t == 0 or self.s is None or self.s.shape != xs.shape:
                 self.s = torch.zeros_like(xs, dtype=torch.float16)
-            u = xs + self.s.float()
+            s_prev = self.s.float()
+            if self.mode == "feedback_guard" and self.act_shift is not None:   # unsigned path: never push u below the zero bound
+                xc = torch.maximum(xs, -self.act_shift)
+                s_fed = torch.maximum(s_prev, -self.act_shift - xc)
+                self.disc = getattr(self, "disc", torch.zeros(2, dtype=torch.float64, device=dev)).to(dev)
+                self.disc += torch.stack([((s_prev - s_fed) != 0).sum().double(), (s_prev - s_fed).double().pow(2).sum()])
+                u = xc + s_fed
+            else:
+                u = xs + s_prev
             q, uc, sc, sh = self._quant(u)
             qh = q.to(torch.bfloat16).float()
             r0 = uc - qh
             half = (sc / 2).expand(_groups(r0)[0].shape).reshape(sh)
             r = torch.maximum(torch.minimum(r0, half), -half)
-            self.stats += torch.stack([(uc != u).sum().double(), (r != r0).sum().double(),
+            true_clip = ((u + self.act_shift) < 0) if self.act_shift is not None else torch.zeros_like(u, dtype=torch.bool)
+            self.stats += torch.stack([true_clip.sum().double(), (r != r0).sum().double(),            # true clips only (u + shift < 0)
                                        torch.tensor(float(u.numel()), device=dev, dtype=torch.float64), (uc - u).double().pow(2).sum()])
             self.s = r.to(torch.float16)
             xq = qh
@@ -185,7 +194,8 @@ def arm(mode, w16, setname, dev):
         res = {"arm": name, "mode": mode, "w16": w16, "set": setname, "prompts": [lo, hi], "batch": 1,
                "psnr_mean": float(np.mean(psnr)), "lpips_mean": float(np.mean(lp)), "latent_rel_mse_mean": float(np.mean(rel)),
                "psnr_per_image": psnr, "lpips_per_image": lp, "latent_rel_mse_per_image": rel, "diag": diag,
-               "clip_rate": float(st[0] / max(st[2], 1)), "clamp_rate": float(st[1] / max(st[2], 1)), "clip_energy": float(st[3])}
+               "clip_rate": float(st[0] / max(st[2], 1)), "clamp_rate": float(st[1] / max(st[2], 1)), "clip_energy": float(st[3]),
+               "guard_discarded": [float(x) for x in sum(getattr(m, "disc", torch.zeros(2, dtype=torch.float64)).cpu() for m in mods)]}
         res.update(run.record())
     atomic_write_json(os.path.join(EXT, f"{name}.json"), res)
     print({k: v for k, v in res.items() if not isinstance(v, (list, dict))}, flush=True)
@@ -207,7 +217,7 @@ def build(dev):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["build", "arm"])
-    ap.add_argument("--mode", default="base", choices=["base", "feedback", "unif"])
+    ap.add_argument("--mode", default="base", choices=["base", "feedback", "feedback_guard", "unif"])
     ap.add_argument("--w16", action="store_true")
     ap.add_argument("--set", default="screen", choices=list(SETS))
     a = ap.parse_args()

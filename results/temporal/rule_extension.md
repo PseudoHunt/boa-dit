@@ -111,3 +111,18 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
   - then E2 confirmation of the best compressed arm, if its R CI excludes 0;
   - then E5.
   Each choice is logged here with its trigger.
+- 2026-10-27 ~21:45 UTC, E1 screen result: on the W4A4 base, feedback is **worse**: latent +22.8% [+16.0, +31.1],
+  ΔPSNR −0.96 dB, ΔLPIPS +0.111. Prediction C/I halves (0.064 → 0.033), and the feedback clip rate is 11.8%. Signed
+  dynamic groups cannot clip, so the clipping is on fc2's unsigned input path (zero bound at the GELU lobe minimum),
+  ≈ 1/3 of fc2 inputs per step. That clip error is step-constant and not fed back. The pre-registered conditional
+  diagnostic (W16A4) is defined for a *flat* result and does not fire. Decision rule: E1 not promising → no E1
+  confirmation.
+- **Added post hoc** (decided after seeing the E1 result; exploratory, not pre-registered): E1 feedback with the
+  stage-3 clipping guard on the unsigned fc2 path, r_fed = max(s, −shift − x̃_c) with x̃_c = max(x̃, −shift), so u never
+  crosses the zero bound. Discarded energy logged; same 64 prompts. It runs after the queued extension jobs.
+- 2026-10-27 ~22:00 UTC, **correction:** the E1 "clip rate 11.8%" was a counter artifact. The unsigned path compared
+  `(u + shift).clamp_min(0) − shift` with u for exact equality, and fp rounding makes them differ without clipping. The
+  counter now counts true clips (u + shift < 0). Re-measured on design prompt 0: true clip rate **1.89%** of all A4
+  elements and **5.2%** of fc2 inputs with feedback; **0.0001%** with the guard. The `clip_rate` field in
+  `ext/e1_w4a4_feedback_screen.json` holds the artifact value; true rates come from runs after this fix. The guarded arm
+  stays (clipping is real, if smaller).
