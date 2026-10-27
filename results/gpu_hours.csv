@@ -378,3 +378,4 @@ temporal,fid2000_dit_bp_single8_none,cuda:0,2026-10-27T15:48:20Z,2026-10-27T16:2
 temporal,fid2000_dit_bp_single8_feedback,cuda:0,2026-10-27T16:29:11Z,2026-10-27T17:47:45Z,1.3095
 temporal,arm_s3_single8_feedback_smoke,cuda:0,2026-10-27T17:48:08Z,2026-10-27T18:07:06Z,0.3161
 temporal,arm_s3_single8_none,cuda:0,2026-10-27T18:07:28Z,2026-10-27T18:29:11Z,0.3621
+temporal,arm_s3_single8_feedback,cuda:0,2026-10-27T18:29:33Z,2026-10-27T19:22:37Z,0.8845
