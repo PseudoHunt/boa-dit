@@ -1,6 +1,6 @@
-# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 22:17 UTC)
+# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 22:35 UTC)
 
-Last checkpoint: extension: ext_e1_unif (rc 0). Logged stage-`temporal` compute: 14.70 A30-h. Hard stop lifted (rule_feedback.md).
+Last checkpoint: extension: ext_e2_screen (rc 0). Logged stage-`temporal` compute: 15.00 A30-h. Hard stop lifted (rule_feedback.md).
 
 Run from the repo root on a machine set up as in README (weights in ckpt/, PixArt in /home/jl_fs/pixart_sigma_1024). The calibration tables, smoothing scales and caches live under ckpt/temporal/ (not in git). On a fresh machine, regenerate them first: `python -m boa_dit.temporal.dit_act calib` (DiT) and `python -m boa_dit.temporal.pixart setup` plus `python -m boa_dit.temporal.pixart_b calib` then `retable_lomin` (PixArt).
 
@@ -19,7 +19,7 @@ Run from the repo root on a machine set up as in README (weights in ckpt/, PixAr
 | EXT E1 screen: base | **done** | `python -m boa_dit.temporal.ext_w4a4 arm --mode base --set screen` |
 | EXT E1 screen: feedback | **done** | `python -m boa_dit.temporal.ext_w4a4 arm --mode feedback --set screen` |
 | EXT E1 screen: uniform | **done** | `python -m boa_dit.temporal.ext_w4a4 arm --mode unif --set screen` |
-| EXT E2 screen (5 arms) | pending | `python -m boa_dit.temporal.ext e2 --seeds screen` |
+| EXT E2 screen (5 arms) | **done** | `python -m boa_dit.temporal.ext e2 --seeds screen` |
 | EXT E3 runtime | pending | `python -m boa_dit.temporal.ext e3 --arms none,unif,full,<best compressed>` |
 
 Partial sampling state (`ckpt/temporal/*.partial`, `ckpt/temporal/pixart/img/<arm>/`) is resumable on the same machine; after a machine loss, re-run the pending job from scratch.

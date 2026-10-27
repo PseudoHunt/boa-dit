@@ -388,3 +388,9 @@ temporal,ext_e1_w4a4_base_screen,cuda:0,2026-10-27T20:41:57Z,2026-10-27T21:00:30
 temporal,ext_e1_w4a4_feedback_screen,cuda:0,2026-10-27T21:00:57Z,2026-10-27T21:41:52Z,0.6821
 temporal,ext_e1_clipcount_check,cuda:0,2026-10-27T21:43:50Z,2026-10-27T21:46:09Z,0.0387
 temporal,ext_e1_w4a4_unif_screen,cuda:0,2026-10-27T21:42:18Z,2026-10-27T22:17:24Z,0.5849
+temporal,ext_fp_reference_screen,cuda:0,2026-10-27T22:17:50Z,2026-10-27T22:18:39Z,0.0138
+temporal,ext_e2_screen_none,cuda:0,2026-10-27T22:18:49Z,2026-10-27T22:20:40Z,0.0309
+temporal,ext_e2_screen_full,cuda:0,2026-10-27T22:20:40Z,2026-10-27T22:24:21Z,0.0614
+temporal,ext_e2_screen_mean,cuda:0,2026-10-27T22:24:21Z,2026-10-27T22:28:07Z,0.0629
+temporal,ext_e2_screen_dct4,cuda:0,2026-10-27T22:28:07Z,2026-10-27T22:31:55Z,0.0633
+temporal,ext_e2_screen_rand4,cuda:0,2026-10-27T22:31:55Z,2026-10-27T22:35:42Z,0.0631
