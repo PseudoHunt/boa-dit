@@ -1,6 +1,6 @@
-# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 21:00 UTC)
+# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-27 21:42 UTC)
 
-Last checkpoint: extension: ext_e1_base (rc 0). Logged stage-`temporal` compute: 13.40 A30-h. Hard stop lifted (rule_feedback.md).
+Last checkpoint: extension: ext_e1_feedback (rc 0). Logged stage-`temporal` compute: 14.08 A30-h. Hard stop lifted (rule_feedback.md).
 
 Run from the repo root on a machine set up as in README (weights in ckpt/, PixArt in /home/jl_fs/pixart_sigma_1024). The calibration tables, smoothing scales and caches live under ckpt/temporal/ (not in git). On a fresh machine, regenerate them first: `python -m boa_dit.temporal.dit_act calib` (DiT) and `python -m boa_dit.temporal.pixart setup` plus `python -m boa_dit.temporal.pixart_b calib` then `retable_lomin` (PixArt).
 
@@ -17,7 +17,7 @@ Run from the repo root on a machine set up as in README (weights in ckpt/, PixAr
 | stage3 DiT arm 4b (cyc4b) | **done** | `python -m boa_dit.temporal.dit_act arm --kind single8 --dither cyc4b` |
 | EXT E1 build (W4A4 base) | **done** | `python -m boa_dit.temporal.ext_w4a4 build` |
 | EXT E1 screen: base | **done** | `python -m boa_dit.temporal.ext_w4a4 arm --mode base --set screen` |
-| EXT E1 screen: feedback | pending | `python -m boa_dit.temporal.ext_w4a4 arm --mode feedback --set screen` |
+| EXT E1 screen: feedback | **done** | `python -m boa_dit.temporal.ext_w4a4 arm --mode feedback --set screen` |
 | EXT E1 screen: uniform | pending | `python -m boa_dit.temporal.ext_w4a4 arm --mode unif --set screen` |
 | EXT E2 screen (5 arms) | pending | `python -m boa_dit.temporal.ext e2 --seeds screen` |
 | EXT E3 runtime | pending | `python -m boa_dit.temporal.ext e3 --arms none,unif,full,<best compressed>` |
