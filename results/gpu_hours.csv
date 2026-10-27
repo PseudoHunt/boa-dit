@@ -384,3 +384,4 @@ temporal,arm_s3_single8_unif,cuda:0,2026-10-27T19:40:25Z,2026-10-27T19:57:30Z,0.
 temporal,arm_dit_bp_single8_cyc4b,cuda:0,2026-10-27T19:57:53Z,2026-10-27T20:10:50Z,0.2159
 temporal,ext_e1_caches_calib,cuda:0,2026-10-27T20:11:36Z,2026-10-27T20:14:12Z,0.0433
 temporal,ext_e1_quant_hsvd_r4_b0.5_kv16_u2_rs,cuda:0,2026-10-27T20:14:12Z,2026-10-27T20:41:29Z,0.4548
+temporal,ext_e1_w4a4_base_screen,cuda:0,2026-10-27T20:41:57Z,2026-10-27T21:00:30Z,0.3091
