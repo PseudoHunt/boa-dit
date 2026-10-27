@@ -126,3 +126,4 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
   elements and **5.2%** of fc2 inputs with feedback; **0.0001%** with the guard. The `clip_rate` field in
   `ext/e1_w4a4_feedback_screen.json` holds the artifact value; true rates come from runs after this fix. The guarded arm
   stays (clipping is real, if smaller).
+- 23:00 UTC follow-on decision: E1 promising=0, PixArt flat=0, E2 best=none
