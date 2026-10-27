@@ -394,3 +394,4 @@ temporal,ext_e2_screen_full,cuda:0,2026-10-27T22:20:40Z,2026-10-27T22:24:21Z,0.0
 temporal,ext_e2_screen_mean,cuda:0,2026-10-27T22:24:21Z,2026-10-27T22:28:07Z,0.0629
 temporal,ext_e2_screen_dct4,cuda:0,2026-10-27T22:28:07Z,2026-10-27T22:31:55Z,0.0633
 temporal,ext_e2_screen_rand4,cuda:0,2026-10-27T22:31:55Z,2026-10-27T22:35:42Z,0.0631
+temporal,ext_e3_runtime,cuda:0,2026-10-27T22:36:19Z,2026-10-27T23:00:15Z,0.3991

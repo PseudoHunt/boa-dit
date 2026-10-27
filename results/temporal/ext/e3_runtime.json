@@ -1,0 +1,63 @@
+{
+ "batch": 32,
+ "steps": 50,
+ "reps": 5,
+ "arms": {
+  "fp": {
+   "e2e_s_mean": 15.867068365821615,
+   "e2e_s_std": 0.011254438478723401,
+   "denoiser_ms_per_step_mean": 315.4765946044922,
+   "denoiser_ms_per_step_std": 0.2692990752561733,
+   "persistent_state_bytes_batch32": 0,
+   "peak_mem_bytes": 3266671104
+  },
+  "none": {
+   "e2e_s_mean": 36.99674428277649,
+   "e2e_s_std": 0.002263730219268296,
+   "denoiser_ms_per_step_mean": 738.1087768554687,
+   "denoiser_ms_per_step_std": 0.03588834425172013,
+   "persistent_state_bytes_batch32": 0,
+   "peak_mem_bytes": 4626443776
+  },
+  "unif": {
+   "e2e_s_mean": 37.022313895542176,
+   "e2e_s_std": 0.0010302380668316387,
+   "denoiser_ms_per_step_mean": 738.6163698730468,
+   "denoiser_ms_per_step_std": 0.020881092458806705,
+   "persistent_state_bytes_batch32": 0,
+   "peak_mem_bytes": 4626443776
+  },
+  "full": {
+   "e2e_s_mean": 73.64264465123415,
+   "e2e_s_std": 0.003273549945638986,
+   "denoiser_ms_per_step_mean": 1471.013341796875,
+   "denoiser_ms_per_step_std": 0.06466894875960681,
+   "persistent_state_bytes_batch32": 7398752256,
+   "peak_mem_bytes": 14441115648
+  },
+  "dct4": {
+   "e2e_s_mean": 75.72879492142238,
+   "e2e_s_std": 0.0025082288214753946,
+   "denoiser_ms_per_step_mean": 1512.7145219726563,
+   "denoiser_ms_per_step_std": 0.048467883379592,
+   "persistent_state_bytes_batch32": 115605504,
+   "peak_mem_bytes": 7012288512
+  }
+ },
+ "stage": "temporal",
+ "run": "ext_e3_runtime",
+ "device": "cuda:0",
+ "config": {
+  "arms": [
+   "none",
+   "unif",
+   "full",
+   "dct4"
+  ],
+  "reps": 5
+ },
+ "git_sha": "c5a44041a8606c6a4830279575363026d240d395",
+ "start_utc": "2026-10-27T22:36:19Z",
+ "wall_s": 1436.7383711338043,
+ "gpu_hours": 0.39909399198161233
+}
