@@ -48,5 +48,29 @@ L += ["## Read 3, DiT half (the registered read needs both beds and ≥ 0.3 dB o
       "failure labels (not constructed / lost to representation / lost downstream) applies.",
       "- The per-step reference is *worse* than the single table on this bed (prediction C/I doubles). B′'s '≥ 50% of the "
       "per-step gain' criterion has no gain to recover: reported, not applied.", ""]
+# ---------------------------------------------------------------- feedback cost: simulation vs deployed
+def state_bytes(sites, tokens, rows=2):
+    """one fp16 residual per quantizer site, per CFG row: sum over sites of rows x tokens x c_in x 2 bytes."""
+    return sum(rows * tokens * c * 2 for c in sites)
+dit_sites = [1152, 1152, 1152, 4608] * 28                                  # qkv, proj, fc1, fc2 inputs, 28 blocks
+pix_sites = [1152] * 3 + [1152, 1152, 1152, 1152, 4608]                     # attn1 q/k/v, attn1 out, attn2 q, attn2 out, fc1, fc2
+pix_shared = [1152, 1152, 1152, 1152, 1152, 4608]                          # attn1 q/k/v share one input -> one residual
+L += ["## Feedback cost: simulation vs deployment", "",
+      f"- **Instrumented implementation:** the feedback arm cost {E('single8_feedback')['gpu_hours']:.2f} A30-h for 512 seeds, against "
+      f"{E('single8_none')['gpu_hours']:.2f} h for the single table. The instrumented implementation is approximately "
+      f"{E('single8_feedback')['gpu_hours'] / E('single8_none')['gpu_hours']:.0f}× slower. It uses per-site Python state and "
+      "diagnostic operations; runtime without diagnostics remains to be measured. One batch of 32 with the counters off took "
+      "73.7 s vs 37.0 s for the baseline, and 16.3 s for unquantized sampling (a single timing, not a benchmark).",
+      "- **Deployed cost (full feedback):** one fp16 residual tensor per quantizer site, held across steps. Per site and step: "
+      "one add before the rounding (u = x + s), one subtract after it (r = ũ − q̂), the guard's clamp and the clip, the "
+      "residual's read and write, and the precision conversion of the stored state. There is no extra matmul. Memory "
+      "traffic from the residual reads and writes may remain significant even without Python overhead. Compressed "
+      "feedback (stage 4) adds projection and reconstruction costs.", "",
+      "| model (resolution, tokens) | quantizer sites | residual state per image (2 CFG rows, fp16) | per CFG row |", "| --- | ---: | ---: | ---: |",
+      f"| DiT-XL/2 (256², 256 tokens) | {len(dit_sites)} | {state_bytes(dit_sites, 256) / 2**20:.0f} MiB | {state_bytes(dit_sites, 256, 1) / 2**20:.0f} MiB |",
+      f"| PixArt-Σ (1024², 4,096 tokens), sites as quantized here | {28 * len(pix_sites)} | {state_bytes(pix_sites * 28, 4096) / 2**30:.2f} GiB | {state_bytes(pix_sites * 28, 4096, 1) / 2**30:.2f} GiB |",
+      f"| PixArt-Σ, attn1 q/k/v sharing one input residual | {28 * len(pix_shared)} | {state_bytes(pix_shared * 28, 4096) / 2**30:.2f} GiB | {state_bytes(pix_shared * 28, 4096, 1) / 2**30:.2f} GiB |",
+      "", "Memory is the real deployment cost: the state scales with tokens × channels summed over every quantized input. On "
+      "PixArt-Σ at 1024² it is several GiB per image, which is why stage 4's compressed (k-dimensional spatial) state exists.", ""]
 atomic_write_text(os.path.join(OUT, "stage3", "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))

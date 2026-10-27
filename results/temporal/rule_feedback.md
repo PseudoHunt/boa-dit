@@ -204,3 +204,7 @@ residual state survive lowering, before any NPU claim.
 - 2026-10-27 (user approval): +0.45 A30-h so all six registered DiT stage-3 arms run (each arm costs ≈ 0.22 h, not
   0.10 h as estimated). Stage 1–4 ceiling raised from a logged total of 7.54 h to 7.99 h. Arm order changed so that the
   key arm runs first: ±Δ/4 (already running), feedback, per-step reference, uniform, 4-phase (0,1,2,3), 4-phase (0,2,1,3).
+- 2026-10-27 (user): the hard budget stop is lifted (GPU available for longer). Work now proceeds through the full list:
+  arm 4a, FID-2k for arms 1 and 5, PixArt's four stage-3 arms at batch 1 (single table, feedback, per-step reference, best
+  stateless arm from DiT = uniform dither), then arm 4b. After every job, the results are committed and pushed with a
+  `STATUS.md` resume file (crash safety).

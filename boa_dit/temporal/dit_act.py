@@ -57,6 +57,23 @@ def compute_smooth(m, diffusion, dev):
     return sm
 
 
+def token_basis(kind, dev, g=16):
+    """Orthonormal token-space basis U [256, k] on the 16x16 grid (row-major patch order) for compressed feedback."""
+    n = g * g
+    if kind == "mean":
+        return torch.full((n, 1), 1.0 / g, device=dev)
+    if kind == "dct4":
+        i = torch.arange(g, dtype=torch.float64)
+        c = lambda f: (torch.ones(g, dtype=torch.float64) / g ** 0.5 if f == 0 else
+                       (2.0 / g) ** 0.5 * torch.cos(torch.pi * (2 * i + 1) * f / (2 * g)))
+        cols = [torch.outer(c(u), c(v)).flatten() for u in (0, 1) for v in (0, 1)]
+        return torch.stack(cols, 1).float().to(dev)
+    if kind == "rand4":
+        q, _ = torch.linalg.qr(torch.randn(n, 4, generator=torch.Generator().manual_seed(0), dtype=torch.float64))
+        return q.float().to(dev)
+    raise ValueError(kind)
+
+
 def bpath(kind):
     return os.path.join(CK, f"dit_static_b_{kind}.pt")
 
@@ -88,9 +105,12 @@ class Quantize:
 
     IDENT_KEY = "b13.mlp.fc1"
 
-    def __init__(self, model, kind, dither, dev, mode="static", feedback=False, guard=True):
+    def __init__(self, model, kind, dither, dev, mode="static", feedback=False, guard=True, log=True, compress=None,
+                 fb_types=None):
         tabs = torch.load(bpath(kind), map_location="cpu")
-        self.sm, self.guard = load_smooth(dev), guard
+        self.U = None if compress is None else token_basis(compress, dev)      # extension E2: k-dim spatial state
+        self.fb_types = fb_types                                              # extension E5: feedback only at these types
+        self.sm, self.guard, self.log = load_smooth(dev), guard, log           # log=False: no counters (FID runs), same arithmetic
         self.disc = {}                                                        # guard: discarded residual energy per site
         keys = sorted(tabs)
         self.p = {k: (tb["D"].float().to(dev), tb["Z"].float().to(dev),
@@ -110,26 +130,30 @@ class Quantize:
             return unsm(ACT.q_dynamic(xs)).to(x.dtype)
         D, Z, O, qm = self.p[key]
         lo, hi = -Z[t] * D[t], (qm - 1 - Z[t]) * D[t]
-        if not self.feedback:
-            self.clip[t] += torch.tensor([float(((xs < lo) | (xs > hi)).sum()), float(xs.numel())], dtype=torch.float64)
+        if not self.feedback or (self.fb_types is not None and key.split(".", 1)[1] not in self.fb_types):
+            if self.log:
+                self.clip[t] += torch.tensor([float(((xs < lo) | (xs > hi)).sum()), float(xs.numel())], dtype=torch.float64)
             return unsm(ACT.q_static(xs, D[t], Z[t], O[t], qm)).to(x.dtype)
         st = self.fb_step(key, t, xs, D, Z, qm, lo, s_c)
-        self._log_fb(key, t, xs, st["u"], st["uc"], lo, hi, st["hi_rep"], st["r"], st["r0"])
+        if self.log:
+            self._log_fb(key, t, xs, st["u"], st["uc"], lo, hi, st["hi_rep"], st["r"], st["r0"])
         return st["consumed"].to(x.dtype)
 
     def fb_step(self, key, t, xs, D, Z, qm, lo, s_c=None):
         """One feedback quantization step at site `key` (the only place the feedback arithmetic lives). xs is in the
         smoothed space (x/s) when the site is smoothed; the state lives in that space too."""
-        if t == 0 or key not in self.r or self.r[key].shape != xs.shape:
-            self.r[key] = torch.zeros_like(xs, dtype=torch.float16)            # state reset at step 0 (per row: per sample, per branch)
-        s_prev = self.r[key].float()
+        shp = xs.shape if self.U is None else (xs.shape[0], self.U.shape[1], xs.shape[2])
+        if t == 0 or key not in self.r or tuple(self.r[key].shape) != tuple(shp):
+            self.r[key] = torch.zeros(shp, device=xs.device, dtype=torch.float16)   # state reset at step 0 (per row: per sample, per branch)
+        s_prev = self.r[key].float() if self.U is None else torch.einsum("tk,rkc->rtc", self.U, self.r[key].float())
         hi_rep = (qm - Z[t]) * D[t]                                           # representable top: code qmax (spare code usable)
         if self.guard:                                                        # feedback-induced clipping guard
             xcl = torch.minimum(torch.maximum(xs, lo), hi_rep)                # x clipped exactly as the baseline would
             r_fed = torch.minimum(torch.maximum(s_prev, lo - xcl), hi_rep - xcl)   # feed only what keeps u in range
             d = s_prev - r_fed                                                # discarded part (energy logged)
-            de = self.disc.setdefault(key, torch.zeros(T // 5, 2, dtype=torch.float64))
-            de[t // 5] += torch.tensor([float((d != 0).sum()), float(d.double().pow(2).sum())], dtype=torch.float64)
+            if self.log:
+                de = self.disc.setdefault(key, torch.zeros(T // 5, 2, dtype=torch.float64))
+                de[t // 5] += torch.tensor([float((d != 0).sum()), float(d.double().pow(2).sum())], dtype=torch.float64)
             u = xcl + r_fed                                                   # u_t inside the representable range
         else:
             d, u = torch.zeros_like(xs), xs + s_prev                          # unguarded (diagnostic only): u_t = x_t + s_{t-1}
@@ -139,9 +163,10 @@ class Quantize:
         qh = consumed if s_c is None else consumed / s_c                      # q̂_t in the quantizer's (smoothed) space
         r0 = uc - qh                                                          # r⁰_t: rounding residual of the effective quantizer
         r = r0.clamp(-D[t] / 2, D[t] / 2)                                     # guard clamp (checked: binding counted)
-        s = r.to(torch.float16)                                               # s_t: stored state, fp16, no damping
-        self.r[key] = s
-        return {"s_prev": s_prev, "u": u, "uc": uc, "q": q, "qh": qh, "r0": r0, "r": r, "s": s.float(), "hi_rep": hi_rep,
+        s = r.to(torch.float16) if self.U is None else torch.einsum("tk,rtc->rkc", self.U, r).to(torch.float16)
+        self.r[key] = s                                                       # s_t: stored state, fp16, no damping
+        s_out = s.float() if self.U is None else torch.einsum("tk,rkc->rtc", self.U, s.float())
+        return {"s_prev": s_prev, "u": u, "uc": uc, "q": q, "qh": qh, "r0": r0, "r": r, "s": s_out, "hi_rep": hi_rep,
                 "d": d, "consumed": consumed, "xs": xs}
 
     def _log_fb(self, key, t, xs, u, uc, lo, hi, hi_rep, r, r0):
@@ -160,6 +185,10 @@ class Quantize:
     def discarded(self):
         """guard: per site and 5-step bucket [elements with a discarded part, discarded energy Σ||d||²]."""
         return {k: v.tolist() for k, v in self.disc.items()}
+
+    def state_bytes(self):
+        """persistent residual memory: bytes of the allocated state tensors (all sites, all rows incl. both CFG halves)."""
+        return sum(v.numel() * v.element_size() for v in self.r.values())
 
     def clamp_rate(self):
         return float(self.clamp[:, 0].sum() / self.clamp[:, 1].sum().clamp_min(1))

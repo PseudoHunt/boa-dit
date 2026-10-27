@@ -371,3 +371,6 @@ temporal,arm_dit_bp_single8_sym2,cuda:0,2026-10-27T13:21:09Z,2026-10-27T13:34:07
 temporal,arm_dit_bp_single8_feedback,cuda:0,2026-10-27T13:34:24Z,2026-10-27T14:13:55Z,0.6586
 temporal,arm_dit_bp_step8_none,cuda:0,2026-10-27T14:14:06Z,2026-10-27T14:27:03Z,0.2158
 temporal,arm_dit_bp_single8_unif,cuda:0,2026-10-27T14:27:13Z,2026-10-27T14:40:11Z,0.2159
+temporal,fid_speed_test,cuda,2026-10-27T15:28:07Z,2026-10-27T15:33:28Z,0.0892
+temporal,arm_dit_bp_single8_cyc4a,cuda:0,2026-10-27T15:34:41Z,2026-10-27T15:47:38Z,0.2158
+temporal,fid_ref_stats,cuda:0,2026-10-27T15:47:52Z,2026-10-27T15:48:20Z,0.0079

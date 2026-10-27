@@ -699,13 +699,15 @@ def main_b():
     ap.add_argument("--kind", default="single8", choices=list(ACT.KINDS))
     ap.add_argument("--dither", default="none", choices=list(ACT.DITHERS))
     ap.add_argument("--feedback", action="store_true")
+    ap.add_argument("--n", type=int, default=64)
+    ap.add_argument("--tag", default="")
     ap.add_argument("--device", default="cuda:0")
     a = ap.parse_args()
     torch.cuda.set_device(a.device)
     os.makedirs(PCK, exist_ok=True)
     {"calib": lambda: calib_b(a.device), "b1": lambda: b1p(a.device), "arm": lambda: arm_b(a.kind, a.dither, a.device),
      "retable_lomin": lambda: retable_b(a.device, True),
-     "s3": lambda: arm_s3(a.kind, a.dither, a.feedback, a.device)}[a.cmd]()
+     "s3": lambda: arm_s3(a.kind, a.dither, a.feedback, a.device, a.n, a.tag)}[a.cmd]()
 
 
 # ================================================================================== stage 3 (rule_feedback.md), PixArt
@@ -737,10 +739,13 @@ class A8LinearFB(A8LinearB):
         r0 = uc - qh                                                          # r⁰_t: residual of the effective quantizer
         r = r0.clamp(-D / 2, D / 2)                                           # guard clamp (binding counted)
         nom = torch.minimum(torch.maximum(u, lo), hi)
-        self.stats += torch.tensor([float((u != uc).sum()), float((r != r0).sum()), float(u.numel()), 0.0], dtype=torch.float64)
+        if self.stats.device != xs.device:                                    # counters on the GPU: no per-call sync
+            self.stats, self.clipE = self.stats.to(xs.device), self.clipE.to(xs.device)
+        self.stats += torch.stack([(u != uc).sum().double(), (r != r0).sum().double(),
+                                   torch.tensor(float(u.numel()), device=xs.device, dtype=torch.float64), torch.zeros((), device=xs.device, dtype=torch.float64)])
         b = t // 4
-        self.clipE[b] += torch.tensor([float((u != nom).sum()), float((nom - u).double().pow(2).sum()),
-                                       float((u != uc).sum()), float((uc - u).double().pow(2).sum())], dtype=torch.float64)
+        self.clipE[b] += torch.stack([(u != nom).sum().double(), (nom - u).double().pow(2).sum(),
+                                      (u != uc).sum().double(), (uc - u).double().pow(2).sum()])
         self.r = r.to(torch.float16)                                          # s_t: fp16, no damping
         q = qh
         return F.linear(q.to(torch.bfloat16), self.W, self.bias).to(dt)
@@ -817,17 +822,18 @@ def net_diag_seq(tr, dev, mode):
 
 
 @torch.no_grad()
-def arm_s3(kind, dither, feedback, dev, n=64):
-    name = f"s3_{kind}_{'feedback' if feedback else dither}"
+def arm_s3(kind, dither, feedback, dev, n=64, tag=""):
+    name = f"s3_{kind}_{'feedback' if feedback else dither}" + (f"_{tag}" if tag else "")
     with Run(STAGE, f"arm_{name}", dev, {"kind": kind, "dither": dither, "feedback": feedback, "n": n, "batch": 1}) as run:
-        if not os.path.exists(os.path.join(img_dir("bf16_b1"), f"{(n - 1) // CHUNK * CHUNK:05d}.pt")):
-            gen_b1("bf16_b1", WC.load_pipe(dev), dev, n)                      # references at the same batch layout
+        ref = "bf16_b1" + (f"_{tag}" if tag else "")
+        if not os.path.exists(os.path.join(img_dir(ref), f"{(n - 1) // CHUNK * CHUNK:05d}.pt")):
+            gen_b1(ref, WC.load_pipe(dev), dev, n)                            # references at the same batch layout
         pipe = WC.load_pipe(dev)
         mods = install_fb(pipe.transformer, kind, dither, feedback)
         keys_all = [f"{l}.{ln}" for l in range(28) for ln in QLAYERS]
         STATE.mode = "static"
         gen_b1(name, pipe, dev, n)
-        st = sum(m.stats for m in mods)
+        st = sum(m.stats.cpu() for m in mods)
         for m in mods:
             m.stats.zero_()
         diag = net_diag_seq(pipe.transformer, dev, "static")
@@ -835,7 +841,7 @@ def arm_s3(kind, dither, feedback, dev, n=64):
         torch.cuda.empty_cache()
         import lpips
         net = lpips.LPIPS(net="vgg", verbose=False).to(dev).eval()
-        ri, rl = load_gen("bf16_b1", n)
+        ri, rl = load_gen(ref, n)
         qi, ql = load_gen(name, n)
         psnr, lp = [], []
         for i in range(n):
@@ -843,12 +849,12 @@ def arm_s3(kind, dither, feedback, dev, n=64):
             psnr.append(float(10 * torch.log10(255.0 ** 2 / (a - b).pow(2).mean().clamp_min(1e-10))))
             lp.append(float(net(a / 127.5 - 1, b / 127.5 - 1).flatten()[0]))
         rel = ((ql - rl).flatten(1).pow(2).sum(1) / rl.flatten(1).pow(2).sum(1)).tolist()
-        res = {"arm": name, "kind": kind, "dither": dither, "feedback": feedback, "n": n, "batch": 1, "prompt_set": "mjhq1k[:64]",
+        res = {"arm": name, "kind": kind, "dither": dither, "feedback": feedback, "n": n, "batch": 1, "prompt_set": f"mjhq1k[:{n}]",
                "psnr_mean": float(np.mean(psnr)), "lpips_mean": float(np.mean(lp)), "latent_rel_mse_mean": float(np.mean(rel)),
                "psnr_per_image": psnr, "lpips_per_image": lp, "latent_rel_mse_per_image": rel, "diag": diag,
                "feedback_clip_rate": float(st[0] / st[2]) if feedback else None,
                "feedback_residual_clamp_rate": float(st[1] / st[2]) if feedback else None,
-               "feedback_clip_energy_by_type_bucket": ({ln: sum(m.clipE for m, k in zip(mods, keys_all) if k.endswith(ln)).tolist()
+               "feedback_clip_energy_by_type_bucket": ({ln: sum(m.clipE.cpu() for m, k in zip(mods, keys_all) if k.endswith(ln)).tolist()
                                                         for ln in QLAYERS} if feedback else None)}
         res.update(run.record())
     atomic_write_json(os.path.join(OUT, "stage3", f"pixart_{name}.json"), res)
