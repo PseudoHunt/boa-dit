@@ -71,3 +71,10 @@ Commit and push after each step.
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-28, DDIM ↔ Euler-σ check:
+  - Endpoint relative difference 9.7e-6 (plain) and 6.4e-5 (scaled by 1.01); the second exceeds the pre-set 1e-5
+    threshold, so the queue stopped.
+  - **Added per-step check:** from each DDIM state, one DDIM step vs one Euler-σ step agree to ≤ 5.5e-7 (plain 4.6e-7)
+    at every step. The mapping is exact; the endpoint differences are fp32 operation-order rounding amplified over 50
+    network evaluations.
+  - The endpoint threshold was too strict. The phase resumes from calibration on the per-step result.

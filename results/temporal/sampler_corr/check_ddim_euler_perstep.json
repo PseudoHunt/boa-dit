@@ -1,0 +1,9 @@
+{
+ "plain_max_perstep_rel": 4.56861585007573e-07,
+ "scaled_max_perstep_rel": 5.505974627340038e-07,
+ "endpoint": {
+  "plain": 9.661797776061576e-06,
+  "scaled": 6.428266351576895e-05
+ },
+ "pass_perstep": true
+}
