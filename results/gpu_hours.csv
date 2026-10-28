@@ -427,3 +427,7 @@ weights_joint,arm_C_final16,cuda:0,2026-10-28T04:38:09Z,2026-10-28T04:39:00Z,0.0
 weights_joint,arm_D_top16,cuda:0,2026-10-28T04:39:00Z,2026-10-28T04:39:51Z,0.0141
 weights_joint,arm_E_rand16,cuda:0,2026-10-28T04:39:51Z,2026-10-28T04:40:42Z,0.0142
 weights_joint,arm_F_all,cuda:0,2026-10-28T04:40:42Z,2026-10-28T04:41:33Z,0.0141
+weights_joint,fp_traj_design,cuda:0,2026-10-28T04:41:58Z,2026-10-28T04:41:58Z,0.0000
+weights_joint,arm_E_rand16:A,cuda:0,2026-10-28T04:41:58Z,2026-10-28T04:42:49Z,0.0142
+weights_joint,arm_E_rand16:B,cuda:0,2026-10-28T04:42:49Z,2026-10-28T04:43:39Z,0.0139
+weights_joint,arm_E_rand16:mean,cuda:0,2026-10-28T04:43:39Z,2026-10-28T04:44:29Z,0.0140

@@ -166,3 +166,10 @@ Stochastic-rounding schedules, four-table constructions, β searches, and sample
     the re-run selection is reported.
   - The `build.json` reconstruction totals use the pre-fix H on retried layers (b27.mlp.fc2 materially); they are
     recomputed from the stored codes in the report.
+- 2026-10-28, screen result (32 seeds, exploratory): A 0.0832. B −0.3%, C +1.0%, D +1.9% [−9.8, +15.0], E −5.6%
+  [−16.5, +6.7] (selective variation: no detectable effect). F (all columns) −15.1% [−27.6, −2.7], C/I 0.262 → 0.147.
+  Independent pair −8.2% [−17.3, +3.1]. By the protocol's rule the "most promising selective pair" is E_rand16, and its
+  controls run as specified.
+  **Added before their results:** the same controls for F_all (Q_A static, Q_B static, Q_mean static), because F is the
+  only arm clear of 0. Static extra precision on F's selected columns (all columns) is the half-step grid everywhere,
+  i.e. a whole-model 5-bit-class table built with GPTQ (`F_all:hp`), the precision comparator at comparable storage.
