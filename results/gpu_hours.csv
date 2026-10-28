@@ -453,3 +453,4 @@ sampler_corr,check_ddim_euler_perstep,cuda:0,2026-10-28T06:19:12Z,2026-10-28T06:
 sampler_corr,calib_diag,cuda:0,2026-10-28T06:31:37Z,2026-10-28T06:34:31Z,0.0484
 sampler_corr,latent_qdrift,cuda:0,2026-10-28T06:34:39Z,2026-10-28T06:39:59Z,0.0888
 sampler_corr,fid2000_base,cuda:0,2026-10-28T06:40:06Z,2026-10-28T07:01:59Z,0.3648
+sampler_corr,fid2000_qdrift,cuda:0,2026-10-28T07:02:07Z,2026-10-28T07:24:00Z,0.3646

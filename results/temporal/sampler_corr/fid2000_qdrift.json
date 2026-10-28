@@ -1,0 +1,15 @@
+{
+ "arm": "qdrift",
+ "n": 2000,
+ "fid": 27.460115058323765,
+ "stage": "sampler_corr",
+ "run": "fid2000_qdrift",
+ "device": "cuda:0",
+ "config": {
+  "arm": "qdrift"
+ },
+ "git_sha": "8ec07f5bb5cbb1749d6ea6f981d8d9a1210020ed",
+ "start_utc": "2026-10-28T07:02:07Z",
+ "wall_s": 1312.7152240276337,
+ "gpu_hours": 0.3646431177854538
+}
