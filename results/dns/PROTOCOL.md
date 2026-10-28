@@ -216,3 +216,13 @@ with w_b = 1/4 (equal-area bands). V_ξ,i = Σ_b w_b V_ξ,i,b, and V_d, C come f
 - **On fail:** report the specific failure (which target, which bands or steps, and which innovation assumptions are violated), keep the DNS result, and mark the C-DNS confirmation **unrun**.
   This is not a negative result for covariance-aware correction in general.
 - **Activation feedback is not combined here.**
+
+### 2026-10-28 17:45: check 2 criterion (amendment after the first check run, before any DNS quality number)
+The first `checks` run passed every item except c2. Its zero-statistics endpoint differed from `ddim_sample` by 1.6e-3 relative error, against
+the pre-set 1e-4 bound. At the same time the zero-statistics schedule was an exact identity (ā′ = ā_prev, τ = prev, C3 = 1) and the explicit
+DDIM step agreed with guided-diffusion's to 4e-7 (c3). The port computes the same update as guided-diffusion in a different algebraic form
+(ws·x + we·ε vs x0-then-ε′). Under fp16 autocast, last-bit differences in the state are amplified over 50 network calls; E3's check already
+needed 1e-3 over 5 calls.
+
+**Amended criterion.** c2 passes if the same comparison with fp32 forwards (amp off, both samplers) is below 1e-5. The fp16 number stays
+reported. All other checks are unchanged. No DNS statistic or sample existed when this was decided.

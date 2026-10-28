@@ -120,6 +120,9 @@ def checks(dev):
         res["c8_calls_dns"] = cc.n
         cc.remove()
         res["c2_zero_stats_rel_diff_vs_base"] = float((xz - base).norm() / base.norm())
+        b32 = ddim_sample(q, d, noise_for_seeds(seeds, dev), lab, P.CFG, amp=False).cpu()
+        z32 = P.dns_sample(q, seeds, lab, zs, dev, amp=False).cpu()
+        res["c2_zero_stats_rel_diff_vs_base_fp32"] = float((z32 - b32).norm() / b32.norm())
         res["c2_zero_stats_schedule_identity"] = all(s["abar_q"] == s["abar_prev"] and s["C3sq"] == 1.0 for s in zs)
         # c3: one explicit DDIM step vs guided-diffusion's ddim_sample step from the same state (fp16-free: amp off)
         x = noise_for_seeds(seeds, dev)
@@ -153,7 +156,7 @@ def checks(dev):
                                   "final_no_dcnc": sch[49]["a"] == 0.0}
             res["c7_stats_sha256"] = hashlib.sha256(open(stats_path(), "rb").read()).hexdigest()
         res.update(run.record())
-    res["pass"] = (res["c2_zero_stats_rel_diff_vs_base"] < 1e-4 and res["c2_zero_stats_schedule_identity"] and res["c3_ddim_step_rel_err_max"] < 1e-5
+    res["pass"] = (res["c2_zero_stats_rel_diff_vs_base_fp32"] < 1e-5 and res["c2_zero_stats_schedule_identity"] and res["c3_ddim_step_rel_err_max"] < 1e-5
                    and res["c4_timestep_is_timestep_map"] and res["c5_cfg_identical"] and res["c8_calls_dns"] == res["c8_calls_base"] == 50)
     atomic_write_json(os.path.join(OUT, "checks.json"), res)
     print(json.dumps(res, indent=1), flush=True)
