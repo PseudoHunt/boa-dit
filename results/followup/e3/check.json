@@ -1,0 +1,19 @@
+{
+ "rollout_rel_err_from_0": 0.00018543780606705695,
+ "rollout_rel_err_from_20": 9.013361705001444e-05,
+ "rollout_rel_err_from_45": 9.675077308202162e-05,
+ "grad_norm_V": 0.06557320058345795,
+ "grad_norm_D": 0.09567953646183014,
+ "grad_first_block_nonzero": true,
+ "export_bitwise_equal_to_heig8_carry": true,
+ "export_sampling_bitwise": true,
+ "pass": true,
+ "stage": "f4",
+ "run": "e3_check",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "b23b8a2e6872e19926693c36cce6903aadd475d8",
+ "start_utc": "2026-10-28T13:36:59Z",
+ "wall_s": 20.626344680786133,
+ "gpu_hours": 0.005729540189107259
+}
