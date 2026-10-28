@@ -59,8 +59,9 @@ if os.path.exists(os.path.join(OUT, "eval2.json")):
           "advantage over static alternatives. Fixed-code scale modulation was also negative for the evaluated coefficients, although its finite-difference "
           "fitting model failed the response-consistency check.",
           "",
-          "The direct coordinate search, which needs no linear-response model, also found no temporal advantage. **Fixed-code scalar modulation is parked.** It is "
-          "a restricted family: it rescales each layer's quantized weights but cannot change their rounding directions, so its failure does not rule out richer weight "
-          "constructions. **Deployed latency is unmeasured:** folding a multiplier into an existing scale is a plausible route, not a measured result."]
+          "The direct coordinate search, which needs no linear-response model, also found no temporal advantage. **Weight-side temporal variation is closed in "
+          "the measured comparisons** (mirror pair, independent pair, joint pair vs its static average and ordinary half-step GPTQ, and this fixed-code "
+          "scale modulation): per-weight temporal variation needs per-weight information, and a finer static grid buys more per bit. No further "
+          "weight-cycling constructions are run. **Deployed latency is unmeasured:** folding a multiplier into an existing scale is a plausible route, not a measured result."]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))

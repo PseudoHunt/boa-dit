@@ -6,10 +6,12 @@ Compute: 1.08 of 2.0 A30-h (stage `sampler_corr`). DiT-XL/2 256, heig-8 W4 (high
 Deterministic DDIM is exactly Euler in σ coordinates: per-step agreement ≤ 5.5e-07. The endpoint differences (9.7e-06 plain, 6.4e-05 scaled) are fp32 rounding amplified over 50 steps; the pre-set 1e-5 endpoint threshold was too strict (see the deviations).
 
 ## Q-Drift result
-- Calibrated V_i (conditional residual variance, per element) ranges 1.4e-05–4.9e-03. The correction c_i is ≤ 0.00186, so ε is rescaled by < 0.05% at every step.
+- Calibrated V_i (conditional residual variance, per element) ranges 1.4e-05–4.9e-03. The correction c_i is ≤ 0.00186, so ε is rescaled by at most 0.19% at any step.
 - **FID-2k:** heig-8 27.47 → Q-Drift **27.46** (FP: 23.89). Δ = -0.01, single runs without CIs: **no effect**.
 - Same-seed latent rel. MSE (512 seeds; not the design objective): 0.06797 → 0.06796, -0.01% [-0.05, +0.03].
-- Q-Drift has nothing to correct here: heig-8's error is small relative to unit-variance ε, and it is almost unpredictable from ε̂ under the method's isotropic linear-Gaussian model (conditioning removes 0.1% of the error energy).
+- **Why the multiplier is small:** c_i = (|Δσ_i|/2σ_i)·V_i, and both factors are small here: heig-8's conditional residual variance V_i is tiny next to unit-variance ε, and the schedule factor |Δσ|/2σ is small at 50 steps. The small multiplier is **not** evidence that the error is unpredictable.
+- Separately, conditioning on ε̂ under the isotropic linear-Gaussian model removes 0.1% of the error energy. That figure describes **predictability from the current ε̂**, not the size of Q-Drift's multiplier.
+- Fair statement: Q-Drift's correction does not incorporate measured cross-step covariance of the residual; its independent auxiliary perturbations are a construction device of the derivation.
 
 ## Conditional-residual temporal-covariance diagnostic (held-out seeds 6064–6095, FP-trajectory states)
 
@@ -25,6 +27,6 @@ Independent steps would give a coherent fraction ≈ 1/50 = 0.02. **Pre-register
 
 ## Reading
 - After removing what is predictable from the current quantized prediction, the remaining weight-induced error is strongly correlated across steps in every spatial band (lag-1 ≈ 0.93–0.97; coherent fraction ≈ 10× the independent-step value, ≈ 22× for the spatial mean).
-- Q-Drift's derivation uses independent auxiliary perturbations across steps. On this model the independent part it models is negligible, and the temporally dependent part it ignores is large. This is a concrete basis for a covariance-aware correction. That correction is **not** derived or run here: replacing the variance with summed autocovariances would need its own derivation.
-- DNS was not reproduced (only its abstract was read).
+- Q-Drift's correction uses a per-step variance and no measured cross-step covariance; the residual it leaves is strongly temporally dependent. A covariance-aware correction is **not** derived or run here (replacing the variance with summed autocovariances would need its own derivation); the consolidated plan tests the narrower observability question instead (§2, `rule_observability.md`).
+- DNS is cited, not reproduced.
 - Scope: one model (DiT-XL/2), one weight-only W4 quantizer, DDIM-50. Q-Drift's published gains are on W3A4 / W4A8 models with larger errors.

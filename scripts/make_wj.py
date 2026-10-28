@@ -142,9 +142,9 @@ if r and all(k in r["arms"] for k in ("F_all", "F_all:A", "F_all:B", "F_all:mean
           "trajectory (cos ≈ −0.93 at steps 0–10, about −0.45 mid-trajectory). Joint calibration on a weight-space objective "
           "therefore cannot reach prediction-level cancellation.",
           "",
-          "**Next experiment suggested by these results** (not run): if the temporal weight route is pursued, the joint objective should "
-          "target prediction or layer-output errors along the trajectory rather than the weight-space surrogate. Any claim would also "
-          "have to beat static W5-class GPTQ at equal storage. The 128 untouched seeds (4100–4227) remain unused; confirming "
-          "answer 3 (switching beats its constituents) would be the cheapest confirmation if wanted.", ""]
+          "**Status: closed in the measured comparisons.** Across the mirror pair, the independent pair, the joint pair (vs its static "
+          "average and ordinary half-step GPTQ) and fixed-code scale modulation, weight-side temporal variation did not beat static "
+          "precision at equal storage. Per-weight temporal variation needs per-weight information, and on this model a finer static grid "
+          "buys more per bit. This is recorded as a result; no further weight-cycling constructions are run.", ""]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))

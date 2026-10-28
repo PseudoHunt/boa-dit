@@ -16,11 +16,15 @@ L = ["# Sampler-side correction (Q-Drift) on heig-8 W4 and the conditional-resid
      "threshold was too strict (see the deviations).", "",
      "## Q-Drift result",
      f"- Calibrated V_i (conditional residual variance, per element) ranges {min(cal['V']):.1e}–{max(cal['V']):.1e}. The correction c_i is ≤ {max(cal['c']):.5f}, "
-     "so ε is rescaled by < 0.05% at every step.",
+     f"so ε is rescaled by at most {100 * max(cal['c']):.2f}% at any step.",
      f"- **FID-2k:** heig-8 {fb['fid']:.2f} → Q-Drift **{fq['fid']:.2f}** (FP: 23.89). Δ = {fq['fid'] - fb['fid']:+.2f}, single runs without CIs: **no effect**.",
      f"- Same-seed latent rel. MSE (512 seeds; not the design objective): {lat['baseline_heig8_stored']:.5f} → {lat['rel_mse_mean']:.5f}, {p(lat['vs_baseline'])}.",
-     "- Q-Drift has nothing to correct here: heig-8's error is small relative to unit-variance ε, and it is almost unpredictable from ε̂ under the method's isotropic "
-     f"linear-Gaussian model (conditioning removes {100 * (1 - dg['energy_ratio_residual_over_raw']):.1f}% of the error energy).", "",
+     "- **Why the multiplier is small:** c_i = (|Δσ_i|/2σ_i)·V_i, and both factors are small here: heig-8's conditional residual variance V_i is tiny next to "
+     "unit-variance ε, and the schedule factor |Δσ|/2σ is small at 50 steps. The small multiplier is **not** evidence that the error is unpredictable.",
+     f"- Separately, conditioning on ε̂ under the isotropic linear-Gaussian model removes {100 * (1 - dg['energy_ratio_residual_over_raw']):.1f}% of the error energy. "
+     "That figure describes **predictability from the current ε̂**, not the size of Q-Drift's multiplier.",
+     "- Fair statement: Q-Drift's correction does not incorporate measured cross-step covariance of the residual; its independent auxiliary perturbations are "
+     "a construction device of the derivation.", "",
      "## Conditional-residual temporal-covariance diagnostic (held-out seeds 6064–6095, FP-trajectory states)", "",
      "| component | raw: lag-1 corr | raw: coherent fraction | residual ξ: lag-1 | lag-2 | lag-5 | lag-10 | residual ξ: coherent fraction | energy share |", "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"]
 for b in ("band1", "band2", "band3", "band4", "dc"):
@@ -32,10 +36,10 @@ L += ["", f"Independent steps would give a coherent fraction ≈ 1/50 = 0.02. **
       "## Reading",
       "- After removing what is predictable from the current quantized prediction, the remaining weight-induced error is strongly correlated across steps in "
       "every spatial band (lag-1 ≈ 0.93–0.97; coherent fraction ≈ 10× the independent-step value, ≈ 22× for the spatial mean).",
-      "- Q-Drift's derivation uses independent auxiliary perturbations across steps. On this model the independent part it models is negligible, and the "
-      "temporally dependent part it ignores is large. This is a concrete basis for a covariance-aware correction. That correction is **not** derived or run here: "
-      "replacing the variance with summed autocovariances would need its own derivation.",
-      "- DNS was not reproduced (only its abstract was read).",
+      "- Q-Drift's correction uses a per-step variance and no measured cross-step covariance; the residual it leaves is strongly temporally dependent. "
+      "A covariance-aware correction is **not** derived or run here (replacing the variance with summed autocovariances would need its own derivation); "
+      "the consolidated plan tests the narrower observability question instead (§2, `rule_observability.md`).",
+      "- DNS is cited, not reproduced.",
       "- Scope: one model (DiT-XL/2), one weight-only W4 quantizer, DDIM-50. Q-Drift's published gains are on W3A4 / W4A8 models with larger errors."]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))
