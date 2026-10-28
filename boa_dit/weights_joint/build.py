@@ -45,6 +45,7 @@ def frac(cost, idx):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hp", default=None, help="construction whose selected columns get static half-step precision")
+    ap.add_argument("--audit_only", action="store_true", help="re-run only the static audit (after the rounding / H_eff fix)")
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
@@ -56,11 +57,14 @@ def main():
     if a.hp:
         sel = torch.load(os.path.join(CK, f"{a.hp}.pt"), map_location="cpu")
         guard(0.05, f"build hp_{a.hp}")
+    elif a.audit_only:
+        guard(0.08, "audit re-run + recon from stored codes")
+        stored = {c: torch.load(os.path.join(CK, f"{c}.pt"), map_location="cpu") for c in CONS}
     else:
         guard(0.25, "audit + constructions B-F")
     out = {}
     audit, build = {"layers": {}}, {"beta": BETA, "k": K, "layers": {}}
-    with Run(STAGE, "build" if not a.hp else f"build_hp_{a.hp}", dev, vars(a)) as run:
+    with Run(STAGE, "build" if not (a.hp or a.audit_only) else (f"build_hp_{a.hp}" if a.hp else "audit_rerun"), dev, vars(a)) as run:
         t0 = time.time()
         for li, key in enumerate(keys):
             s = S[key]
@@ -82,6 +86,18 @@ def main():
                                     "total_cost": float(cost.sum()), "damped_quadratic": quad(Q - Wp, Hc),
                                     "final1": frac(cost, slice(d - 1, d)), "final16": frac(cost, slice(d - 16, d)), "final64": frac(cost, slice(d - 64, d)),
                                     "top16": frac(cost, order[:16]), "top64": frac(cost, order[:64]), "cost": cost.float().cpu().tolist()}
+            if a.audit_only:                                                  # recompute recon components from stored codes with H_eff
+                rec = {"static": {"recon": quad(Wq1 - Wp, Hc)}}
+                for c in CONS:
+                    lay = stored[c]["layers"][key]
+                    QA = scale * (lay["cA"].to(dev).float() - zero); QB = scale * (lay["cB"].to(dev).float() - zero)
+                    EA, EB = QA - Wp, QB - Wp
+                    rec[c] = {"recon_A": quad(EA, Hc), "recon_B": quad(EB, Hc), "shared": quad((EA + EB) / 2, Hc), "alternating": quad((EA - EB) / 2, Hc),
+                              "frac_codes_differ": float((lay["cA"] != lay["cB"]).float().mean())}
+                rec["D_top16_selection_overlap_with_rerun"] = float((stored["D_top16"]["sel"][key] & torch.zeros(d, dtype=torch.bool).index_fill_(
+                    0, torch.topk(cost.cpu(), K).indices, True)).sum() / K)
+                build["layers"][key] = rec
+                continue
             sels = selections(d, cost, li)
             E1 = Wq1 - Wp
             rec = {"static": {"recon": quad(E1, Hc)}}
@@ -102,7 +118,7 @@ def main():
         if a.hp:
             atomic_torch_save({"scale": {k: S[k]["scale"] for k in keys}, "zero": {k: S[k]["zero"] for k in keys},
                                "V": {k: S[k]["V"].half() for k in keys}, "layers": out}, os.path.join(CK, f"hp_{a.hp}.pt"))
-        else:
+        elif not a.audit_only:
             for c in CONS:
                 atomic_torch_save({"scale": {k: S[k]["scale"] for k in keys}, "zero": {k: S[k]["zero"] for k in keys},
                                    "V": {k: S[k]["V"].half() for k in keys}, "sel": {k: out[c][k]["sel"] for k in keys},
@@ -118,7 +134,16 @@ def main():
     audit["all_layers_reproduce_heig8"] = all(v["reproduces_heig8"] for v in L.values())
     audit["telescoping_max_rel"] = max(abs(v["total_cost"] - v["damped_quadratic"]) / v["damped_quadratic"] for v in L.values())
     audit["processing_order"] = "natural column order (heig-8 GPTQ has act_order_col = False; no permutation)"
-    atomic_write_json(os.path.join(OUT, "audit.json"), {**audit, **rec})
+    atomic_write_json(os.path.join(OUT, "audit.json" if not a.audit_only else "audit_rerun.json"), {**audit, **rec})
+    if a.audit_only:
+        tot = {c: {m: sum(v[c][m] for v in build["layers"].values()) for m in build["layers"][keys[0]][c]} for c in CONS}
+        tot["static"] = {"recon": sum(v["static"]["recon"] for v in build["layers"].values())}
+        build["totals"] = tot
+        build["D_top16_mean_selection_overlap"] = float(np.mean([v["D_top16_selection_overlap_with_rerun"] for v in build["layers"].values()]))
+        atomic_write_json(os.path.join(OUT, "recon_rerun.json"), {**build, **rec})
+        print("audit (re-run):", agg, "| reproduce", audit["all_layers_reproduce_heig8"], "| telescoping", audit["telescoping_max_rel"],
+              "| D overlap", build["D_top16_mean_selection_overlap"], flush=True)
+        return
     tot = {c: {m: sum(v[c][m] for v in build["layers"].values()) for m in build["layers"][keys[0]][c]} for c in CONS}
     tot["static"] = {"recon": sum(v["static"]["recon"] for v in build["layers"].values())}
     build["totals"] = tot

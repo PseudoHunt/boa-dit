@@ -27,7 +27,9 @@ def prep(W, H, bits, replace):
     q.H_row = None
     Wp, Hc, _ = q.preprocess()
     U = get_cholesky_of_inverse(Hc.clone())                                   # [1, d, d]; damps further only if needed
-    return Wp.reshape(W.shape[0], W.shape[1]).contiguous(), Hc[0], U[0]
+    U = U[0]
+    H_eff = torch.cholesky_inverse(U.double(), upper=True).float()            # (U^T U)^-1: the H actually used (incl. BoA's retry damping)
+    return Wp.reshape(W.shape[0], W.shape[1]).contiguous(), H_eff, U
 
 
 def levels(scale, zero, maxq, half=False):
@@ -49,10 +51,10 @@ def gptq_static(W, U, scale, zero, maxq, half_cols=None):
     codes = torch.zeros(rows, d, dtype=torch.int16, device=W.device)
     cost = torch.zeros(d, dtype=torch.float64, device=W.device)
     for j in range(d):
-        Lv = L5 if (half_cols is not None and bool(half_cols[j])) else L4
-        e = W[:, j:j + 1] - Lv
-        c = e.abs().argmin(1)                                                 # nearest legal level (BoA: round + clamp)
-        q = Lv.gather(1, c[:, None])[:, 0]
+        half = half_cols is not None and bool(half_cols[j])
+        s_, z_, mq = (scale / 2, zero * 2, 2 * maxq) if half else (scale, zero, maxq)
+        c = torch.clamp(torch.round(W[:, j:j + 1] / s_) + z_, 0, mq)[:, 0].long()   # BoA fake_quantize rounding, exactly
+        q = (s_ * (c[:, None].float() - z_))[:, 0]
         Q[:, j], codes[:, j] = q, c.to(torch.int16)
         err = (W[:, j] - q) / U[j, j]
         cost[j] = err.double().pow(2).sum()

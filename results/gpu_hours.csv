@@ -418,3 +418,12 @@ temporal,ext_e4_stepcount(FAILED),cuda:0,2026-10-28T02:38:13Z,2026-10-28T02:55:2
 temporal,ext_e4_stepcount,cuda:0,2026-10-28T02:56:32Z,2026-10-28T03:18:52Z,0.3723
 weights_joint,oracle,cuda:0,2026-10-28T04:14:49Z,2026-10-28T04:21:25Z,0.1100
 weights_joint,build,cuda:0,2026-10-28T04:21:57Z,2026-10-28T04:34:42Z,0.2126
+weights_joint,check_identical_tables,cuda:0,2026-10-28T04:35:11Z,2026-10-28T04:35:16Z,0.0016
+weights_joint,fp_traj_design,cuda:0,2026-10-28T04:35:16Z,2026-10-28T04:35:58Z,0.0116
+weights_joint,arm_A,cuda:0,2026-10-28T04:35:58Z,2026-10-28T04:36:38Z,0.0111
+weights_joint,arm_indep,cuda:0,2026-10-28T04:36:38Z,2026-10-28T04:37:18Z,0.0111
+weights_joint,arm_B_final1,cuda:0,2026-10-28T04:37:18Z,2026-10-28T04:38:09Z,0.0141
+weights_joint,arm_C_final16,cuda:0,2026-10-28T04:38:09Z,2026-10-28T04:39:00Z,0.0142
+weights_joint,arm_D_top16,cuda:0,2026-10-28T04:39:00Z,2026-10-28T04:39:51Z,0.0141
+weights_joint,arm_E_rand16,cuda:0,2026-10-28T04:39:51Z,2026-10-28T04:40:42Z,0.0142
+weights_joint,arm_F_all,cuda:0,2026-10-28T04:40:42Z,2026-10-28T04:41:33Z,0.0141

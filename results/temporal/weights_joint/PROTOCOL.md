@@ -153,3 +153,16 @@ Stochastic-rounding schedules, four-table constructions, β searches, and sample
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-28, audit check failure (found in the build run, before any arm result was read):
+  - The static logger used nearest-level search where BoA uses round(w/scale) + clamp. At fp boundaries they disagree:
+    24 of 112 layers differ from heig-8's W_q on ≤ 0.012% of weights (mean 0.0006%).
+  - The damped quadratic used the pre-retry H, but BoA's Cholesky step re-damps H when factorization fails. Telescoping
+    error was 79% on b27.mlp.fc2 and ≤ 1e-4 elsewhere.
+  - **Fix:** the static logger now uses BoA's exact rounding, and every quadratic (audit and reconstruction components)
+    uses H_eff = (UᵀU)⁻¹, the H actually used.
+  - The audit is re-run (`audit_rerun.json`, reported as the authoritative Part-1 numbers).
+  - The joint constructions are unaffected: they compensate with the same U and their own rounding.
+  - Construction D's highest-cost-16 selection was made from the pre-fix costs; this is recorded, and its overlap with
+    the re-run selection is reported.
+  - The `build.json` reconstruction totals use the pre-fix H on retried layers (b27.mlp.fc2 materially); they are
+    recomputed from the stored codes in the report.

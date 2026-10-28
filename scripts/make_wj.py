@@ -37,21 +37,28 @@ if o:
                  f"{pct(x['vs_static_minus']) if 'vs_static_minus' in x else '—'} |")
     L += ["", f"Alternating/static-plus endpoint error ratio (absolute): {lv['ratio_alt_pm_over_static_plus_abs_err']:.3f}; Stage-1 "
           f"reference (prediction-error sign flip, different settings): {o['stage1_reference']['ratio']:.4f}.", ""]
-a = J("audit.json")
+a = J("audit_rerun.json") or J("audit.json")
+a_label = "re-run after the rounding / H_eff fix (authoritative)" if J("audit_rerun.json") else "first run (pre-fix; see deviations)"
 if a:
     g = a["aggregate_cost_weighted"]
     L += ["## Part 1: where GPTQ leaves reconstruction cost (incremental cost per input column, natural processing order)", "",
-          f"Static GPTQ reproduces heig-8's W_q exactly on all layers: {a['all_layers_reproduce_heig8']}; telescoping vs the damped "
+          f"Audit {a_label}. Static GPTQ reproduces heig-8's W_q exactly on all layers: {a['all_layers_reproduce_heig8']}; telescoping vs the damped "
           f"quadratic: max rel. {a['telescoping_max_rel']:.1e}.", "",
           "| columns | share of total reconstruction cost (cost-weighted over 112 layers) |", "| --- | ---: |"]
     for k, lab in (("final1", "final column"), ("final16", "final 16"), ("final64", "final 64"), ("top16", "highest-cost 16"), ("top64", "highest-cost 64")):
         L.append(f"| {lab} | {100 * g[k]:.2f}% |")
     L += ["", "A diagnostic of headroom for the terminal-column hypothesis, not an endpoint predictor.", ""]
-b = J("build.json")
+b = J("recon_rerun.json") or J("build.json")
 if b:
     t = b["totals"]
+    if "surrogate" not in t["F_all"]:
+        bb = J("build.json")
+        for c in ("B_final1", "C_final16", "D_top16", "E_rand16", "F_all"):
+            t[c]["surrogate"] = bb["totals"][c]["surrogate"] if bb else float("nan")
     L += ["## Part 2: joint constructions (β = 0.1; damped PHP metric, summed over 112 layers)", "",
-          f"Static heig-8 reconstruction: {t['static']['recon']:.5g}.", "",
+          f"Static heig-8 reconstruction: {t['static']['recon']:.5g}. Components "
+          + ("recomputed from the stored codes with H_eff (authoritative); surrogate column from the build run." if J("recon_rerun.json") else "from the build run (pre-fix H on retried layers).")
+          + (f" Construction D's selection overlaps the re-run highest-cost-16 selection by {100 * b['D_top16_mean_selection_overlap']:.0f}% on average." if "D_top16_mean_selection_overlap" in b else ""), "",
           "| construction | recon Q_A | recon Q_B | shared ‖(E_A+E_B)/2‖² | alternating ‖(E_A−E_B)/2‖² | surrogate |", "| --- | ---: | ---: | ---: | ---: | ---: |"]
     for c in ("B_final1", "C_final16", "D_top16", "E_rand16", "F_all"):
         x = t[c]
