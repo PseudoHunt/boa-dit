@@ -9,5 +9,6 @@ while true; do
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q && echo "$(date -u +%H:%M) pushed $(basename $w)"; })
   done
+  mkdir -p /home/boa-dit-fw/results/followup/e3/carries; cp -u /home/boa-dit/ckpt/followup/e3/carry_final_*.pt /home/boa-dit-fw/results/followup/e3/carries/ 2>/dev/null
   sleep 600
 done
