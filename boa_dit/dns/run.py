@@ -286,9 +286,37 @@ def traces(dev):
     atomic_torch_save(out, os.path.join(CK, "cdns_traces.pt"))
 
 
+@torch.no_grad()
+def score(dev):
+    """paired diagnostics on 20000-20127 vs FP: baseline (E3C C0, reused) and every DNS-side arm present; latent rel. MSE, PSNR, LPIPS."""
+    import lpips
+    E = torch.load(os.path.join(E3C_CK, "eval_latents.pt"))
+    lat = {"base": E["C0"]}
+    for f in sorted(os.listdir(os.path.join(CK, "paired"))):
+        if f.startswith("latents_") and f.endswith(".pt"):
+            lat[f[8:-3]] = torch.load(os.path.join(CK, "paired", f))
+    with Run(STAGE, "dns_score", dev, {"arms": list(lat)}) as run:
+        vae = load_vae(dev)
+        net = lpips.LPIPS(net="vgg", verbose=False).to(dev).eval()
+        imf = decode(vae, E["fp"].to(dev))
+        out = {}
+        for k, x in lat.items():
+            im = decode(vae, x.to(dev))
+            ps, lp = [], []
+            for i in range(len(im)):
+                a, b = imf[i:i + 1].to(dev).float(), im[i:i + 1].to(dev).float()
+                ps.append(float(10 * torch.log10(255.0 ** 2 / (a - b).pow(2).mean().clamp_min(1e-10))))
+                lp.append(float(net(a / 127.5 - 1, b / 127.5 - 1).flatten()[0]))
+            rel = ((x - E["fp"]).flatten(1).pow(2).sum(1) / E["fp"].flatten(1).pow(2).sum(1)).tolist()
+            out[k] = {"rel_mse": rel, "psnr": ps, "lpips": lp}
+            print(f"  {k}: latent {np.mean(rel):.5f} PSNR {np.mean(ps):.2f} LPIPS {np.mean(lp):.4f}", flush=True)
+        out["run"] = run.record()
+    atomic_write_json(os.path.join(OUT, "paired_scores.json"), out)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["calib", "checks", "design", "sample", "traces"])
+    ap.add_argument("cmd", choices=["calib", "checks", "design", "sample", "traces", "score"])
     ap.add_argument("--arm")
     ap.add_argument("--set", default="paired")
     a = ap.parse_args()
@@ -298,7 +326,7 @@ def main():
     if a.cmd == "sample":
         sample(dev, a.arm, a.set)
     else:
-        {"calib": calib, "checks": checks, "design": design, "traces": traces}[a.cmd](dev)
+        {"calib": calib, "checks": checks, "design": design, "traces": traces, "score": score}[a.cmd](dev)
 
 
 if __name__ == "__main__":
