@@ -26,7 +26,7 @@ def extend(mods, T):
 
 
 @torch.no_grad()
-def run(pipe, steps, dev, name):
+def sample_steps(pipe, steps, dev, name):
     d = PX.img_dir(name)
     os.makedirs(d, exist_ok=True)
     e = WC.load_embeds("mjhq1k")
@@ -56,14 +56,14 @@ def main():
     res = {"n": N, "prompts": "mjhq1k[:16]", "steps": {}}
     with Run(STAGE, "ext_e4_stepcount", dev, {"steps": [10, 50], "n": N}) as run:
         for steps in (10, 50):
-            ref = run(WC.load_pipe(dev), steps, dev, f"e4_bf16_s{steps}")
+            ref = sample_steps(WC.load_pipe(dev), steps, dev, f"e4_bf16_s{steps}")
             arms = {}
             for fb in (False, True):
                 pipe = WC.load_pipe(dev)
                 mods = PX.install_fb(pipe.transformer, "single8", "none", fb)
                 extend(mods, steps)
                 PX.STATE.mode = "static"
-                arms["feedback" if fb else "single8"] = run(pipe, steps, dev, f"e4_{'fb' if fb else 'single8'}_s{steps}")
+                arms["feedback" if fb else "single8"] = sample_steps(pipe, steps, dev, f"e4_{'fb' if fb else 'single8'}_s{steps}")
                 PX.STATE.mode = "fp"
                 del pipe
                 torch.cuda.empty_cache()
