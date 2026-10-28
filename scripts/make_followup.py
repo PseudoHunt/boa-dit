@@ -54,8 +54,8 @@ for pl, v in S1["placements"].items():
 L += ["", "P reduces paired state error at every placement. The effect shrinks from about −2.5% at t30 to under −1% at the final latent. "
       "M brings band-1 variance to the FP value. This is a second-moment match, not a restored distribution.", "",
       "### 1B. Live intervention", "",
-      "Design (seeds 8000–8031) froze the placement **final** for both P and M. For P, final and t30 were within 0.01% of each other "
-      "(ties go to the later placement). For M, final had the lowest band-1+2 mismatch.", "",
+      "Design (seeds 8000–8031) froze the placement **final** for both P and M. For P, final had the lowest mean endpoint error, "
+      "narrowly ahead of t30 (−0.99% vs −0.98%). For M, final had the lowest band-1+2 mismatch.", "",
       "| design arm | endpoint latent vs baseline | band-1+2 moment mismatch |", "| --- | --- | ---: |",
       f"| baseline | — | {D1['baseline']['mismatch_low']:.3f} |"]
 L += [f"| {k} | {pct2(a['vs_baseline'])} | {a['mismatch_low']:.3f} |" for k, a in D1["arms"].items()]
