@@ -48,12 +48,13 @@ def guard(est, what):
 
 
 class Scaler:
-    """Output hooks on the 112 block linears: c_t·(out - b) + b + carry; c = 1 -> out + carry (exactly heig-8's carry path)."""
+    """Output hooks on the 112 block linears: c_t·(out - b) + b + carry; c = 1 -> out + carry (exactly heig-8's carry path).
+    force_fp32=True takes the c != 1 arithmetic path even for c = 1 (implementation control)."""
 
-    def __init__(self, model, sched=None):
+    def __init__(self, model, sched=None, force_fp32=False):
         dev = next(model.parameters()).device
         car = torch.load(CARRY, map_location="cpu")
-        self.sched = sched or {}
+        self.sched, self.force = sched or {}, force_fp32
         self.hs = []
         for key in KEYS:
             l, ln = key.split(".", 1)
@@ -68,7 +69,7 @@ class Scaler:
             carry = ((x.to(V.dtype) @ V) @ D.T).to(dt) if dt == torch.float16 else (x.float() @ V.float()) @ D.float().T
             s = self.sched.get(key)
             c = 1.0 if s is None or CTX.step is None else s[CTX.step]
-            if c == 1.0:
+            if c == 1.0 and not self.force:
                 return out + carry
             b = mod.bias.float()
             return (((out.float() - b) * c + b) + carry.float()).to(dt)
@@ -256,14 +257,126 @@ def evaluate(dev):
     atomic_write_json(os.path.join(OUT, "eval.json"), out)
 
 
+EVAL2 = list(range(4300, 4428))
+STEPS_CS = (0.01, 0.005, 0.0025)
+
+
+def batched(m, d, seeds, sched, dev, force=False):
+    sc = Scaler(m, sched, force)
+    x = torch.cat([ddim_sample(m, d, noise_for_seeds(seeds[i:i + 32], dev), labels_for_seeds(seeds[i:i + 32]), 1.5).cpu() for i in range(0, len(seeds), 32)])
+    sc.remove()
+    return x
+
+
+def fp_end(seeds, dev):
+    fpm = load_dit(dev)
+    x = torch.cat([ddim_sample(fpm, make_diffusion(50), noise_for_seeds(seeds[i:i + 32], dev), labels_for_seeds(seeds[i:i + 32]), 1.5).cpu()
+                   for i in range(0, len(seeds), 32)])
+    del fpm
+    torch.cuda.empty_cache()
+    return x
+
+
+@torch.no_grad()
+def controls(dev):
+    guard(0.08, "implementation controls")
+    cstar = json.load(open(os.path.join(OUT, "refit.json")))["cstar"]
+    m, d = heig_model(dev), make_diffusion(50)
+    res = {}
+    with Run(STAGE, "controls", dev, {}) as run:
+        s2 = CAL_FIT[:2]
+        base = batched(m, d, s2, schedule(cstar, {}, [0.0] * T), dev)
+        res["zero_amplitude_bitexact"] = {pn: bool(torch.equal(batched(m, d, s2, schedule(cstar, {f: 0.0 for f in LINEARS}, phi), dev), base))
+                                          for pn, phi in {**PATTERNS, "shuffled": SHUF}.items()}
+        xf = fp_end(EVAL, dev)
+        x1 = batched(m, d, EVAL, {k: [1.0] * T for k in KEYS}, dev, force=True)       # fp32 path, c = 1 exactly
+        r1 = rel_mse(x1, xf)
+        ev = json.load(open(os.path.join(OUT, "eval.json")))["arms"]
+        res["fp32_path_c1"] = {"rel_mse_mean": float(r1.mean()), "rel_mse_per_seed": r1.tolist(),
+                               "vs_original": boot_reduction(r1.tolist(), ev["original"]["rel_mse_per_seed"]),
+                               "static_refit_vs_fp32_path_c1": boot_reduction(ev["static_refit"]["rel_mse_per_seed"], r1.tolist())}
+        res.update(run.record())
+    atomic_write_json(os.path.join(OUT, "controls.json"), res)
+    print("zero-amplitude bit-exact:", res["zero_amplitude_bitexact"], flush=True)
+    print("fp32 path c=1: latent", round(res["fp32_path_c1"]["rel_mse_mean"], 5), "vs original", res["fp32_path_c1"]["vs_original"],
+          "| refit vs fp32-path c=1", res["fp32_path_c1"]["static_refit_vs_fp32_path_c1"], flush=True)
+
+
+@torch.no_grad()
+def cs(dev):
+    guard(0.22, "coordinate search + validation")
+    cstar = json.load(open(os.path.join(OUT, "refit.json")))["cstar"]
+    m, d = heig_model(dev), make_diffusion(50)
+    res = {"steps": STEPS_CS, "bound": ABOUND, "constructions": {}}
+    with Run(STAGE, "coordinate_search", dev, {"cal": CAL_FIT, "val": VAL}) as run:
+        xf_cal, xf_val = fp_end(CAL_FIT, dev), fp_end(VAL, dev)
+        loss = lambda a, phi, seeds, xf: float(rel_mse(batched(m, d, seeds, schedule(cstar, a, phi), dev), xf).mean())
+        t0 = time.time()
+        for pn in ("constant", "alternating"):
+            phi = PATTERNS[pn]
+            a = {f: 0.0 for f in LINEARS}
+            cur = loss(a, phi, CAL_FIT, xf_cal)
+            if pn == "constant":
+                print(f"  pilot: one calibration evaluation took {time.time() - t0:.1f} s (x 50 evals + validation)", flush=True)
+            hist, cands, nev = [{"a": dict(a), "cal": cur}], [dict(a)], 1
+            for delta in STEPS_CS:
+                for f in LINEARS:
+                    best = None
+                    for sgn in (1, -1):
+                        trial = dict(a); trial[f] = float(min(max(a[f] + sgn * delta, -ABOUND), ABOUND))
+                        v = loss(trial, phi, CAL_FIT, xf_cal); nev += 1
+                        if v < cur and (best is None or v < best[1]):
+                            best = (trial, v)
+                    if best:
+                        a, cur = best
+                    hist.append({"delta": delta, "family": f, "a": dict(a), "cal": cur})
+                cands.append(dict(a))
+            val = [{"a": c, "val_rel_mse": loss(c, phi, VAL, xf_val)} for c in cands]
+            pick = min(range(len(val)), key=lambda i: val[i]["val_rel_mse"])
+            res["constructions"][pn] = {"history": hist, "n_evaluations_cal": nev, "candidates": val, "picked_index": pick, "a": val[pick]["a"]}
+            print(pn, "evals", nev, "final cal", round(cur, 5), "| validation", [round(v["val_rel_mse"], 5) for v in val], "-> pick", pick, val[pick]["a"], flush=True)
+        res.update(run.record())
+    atomic_write_json(os.path.join(OUT, "cs.json"), res)
+    atomic_write_json(os.path.join(OUT, "frozen_cs.json"), {"cstar": cstar, "a": {pn: res["constructions"][pn]["a"] for pn in res["constructions"]},
+                                                           "frozen_before_eval_seeds_4300_4427": True})
+
+
+@torch.no_grad()
+def eval2(dev):
+    guard(0.15, "evaluation on new seeds 4300-4427")
+    fr = json.load(open(os.path.join(OUT, "frozen_cs.json")))
+    cstar = fr["cstar"]
+    arms = {"static_refit": schedule(cstar, {}, [0.0] * T), "cs_constant": schedule(cstar, fr["a"]["constant"], PATTERNS["constant"]),
+            "cs_alternating": schedule(cstar, fr["a"]["alternating"], PATTERNS["alternating"])}
+    out = {"seeds": [EVAL2[0], EVAL2[-1]], "arms": {}}
+    with Run(STAGE, "eval2", dev, {"seeds": "4300-4427"}) as run:
+        tr = fp_traj(dev, EVAL2[:32], True, "scale_eval2_fp16")
+        xf = fp_end(EVAL2, dev)
+        m, d = heig_model(dev), make_diffusion(50)
+        for name, sched in arms.items():
+            x = batched(m, d, EVAL2, sched, dev)
+            sc = Scaler(m, sched)
+            dg = diagnostics(m, d, dev, tr)
+            sc.remove()
+            r = rel_mse(x, xf)
+            out["arms"][name] = {"rel_mse_mean": float(r.mean()), "rel_mse_per_seed": r.tolist(), "diag": dg}
+            print(f"  {name}: latent {float(r.mean()):.5f}, total {sum(dg['per_step_err']):.4g}, C {dg['C']:.4g}, I {dg['I']:.4g}, C/I {dg['C_over_I']:.4f}", flush=True)
+        A = out["arms"]
+        for x_, y_ in (("cs_constant", "static_refit"), ("cs_alternating", "static_refit"), ("cs_alternating", "cs_constant")):
+            A[x_][f"vs_{y_}"] = boot_reduction(A[x_]["rel_mse_per_seed"], A[y_]["rel_mse_per_seed"])
+        out.update(run.record())
+    atomic_write_json(os.path.join(OUT, "eval2.json"), out)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["validate", "refit", "fit", "eval"])
+    ap.add_argument("cmd", choices=["validate", "refit", "fit", "eval", "controls", "cs", "eval2"])
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     os.makedirs(OUT, exist_ok=True)
-    {"validate": lambda: validate(dev), "refit": lambda: refit(dev), "fit": lambda: fit(dev), "eval": lambda: evaluate(dev)}[a.cmd]()
+    {"validate": lambda: validate(dev), "refit": lambda: refit(dev), "fit": lambda: fit(dev), "eval": lambda: evaluate(dev),
+     "controls": lambda: controls(dev), "cs": lambda: cs(dev), "eval2": lambda: eval2(dev)}[a.cmd]()
 
 
 if __name__ == "__main__":

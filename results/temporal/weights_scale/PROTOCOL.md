@@ -95,3 +95,26 @@ Written 2026-10-28, before any sampling for this experiment. Branch `weights-joi
     0.0669; constant 0.0658; slow 0.0739; alternating 0.0656.
   - The evaluation proceeds as frozen: it tests these particular coefficients by actual sampling. It does **not**
     validate the fitting procedure. A resolved fit would need fp32 finite differences and/or larger ε (not run).
+- 2026-10-28, review follow-up (recorded before any of its runs):
+  - **From existing data:**
+    - Absolute coherence: alternating C = 1551 vs original 1545, i.e. unchanged. I rises 5787 → 6728, and total
+      prediction-error energy rises 229 → 259. The lower C/I is added fluctuating error, not reduced coherent error.
+    - FD: at |a| = 0.02 the alternating response moves the endpoint by only 2.0–4.3% of ‖e‖ (constant: 31–71%).
+      The R(2ε)–R(ε) discrepancy is 1.4–2.3% of ‖e‖ in absolute terms. The relative failure mainly reflects a very
+      small alternating response.
+  - **Implementation controls:**
+    - (a) every pattern with amplitude 0 reproduces the static-refit latents bit for bit (2 seeds);
+    - (b) the hook's fp32 path forced with c = 1 exactly, on the reserved seeds 4100–4227 (an implementation diagnostic
+      for the original-vs-refit comparison on those seeds, not a selection). It tests whether the refit's 1.6% gain
+      is arithmetic.
+  - **Direct coordinate search** (no linear-response model), constant vs alternating only:
+    - Both start at a = 0 around the static refit; bounds |a_f| ≤ 0.02 for both.
+    - Steps δ ∈ {0.01, 0.005, 0.0025}. At each δ, one pass over the families (qkv, proj, fc1, fc2), evaluating
+      a_f + δ and a_f − δ (clipped to the bounds) and keeping the best actual calibration loss if it improves. That is
+      24 evaluations + 1 start per construction, identical for both.
+    - Calibration loss: mean endpoint latent rel. MSE vs FP on seeds 5000–5007.
+    - Candidates: the coefficients after each δ level (3 per construction) plus a = 0. Selection: lowest mean latent
+      rel. MSE on validation seeds 5008–5023. Then freeze (`frozen_cs.json`).
+    - Evaluation on **new untouched seeds 4300–4427** (128): static refit, CS-constant, CS-alternating. Paired CIs
+      vs static refit and between the two CS arms; C, I, total energy.
+  - **Report wording** as proposed in review: "deployed latency unmeasured".
