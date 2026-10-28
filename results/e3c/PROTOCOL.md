@@ -110,3 +110,34 @@ The details are fixed by a dated amendment below, **after profiling and before a
 the uniform-W4 arm's checkpoint (`ckpt_uniform_w4_K1_lam1_brcfg/model.pt`, absent on this machine). That step only annotates the JSON.
 The JSON was written by hand from the saved per-layer diagnostics, without the `drift_uniform` fields. Measured extra bits/param: **0.2963**
 (heig-8: 0.1481). H16 itself is unchanged by this.
+
+### 2026-10-28 17:05: Part 2 details (before any PixArt run)
+- **Code.** `boa_dit/e3c/pixart_refit.py`.
+  - Sampler: the deployed one (diffusers DPM-Solver++(2M), 20 steps, guidance 4.5, batch 1, seed = prompt index).
+  - Rollouts restore the scheduler's multistep history (the previous x0 prediction, `lower_order_nums`, the step index) from the cached base trajectory.
+    Gradients flow through every state update and through the history the rollout itself produces.
+- **Checks (must pass before training).** All listed in `check`:
+  - own loop == pipeline, bitwise;
+  - untrained trainable layer == the deployed `QLinear`, bitwise;
+  - untrained export == the base tensors, bitwise;
+  - a K-step rollout from cached states ≤ 1e-3 relative error;
+  - a nonzero gradient at block 0.
+- **Arms.**
+  - P0 = base.
+  - P1 = L_local (time-matched).
+  - P2 = L_local + λ·L_roll,full, with K = 5 and B = 1 prompt (two CFG rows).
+  - Both start from the base branch, use Adam and training seed 0. One training run per arm (cost), so training-run variance is not measured on PixArt.
+- **Training data.** Base W4A4 trajectories of mjhq1k[600:664] (64 prompts, untouched). The loss normalization constants are base values on the first 4 training prompts.
+- **Design.** design[24:32] (8 prompts; E2 used design[0:24]).
+  - lr ∈ {1e-4, 3e-4}, picked by P1's design-local loss after T/4.
+  - λ ∈ {0.5, 2}, picked by P2's endpoint latent rel. MSE vs bf16 after T/4.
+- **T_train.** 1.0 h per arm. If profiling shows fewer than 150 P2 updates in 1.0 h, T_train is raised to give 150 P2 updates, capped at 2.0 h.
+  The value is written to `plan.json` before design.
+- **Evaluation.**
+  - MJHQ-64 (mjhq1k[0:64]). Base images (`e1_w4a4_base_screen`) and bf16 batch-1 references (`bf16_b1`) are reused: same generator, seeds, batch and model files.
+  - Untouched confirmation set mjhq1k[288:352]: new bf16 references and base images.
+  - Metrics: PSNR, LPIPS-VGG and latent rel. MSE vs bf16, plus ImageReward v1.0. Paired bootstrap over prompts vs P0, and P2 vs P1.
+- **Reads.**
+  - P1 > P0: refitting the branch helps.
+  - P2 > P1 (CI excludes 0 on latent): credits the trajectory objective on this bed.
+  - ImageReward is reported, but no generation-quality claim is made from it alone.
