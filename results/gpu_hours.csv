@@ -444,3 +444,4 @@ weights_joint,fp_traj_design,cuda:0,2026-10-28T04:54:56Z,2026-10-28T04:54:56Z,0.
 weights_joint,arm_F_all:hp,cuda:0,2026-10-28T04:54:56Z,2026-10-28T04:55:38Z,0.0115
 weights_scale,refit,cuda:0,2026-10-28T05:19:01Z,2026-10-28T05:19:12Z,0.0030
 weights_scale,fit,cuda:0,2026-10-28T05:19:31Z,2026-10-28T05:28:33Z,0.1506
+weights_scale,eval,cuda:0,2026-10-28T05:28:40Z,2026-10-28T05:46:33Z,0.2978

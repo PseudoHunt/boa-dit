@@ -84,3 +84,14 @@ Written 2026-10-28, before any sampling for this experiment. Branch `weights-joi
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-28, refit: c* ≈ 1 everywhere (family means 1.0001–1.0003; no boundary hits). heig-8's scales are already
+  locally optimal, so the static-refit baseline is essentially the original.
+- 2026-10-28, **fit: the FD resolution check fails** (recorded before any evaluation result):
+  - alternating pattern: R(2ε) vs R(ε) relative difference 0.53–0.73; symmetric curvature ratio 0.45–3.1. Constant and
+    slow patterns: curvature ≈ 0.33–0.48.
+  - At ε = 0.005 the fp16 endpoint response is far from linear (possibly rounding-driven divergence; not tested), so
+    the linearized amplitude fit is unreliable.
+  - Validation picked λ = 0 (constant) and the strongest λ (slow, alternating). Validation latent: static refit
+    0.0669; constant 0.0658; slow 0.0739; alternating 0.0656.
+  - The evaluation proceeds as frozen: it tests these particular coefficients by actual sampling. It does **not**
+    validate the fitting procedure. A resolved fit would need fp32 finite differences and/or larger ε (not run).
