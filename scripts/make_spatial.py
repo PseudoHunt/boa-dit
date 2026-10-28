@@ -24,7 +24,10 @@ for bits in ("A4", "A8"):
 s = r["read_S"]
 L += ["## Read S (pre-registered, on A4)",
       f"- (a) correlation ≥ 0.3 in the half-error set: **{s['a']}**; (b) ≥ 40% of energy in band 1: **{s['b']}**.",
-      f"- **Read S: {'PASS' if s['pass'] else 'FAIL'}.** " + ("" if s["pass"] else "The spatial GPU leg is closed; §4 (error diffusion, blue-noise masks) is **not run**."), "",
+      f"- **Read S: {'PASS' if s['pass'] else 'FAIL'}.** " + ("" if s["pass"] else "As pre-registered, §4 (error diffusion, blue-noise masks) was **not run** in that allocation. "
+      "**Correction (2026-10-28):** a white baseline error spectrum is not a valid impossibility gate for noise shaping. Shaping creates spatial "
+      "structure rather than exploiting existing structure; what matters is downstream sensitivity by spatial frequency, which this diagnostic "
+      "did not measure. Spatial shaping is untested, not ruled out."), "",
       "## Reading",
       "- The activations themselves are spatially correlated (x̃ adjacent correlation 0.27–0.70), but their A4 rounding error is essentially white: neighbouring "
       "tokens fall in the same grid cell only ≈ 27–48% of the time in the error-carrying types, and each token has its own dynamic scale, so the rounding "

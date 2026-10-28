@@ -62,3 +62,7 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
   - (a) The half-error set is {attn2.to_q} (72% of output-space error); its centred adjacent-token correlation is 0.014.
   - (b) The weighted band-1 share is 0.276 (white: 0.25).
   - The spatial GPU leg is closed and **§4 is skipped** (not run).
+- 2026-10-28, correction (closure note): Read S used baseline error whiteness as a gate for shaping. That is **not a valid
+  impossibility gate**: shaping methods impose spatial structure on the error, and the relevant quantity is the
+  downstream sensitivity to error by spatial frequency, which §1 did not measure. Skipping §4 is recorded as a protocol
+  decision, not as evidence that spatial shaping cannot help. The 2026-10-28 follow-up protocol (§2) replaces the gate.
