@@ -103,3 +103,10 @@ The details are fixed by a dated amendment below, **after profiling and before a
 
 ## Amendments
 (dated, appended before the affected arms run)
+
+### 2026-10-28 16:40: H16 build note (before any H16 evaluation)
+`quantize_dc --mode heig --r 16 --bits 4` completed all 28 blocks and saved `ckpt/ckpt_deflate_heig_r16_w4/model.pt` and
+`results/deflate/quant/deflate_heig_r16_w4/carry.pt`. It then failed in its **post-hoc diagnostic**, which compares weight drift against
+the uniform-W4 arm's checkpoint (`ckpt_uniform_w4_K1_lam1_brcfg/model.pt`, absent on this machine). That step only annotates the JSON.
+The JSON was written by hand from the saved per-layer diagnostics, without the `drift_uniform` fields. Measured extra bits/param: **0.2963**
+(heig-8: 0.1481). H16 itself is unchanged by this.
