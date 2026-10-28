@@ -1,0 +1,5 @@
+{"purpose": "probe sanity check (design[0], step 2): re-entrant call without a probe, and spread across directions",
+ "rel_change_vs_unperturbed": {"none": 0.0, "low_d0": 0.005078, "low_d1": 0.005011, "high_d0": 0.005077, "high_d1": 0.005065},
+ "low_d0_vs_low_d1": 0.005096, "low_d0_vs_high_d0": 0.005123,
+ "reading": "probes are applied (no-probe call reproduces the output exactly); responses to different directions are mutually uncorrelated, so equal S across bands reflects energy-only sensitivity at attn2.to_q, not a no-op",
+ "script": "scratchpad e2_diag.py (logged as f4 run e2_probe_diag)"}
