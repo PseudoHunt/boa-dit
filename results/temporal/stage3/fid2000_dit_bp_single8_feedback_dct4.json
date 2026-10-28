@@ -1,0 +1,21 @@
+{
+ "arm": "bp_single8_feedback_dct4",
+ "n": 2000,
+ "fid": 26.179693538540675,
+ "stage": "c3",
+ "run": "fid2000_dit_bp_single8_feedback_dct4",
+ "device": "cuda:0",
+ "config": {
+  "kind": "single8",
+  "dither": "none",
+  "feedback": true,
+  "n": 2000,
+  "compress": "dct4",
+  "lo": 0,
+  "stage": "c3"
+ },
+ "git_sha": "1b94558c6fcf8ed53181782d43157b33164ba044",
+ "start_utc": "2026-10-28T11:04:22Z",
+ "wall_s": 4737.166639089584,
+ "gpu_hours": 1.315879621969329
+}
