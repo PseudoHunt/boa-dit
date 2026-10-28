@@ -92,3 +92,8 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
   - §5 (INT4 state, η, site budget) is **unrun in this allocation**; `mem.py` is written but untested on GPU.
   - If DCT-16 passes its read, the report states that D3 is the **DCT-4** arm, so its FID is a lower bound on what the
     recommended band-limited setting would get on DiT.
+- 2026-10-28, **correction (data provenance):** the D2 set mjhq1k[64:96] was untouched by every feedback/temporal arm,
+  but these prompts belong to mjhq1k[0:256], which the earlier W4A4 base validation (MJHQ-256: bf16 and
+  `hsvd_r4_b0.5`, `results/w4a4/eval/img256_*.json`) generated and reported. D2 is therefore a **second, previously
+  unused-for-this-comparison set**, not untouched confirmation data in the strict sense. The results stand as
+  reported; the label changes. New PixArt confirmation uses mjhq1k[256:1000], which no experiment has used.
