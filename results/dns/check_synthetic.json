@@ -1,0 +1,74 @@
+{
+ "official_commit": "3f02e6932edb30f58c0471456501c34e85517e27",
+ "steps": {
+  "0": {
+   "t": 980,
+   "prev": 960,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 8.745840492313116e-05,
+   "abar_prev": 8.741305391053614e-05,
+   "tau": 960,
+   "C3sq": 1.0005188128153197,
+   "fallback": true
+  },
+  "10": {
+   "t": 780,
+   "prev": 760,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 0.002833600934140666,
+   "abar_prev": 0.0028329432364363493,
+   "tau": 760,
+   "C3sq": 1.0002321605656823,
+   "fallback": true
+  },
+  "30": {
+   "t": 380,
+   "prev": 360,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 0.26351385311889713,
+   "abar_prev": 0.2634905274750986,
+   "tau": 360,
+   "C3sq": 1.0000885255497496,
+   "fallback": true
+  },
+  "47": {
+   "t": 40,
+   "prev": 20,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 0.9937471088974785,
+   "abar_prev": 0.9937354285721993,
+   "tau": 20,
+   "C3sq": 1.0000117539587936,
+   "fallback": true
+  },
+  "48": {
+   "t": 20,
+   "prev": 0,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 0.9999,
+   "abar_prev": 0.9999,
+   "tau": 0,
+   "C3sq": 1.0,
+   "fallback": false
+  },
+  "49": {
+   "t": 0,
+   "prev": -1,
+   "rel_diff_vs_official": 0.0,
+   "abar_q": 1.0,
+   "abar_prev": 1.0,
+   "tau": null,
+   "C3sq": 1.0,
+   "fallback": false
+  }
+ },
+ "zero_stats": {
+  "max_abs_abar_q_minus_prev": 0.0,
+  "tau_equals_prev_steps": 49,
+  "n_steps_checked": 49,
+  "tau_mismatch": [],
+  "max_abs_C3_minus_1": 0.0,
+  "ws_we_equal_ddim": 0.0
+ },
+ "pass": true
+}
