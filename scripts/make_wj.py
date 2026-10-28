@@ -83,21 +83,39 @@ if r:
     pr = lambda x, y: boot_reduction(A[x]["rel_mse_per_seed"], A[y]["rel_mse_per_seed"]) if x in A and y in A else None
     sel = [k for k in ("B_final1", "C_final16", "D_top16", "E_rand16") if k in A]
     best = min(sel, key=lambda k: A[k]["rel_mse_mean"]) if sel else None
-    L += ["## Interpretation (exploratory)", ""]
-    if "indep" in A:
-        jbest = min([k for k in sel + ["F_all"] if k in A], key=lambda k: A[k]["rel_mse_mean"]) if sel else None
-        if jbest:
-            L.append(f"- **Joint vs the existing independent pair:** best joint ({jbest}) vs indep: {pct(pr(jbest, 'indep'))}.")
+    L += ["## Interpretation (exploratory; 32 design seeds)", ""]
+    if "indep" in A and "F_all" in A:
+        L.append(f"- **Joint (F, all columns) vs the existing independent pair, paired:** {pct(pr('F_all', 'indep'))}. F is clear of 0 "
+                 "against the baseline while the independent pair is not, but that does **not** establish a significant difference between the "
+                 "two: the direct comparison is a point-estimate result.")
     if "D_top16" in A and "E_rand16" in A:
-        L.append(f"- **Selective (highest-cost 16) vs random 16:** {pct(pr('D_top16', 'E_rand16'))}.")
-    if best:
-        L.append(f"- Most promising selective pair: **{best}**.")
-        for ctl in ("A", "B", "mean", "hp"):
-            k = f"{best}:{ctl}"
-            if k in A:
-                L.append(f"  - alternating {best} vs {k}: {pct(pr(best, k))}")
-            else:
-                L.append(f"  - {k}: **unrun**")
-    L.append("- A lower endpoint error alone does not show temporal shaping beats extra precision; see the :hp and :mean rows.")
+        L.append(f"- **Highest-cost 16 vs random 16, paired:** {pct(pr('D_top16', 'E_rand16'))}. Not established in either direction "
+                 "(the wide interval does not show that the difference is noise either).")
+    sel_note = [k for k in ("B_final1", "C_final16", "D_top16", "E_rand16") if k in A]
+    if sel_note:
+        L.append("- **The tested 1- and 16-column selections show no reliable improvement** over the baseline. Larger subsets and other "
+                 "selection criteria are untested. The Part-1 audit explains why the tail was an unpromising target: the final column holds "
+                 "≈ 0.2% and the final 16 ≈ 3% of the static reconstruction cost. These shares are not strict bounds on endpoint gain.")
+    for cons in [c for c in ("E_rand16", "F_all") if c in A]:
+        rows = [(ctl, f"{cons}:{ctl}") for ctl in ("A", "B", "mean", "hp")]
+        L.append(f"- **Controls for {cons}** (alternating vs each control, paired; negative = alternation lower):")
+        for ctl, k in rows:
+            L.append(f"  - vs {k}: {pct(pr(cons, k))}" if k in A else f"  - {k}: **unrun**")
+    fc = J("F_codes.json")
+    if fc:
+        h = fc["diff_hist"]; n = fc["n_weights"]
+        top = ", ".join(f"{int(k):+d}: {100 * h[k] / n:.1f}%" for k in ("-2", "-1", "0", "1", "2") if k in h)
+        L.append(f"- **F's code differences:** {100 * fc['frac_codes_differ']:.1f}% of weights differ between Q_A and Q_B ({top}). "
+                 f"Order-0 entropy of the difference {fc['entropy_estimate_bits_per_weight']:.2f} bits/weight: an **estimate** of a possible "
+                 "difference encoding, not achieved storage (the stored files hold full codes for both tables; the table above counts two packed tables).")
+    L += ["- **Reading guide for the controls:**",
+          "  - one constituent table as good as alternation → joint construction may simply have produced a better static table;",
+          "  - alternation beats both constituents → switching contributes;",
+          "  - the static average beats alternation → the more accurate mean is what matters, and variation costs;",
+          "  - alternation beats the static average → evidence that temporal variation itself helps (confirm on untouched seeds 4100–4227).",
+          "- The **static average** is stored as half-step (5-bit-class) codes on the varied columns. It is counted that way, not as two tables "
+          "or an fp tensor. Static average vs alternation isolates variation around the same mean. The independently optimized static "
+          "half-step table (:hp) asks whether the pair is a competitive use of extra precision.",
+          "- A lower endpoint error alone does not show that temporal shaping beats extra precision."]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))
