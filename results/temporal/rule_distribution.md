@@ -97,3 +97,14 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
   `hsvd_r4_b0.5`, `results/w4a4/eval/img256_*.json`) generated and reported. D2 is therefore a **second, previously
   unused-for-this-comparison set**, not untouched confirmation data in the strict sense. The results stand as
   reported; the label changes. New PixArt confirmation uses mjhq1k[256:1000], which no experiment has used.
+- 2026-10-28, **DCT-16 result (`dist/pixart_scores.json`, `read_dct16`): the trade-off read FAILS on both sets.**
+  - k-curve, mean latent rel. MSE / PSNR / LPIPS:
+    - screen: single 0.1844 / 18.11 / 0.3778; DCT-4 0.1701 / 18.54 / 0.3633; **DCT-16 0.1793 / 18.29 / 0.3692**;
+      full 0.1599 / 18.69 / 0.3933.
+    - untouched (see the provenance note): single 0.1921 / 17.66 / 0.3965; DCT-4 0.1761 / 18.15 / 0.3845;
+      **DCT-16 0.1851 / 17.89 / 0.3851**; full 0.1671 / 18.32 / 0.4178.
+  - DCT-16 does **not** land between DCT-4 and full: it is worse than DCT-4 on latent and PSNR on both sets (between
+    single and DCT-4). Its LPIPS stays at or below single's (screen −0.0086 [−0.0144, −0.0023]; untouched −0.0114
+    [−0.0251, +0.0065]).
+  - The k-curve is not monotone in k between 4 and full. The recommended-setting clause does not apply, so the D3
+    lower-bound note is not needed.
