@@ -1,0 +1,61 @@
+{
+ "T_train_hours": 0.3,
+ "short_hours": 0.075,
+ "lr": {
+  "0.0001": {
+   "design_local": 0.651216521859169,
+   "updates": 1384
+  },
+  "0.0003": {
+   "design_local": 0.914473956823349,
+   "updates": 1388
+  }
+ },
+ "lam": {
+  "C2": {
+   "0.5": {
+    "design_latent": 0.05680697879870422,
+    "updates": 210
+   },
+   "2.0": {
+    "design_latent": 0.05863344014505856,
+    "updates": 211
+   }
+  },
+  "C3": {
+   "0.5": {
+    "design_latent": 0.05788436540751718,
+    "updates": 211
+   },
+   "2.0": {
+    "design_latent": 0.05963787893415429,
+    "updates": 211
+   }
+  }
+ },
+ "C0_design_local": 0.9782725274562836,
+ "lr_star": 0.0001,
+ "C0_design_latent": 0.06345512517145835,
+ "lam_star": {
+  "C2": 0.5,
+  "C3": 0.5
+ },
+ "stage": "f4",
+ "run": "e3_design",
+ "device": "cuda:0",
+ "config": {
+  "lrs": [
+   0.0001,
+   0.0003
+  ],
+  "lams": [
+   0.5,
+   2.0
+  ],
+  "short_h": 0.075
+ },
+ "git_sha": "3ce553738180ce3fb3707381b47e2434317fbff9",
+ "start_utc": "2026-10-28T13:43:56Z",
+ "wall_s": 1923.9704043865204,
+ "gpu_hours": 0.5344362234407001
+}
