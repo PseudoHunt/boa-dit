@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import shutil
+import time
 
 import numpy as np
 import torch
@@ -26,6 +27,7 @@ OUT = os.path.join(RESULTS, "e3c")
 CK = os.path.join(CKPT_DIR, "e3c")
 EVAL, FIDS, MCAL = list(range(20000, 20128)), list(range(30000, 32000)), list(range(7000, 7064))
 LR, LAM, HOURS, UPD = 1e-4, 0.5, 0.3, 841
+LOCK = "/home/boa-dit/ckpt/gpu_shared.lock"                                # held by concurrent untimed jobs (scripts/run_early.sh)
 H16 = "deflate_heig_r16_w4"
 H16_STATE = os.path.join(CKPT_DIR, f"ckpt_{H16}", "model.pt")
 H16_CARRY = os.path.join(RESULTS, "deflate", "quant", H16, "carry.pt")
@@ -50,6 +52,9 @@ def train(dev, arm, seed):
         atomic_write_json(f, lg)
         return
     obj, hours, mu = SPEC[arm]
+    while os.path.exists(LOCK):                                               # time-matched runs never share the GPU
+        print(f"  waiting for {LOCK}", flush=True)
+        time.sleep(30)
     with Run(STAGE, f"e3c_train_{arm}_s{seed}", dev, {"arm": arm, "obj": obj, "hours": hours, "max_updates": mu, "seed": seed, "lr": LR}) as run:
         p, lg = E3.train(dev, obj, LAM if obj == "C2" else 0.0, LR, hours, f"e3c_{arm}_s{seed}", seed=seed, max_updates=mu)
         shutil.move(p, dst)
