@@ -401,3 +401,7 @@ temporal,ext_e5_screen_fc2,cuda:0,2026-10-27T23:04:39Z,2026-10-27T23:07:34Z,0.04
 temporal,ext_e5_screen_mlp,cuda:0,2026-10-27T23:07:34Z,2026-10-27T23:10:45Z,0.0531
 temporal,ext_e5_screen_attn,cuda:0,2026-10-27T23:10:45Z,2026-10-27T23:13:07Z,0.0394
 temporal,ext_e1_w4a4_feedback_guard_screen,cuda:0,2026-10-27T23:13:44Z,2026-10-27T23:59:10Z,0.7570
+temporal,ext_fp_reference_confirm,cuda:0,2026-10-27T23:59:44Z,2026-10-28T00:04:14Z,0.0752
+temporal,ext_e2_confirm_none,cuda:0,2026-10-28T00:04:24Z,2026-10-28T00:14:16Z,0.1645
+temporal,ext_e2_confirm_full,cuda:0,2026-10-28T00:14:16Z,2026-10-28T00:33:54Z,0.3273
+temporal,ext_e2_confirm_dct4,cuda:0,2026-10-28T00:33:54Z,2026-10-28T00:54:09Z,0.3375
