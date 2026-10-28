@@ -141,3 +141,23 @@ The JSON was written by hand from the saved per-layer diagnostics, without the `
   - P1 > P0: refitting the branch helps.
   - P2 > P1 (CI excludes 0 on latent): credits the trajectory objective on this bed.
   - ImageReward is reported, but no generation-quality claim is made from it alone.
+
+### 2026-10-28 18:05: Part 3, PixArt pilot (user specification, run **after** Parts 1–2 and the DNS work; registered before any pilot step)
+User text (verbatim):
+- "Pre-registered check (no training): the exported branch reproduces the corrected H-SVDQuant-r4 base bit-exactly in sampling, as E3's check did for heig-8."
+- "Profile one update at batch 1, K = 3 rollout steps, gradient checkpointing per block, straight-through on the activation quantizer with stop-gradient on any residual; record seconds per update and peak memory. If an update exceeds 3 s or memory exceeds 20 GiB, drop to K = 2."
+- "Two arms, 0.4 h training each, same seed, design prompts: C1 local per-step reconstruction loss; C2 local plus K-step rollout loss against the FP teacher from the same cached student state, λ = 0.5 (E3's value). Train L₁ and L₂; D and the codes stay frozen."
+- "Evaluate base, C1, C2 on mjhq1k[256:288] (untouched): latent, PSNR, LPIPS with paired CIs; sec/image unchanged by construction."
+
+**Read (verbatim, written before step 3).** "The pilot passes iff C2 beats the base by ≥ 0.3 dB PSNR with the CI excluding 0 and C2 beats C1 on latent; a C1-only gain means the H-SVDQuant branch was under-fit, which is still a result but not the rollout claim. Fewer than 200 updates per arm, or a failed step-1 check, makes the pilot uninformative rather than negative; report it as such."
+- "C2 beats C1 on latent" is read as C2's latent rel. MSE being lower, with the paired CI excluding 0.
+
+**Implementation choices (not specified by the user).**
+- Code: `pixart_refit.py --pilot`.
+- Training states: base W4A4 trajectories of all 32 `design` prompts. Same seed 0; lr 1e-4 (E3's frozen value); Adam; sampler DPM-Solver++(2M), 20 steps, g 4.5.
+- If K = 2 is also over a limit, K = 2 is kept and the overrun is reported.
+- STE: forward = the deployed quantizer output (bit-identical); backward = identity. This equals x + stop_grad(Q(x) − x).
+- The step-1 check is `check`, extended to sampling with the **exported** untrained branch through the deployed `QLinearFB` path, which must be bitwise equal to base sampling.
+- Evaluation: bf16 references and base images for mjhq1k[256:288] are regenerated with the same generator (batch 1, seed = prompt index).
+- **Provenance note.** mjhq1k[256:288] was the confirmation set of follow-up E2 (tile-balanced rounding, branch `followup-act`).
+  It was not used by any branch-refit choice, so it is untouched for this pilot's purposes. It is not unused overall.
