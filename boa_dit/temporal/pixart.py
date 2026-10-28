@@ -701,13 +701,14 @@ def main_b():
     ap.add_argument("--feedback", action="store_true")
     ap.add_argument("--n", type=int, default=64)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--compress", default=None, choices=[None, "dct4"])
     ap.add_argument("--device", default="cuda:0")
     a = ap.parse_args()
     torch.cuda.set_device(a.device)
     os.makedirs(PCK, exist_ok=True)
     {"calib": lambda: calib_b(a.device), "b1": lambda: b1p(a.device), "arm": lambda: arm_b(a.kind, a.dither, a.device),
      "retable_lomin": lambda: retable_b(a.device, True),
-     "s3": lambda: arm_s3(a.kind, a.dither, a.feedback, a.device, a.n, a.tag)}[a.cmd]()
+     "s3": lambda: arm_s3(a.kind, a.dither, a.feedback, a.device, a.n, a.tag, a.compress)}[a.cmd]()
 
 
 # ================================================================================== stage 3 (rule_feedback.md), PixArt
@@ -716,9 +717,9 @@ class A8LinearFB(A8LinearB):
     u = x + s, ũ = clip(u) to [-ZΔ, (qmax - Z)Δ], q = Q(ũ) on codes 0..qmax, q̂ = bf16(q) (consumed), r⁰ = ũ - q̂,
     s = fp16(clamp(r⁰, ±Δ/2)). Clip error is never fed back."""
 
-    def __init__(self, W, bias, d, tab, offs, feedback=False):
+    def __init__(self, W, bias, d, tab, offs, feedback=False, U=None):
         super().__init__(W, bias, d, tab, offs)
-        self.feedback, self.r = feedback, None
+        self.feedback, self.r, self.U = feedback, None, U                     # U [tokens, k]: compressed spatial state (block 5)
         self.stats = torch.zeros(4, dtype=torch.float64)                    # clipped, clamped, elements, -
         self.clipE = torch.zeros(NSTEP // 4, 4, dtype=torch.float64)        # per 4-step bucket: nominal n, E, representable n, E
 
@@ -728,11 +729,14 @@ class A8LinearFB(A8LinearB):
         dt = x.dtype
         t = STATE.step
         xs = x.float()
-        if t == 0 or self.r is None or self.r.shape != xs.shape:
-            self.r = torch.zeros_like(xs, dtype=torch.float16)
+        shp = xs.shape if self.U is None or xs.shape[1] != self.U.shape[0] else (xs.shape[0], self.U.shape[1], xs.shape[2])
+        if t == 0 or self.r is None or tuple(self.r.shape) != tuple(shp):
+            self.r = torch.zeros(shp, device=xs.device, dtype=torch.float16)
         D, Z = self.D[t], self.Z[t]
         lo, hi, hi_rep = -Z * D, (self.qmax - 1 - Z) * D, (self.qmax - Z) * D     # nominal top / representable top (code qmax)
-        u = xs + self.r.float()                                               # u_t = x_t + s_{t-1}
+        comp = self.U is not None and tuple(shp) != tuple(xs.shape)
+        s_prev = torch.einsum("tk,rkc->rtc", self.U, self.r.float()) if comp else self.r.float()
+        u = xs + s_prev                                                       # u_t = x_t + s_{t-1}
         uc = torch.minimum(torch.maximum(u, lo), hi_rep)                      # ũ_t = clip to the representable range
         q = ACT.q_static(uc, D, Z, torch.zeros((), device=xs.device), self.qmax, hi_code=self.qmax)
         qh = q.to(torch.bfloat16).float()                                     # q̂_t: what the next linear consumes (bf16)
@@ -746,15 +750,23 @@ class A8LinearFB(A8LinearB):
         b = t // 4
         self.clipE[b] += torch.stack([(u != nom).sum().double(), (nom - u).double().pow(2).sum(),
                                       (u != uc).sum().double(), (uc - u).double().pow(2).sum()])
-        self.r = r.to(torch.float16)                                          # s_t: fp16, no damping
+        self.r = (torch.einsum("tk,rtc->rkc", self.U, r) if comp else r).to(torch.float16)   # s_t: fp16, no damping
         q = qh
         return F.linear(q.to(torch.bfloat16), self.W, self.bias).to(dt)
 
 
-def install_fb(tr, kind, dither="none", feedback=False):
+def dct4_basis(g, dev):
+    """orthonormal 2-D DCT-II modes (u, v) in {0,1}^2 on a g x g token grid (row-major), [g*g, 4]."""
+    i = torch.arange(g, dtype=torch.float64)
+    c = lambda f: (torch.ones(g, dtype=torch.float64) / g ** 0.5 if f == 0 else (2.0 / g) ** 0.5 * torch.cos(torch.pi * (2 * i + 1) * f / (2 * g)))
+    return torch.stack([torch.outer(c(u), c(v)).flatten() for u in (0, 1) for v in (0, 1)], 1).float().to(dev)
+
+
+def install_fb(tr, kind, dither="none", feedback=False, compress=None):
     tabs = torch.load(bpath(kind), map_location="cpu")
     keys = sorted(tabs)
     dev = next(tr.parameters()).device
+    U = dct4_basis(64, dev) if compress == "dct4" else None
     mods = []
     for l, blk in enumerate(tr.transformer_blocks):
         for ln in QLAYERS:
@@ -762,7 +774,7 @@ def install_fb(tr, kind, dither="none", feedback=False):
             lin = WC.block_linear(blk, ln)
             tb = tabs[key]
             fr = ACT.offset_frac(dither, NSTEP, keys.index(key))
-            m = A8LinearFB(lin.weight.data, lin.bias, None, tb, fr * tb["D"], feedback).to(dev)
+            m = A8LinearFB(lin.weight.data, lin.bias, None, tb, fr * tb["D"], feedback, U).to(dev)
             set_module(blk, ln, m)
             mods.append(m)
     return mods
@@ -822,14 +834,14 @@ def net_diag_seq(tr, dev, mode):
 
 
 @torch.no_grad()
-def arm_s3(kind, dither, feedback, dev, n=64, tag=""):
-    name = f"s3_{kind}_{'feedback' if feedback else dither}" + (f"_{tag}" if tag else "")
+def arm_s3(kind, dither, feedback, dev, n=64, tag="", compress=None):
+    name = f"s3_{kind}_{'feedback' if feedback else dither}" + (f"_{compress}" if compress else "") + (f"_{tag}" if tag else "")
     with Run(STAGE, f"arm_{name}", dev, {"kind": kind, "dither": dither, "feedback": feedback, "n": n, "batch": 1}) as run:
         ref = "bf16_b1" + (f"_{tag}" if tag else "")
         if not os.path.exists(os.path.join(img_dir(ref), f"{(n - 1) // CHUNK * CHUNK:05d}.pt")):
             gen_b1(ref, WC.load_pipe(dev), dev, n)                            # references at the same batch layout
         pipe = WC.load_pipe(dev)
-        mods = install_fb(pipe.transformer, kind, dither, feedback)
+        mods = install_fb(pipe.transformer, kind, dither, feedback, compress)
         keys_all = [f"{l}.{ln}" for l in range(28) for ln in QLAYERS]
         STATE.mode = "static"
         gen_b1(name, pipe, dev, n)

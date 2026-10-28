@@ -117,30 +117,32 @@ Called from `Quantize._fn`, whose return value `st["qh"]` is what the next linea
 ```
 
 ### PixArt (`A8LinearFB.forward`)
-`boa_dit/temporal/pixart.py` lines 731–751:
+`boa_dit/temporal/pixart.py` lines 733–755:
 
 ```python
- 731          if t == 0 or self.r is None or self.r.shape != xs.shape:
- 732              self.r = torch.zeros_like(xs, dtype=torch.float16)
- 733          D, Z = self.D[t], self.Z[t]
- 734          lo, hi, hi_rep = -Z * D, (self.qmax - 1 - Z) * D, (self.qmax - Z) * D     # nominal top / representable top (code qmax)
- 735          u = xs + self.r.float()                                               # u_t = x_t + s_{t-1}
- 736          uc = torch.minimum(torch.maximum(u, lo), hi_rep)                      # ũ_t = clip to the representable range
- 737          q = ACT.q_static(uc, D, Z, torch.zeros((), device=xs.device), self.qmax, hi_code=self.qmax)
- 738          qh = q.to(torch.bfloat16).float()                                     # q̂_t: what the next linear consumes (bf16)
- 739          r0 = uc - qh                                                          # r⁰_t: residual of the effective quantizer
- 740          r = r0.clamp(-D / 2, D / 2)                                           # guard clamp (binding counted)
- 741          nom = torch.minimum(torch.maximum(u, lo), hi)
- 742          if self.stats.device != xs.device:                                    # counters on the GPU: no per-call sync
- 743              self.stats, self.clipE = self.stats.to(xs.device), self.clipE.to(xs.device)
- 744          self.stats += torch.stack([(u != uc).sum().double(), (r != r0).sum().double(),
- 745                                     torch.tensor(float(u.numel()), device=xs.device, dtype=torch.float64), torch.zeros((), device=xs.device, dtype=torch.float64)])
- 746          b = t // 4
- 747          self.clipE[b] += torch.stack([(u != nom).sum().double(), (nom - u).double().pow(2).sum(),
- 748                                        (u != uc).sum().double(), (uc - u).double().pow(2).sum()])
- 749          self.r = r.to(torch.float16)                                          # s_t: fp16, no damping
- 750          q = qh
- 751          return F.linear(q.to(torch.bfloat16), self.W, self.bias).to(dt)
+ 733          if t == 0 or self.r is None or tuple(self.r.shape) != tuple(shp):
+ 734              self.r = torch.zeros(shp, device=xs.device, dtype=torch.float16)
+ 735          D, Z = self.D[t], self.Z[t]
+ 736          lo, hi, hi_rep = -Z * D, (self.qmax - 1 - Z) * D, (self.qmax - Z) * D     # nominal top / representable top (code qmax)
+ 737          comp = self.U is not None and tuple(shp) != tuple(xs.shape)
+ 738          s_prev = torch.einsum("tk,rkc->rtc", self.U, self.r.float()) if comp else self.r.float()
+ 739          u = xs + s_prev                                                       # u_t = x_t + s_{t-1}
+ 740          uc = torch.minimum(torch.maximum(u, lo), hi_rep)                      # ũ_t = clip to the representable range
+ 741          q = ACT.q_static(uc, D, Z, torch.zeros((), device=xs.device), self.qmax, hi_code=self.qmax)
+ 742          qh = q.to(torch.bfloat16).float()                                     # q̂_t: what the next linear consumes (bf16)
+ 743          r0 = uc - qh                                                          # r⁰_t: residual of the effective quantizer
+ 744          r = r0.clamp(-D / 2, D / 2)                                           # guard clamp (binding counted)
+ 745          nom = torch.minimum(torch.maximum(u, lo), hi)
+ 746          if self.stats.device != xs.device:                                    # counters on the GPU: no per-call sync
+ 747              self.stats, self.clipE = self.stats.to(xs.device), self.clipE.to(xs.device)
+ 748          self.stats += torch.stack([(u != uc).sum().double(), (r != r0).sum().double(),
+ 749                                     torch.tensor(float(u.numel()), device=xs.device, dtype=torch.float64), torch.zeros((), device=xs.device, dtype=torch.float64)])
+ 750          b = t // 4
+ 751          self.clipE[b] += torch.stack([(u != nom).sum().double(), (nom - u).double().pow(2).sum(),
+ 752                                        (u != uc).sum().double(), (uc - u).double().pow(2).sum()])
+ 753          self.r = (torch.einsum("tk,rtc->rkc", self.U, r) if comp else r).to(torch.float16)   # s_t: fp16, no damping
+ 754          q = qh
+ 755          return F.linear(q.to(torch.bfloat16), self.W, self.bias).to(dt)
 ```
 
 **What is fed forward:** s_t = fp16(clamp(r⁰_t, −Δ_t/2, +Δ_t/2)), with r⁰_t = ũ_t − q̂_t the rounding residual of the **effective** quantizer. q̂_t is the value the next linear consumes: fp16 on DiT (autocast), bf16 on PixArt. The state resets to 0 at step 0 of every sampling batch. There is no damping factor (×1). The clip error ũ_t − u_t is never fed back. The clip interval in the feedback path is the **representable** range [−ZΔ, (q_max − Z)Δ], so the spare code q_max is usable. The guard clamp can bind, because a cast can push |ũ − q̂| above Δ/2; its binding rate is measured, not assumed.

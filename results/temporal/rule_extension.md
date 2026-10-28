@@ -152,3 +152,11 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
      the many-step explanation directly. Read: the relative improvement of feedback over the single table at 10 vs 50
      steps (and 20 from stage 3), each with its paired CI over 16 prompts. The many-step explanation predicts a larger
      relative gain at more steps.
+- 2026-10-28, E4 result: feedback vs single at 10 steps −10.0% [−20.1, +2.5] and at 50 steps −14.0% [−19.4, −7.4]
+  (16 prompts; 20-step stage 3: −13.3%). The direction matches the many-step explanation; the CIs overlap.
+  **Block 5, recorded before its result:** DCT-4 compressed feedback on PixArt (orthonormal 2-D DCT-II modes
+  (u, v) ∈ {0, 1}² on the 64 × 64 token grid, per channel and CFG row; state 4 × C), W16A8 single table, MJHQ `[:64]`,
+  batch 1, compared with the stage-3 single-table and full-feedback arms. Hypothesis (from the stage-3 band shift):
+  feedback's LPIPS regression comes from added high-frequency per-step error. Read: the hypothesis is supported iff
+  DCT-4's ΔLPIPS vs the single table is < full feedback's (+0.0155) with the paired CI of (DCT-4 − full) LPIPS below
+  0, while it keeps a latent gain vs the single table with CI > 0.
