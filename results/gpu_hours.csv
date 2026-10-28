@@ -407,3 +407,4 @@ temporal,ext_e2_confirm_full,cuda:0,2026-10-28T00:14:16Z,2026-10-28T00:33:54Z,0.
 temporal,ext_e2_confirm_dct4,cuda:0,2026-10-28T00:33:54Z,2026-10-28T00:54:09Z,0.3375
 temporal,ext_fp_reference_confirm,cuda:0,2026-10-28T00:54:36Z,2026-10-28T00:54:36Z,0.0000
 temporal,ext_e5_confirm_attn,cuda:0,2026-10-28T00:54:46Z,2026-10-28T01:07:19Z,0.2091
+temporal,ext_e1_w16a4_base_screen,cuda:0,2026-10-28T01:07:45Z,2026-10-28T01:23:54Z,0.2692
