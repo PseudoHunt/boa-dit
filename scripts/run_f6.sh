@@ -7,6 +7,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q && echo 
 step() { local n=$1; shift; "$@" > logs/f6_$n.log 2>&1; local rc=$?; grep -v -i -E "warn|it/s\]" logs/f6_$n.log | tail -8; ck "$n (rc $rc)"; return $rc; }
 until grep -q EARLY_DONE logs/f6_early.log 2>/dev/null; do sleep 60; done
 python -c "import json;assert json.load(open('results/dns/checks.json'))['pass']" || { echo "DNS CHECKS NOT PASSED: stop"; exit 6; }
+(cd /home/boa-dit-e3c && python scripts/e3c_fidboot.py > logs/f5_fidboot.log 2>&1) & BOOT=$!   # E3C bootstrap: CPU, during untimed DNS work
 step design python -m boa_dit.dns.run design
 for a in dns qdrift; do step sample_${a}_paired python -m boa_dit.dns.run sample --arm $a --set paired; done
 for a in dns qdrift; do step sample_${a}_fid python -m boa_dit.dns.run sample --arm $a --set fid; done
@@ -19,4 +20,7 @@ else
 fi
 step score python -m boa_dit.dns.run score
 step fidboot python scripts/dns_fidboot.py
+wait $BOOT; (cd /home/boa-dit-e3c && python scripts/make_e3c.py >/dev/null 2>&1 && git add results/e3c && git commit -qm "f5: E3C FID bootstrap and report
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" && git push -q && echo "PUSHED: e3c fidboot + report")
 echo F6_DONE
