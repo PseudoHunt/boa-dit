@@ -108,3 +108,11 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
     [−0.0251, +0.0065]).
   - The k-curve is not monotone in k between 4 and full. The recommended-setting clause does not apply, so the D3
     lower-bound note is not needed.
+- 2026-10-28, **D3 result** (`stage3/fid2000_dit_bp_single8_feedback_dct4.json`): DiT FID-2k (seeds 0–1999) for DCT-4
+  feedback = **26.18**. For comparison: single table 26.98, full feedback 26.07. These are single runs without CIs.
+  The run resumed from its 128-image checkpoint (deterministic per-seed sampling, same seeds).
+  - DiT set 1 FID: full and DCT-4 feedback are both ≈ 0.8–0.9 below single. Set 2 (D5) is unrun, so the sign is
+    unconfirmed.
+- 2026-10-28, **budget close:** c3 total 3.358 A30-h against the 3.0 cap. **Overrun 0.358 h, approved by the user**
+  (approval "≈ 0.3 h, report as such"; the realized overrun is 0.058 h above that figure, under the queue's 3.45 h hard
+  stop). §5 is unrun in this allocation (dropped by the user); D4, D5 and PixArt FID-2k are unrun by cost.
