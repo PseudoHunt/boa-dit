@@ -85,3 +85,10 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
     after DCT-16 is ≈ 0.95 h against ≈ 1.3 h to finish D3, so **D3 is reported unrun** (cost 1.38 h total) unless the
     measured spend leaves room. §5 runs afterwards with whatever budget is left (rank → η → INT4 → budget → DCT-4 ref,
     each behind the guard).
+- 2026-10-28, **user instruction (before the DCT-16 read): §5 is dropped from this allocation; D3 is resumed instead.**
+  - Order: DCT-16 finishes as set up → score → D3 resumes from its 128/2000-image checkpoint and completes.
+  - Projected end ≈ 3.37 h. **A ≈ 0.3 h overrun of the 3.0 h cap is approved by the user** and is reported as such; the
+    queue hard-stops D3 if the projection at launch exceeds 3.45 h.
+  - §5 (INT4 state, η, site budget) is **unrun in this allocation**; `mem.py` is written but untested on GPU.
+  - If DCT-16 passes its read, the report states that D3 is the **DCT-4** arm, so its FID is a lower bound on what the
+    recommended band-limited setting would get on DiT.
