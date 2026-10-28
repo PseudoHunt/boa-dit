@@ -219,7 +219,7 @@ def band_energy(dd, mask):
 
 
 # ---------------------------------------------------------------------------------------------------------- training
-def train(dev, arm, lam, lr, hours, tag, seed=0):
+def train(dev, arm, lam, lr, hours, tag, seed=0, max_updates=None):
     """matched wall-clock training of one arm from the heig-8 carry; returns the exported carry path and a log."""
     C = torch.load(os.path.join(CK, "cache.pt"))
     d = make_diffusion(T)
@@ -234,7 +234,7 @@ def train(dev, arm, lam, lr, hours, tag, seed=0):
     lowm = LOW.to(dev)
     g = torch.Generator().manual_seed(seed)
     log, n_up, t_start = [], 0, time.time()
-    while time.time() - t_start < hours * 3600:
+    while time.time() - t_start < hours * 3600 and (max_updates is None or n_up < max_updates):
         si = torch.randint(0, len(X), (B,), generator=g)
         i0 = int(torch.randint(0, T, (1,), generator=g))                      # one start step per update (shared k)
         k = min(K, T - i0)
@@ -265,7 +265,7 @@ def train(dev, arm, lam, lr, hours, tag, seed=0):
     carry.remove()
     path = os.path.join(CK, f"carry_{tag}.pt")
     atomic_torch_save(exp, path)
-    return path, {"arm": arm, "lam": lam, "lr": lr, "hours": hours, "updates": n_up, "train_seconds": time.time() - t_start, "log": log}
+    return path, {"arm": arm, "lam": lam, "lr": lr, "hours": hours, "max_updates": max_updates, "seed": seed, "updates": n_up, "train_seconds": time.time() - t_start, "log": log}
 
 
 def profile(dev):
