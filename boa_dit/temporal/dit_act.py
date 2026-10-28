@@ -106,10 +106,12 @@ class Quantize:
     IDENT_KEY = "b13.mlp.fc1"
 
     def __init__(self, model, kind, dither, dev, mode="static", feedback=False, guard=True, log=True, compress=None,
-                 fb_types=None):
+                 fb_types=None, state_bits=16, full_sites=None):
         tabs = torch.load(bpath(kind), map_location="cpu")
         self.U = None if compress is None else token_basis(compress, dev)      # extension E2: k-dim spatial state
         self.fb_types = fb_types                                              # extension E5: feedback only at these types
+        self.state_bits = state_bits                                          # c3 §5: 4 = full state stored as INT4 codes of Δ/16
+        self.full_sites = full_sites                                          # c3 §5: full state at these sites, compressed elsewhere
         self.sm, self.guard, self.log = load_smooth(dev), guard, log           # log=False: no counters (FID runs), same arithmetic
         self.disc = {}                                                        # guard: discarded residual energy per site
         keys = sorted(tabs)
@@ -142,10 +144,11 @@ class Quantize:
     def fb_step(self, key, t, xs, D, Z, qm, lo, s_c=None):
         """One feedback quantization step at site `key` (the only place the feedback arithmetic lives). xs is in the
         smoothed space (x/s) when the site is smoothed; the state lives in that space too."""
-        shp = xs.shape if self.U is None else (xs.shape[0], self.U.shape[1], xs.shape[2])
+        U = None if (self.full_sites is not None and key in self.full_sites) else self.U
+        shp = xs.shape if U is None else (xs.shape[0], U.shape[1], xs.shape[2])
         if t == 0 or key not in self.r or tuple(self.r[key].shape) != tuple(shp):
             self.r[key] = torch.zeros(shp, device=xs.device, dtype=torch.float16)   # state reset at step 0 (per row: per sample, per branch)
-        s_prev = self.r[key].float() if self.U is None else torch.einsum("tk,rkc->rtc", self.U, self.r[key].float())
+        s_prev = self.r[key].float() if U is None else torch.einsum("tk,rkc->rtc", U, self.r[key].float())
         hi_rep = (qm - Z[t]) * D[t]                                           # representable top: code qmax (spare code usable)
         if self.guard:                                                        # feedback-induced clipping guard
             xcl = torch.minimum(torch.maximum(xs, lo), hi_rep)                # x clipped exactly as the baseline would
@@ -163,9 +166,14 @@ class Quantize:
         qh = consumed if s_c is None else consumed / s_c                      # q̂_t in the quantizer's (smoothed) space
         r0 = uc - qh                                                          # r⁰_t: rounding residual of the effective quantizer
         r = r0.clamp(-D[t] / 2, D[t] / 2)                                     # guard clamp (checked: binding counted)
-        s = r.to(torch.float16) if self.U is None else torch.einsum("tk,rtc->rkc", self.U, r).to(torch.float16)
+        if U is not None:
+            s = torch.einsum("tk,rtc->rkc", U, r).to(torch.float16)
+        elif self.state_bits == 4:                                            # signed 4-bit code in units of Δ/16 (r is within ±Δ/2)
+            s = (torch.round(r / (D[t] / 16)).clamp(-8, 7) * (D[t] / 16)).to(torch.float16)
+        else:
+            s = r.to(torch.float16)
         self.r[key] = s                                                       # s_t: stored state, fp16, no damping
-        s_out = s.float() if self.U is None else torch.einsum("tk,rkc->rtc", self.U, s.float())
+        s_out = s.float() if U is None else torch.einsum("tk,rkc->rtc", U, s.float())
         return {"s_prev": s_prev, "u": u, "uc": uc, "q": q, "qh": qh, "r0": r0, "r": r, "s": s_out, "hi_rep": hi_rep,
                 "d": d, "consumed": consumed, "xs": xs}
 
@@ -188,7 +196,8 @@ class Quantize:
 
     def state_bytes(self):
         """persistent residual memory: bytes of the allocated state tensors (all sites, all rows incl. both CFG halves)."""
-        return sum(v.numel() * v.element_size() for v in self.r.values())
+        full = lambda k: self.U is None or (self.full_sites is not None and k in self.full_sites)
+        return sum(v.numel() * (0.5 if (self.state_bits == 4 and full(k)) else v.element_size()) for k, v in self.r.items())
 
     def clamp_rate(self):
         return float(self.clamp[:, 0].sum() / self.clamp[:, 1].sum().clamp_min(1))
