@@ -1,0 +1,6 @@
+{
+ "c1_bitexact_vs_heig8": true,
+ "output_vs_weight_scaling_max_rel": 4.146909873270488e-07,
+ "symmetric_average_max_rel": 4.147437948631705e-08,
+ "all_pass": true
+}
