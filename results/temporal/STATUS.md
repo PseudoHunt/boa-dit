@@ -1,6 +1,6 @@
-# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-28 02:37 UTC)
+# Temporal phase: run status (auto-written by scripts/temporal_checkpoint.sh, 2026-10-28 02:55 UTC)
 
-Last checkpoint: block 4: ext_e4_stepcount (rc 1). Logged stage-`temporal` compute: 18.92 A30-h. Hard stop lifted (rule_feedback.md).
+Last checkpoint: block 4: E4 step count (retry after name-clash fix). Logged stage-`temporal` compute: 19.21 A30-h. Hard stop lifted (rule_feedback.md).
 
 Run from the repo root on a machine set up as in README (weights in ckpt/, PixArt in /home/jl_fs/pixart_sigma_1024). The calibration tables, smoothing scales and caches live under ckpt/temporal/ (not in git). On a fresh machine, regenerate them first: `python -m boa_dit.temporal.dit_act calib` (DiT) and `python -m boa_dit.temporal.pixart setup` plus `python -m boa_dit.temporal.pixart_b calib` then `retable_lomin` (PixArt).
 
