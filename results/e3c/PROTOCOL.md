@@ -161,3 +161,8 @@ User text (verbatim):
 - Evaluation: bf16 references and base images for mjhq1k[256:288] are regenerated with the same generator (batch 1, seed = prompt index).
 - **Provenance note.** mjhq1k[256:288] was the confirmation set of follow-up E2 (tile-balanced rounding, branch `followup-act`).
   It was not used by any branch-refit choice, so it is untouched for this pilot's purposes. It is not unused overall.
+
+### 2026-10-28 22:40: deviation, CPU contention during C2L s0
+A CPU-only FID bootstrap (numpy, all cores) ran alongside the first ~37 min of the time-matched C2L s0 run. It slowed training to ≈ 0.74
+updates/s, against ≈ 0.78 for the C2 runs. The bootstrap was stopped at 22:40 and moved to after all training. C2L s0's update count is
+reported, and it is flagged in the report as having received ≈ 4% fewer updates than an uncontended run would.
