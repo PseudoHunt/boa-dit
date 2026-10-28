@@ -1,0 +1,18 @@
+{
+ "lam0_adjacent_mismatch": 0,
+ "lam0_adjacent_ties": 1,
+ "clipped": 0,
+ "adjacent_ms_per_call": 13.682365417480469,
+ "adjacent_peak_temp_MiB": 497.25390625,
+ "lam0_random_mismatch": 0,
+ "lam0_random_ties": 1,
+ "random_ms_per_call": 12.593793869018555,
+ "random_peak_temp_MiB": 497.28515625,
+ "nearest_ms_per_call": 0.3957033157348633,
+ "lam0.25_tiles_worse_than_nearest": 0,
+ "lam0.25_energy_ratio_vs_nearest": 1.0473964214324951,
+ "lam1.0_tiles_worse_than_nearest": 0,
+ "lam1.0_energy_ratio_vs_nearest": 1.1427476406097412,
+ "lam4.0_tiles_worse_than_nearest": 0,
+ "lam4.0_energy_ratio_vs_nearest": 1.3205405473709106
+}
