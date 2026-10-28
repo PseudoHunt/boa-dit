@@ -34,11 +34,22 @@ OUT = os.path.join(RESULTS, "e3c", "pixart")
 CK = os.path.join(CKPT_DIR, "e3c", "pixart")
 QBASE = os.path.join(WC.CK, f"q_{EXT.BASE}.pt")
 TRAIN = list(range(600, 664))                    # mjhq1k indices (untouched)
+TRAIN_SET = "mjhq1k"
 DESIGN = list(range(24, 32))                     # `design` prompt set indices (E2 used design[0:24])
 SETS = {"mjhq64": (0, 64), "confirm": (288, 352)}
 STEPS, G, K = WC.STEPS, WC.GUIDANCE, 5
 LRS, LAMS = [1e-4, 3e-4], [0.5, 2.0]
 ACK = {"resolution": None, "aspect_ratio": None}
+TAG = ""
+
+
+def configure_pilot():
+    """Part 3: training states from all 32 design prompts; separate outputs; K from the pilot profile once it exists."""
+    global OUT, CK, TRAIN, TRAIN_SET, TAG, K
+    OUT, CK = os.path.join(RESULTS, "e3c", "pixart_pilot"), os.path.join(CKPT_DIR, "e3c", "pixart_pilot")
+    TRAIN, TRAIN_SET, TAG = list(range(32)), "design", "pilot"
+    f = os.path.join(OUT, "profile.json")
+    K = json.load(open(f))["K"] if os.path.exists(f) else 3
 
 
 # --------------------------------------------------------------------------------------------- trainable branch
@@ -166,7 +177,7 @@ def setup(dev, trainable=True):
 
 # --------------------------------------------------------------------------------------------- check, cache, profile
 def check(dev):
-    with Run(STAGE, "e3c_px_check", dev, {}) as run:
+    with Run(STAGE, f"e3c_px{TAG}_check", dev, {"K": K}) as run:
         e = WC.load_embeds("mjhq1k")
         pipe = WC.load_pipe(dev)
         idx = [TRAIN[0]]
@@ -198,8 +209,12 @@ def check(dev):
         res["peak_mem_GiB"] = torch.cuda.max_memory_allocated() / 2 ** 30
         exp = export(mods)
         qb = torch.load(QBASE, map_location="cpu")
+        install_q(pipe.transformer, exp)
+        with torch.no_grad():
+            res["exported_branch_sampling_bitwise"] = bool(torch.equal(run_loop(pipe, pipe.transformer, lat0, ehs, mask, dev), ownq))
+            res["exported_branch_pipeline_bitwise"] = bool(torch.equal(WC.sample(pipe, e, idx, dev), refq))
         res["export_bitwise_untrained"] = all(torch.equal(exp[k]["L1"], qb[k]["L1"]) and torch.equal(exp[k]["L2"], qb[k]["L2"]) for k in qb)
-        res["pass"] = (res["own_loop_bitwise_w4a4"] and res["untrained_qlineart_bitwise"] and res["export_bitwise_untrained"]
+        res["pass"] = (res["own_loop_bitwise_w4a4"] and res["exported_branch_sampling_bitwise"] and res["exported_branch_pipeline_bitwise"] and res["untrained_qlineart_bitwise"] and res["export_bitwise_untrained"]
                        and max(v for k, v in res.items() if k.startswith("rollout")) <= 1e-3 and res["grad_block0_L1"] > 0)
         res.update(run.record())
     os.makedirs(OUT, exist_ok=True)
@@ -212,12 +227,12 @@ def check(dev):
 @torch.no_grad()
 def cache(dev):
     os.makedirs(CK, exist_ok=True)
-    with Run(STAGE, "e3c_px_cache", dev, {"train": [TRAIN[0], TRAIN[-1]], "design": DESIGN}) as run:
+    with Run(STAGE, f"e3c_px{TAG}_cache", dev, {"train": [TRAIN[0], TRAIN[-1]], "train_set": TRAIN_SET, "design": DESIGN, "K": K}) as run:
         pipe = WC.load_pipe(dev)
         install_q(pipe.transformer, torch.load(QBASE, map_location="cpu"))
         tch = teacher(dev)
         out = {}
-        for name, setn, idx in (("train", "mjhq1k", TRAIN), ("design", "design", DESIGN)):
+        for name, setn, idx in (("train", TRAIN_SET, TRAIN), ("design", "design", DESIGN)):
             e = WC.load_embeds(setn)
             X, H, X0 = [], [], []
             for j in idx:
@@ -231,7 +246,7 @@ def cache(dev):
             if X0:
                 out[name]["x0fp"] = torch.cat(X0)
         # normalization constants on the first 4 training prompts: local, rollout (full) per start step
-        e = WC.load_embeds("mjhq1k")
+        e = WC.load_embeds(TRAIN_SET)
         nl, nr = torch.zeros(STEPS), torch.zeros(STEPS)
         for n, j in enumerate(TRAIN[:4]):
             ehs, mask = emb(e, [j], dev)
@@ -259,7 +274,7 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
     pipe.transformer.enable_gradient_checkpointing()
     params = [p for m in mods.values() for p in (m.L1p, m.L2p)]
     opt = torch.optim.Adam(params, lr=lr)
-    e = WC.load_embeds("mjhq1k")
+    e = WC.load_embeds(C["train"]["set"])
     X, H = C["train"]["x"], C["train"]["hist"]
     nl, nr = C["norm"]["loc"], C["norm"]["roll"]
     g = torch.Generator().manual_seed(seed)
@@ -268,7 +283,7 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
         n = int(torch.randint(0, len(X), (1,), generator=g))
         i = int(torch.randint(0, STEPS, (1,), generator=g))
         k = min(K, STEPS - i)
-        ehs, mask = emb(e, [TRAIN[n]], dev)
+        ehs, mask = emb(e, [C["train"]["idx"][n]], dev)
         x, h = X[n, i:i + 1].to(dev), (None if i == 0 else H[n, i:i + 1].to(dev))
         with torch.no_grad():
             et, xt = rollout(pipe, tch, x, h, i, 1 if arm == "P1" else k, ehs, mask, dev)
@@ -298,7 +313,7 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
 
 
 def profile(dev):
-    with Run(STAGE, "e3c_px_profile", dev, {"K": K}) as run:
+    with Run(STAGE, f"e3c_px{TAG}_profile", dev, {"K": K}) as run:
         pipe, _ = setup(dev, trainable=False)
         tch = teacher(dev)
         res = {}
@@ -432,21 +447,92 @@ def gen(dev, name, qpath, lo, hi):
         run.record()
 
 
+# --------------------------------------------------------------------------------------------- Part 3 pilot (user spec)
+PILOT_SET = (256, 288)
+
+
+def pilot_profile(dev):
+    """one-update timing at K = 3 (then 2 if > 3 s or > 20 GiB); writes pilot K into profile.json."""
+    global K
+    pipe, _ = setup(dev, trainable=False)
+    tch = teacher(dev)
+    res = {}
+    with Run(STAGE, "e3c_pxpilot_profile", dev, {}) as run:
+        for k in (3, 2):
+            K = k
+            torch.cuda.reset_peak_memory_stats()
+            _, lg = train(dev, "P2", 0.5, 1e-4, 90 / 3600, f"pilot_profile_K{k}", pipe=pipe, tch=tch)
+            sp = lg["train_seconds"] / max(lg["updates"], 1)
+            res[f"K{k}"] = {"sec_per_update": sp, "updates_in_90s": lg["updates"], "peak_mem_GiB": torch.cuda.max_memory_allocated() / 2 ** 30}
+            print(f"  K={k}: {sp:.2f} s/update, peak {res[f'K{k}']['peak_mem_GiB']:.1f} GiB", flush=True)
+            if sp <= 3.0 and res[f"K{k}"]["peak_mem_GiB"] <= 20.0:
+                break
+        res["K"] = K
+        res["rule"] = "K=3 unless an update > 3 s or memory > 20 GiB, then K=2 (kept even if still over; reported)"
+        torch.cuda.reset_peak_memory_stats()
+        _, lg = train(dev, "P1", 0.0, 1e-4, 60 / 3600, "pilot_profile_P1", pipe=pipe, tch=tch)
+        res["P1_sec_per_update"] = lg["train_seconds"] / max(lg["updates"], 1)
+        res.update(run.record())
+    atomic_write_json(os.path.join(OUT, "profile.json"), res)
+
+
+def pilot_final(dev):
+    global K
+    K = json.load(open(os.path.join(OUT, "profile.json")))["K"]
+    pipe, _ = setup(dev, trainable=False)
+    tch = teacher(dev)
+    for arm in ("P1", "P2"):
+        f = os.path.join(OUT, f"train_{arm}.json")
+        if os.path.exists(f):
+            continue
+        lam = 0.0 if arm == "P1" else 0.5
+        with Run(STAGE, f"e3c_pxpilot_train_{arm}", dev, {"lam": lam, "lr": 1e-4, "hours": 0.4, "K": K, "seed": 0}) as run:
+            p, lg = train(dev, arm, lam, 1e-4, 0.4, f"pilot_{arm}", pipe=pipe, tch=tch)
+            lg.update({"q": p, "K": K, **run.record()})
+        atomic_write_json(f, lg)
+
+
+@torch.no_grad()
+def pilot_score(dev):
+    import lpips
+    net = lpips.LPIPS(net="vgg", verbose=False).to(dev).eval()
+    lo, hi = PILOT_SET
+    names = {"ref": "pilot_bf16_256", "base": "pilot_base_256", "C1": "pilot_C1_256", "C2": "pilot_C2_256"}
+    res = {}
+    with Run(STAGE, "e3c_pxpilot_score", dev, {}) as run:
+        ri, rl = EXT.load(names["ref"], lo, hi)
+        for arm in ("base", "C1", "C2"):
+            qi, ql = EXT.load(names[arm], lo, hi)
+            ps, lp = [], []
+            for i in range(len(ri)):
+                a, b = ri[i:i + 1].to(dev).float(), qi[i:i + 1].to(dev).float()
+                ps.append(float(10 * torch.log10(255.0 ** 2 / (a - b).pow(2).mean().clamp_min(1e-10))))
+                lp.append(float(net(a / 127.5 - 1, b / 127.5 - 1).flatten()[0]))
+            res[arm] = {"psnr": ps, "lpips": lp, "latent": ((ql - rl).flatten(1).pow(2).sum(1) / rl.flatten(1).pow(2).sum(1)).tolist()}
+            print(f"  {arm}: PSNR {np.mean(ps):.2f} LPIPS {np.mean(lp):.4f} latent {np.mean(res[arm]['latent']):.4f}", flush=True)
+        res["run"] = run.record()
+    atomic_write_json(os.path.join(OUT, "scores.json"), res)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["check", "cache", "profile", "plan", "design", "final", "gen", "score"])
+    ap.add_argument("cmd", choices=["check", "cache", "profile", "plan", "design", "final", "gen", "score", "pilot_profile", "pilot_final", "pilot_score"])
+    ap.add_argument("--pilot", action="store_true", help="Part 3: design prompts as training states, outputs under pixart_pilot/")
     ap.add_argument("--name")
     ap.add_argument("--q")
     ap.add_argument("--lo", type=int)
     ap.add_argument("--hi", type=int)
     a = ap.parse_args()
+    if a.pilot or a.cmd.startswith("pilot"):
+        configure_pilot()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     os.makedirs(OUT, exist_ok=True)
     if a.cmd == "gen":
         gen(dev, a.name, a.q, a.lo, a.hi)
     else:
-        {"check": check, "cache": cache, "profile": profile, "plan": plan, "design": design, "final": final, "score": score}[a.cmd](dev)
+        {"check": check, "cache": cache, "profile": profile, "plan": plan, "design": design, "final": final, "score": score,
+         "pilot_profile": pilot_profile, "pilot_final": pilot_final, "pilot_score": pilot_score}[a.cmd](dev)
 
 
 if __name__ == "__main__":
