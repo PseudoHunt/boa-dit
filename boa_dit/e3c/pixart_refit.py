@@ -381,7 +381,46 @@ def final(dev):
         atomic_write_json(f, lg)
 
 
+def plan(dev):
+    """T_train rule (PROTOCOL Part 2 amendment): 1.0 h, raised to give 150 P2 updates if needed, capped at 2.0 h."""
+    prof = json.load(open(os.path.join(OUT, "profile.json")))
+    sp = prof["P2"]["sec_per_update"]
+    tt = 1.0 if 3600 / sp >= 150 else min(2.0, 150 * sp / 3600)
+    res = {"T_train_hours": round(tt, 3), "P1_sec_per_update": prof["P1"]["sec_per_update"], "P2_sec_per_update": sp,
+           "expected_updates": {"P1": int(tt * 3600 / prof["P1"]["sec_per_update"]), "P2": int(tt * 3600 / sp)}}
+    atomic_write_json(os.path.join(OUT, "plan.json"), res)
+    print(res, flush=True)
+
+
 # --------------------------------------------------------------------------------------------- generation and scores
+NAMES = {"mjhq64": {"ref": "bf16_b1", "P0": "e1_w4a4_base_screen", "P1": "p5_P1_mjhq64", "P2": "p5_P2_mjhq64"},
+         "confirm": {"ref": "p5_bf16_c288", "P0": "p5_P0_c288", "P1": "p5_P1_c288", "P2": "p5_P2_c288"}}
+
+
+@torch.no_grad()
+def score(dev):
+    import lpips
+    net = lpips.LPIPS(net="vgg", verbose=False).to(dev).eval()
+    res = {}
+    with Run(STAGE, "e3c_px_score", dev, {}) as run:
+        for setn, (lo, hi) in SETS.items():
+            ri, rl = EXT.load(NAMES[setn]["ref"], lo, hi)
+            res[setn] = {}
+            for arm in ("P0", "P1", "P2"):
+                qi, ql = EXT.load(NAMES[setn][arm], lo, hi)
+                ps, lp = [], []
+                for i in range(len(ri)):
+                    a, b = ri[i:i + 1].to(dev).float(), qi[i:i + 1].to(dev).float()
+                    ps.append(float(10 * torch.log10(255.0 ** 2 / (a - b).pow(2).mean().clamp_min(1e-10))))
+                    lp.append(float(net(a / 127.5 - 1, b / 127.5 - 1).flatten()[0]))
+                rel = ((ql - rl).flatten(1).pow(2).sum(1) / rl.flatten(1).pow(2).sum(1)).tolist()
+                res[setn][arm] = {"psnr": ps, "lpips": lp, "latent": rel}
+                print(f"  {setn} {arm}: PSNR {np.mean(ps):.2f} LPIPS {np.mean(lp):.4f} latent {np.mean(rel):.4f}", flush=True)
+        res["run"] = run.record()
+    atomic_write_json(os.path.join(OUT, "scores.json"), res)
+
+
+# ---------------------------------------------------------------------------------------------
 @torch.no_grad()
 def gen(dev, name, qpath, lo, hi):
     """batch-1 images + latents through ext_w4a4.gen (the generator used for every earlier MJHQ-64 arm). qpath 'bf16' = reference."""
@@ -395,7 +434,7 @@ def gen(dev, name, qpath, lo, hi):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["check", "cache", "profile", "design", "final", "gen"])
+    ap.add_argument("cmd", choices=["check", "cache", "profile", "plan", "design", "final", "gen", "score"])
     ap.add_argument("--name")
     ap.add_argument("--q")
     ap.add_argument("--lo", type=int)
@@ -407,7 +446,7 @@ def main():
     if a.cmd == "gen":
         gen(dev, a.name, a.q, a.lo, a.hi)
     else:
-        {"check": check, "cache": cache, "profile": profile, "design": design, "final": final}[a.cmd](dev)
+        {"check": check, "cache": cache, "profile": profile, "plan": plan, "design": design, "final": final, "score": score}[a.cmd](dev)
 
 
 if __name__ == "__main__":
