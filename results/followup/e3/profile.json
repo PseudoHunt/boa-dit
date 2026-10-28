@@ -1,0 +1,22 @@
+{
+ "C1": {
+  "sec_per_update": 0.19577626840299425,
+  "updates_in_60s": 307
+ },
+ "C2": {
+  "sec_per_update": 1.277742902437846,
+  "updates_in_60s": 48
+ },
+ "peak_mem_GiB": 9.60175895690918,
+ "stage": "f4",
+ "run": "e3_profile",
+ "device": "cuda:0",
+ "config": {
+  "B": 4,
+  "K": 5
+ },
+ "git_sha": "f60972e975402c546cdb2ff9aaaed935e8344248",
+ "start_utc": "2026-10-28T13:41:04Z",
+ "wall_s": 158.45985984802246,
+ "gpu_hours": 0.044016627735561795
+}
