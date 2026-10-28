@@ -80,3 +80,7 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
     is ≤ 0.18 in magnitude; ρ is large because Cov(d) is small next to the cross term.
   - (b) The oracle removes 94% of the coherent low-band residual. Deployable and current-only predict nothing (CV picks
     the largest λ; held-out MSE 1.000). **The (c) gate fails**, so (c) is not run and **Read O = not viable**.
+- 2026-10-28, correction (closure note): the −3.3% band-1 variance change is the **last five-step bucket** (steps 45–49),
+  not a trajectory-wide figure. "Read O = not viable" is the result of the **tested linear (ridge) prediction-history
+  model** only; it does not show the error is unobservable. Nonlinear predictors, state features and an accumulated-state
+  target are untested (the 2026-10-28 follow-up protocol tests the last).

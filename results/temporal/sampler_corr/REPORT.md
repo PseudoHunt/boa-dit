@@ -6,7 +6,7 @@ Compute: 1.08 of 2.0 A30-h (stage `sampler_corr`). DiT-XL/2 256, heig-8 W4 (high
 Deterministic DDIM is exactly Euler in σ coordinates: per-step agreement ≤ 5.5e-07. The endpoint differences (9.7e-06 plain, 6.4e-05 scaled) are fp32 rounding amplified over 50 steps; the pre-set 1e-5 endpoint threshold was too strict (see the deviations).
 
 ## Q-Drift result
-- Calibrated V_i (conditional residual variance, per element) ranges 1.4e-05–4.9e-03. The correction c_i is ≤ 0.00186, so ε is rescaled by at most 0.19% at any step.
+- Calibrated V_i (conditional residual variance, per element) ranges 1.4e-05–4.9e-03. The maximum Q-Drift multiplier is c = 0.001857 (step index 48); the final-step value is 0.000477. ε is rescaled by at most 0.19% at any step.
 - **FID-2k:** heig-8 27.47 → Q-Drift **27.46** (FP: 23.89). Δ = -0.01, single runs without CIs: **no effect**.
 - Same-seed latent rel. MSE (512 seeds; not the design objective): 0.06797 → 0.06796, -0.01% [-0.05, +0.03].
 - **Why the multiplier is small:** c_i = (|Δσ_i|/2σ_i)·V_i, and both factors are small here: heig-8's conditional residual variance V_i is tiny next to unit-variance ε, and the schedule factor |Δσ|/2σ is small at 50 steps. The small multiplier is **not** evidence that the error is unpredictable.

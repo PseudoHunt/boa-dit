@@ -15,8 +15,8 @@ L = ["# Sampler-side correction (Q-Drift) on heig-8 W4 and the conditional-resid
      f"The endpoint differences ({ck['plain']:.1e} plain, {ck['scaled']:.1e} scaled) are fp32 rounding amplified over 50 steps; the pre-set 1e-5 endpoint "
      "threshold was too strict (see the deviations).", "",
      "## Q-Drift result",
-     f"- Calibrated V_i (conditional residual variance, per element) ranges {min(cal['V']):.1e}–{max(cal['V']):.1e}. The correction c_i is ≤ {max(cal['c']):.5f}, "
-     f"so ε is rescaled by at most {100 * max(cal['c']):.2f}% at any step.",
+     f"- Calibrated V_i (conditional residual variance, per element) ranges {min(cal['V']):.1e}–{max(cal['V']):.1e}. The maximum Q-Drift multiplier is "
+     f"c = {max(cal['c']):.6f} (step index {int(np.argmax(cal['c']))}); the final-step value is {cal['c'][-1]:.6f}. ε is rescaled by at most {100 * max(cal['c']):.2f}% at any step.",
      f"- **FID-2k:** heig-8 {fb['fid']:.2f} → Q-Drift **{fq['fid']:.2f}** (FP: 23.89). Δ = {fq['fid'] - fb['fid']:+.2f}, single runs without CIs: **no effect**.",
      f"- Same-seed latent rel. MSE (512 seeds; not the design objective): {lat['baseline_heig8_stored']:.5f} → {lat['rel_mse_mean']:.5f}, {p(lat['vs_baseline'])}.",
      "- **Why the multiplier is small:** c_i = (|Δσ_i|/2σ_i)·V_i, and both factors are small here: heig-8's conditional residual variance V_i is tiny next to "

@@ -26,7 +26,7 @@ for b in ("band1", "band2", "band3", "band4"):
              f"{v['buckets'][-1]['dV'] / v['buckets'][-1]['trCovFP']:+.4f} |")
 L += ["", f"**Gate: {'PASS' if a2['gate_pass'] else 'FAIL'}: {a2['interpretation']}.**",
       "- In band 1 the cross term is negative and larger than Cov(d): heig-8's latents have **less** low-band across-seed variance than FP, by "
-      f"{-100 * a2['band1']['buckets'][-1]['dV'] / a2['band1']['buckets'][-1]['trCovFP']:.1f}% at the end. That is a contraction, not added variance.",
+      f"{-100 * a2['band1']['buckets'][-1]['dV'] / a2['band1']['buckets'][-1]['trCovFP']:.1f}% in the last five-step bucket (steps 45–49). That is a contraction, not added variance.",
       "- The normalized correlation r stays small (≤ 0.18), so this is not a strong alignment of the error with the signal. ρ is large because Cov(d) is "
       "small next to the cross term. A variance-adding correction (Q-Drift style) would push the wrong way in band 1.",
       "- The covariance-calibrated correction is not built (its gate failed, and it is outside this allocation).", "",
@@ -39,10 +39,11 @@ for k, lab in (("oracle", "oracle history (r_{t−1})"), ("deployable", "deploya
 d = P["deployable_over_current"]
 L += ["", f"Deployable / current-only MSE: {d['ratio']:.3f} [{d['ci'][0]:.3f}, {d['ci'][1]:.3f}] (gate needs ≤ 0.8): **gate for (c): {'PASS' if P['gate_c'] else 'FAIL'}.**", "",
       "## Read O",
-      f"- **{'Viable' if P['gate_c'] else 'Not viable'}.** (c) was not run: the deployable history carries no usable information about the low-band residual. "
-      "Cross-validation shrinks it to zero.",
-      "- The oracle history removes ≈ 94% of the coherent low-band residual. The error is persistent and predictable from its own past, but **not observable** "
-      "from the quantized model's predictions. This is the expected and acceptable outcome named in the plan.",
+      f"- **{'Viable' if P['gate_c'] else 'Not viable'}.** (c) was not run: the **tested linear (ridge) prediction-history model** extracts no usable information about the "
+      "low-band residual from the deployable features; cross-validation shrinks it to zero.",
+      "- The oracle history removes ≈ 94% of the coherent low-band residual. The error is persistent and predictable from its own past, but it was **not predicted "
+      "by this linear model** of the quantized model's predictions. This rules out that predictor, not observability in general: nonlinear predictors, "
+      "other features (e.g. the latent state itself) and other targets (accumulated state error) are untested.",
       "- The drift-aware schedule deformation was not built (as instructed)."]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("ok")
