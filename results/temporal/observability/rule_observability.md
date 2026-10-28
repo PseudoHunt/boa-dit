@@ -73,3 +73,10 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-28, results (`audit.json`, `predict.json`):
+  - (a1) The shared mean is 0.22% of the local-error energy (split-half; naive 1.8%), so the **B_t arm is not
+    triggered**.
+  - (a2) **The gate fails**: tr Cov(d)-weighted ρ = −2.45 (band 1), −1.08, −0.90, −0.79. The normalized cross-correlation
+    is ≤ 0.18 in magnitude; ρ is large because Cov(d) is small next to the cross term.
+  - (b) The oracle removes 94% of the coherent low-band residual. Deployable and current-only predict nothing (CV picks
+    the largest λ; held-out MSE 1.000). **The (c) gate fails**, so (c) is not run and **Read O = not viable**.
