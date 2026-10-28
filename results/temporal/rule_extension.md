@@ -139,3 +139,6 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
      quantizer (W16A4, no branch), on the screen 64. It separates "A4 activation feedback fails in itself" from
      "weight error hides it".
   Both are labelled exploratory additions.
+- 2026-10-28, block-2 result so far: E2 confirmation (seeds 3100–3611): full −18.2% [−21.4, −15.1] vs none; dct4
+  −13.3% [−15.5, −11.1]; R(dct4) = 0.73 [0.66, 0.81]. **Added before its result:** rand4 on the same 512 seeds, to
+  settle the "dct4 beats rand4" clause of the low-frequency read (dct4 must beat rand4 on latent MSE, paired CI > 0).
