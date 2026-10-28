@@ -1,0 +1,140 @@
+{
+ "arm": "C1",
+ "lam": 0.0,
+ "lr": 0.0001,
+ "hours": 100.0,
+ "max_updates": 841,
+ "seed": 0,
+ "updates": 841,
+ "train_seconds": 165.16575574874878,
+ "log": [
+  {
+   "update": 50,
+   "t": 10.05817985534668,
+   "loss": 1.0617517232894897,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 100,
+   "t": 19.760571479797363,
+   "loss": 0.48297080397605896,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 150,
+   "t": 29.52342939376831,
+   "loss": 0.433197945356369,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 200,
+   "t": 39.326202392578125,
+   "loss": 0.3204183578491211,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 250,
+   "t": 49.067075967788696,
+   "loss": 0.22682279348373413,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 300,
+   "t": 58.9165403842926,
+   "loss": 0.7348285913467407,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 350,
+   "t": 68.8178551197052,
+   "loss": 1.215792179107666,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 400,
+   "t": 78.67623472213745,
+   "loss": 0.393632709980011,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 450,
+   "t": 88.44756746292114,
+   "loss": 0.2059953659772873,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 500,
+   "t": 98.30208086967468,
+   "loss": 0.44281309843063354,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 550,
+   "t": 108.07100224494934,
+   "loss": 0.1904127299785614,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 600,
+   "t": 117.81746649742126,
+   "loss": 0.35237568616867065,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 650,
+   "t": 127.683598279953,
+   "loss": 1.8347645998001099,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 700,
+   "t": 137.50546550750732,
+   "loss": 0.19664499163627625,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 750,
+   "t": 147.2945055961609,
+   "loss": 0.7326807975769043,
+   "local": null,
+   "roll": null
+  },
+  {
+   "update": 800,
+   "t": 157.07558393478394,
+   "loss": 0.24221575260162354,
+   "local": null,
+   "roll": null
+  }
+ ],
+ "carry": "/home/boa-dit-e3c/ckpt/e3c/carry_C1u_s0.pt",
+ "stage": "f5",
+ "run": "e3c_train_C1u_s0",
+ "device": "cuda:0",
+ "config": {
+  "arm": "C1u",
+  "obj": "C1",
+  "hours": 100.0,
+  "max_updates": 841,
+  "seed": 0,
+  "lr": 0.0001
+ },
+ "git_sha": "66f8de5dae1a5cc0f1df115b51ca6aa4fc508a36",
+ "start_utc": "2026-10-28T16:14:47Z",
+ "wall_s": 184.55600476264954,
+ "gpu_hours": 0.05126555687851376
+}
