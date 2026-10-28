@@ -701,7 +701,7 @@ def main_b():
     ap.add_argument("--feedback", action="store_true")
     ap.add_argument("--n", type=int, default=64)
     ap.add_argument("--tag", default="")
-    ap.add_argument("--compress", default=None, choices=[None, "dct4"])
+    ap.add_argument("--compress", default=None, choices=[None, "dct4", "dct16"])
     ap.add_argument("--device", default="cuda:0")
     a = ap.parse_args()
     torch.cuda.set_device(a.device)
@@ -755,18 +755,18 @@ class A8LinearFB(A8LinearB):
         return F.linear(q.to(torch.bfloat16), self.W, self.bias).to(dt)
 
 
-def dct4_basis(g, dev):
-    """orthonormal 2-D DCT-II modes (u, v) in {0,1}^2 on a g x g token grid (row-major), [g*g, 4]."""
+def dct4_basis(g, dev, m=2):
+    """orthonormal 2-D DCT-II modes (u, v) in {0..m-1}^2 on a g x g token grid (row-major), [g*g, m*m]; m=2: DCT-4, m=4: DCT-16."""
     i = torch.arange(g, dtype=torch.float64)
     c = lambda f: (torch.ones(g, dtype=torch.float64) / g ** 0.5 if f == 0 else (2.0 / g) ** 0.5 * torch.cos(torch.pi * (2 * i + 1) * f / (2 * g)))
-    return torch.stack([torch.outer(c(u), c(v)).flatten() for u in (0, 1) for v in (0, 1)], 1).float().to(dev)
+    return torch.stack([torch.outer(c(u), c(v)).flatten() for u in range(m) for v in range(m)], 1).float().to(dev)
 
 
 def install_fb(tr, kind, dither="none", feedback=False, compress=None):
     tabs = torch.load(bpath(kind), map_location="cpu")
     keys = sorted(tabs)
     dev = next(tr.parameters()).device
-    U = dct4_basis(64, dev) if compress == "dct4" else None
+    U = {"dct4": lambda: dct4_basis(64, dev), "dct16": lambda: dct4_basis(64, dev, 4)}[compress]() if compress else None
     mods = []
     for l, blk in enumerate(tr.transformer_blocks):
         for ln in QLAYERS:

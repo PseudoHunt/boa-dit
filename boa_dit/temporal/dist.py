@@ -1,9 +1,10 @@
 """Consolidated §3 (rule_distribution.md): distributional metrics for the activation method.
+  gen16  : DCT-16 feedback swap arm on both sets (user, 2026-10-28)
   gen2   : D2 images on untouched prompts mjhq1k[64:96] (batch 1, seed = index): bf16 refs, single table, full feedback, DCT-4
   fid    : DiT FID-2k for one Stage-3 arm (D3/D4/D5), via the stage-3 entry point
   ir     : ImageReward per image for a set of arms (runs in the ImageReward venv; scoring only, logged under c3)
   score  : D1/D2 tables: paired bootstraps vs single table (PSNR, LPIPS, latent, ImageReward)
-Run: python -m boa_dit.temporal.dist gen2 | score
+Run: python -m boa_dit.temporal.dist gen2 | gen16 | score
      <irenv>/bin/python -m boa_dit.temporal.dist ir --set screen|untouched
 """
 import argparse
@@ -21,9 +22,11 @@ DD = os.path.join(OUT, "dist")
 SETS = {"screen": (0, 64), "untouched": (64, 96)}
 # (image dir, label); screen dirs are the Stage-3 arms, untouched dirs are written by gen2
 ARMS = {"screen": [("bf16_b1", "bf16 reference"), ("s3_single8_none", "single table"), ("s3_single8_unif", "uniform dither (best stateless)"),
-                   ("s3_single8_feedback", "full feedback"), ("s3_single8_feedback_dct4", "DCT-4 feedback")],
+                   ("s3_single8_feedback", "full feedback"), ("s3_single8_feedback_dct4", "DCT-4 feedback"),
+                   ("s3_single8_feedback_dct16", "DCT-16 feedback")],
         "untouched": [("u_bf16_b1", "bf16 reference"), ("u_single8_none", "single table"), ("u_single8_feedback", "full feedback"),
-                      ("u_single8_feedback_dct4", "DCT-4 feedback")]}
+                      ("u_single8_feedback_dct4", "DCT-4 feedback"),
+                      ("u_single8_feedback_dct16", "DCT-16 feedback")]}
 CHUNK = 8
 
 
@@ -34,50 +37,63 @@ def load_imgs(name, lo, hi):
     return torch.cat([c["img"] for c in ch])[off:off + hi - lo], torch.cat([c["lat"] for c in ch])[off:off + hi - lo]
 
 
+SPECS = {"u_bf16_b1": None}
+for _c in (None, "dct4", "dct16"):
+    SPECS["u_single8_feedback" + (f"_{_c}" if _c else "")] = dict(kind="single8", dither="none", feedback=True, compress=_c)
+SPECS["u_single8_none"] = dict(kind="single8", dither="none", feedback=False, compress=None)
+SPECS["s3_single8_feedback_dct16"] = SPECS["u_single8_feedback_dct16"]
+GEN2 = ["u_bf16_b1", "u_single8_none", "u_single8_feedback", "u_single8_feedback_dct4"]
+# DCT-16 swap arm (user, 2026-10-28): both prompt sets, same seeds (seed = prompt index, batch 1)
+GEN16 = [("s3_single8_feedback_dct16", "screen"), ("u_single8_feedback_dct16", "untouched")]
+
+
 @torch.no_grad()
-def gen2(dev):
-    """D2: untouched prompts, batch 1, one arm at a time; chunk files are keyed by absolute prompt index (resumable)."""
+def gen_arm(name, setname, dev, e):
+    """one arm on one prompt set, batch 1; chunk files keyed by absolute prompt index (resumable); pilot c3 guard."""
     from boa_dit.temporal import pixart as PX
     from boa_dit.w4a4 import common as WC
-    lo, hi = SETS["untouched"]
+    lo, hi = SETS[setname]
+    spec = SPECS[name]
+    d = PX.img_dir(name)
+    os.makedirs(d, exist_ok=True)
+    todo = [i for i in range(lo, hi, CHUNK) if not os.path.exists(os.path.join(d, f"{i:05d}.pt"))]
+    if not todo:
+        return
+    with Run(STAGE, f"dist_gen2_{name}", dev, {"prompts": [lo, hi], "spec": spec}) as run:
+        pipe = WC.load_pipe(dev)
+        if spec is not None:
+            PX.install_fb(pipe.transformer, spec["kind"], spec["dither"], spec["feedback"], spec["compress"])
+            PX.STATE.mode = "static"
+        first = True
+        for i in todo:
+            imgs, lats = [], []
+            for j in range(i, min(hi, i + CHUNK)):
+                torch.cuda.synchronize(); t0 = time.time()
+                sc = PX.StepCounter(pipe.transformer)
+                try:
+                    lat = PX.sample_lat(pipe, e, [j], dev)
+                finally:
+                    sc.remove()
+                imgs.append(PX.decode(pipe, lat)); lats.append(lat.float().cpu())
+                if first:
+                    torch.cuda.synchronize(); s = time.time() - t0
+                    proj = s * len(todo) * CHUNK / 3600
+                    print(f"  pilot {name}: {s:.1f} s/image -> {proj:.3f} h for {len(todo) * CHUNK} images", flush=True)
+                    if not guard(proj, f"gen2 {name}"):
+                        raise SystemExit(4)
+                    first = False
+            atomic_torch_save({"img": torch.cat(imgs), "lat": torch.cat(lats)}, os.path.join(d, f"{i:05d}.pt"))
+            print(f"  {name}: prompts {i}-{min(hi, i + CHUNK) - 1} done", flush=True)
+        del pipe
+        torch.cuda.empty_cache()
+        run.record()
+
+
+def gen2(dev, arms):
+    from boa_dit.w4a4 import common as WC
     e = WC.load_embeds("mjhq1k")
-    specs = [("u_bf16_b1", None), ("u_single8_none", dict(kind="single8", dither="none", feedback=False, compress=None)),
-             ("u_single8_feedback", dict(kind="single8", dither="none", feedback=True, compress=None)),
-             ("u_single8_feedback_dct4", dict(kind="single8", dither="none", feedback=True, compress="dct4"))]
-    for name, spec in specs:
-        d = PX.img_dir(name)
-        os.makedirs(d, exist_ok=True)
-        todo = [i for i in range(lo, hi, CHUNK) if not os.path.exists(os.path.join(d, f"{i:05d}.pt"))]
-        if not todo:
-            continue
-        with Run(STAGE, f"dist_gen2_{name}", dev, {"prompts": [lo, hi], "spec": spec}) as run:
-            pipe = WC.load_pipe(dev)
-            if spec is not None:
-                PX.install_fb(pipe.transformer, spec["kind"], spec["dither"], spec["feedback"], spec["compress"])
-                PX.STATE.mode = "static"
-            first = True
-            for i in todo:
-                imgs, lats = [], []
-                for j in range(i, min(hi, i + CHUNK)):
-                    torch.cuda.synchronize(); t0 = time.time()
-                    sc = PX.StepCounter(pipe.transformer)
-                    try:
-                        lat = PX.sample_lat(pipe, e, [j], dev)
-                    finally:
-                        sc.remove()
-                    imgs.append(PX.decode(pipe, lat)); lats.append(lat.float().cpu())
-                    if first:
-                        torch.cuda.synchronize(); s = time.time() - t0
-                        proj = s * len(todo) * CHUNK / 3600
-                        print(f"  pilot {name}: {s:.1f} s/image -> {proj:.3f} h for {len(todo) * CHUNK} images", flush=True)
-                        if not guard(proj, f"gen2 {name}"):
-                            raise SystemExit(4)
-                        first = False
-                atomic_torch_save({"img": torch.cat(imgs), "lat": torch.cat(lats)}, os.path.join(d, f"{i:05d}.pt"))
-                print(f"  {name}: prompts {i}-{min(hi, i + CHUNK) - 1} done", flush=True)
-            del pipe
-            torch.cuda.empty_cache()
-            run.record()
+    for name, setname in arms:
+        gen_arm(name, setname, dev, e)
 
 
 @torch.no_grad()
@@ -138,6 +154,28 @@ def fidelity(setname, dev):
     return out
 
 
+def read16(res):
+    """pre-registered (rule_distribution.md, 2026-10-28 swap): on BOTH sets, full < DCT-16 < DCT-4 on mean latent,
+    DCT-4 < DCT-16 < full on mean PSNR, and DCT-16 mean LPIPS <= single table's. CIs reported, not part of the read."""
+    names = {"screen": ("s3_single8_none", "s3_single8_feedback", "s3_single8_feedback_dct4", "s3_single8_feedback_dct16"),
+             "untouched": ("u_single8_none", "u_single8_feedback", "u_single8_feedback_dct4", "u_single8_feedback_dct16")}
+    out = {}
+    for setname, (sg, fu, d4, d16) in names.items():
+        a = res.get(setname, {}).get("arms", {})
+        if d16 not in a or "latent_mean" not in a[d16]:
+            out[setname] = "missing"; continue
+        g = lambda n, k: a[n][k + "_mean"]
+        out[setname] = {"latent_between": g(fu, "latent") < g(d16, "latent") < g(d4, "latent"),
+                        "psnr_between": g(d4, "psnr") < g(d16, "psnr") < g(fu, "psnr"),
+                        "lpips_le_single": g(d16, "lpips") <= g(sg, "lpips"),
+                        "k_curve": {k: {m: g(n, m) for m in ("latent", "psnr", "lpips")} for k, n in
+                                    (("single", sg), ("dct4", d4), ("dct16", d16), ("full", fu))},
+                        "dct16_vs_single_lpips": a[d16]["vs_single"]["lpips"]}
+        out[setname]["pass"] = all(out[setname][k] for k in ("latent_between", "psnr_between", "lpips_le_single"))
+    out["trade_off_exists"] = all(isinstance(out[k], dict) and out[k]["pass"] for k in names)
+    return out
+
+
 def score(dev):
     res = {}
     for setname in SETS:
@@ -149,36 +187,46 @@ def score(dev):
         base = ARMS[setname][1][0]
         rows = {}
         for name, lab in ARMS[setname]:
-            r = {"label": lab, "ir_mean": float(np.mean(irs[name])), "ir_per_image": irs[name]}
+            r = {"label": lab}
+            if name in irs:                                                      # DCT-16 swap arm: no ImageReward (not requested)
+                r.update({"ir_mean": float(np.mean(irs[name])), "ir_per_image": irs[name]})
             if name in fid:
                 r.update({k + "_mean": float(np.mean(v)) for k, v in fid[name].items()})
                 r.update({k + "_per_image": v for k, v in fid[name].items()})
             if name != base and name in fid:
-                r["vs_single"] = {"ir": boot_diff(irs[name], irs[base]), "psnr": boot_diff(fid[name]["psnr"], fid[base]["psnr"]),
+                r["vs_single"] = {"psnr": boot_diff(fid[name]["psnr"], fid[base]["psnr"]),
                                   "lpips": boot_diff(fid[name]["lpips"], fid[base]["lpips"]), "latent": boot_red(fid[name]["latent"], fid[base]["latent"])}
+                if name in irs:
+                    r["vs_single"]["ir"] = boot_diff(irs[name], irs[base])
             rows[name] = r
         res[setname] = {"prompts": list(SETS[setname]), "arms": rows}
+    res["read_dct16"] = read16(res)
     atomic_write_json(os.path.join(DD, "pixart_scores.json"), res)
+    print("Read DCT-16 trade-off:", res["read_dct16"])
     for s, v in res.items():
+        if s == "read_dct16":
+            continue
         print(f"== {s} mjhq1k[{v['prompts'][0]}:{v['prompts'][1]}]")
         for name, r in v["arms"].items():
             vs = r.get("vs_single")
-            extra = "" if not vs else (f" | vs single: IR {vs['ir']['diff']:+.4f} [{vs['ir']['ci'][0]:+.4f}, {vs['ir']['ci'][1]:+.4f}], "
-                                       f"PSNR {vs['psnr']['diff']:+.2f} [{vs['psnr']['ci'][0]:+.2f}, {vs['psnr']['ci'][1]:+.2f}], "
-                                       f"LPIPS {vs['lpips']['diff']:+.4f} [{vs['lpips']['ci'][0]:+.4f}, {vs['lpips']['ci'][1]:+.4f}], "
-                                       f"latent {-100 * vs['latent']['reduction']:+.1f}% [{-100 * vs['latent']['ci'][1]:+.1f}, {-100 * vs['latent']['ci'][0]:+.1f}]")
-            print(f"  {r['label']:32s} IR {r['ir_mean']:+.4f}" + (f" PSNR {r['psnr_mean']:.2f} LPIPS {r['lpips_mean']:.4f} latent {r['latent_mean']:.5f}" if "psnr_mean" in r else "") + extra)
+            extra = ""
+            if vs:
+                extra = " | vs single: " + (f"IR {vs['ir']['diff']:+.4f} [{vs['ir']['ci'][0]:+.4f}, {vs['ir']['ci'][1]:+.4f}], " if "ir" in vs else "")
+                extra += (f"PSNR {vs['psnr']['diff']:+.2f} [{vs['psnr']['ci'][0]:+.2f}, {vs['psnr']['ci'][1]:+.2f}], "
+                          f"LPIPS {vs['lpips']['diff']:+.4f} [{vs['lpips']['ci'][0]:+.4f}, {vs['lpips']['ci'][1]:+.4f}], "
+                          f"latent {-100 * vs['latent']['reduction']:+.1f}% [{-100 * vs['latent']['ci'][1]:+.1f}, {-100 * vs['latent']['ci'][0]:+.1f}]")
+            print(f"  {r['label']:32s} IR " + (f"{r['ir_mean']:+.4f}" if "ir_mean" in r else "  n/a  ") + (f" PSNR {r['psnr_mean']:.2f} LPIPS {r['lpips_mean']:.4f} latent {r['latent_mean']:.5f}" if "psnr_mean" in r else "") + extra)
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["gen2", "ir", "score"])
+    ap.add_argument("cmd", choices=["gen2", "gen16", "ir", "score"])
     ap.add_argument("--set", default="screen", choices=list(SETS))
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     os.makedirs(DD, exist_ok=True)
-    {"gen2": lambda: gen2(dev), "ir": lambda: ir(a.set, dev), "score": lambda: score(dev)}[a.cmd]()
+    {"gen2": lambda: gen2(dev, [(n, "untouched") for n in GEN2]), "gen16": lambda: gen2(dev, GEN16), "ir": lambda: ir(a.set, dev), "score": lambda: score(dev)}[a.cmd]()
 
 
 if __name__ == "__main__":

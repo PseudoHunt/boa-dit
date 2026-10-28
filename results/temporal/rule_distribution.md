@@ -70,3 +70,18 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
     [−0.107, +0.009], DCT-4 −0.042 [−0.103, +0.017]. Signs flip between sets and every CI includes 0. Quantized arms score
     at or above the bf16 reference on both sets, so ImageReward does not resolve differences at this scale.
   - The PixArt ImageReward component of Read D therefore fails independently of the unrun PixArt FID.
+- 2026-10-28, **user swap (pre-registered here before any run): §5 is replaced by one arm, DCT-16 feedback on PixArt.**
+  - Arm: the static-A8 feedback of the DCT-4 arm with the state compressed to the 16 lowest 2-D DCT-II modes (u, v ∈
+    {0..3}, orthonormal, 64×64 token grid; DCT-4 is its {0,1}² subset, checked to 0 difference). Same seeds (seed =
+    prompt index, batch 1) and **both prompt sets**: screen mjhq1k[0:64] (`s3_single8_feedback_dct16`) and untouched
+    mjhq1k[64:96] (`u_single8_feedback_dct16`). Metrics: PSNR, LPIPS-VGG, latent rel. MSE vs the bf16 batch-1
+    references, paired bootstrap vs single table (2,000 resamples, seed 0). No ImageReward (not requested).
+  - **Read (trade-off), on both sets, mean values:** full < DCT-16 < DCT-4 on latent **and** DCT-4 < DCT-16 < full on
+    PSNR **and** DCT-16 LPIPS ≤ single table's. CIs are reported but are not part of the read.
+    - If it holds: the method's recommended setting is band-limited feedback with k chosen for LPIPS, and the report
+      gives the k-curve (single, k = 4, 16, full) on both sets.
+  - Cost: ≈ 33 s/image × 96 ≈ 0.9 h (DCT-4 pilot).
+  - **D3 is stopped to make room** (stopped at 128/2000 images, 0.099 h recorded as FAILED, partial kept). Remaining
+    after DCT-16 is ≈ 0.95 h against ≈ 1.3 h to finish D3, so **D3 is reported unrun** (cost 1.38 h total) unless the
+    measured spend leaves room. §5 runs afterwards with whatever budget is left (rank → η → INT4 → budget → DCT-4 ref,
+    each behind the guard).
