@@ -1,0 +1,12 @@
+{
+ "T_train_hours": 0.3,
+ "f4_spent_at_plan": 1.431,
+ "left_after_reserve": 2.319,
+ "C1_sec_per_update": 0.19577626840299425,
+ "C2_sec_per_update": 1.277742902437846,
+ "expected_updates": {
+  "C1": 5516,
+  "C2/C3": 845
+ },
+ "meaningful": true
+}
