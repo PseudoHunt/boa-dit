@@ -135,3 +135,84 @@ ablation) is committed as a dated amendment **before its implementation and befo
 
 ## Amendments
 (dated, appended before the affected arms run)
+
+### 2026-10-28 17:30: §4 covariance-aware extension, mathematical specification (before implementation and before any of its results)
+
+**Notation.** Deterministic DDIM step i (t_i → t_{i+1}), x_{i+1} = a_i x_i + c_i ε(x_i), with a_i = sqrt(ā_{i+1}/ā_i) and
+c_i = sqrt(1 − ā_{i+1}) − sqrt(ā_{i+1}(1 − ā_i)/ā_i). These are exactly DNS's ws and we at ā′ = ā_{i+1}.
+Bands b = 1..4 are the equal-area radial DFT bands (`objective/d2.band_masks`). Per-band quantities are averaged per element, and bands add exactly (Parseval).
+
+**A. Quantities** (paired free-running FP / heig-8 trajectories, same noise and labels; fit 44000–44063, held-out 44100–44163).
+1. Local prediction error at the quantized latent: ξ_i = ε_Q(x^Q_i) − ε_F(x^Q_i). Both networks run on the same state, so this needs one extra FP call per step in calibration only.
+2. Accumulated free-running state error: d_i = x^Q_i − x^F_i.
+3. Their means across seeds, m_ξ,i and m_d,i (per element). They are reported, and removed from every covariance below.
+4. Temporal prediction-error covariance: S_b(i, j) = E⟨ξ_i,b − m, ξ_j,b − m⟩/D_b (all lags), and its lag-1 correlation.
+5. State-error / current-error covariance: C_b(i) = E⟨d_i,b − m, ξ_i,b − m⟩/D_b. This is **not** the adjacent-error correlation S(i, i−1).
+6. FP-state / accumulated-error covariance: X_b(i) = E⟨x^F_i,b − m, d_i,b − m⟩/D_b.
+7. Uncentred second moments of ξ, d and the cross products, reported alongside the covariances (never substituted for them).
+
+**B. Propagation model with the denoiser response** (per band b, scalar coefficients; a spatially isotropic within-band parameterization).
+- Exact identity: d_{i+1} = a_i d_i + c_i Δ_i + c_i ξ_i, where Δ_i = ε_F(x^Q_i) − ε_F(x^F_i) is the FP denoiser's response to the state error (measured, not assumed).
+- Linear band-diagonal closure: Δ_i,b ≈ J_i,b d_i,b, so
+
+      d_{i+1,b} = A_i,b d_i,b + c_i ξ_i,b + r_i,b,       A_i,b = a_i + c_i J_i,b
+      ξ_{i+1,b} = F_i,b ξ_i,b + ν_i,b
+
+  - J_i,b is the least-squares regression of Δ_i,b on d_i,b (fit seeds, centred). F_i,b is the least-squares lag-1 regression of centred ξ. ν and r are residuals.
+  - Reference gain: a noise-like perturbation of an exact VP marginal under an ideal denoiser propagates with g_i = sqrt((1 − ā_{i+1})/(1 − ā_i)).
+    This is the eigenvalue of a_i + c_i J for J = 1/sqrt(1 − ā_i), the noise direction. Measured A_i,b is compared against it.
+- **Joint covariance recursion** (V_d, C, V_ξ per band; V_ξ,i taken from data at every step, so the marginal variances are matched exactly):
+
+      V_d,i+1 = A² V_d,i + 2 A c C_i + c² V_ξ,i            (+ Var r_i, reported)
+      C_{i+1} = A F C_i + c F V_ξ,i
+      V_d,0 = C_0 = 0
+
+  - The C-recursion assumes the innovations ν_i are uncorrelated with d_i, ξ_i and r_i.
+  - The V_d recursion assumes r_i is uncorrelated with d_i and ξ_i.
+  - All four correlations are tested on held-out data (|corr| > 0.1 is flagged as a violation).
+- **Matched temporal-independence ablation.**
+  - Kept the same: m, V_ξ,i (marginals), A_i,b, the band parameterization, and the data and fitting procedure.
+  - Removed: all cross-step dependence of ξ, consistently: F ≡ 0 with V_ν,i = V_ξ,i+1, so ξ_{i+1} is independent of (d, ξ)_{≤i}.
+  - This implies C_i ≡ 0 for all i and V_d,i+1 = A² V_d,i + c² V_ξ,i. It is a self-consistent independent model, not one zeroed term inside a dependent recursion.
+
+**C. Explicit sampler update ("C-DNS").** Everything is identical to faithful DNS (`port.py`): the same affine correction T, DCNC, solver, map Φ,
+the original next timestep passed to the denoiser, one global schedule, and the same calls. The one difference is DNS's per-step variance σ²_ε,i, which is replaced by
+
+      σ̃²_i = ρ_i · σ²_ε,i,      ρ_i = max(0, ΔV_i / (c_i² V_ξ,i)),      ΔV_i = Σ_b w_b [ (A_i,b² − g_i²) V_d,i,b + 2 A_i,b c_i C_i,b + c_i² V_ξ,i,b ],
+
+with w_b = 1/4 (equal-area bands). V_ξ,i = Σ_b w_b V_ξ,i,b, and V_d, C come from the recursion above (full model) or the ablation (C ≡ 0, its own V_d).
+- **Quantity corrected.** The same as DNS: the excess of the state's marginal second moment over the VP marginal at the next timestep.
+- **Derivation of ΔV.** DNS's Φ renormalizes after every step, so variance it has already absorbed is treated as diffusion noise, and an ideal denoiser propagates noise with gain g_i.
+  The excess that step i must newly absorb is the growth of the error variance beyond that reference propagation, V_d,i+1 − g_i² V_d,i.
+  The recursion gives exactly ΔV_i. Its three terms are:
+  - the denoiser-response deviation from noise-like propagation, (A² − g²) V_d;
+  - the temporal cross-covariance, 2 A c C;
+  - DNS's fresh-error term, c² V_ξ.
+- **Ratio form.** The ratio transfers the model's relative effect onto DNS's own calibrated σ² (measured on forward-noised FP samples after T and DCNC).
+  This keeps every other DNS quantity fixed.
+- **Coordinates.** VP x_t; ε-prediction; the full 1000-step ā table; the denoiser gets the original next timestep (as DNS).
+- **Approximations (labelled).**
+  - (i) Linear band-diagonal propagation; cross-band coupling and nonlinearity go into r.
+  - (ii) Open-loop closure: statistics come from uncorrected heig-8 trajectories but are used in the corrected (closed-loop) sampler. Valid when C3 − 1 is small; C3 is reported.
+  - (iii) d is treated as independent of x^F for the marginal: the term 2·X_b(i) is **not** modelled. Its measured size is reported as a limitation.
+  - (iv) One isotropic scalar per step after band pooling.
+  - (v) The ρ clamp at 0, because DNS's map can only add timestep shift (ā′ ≥ ā_prev). Clamp events are counted.
+- **No preservation guarantee is claimed.** DNS's own guarantee rests on assumptions (a)–(c) in §1, and C-DNS adds (i)–(v).
+- **Not done.** No per-band timesteps. No separate addition of drift rescaling or noise subtraction: C-DNS changes only the variance fed to DNS's single schedule deformation, so there is no double counting.
+  No replacement of local variance by accumulated variance: ΔV is the increment derived above, not V_d.
+- **Limits (verified numerically before use).**
+  - (L1) F ≡ 0, C ≡ 0 and A_i,b = g_i ⇒ ΔV_i = c_i² V_ξ,i ⇒ ρ ≡ 1 ⇒ C-DNS schedule == DNS schedule exactly.
+  - (L2) σ²_ε,i = 0 ⇒ C-DNS == the uncorrected sampler (ā′ = ā_prev, C3 = 1), for any ρ.
+  - (L3) ρ_i = 0 ⇒ no deformation at step i.
+
+**§5 gate (held-out seeds 44100–44163, before any C-DNS sampling).**
+- **Targets:**
+  - (a) the band-wise trajectory V_d,i,b (open-loop accumulated state-error variance), predicted by recursion from i = 0;
+  - (b) the one-step increment ΔV_i,b, computed with the empirical V_d,i and each model's C_i.
+- **Score.** Mean over steps and bands of |log(predicted/empirical)| for (a), and normalized absolute error for (b), with steps where the empirical V_d is below 1e-8 excluded.
+- **Pass** if the full model's score on (a) is lower than the ablation's by ≥ 10% relative, **and** the seed-bootstrap 95% CI (over held-out seeds, 1,000 resamples) of the score difference excludes 0.
+  Score (b) is reported, not gated.
+- **On pass:** freeze ρ (full and ablation) and run DNS, C-DNS-ablation and C-DNS-full on the confirmation sets with the same metrics as §3.
+- **On fail:** report the specific failure (which target, which bands or steps, and which innovation assumptions are violated), keep the DNS result, and mark the C-DNS confirmation **unrun**.
+  This is not a negative result for covariance-aware correction in general.
+- **Activation feedback is not combined here.**
