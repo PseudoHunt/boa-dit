@@ -415,3 +415,4 @@ temporal,ext_fp_reference_confirm,cuda:0,2026-10-28T02:24:11Z,2026-10-28T02:24:1
 temporal,ext_e6_confirm_attn_dct4,cuda:0,2026-10-28T02:24:22Z,2026-10-28T02:37:05Z,0.2121
 temporal,ext_e4_stepcount(FAILED),cuda:0,2026-10-28T02:37:35Z,2026-10-28T02:37:39Z,0.0009
 temporal,ext_e4_stepcount(FAILED),cuda:0,2026-10-28T02:38:13Z,2026-10-28T02:55:25Z,0.2866
+temporal,ext_e4_stepcount,cuda:0,2026-10-28T02:56:32Z,2026-10-28T03:18:52Z,0.3723

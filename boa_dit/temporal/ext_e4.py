@@ -20,6 +20,7 @@ N = 16
 
 def extend(mods, T):
     for m in mods:
+        m.clipE = torch.zeros((T + 3) // 4, 4, dtype=torch.float64)          # clip-energy log sized for T steps (4-step buckets)
         for b in ("D", "Z", "O"):
             v = getattr(m, b)
             setattr(m, b, torch.cat([v, v[:1].expand(max(0, T - len(v)))]) if T > len(v) else v)
