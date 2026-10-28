@@ -99,3 +99,16 @@ Bits/weight are computed packed sizes (4-bit codes + fp16 scale/zero per row + f
   - alternation beats the static average → evidence that temporal variation itself helps (confirm on untouched seeds 4100–4227).
 - The **static average** is stored as half-step (5-bit-class) codes on the varied columns. It is counted that way, not as two tables or an fp tensor. Static average vs alternation isolates variation around the same mean. The independently optimized static half-step table (:hp) asks whether the pair is a competitive use of extra precision.
 - A lower endpoint error alone does not show that temporal shaping beats extra precision.
+
+## Answers to the protocol's questions (exploratory, 32 design seeds; paired 95% CIs)
+
+1. **Does joint design beat the existing independently constructed pair?** F vs indep -7.5% [-17.0, +3.1]: a point estimate favouring joint design, **not established**.
+2. **Does selective variation beat random selection at the same size?** Highest-cost 16 vs random 16 +8.0% [-1.4, +17.9]: **not established**, and no tested 1- or 16-column selection shows a reliable gain over the baseline.
+3. **Does alternation improve over either constituent table?** **Yes**: alternating F vs Q_A -16.2% [-25.0, -7.6], vs Q_B -19.6% [-27.2, -11.9]. Each constituent alone is no better than the baseline, so switching contributes, and it lowers the prediction error's coherence (C/I ≈ 0.26 → 0.15).
+4. **Does alternation improve over, or approach, the static average?** **No**: alternation vs the static average +14.6% [+7.5, +23.6]. The more accurate mean is worth more than the variation around it, and variation costs.
+5. **Is there a plausible quality–storage–runtime advantage?** **No, for this construction.** The static average (5.17 bits/weight, half-step codes) is indistinguishable from an independently optimized static half-step table (5.18 bits/weight): +1.8% [-10.6, +17.8]. Alternation is worse than that static table (+16.7% [-0.1, +39.1]), needs two tables (8.25 bits/weight packed; an estimated 1.72 bits/weight difference entropy, not achieved), and doubles the simulation's weight buffers.
+
+**What the pilot shows.** Weight-space alternation can cancel part of the error: the oracle halves the endpoint error, and legal joint tables beat their own constituents. But on this model the same storage spent on static precision does as well or better. The oracle locates the limit: opposite weight perturbations give opposite prediction errors only early in the trajectory (cos ≈ −0.93 at steps 0–10, about −0.45 mid-trajectory). Joint calibration on a weight-space objective therefore cannot reach prediction-level cancellation.
+
+**Next experiment suggested by these results** (not run): if the temporal weight route is pursued, the joint objective should target prediction or layer-output errors along the trajectory rather than the weight-space surrogate. Any claim would also have to beat static W5-class GPTQ at equal storage. The 128 untouched seeds (4100–4227) remain unused; confirming answer 3 (switching beats its constituents) would be the cheapest confirmation if wanted.
+
