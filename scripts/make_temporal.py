@@ -133,6 +133,22 @@ def main():
               f"**Read (period-2 error healed like random error): {'PASS' if a0['read_healed'] else 'FAIL as written'}** — (ii) is not "
               "within 20% of (iii) because it is ~50× *smaller*: a sign-alternating error cancels to first order across adjacent "
               "steps, beyond what independent error averages to. A period-2 error is the most-healed pattern of the three.", ""]
+    s1 = J("stage1", "stage1.json")
+    if s1:
+        import numpy as np
+        RR = s1["ratios_to_i"]
+        rng = lambda k, f=lambda v: v: (min(f(RR[a][k]["ratio"]) for a in RR), max(f(RR[a][k]["ratio"]) for a in RR))
+        alt = {a: 1 / RR[a]["iii_alternated"]["ratio"] for a in RR}
+        L += ["## Stage 1 replay (numbers regenerated from `stage1/stage1.json`)",
+              f"- As-recorded replay reproduces heig-8's endpoint to three digits ({np.mean(s1['final_err']['i_recorded@1.0']):.1f} vs "
+              f"{np.mean(s1['heig8_endpoint_err']):.1f}).",
+              f"- Sign-alternated removes {100 * (1 - rng('iii_alternated')[1]):.2f}–{100 * (1 - rng('iii_alternated')[0]):.2f}% of the error "
+              f"(≈ 99.8%); fresh random {100 * (1 - rng('vi_white')[1]):.1f}–{100 * (1 - rng('vi_white')[0]):.1f}% (≈ 99%); shuffled and reversed keep "
+              f"{100 * min(rng('iv_shuffled')[0], rng('ii_reversed')[0]):.0f}–{100 * max(rng('iv_shuffled')[1], rng('ii_reversed')[1]):.0f}%; the "
+              f"frozen-denoiser control is {rng('vii_coef_only')[0]:.1f}–{rng('vii_coef_only')[1]:.1f}× worse.",
+              "- **\"400× vs 500×\" reconciled:** the sign-alternated reduction factor depends on the injection amplitude: "
+              + ", ".join(f"{alt[a]:.0f}× at amplitude {a} (CI {1 / RR[a]['iii_alternated']['ci'][1]:.0f}–{1 / RR[a]['iii_alternated']['ci'][0]:.0f}×)" for a in RR)
+              + ". The two quoted figures came from different amplitudes; the CIs overlap. Quote the range, not one factor.", ""]
     p = J("pair.json")
     if p:
         s = p["summary"]
