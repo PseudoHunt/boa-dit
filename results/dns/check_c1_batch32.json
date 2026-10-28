@@ -1,0 +1,1 @@
+{"c1_batch32_bitwise_vs_e3c_C0": true, "seeds": [20000, 20031], "rel_diff": 0.0, "note": "the checks.json c1 comparison used a batch of 4 and is not bitwise equal: fp16 kernels differ with batch size. All DNS-side sampling uses the same aligned batches of 32 as E3C, so the baseline reuse is bitwise valid."}

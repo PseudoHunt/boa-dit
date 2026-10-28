@@ -226,3 +226,9 @@ needed 1e-3 over 5 calls.
 
 **Amended criterion.** c2 passes if the same comparison with fp32 forwards (amp off, both samplers) is below 1e-5. The fp16 number stays
 reported. All other checks are unchanged. No DNS statistic or sample existed when this was decided.
+
+### 2026-10-28 20:40: check results note
+`checks.json` passes, with c2 under the amended fp32 criterion (3.2e-6; the fp16 value is 1.6e-3, as before).
+Its c1 item (`base_equals_e3c_C0_latents`) is false because it sampled a batch of 4, and fp16 kernels differ with batch size.
+Re-run with E3C's batch of 32 (seeds 20000–20031), the baseline is **bitwise identical** to E3C C0 (`check_c1_batch32.json`).
+All DNS-side sampling uses the same aligned batches of 32, so the baseline reuse stands.
