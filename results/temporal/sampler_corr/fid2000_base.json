@@ -1,0 +1,15 @@
+{
+ "arm": "base",
+ "n": 2000,
+ "fid": 27.469854424533253,
+ "stage": "sampler_corr",
+ "run": "fid2000_base",
+ "device": "cuda:0",
+ "config": {
+  "arm": "base"
+ },
+ "git_sha": "fed50d83d53cf86a01083b16e3df0551f7c1571f",
+ "start_utc": "2026-10-28T06:40:06Z",
+ "wall_s": 1313.194189786911,
+ "gpu_hours": 0.3647761638296975
+}
