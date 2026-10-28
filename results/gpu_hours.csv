@@ -445,3 +445,4 @@ weights_joint,arm_F_all:hp,cuda:0,2026-10-28T04:54:56Z,2026-10-28T04:55:38Z,0.01
 weights_scale,refit,cuda:0,2026-10-28T05:19:01Z,2026-10-28T05:19:12Z,0.0030
 weights_scale,fit,cuda:0,2026-10-28T05:19:31Z,2026-10-28T05:28:33Z,0.1506
 weights_scale,eval,cuda:0,2026-10-28T05:28:40Z,2026-10-28T05:46:33Z,0.2978
+weights_scale,controls,cuda:0,2026-10-28T05:52:11Z,2026-10-28T05:55:54Z,0.0620
