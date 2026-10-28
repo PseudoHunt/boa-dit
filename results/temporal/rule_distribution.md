@@ -58,3 +58,15 @@ Nothing above the marker changes afterwards; deviations are appended below it, d
 
 ## Deviations and results
 (appended below as they happen)
+- 2026-10-28, operational: the D2 queue's wait (`pgrep -f` on the generator) matched its own launcher shell and stalled
+  after generation finished; GPU idle, no budget spent. Relaunched with the wait removed (§3) and a PID wait (§5).
+- 2026-10-28, D1/D2 results (`dist/pixart_scores.json`; paired bootstrap vs single table, 95% CI):
+  - **LPIPS settlement: replicated.** On untouched mjhq1k[64:96], full feedback LPIPS +0.0213 [+0.0076, +0.0373] (worse,
+    CI excludes 0); DCT-4 −0.0120 [−0.0231, +0.0008] (better sign; CI touches 0). Both signs repeat the screen set
+    (+0.0155 / −0.0145), so the pattern counts as replicated under the pre-registered sign rule; DCT-4's CI alone is not
+    significant on 32 prompts.
+  - PSNR and latent replicate as well: full feedback +0.66 dB, latent −13.0%; DCT-4 +0.49 dB, latent −8.3% [−17.3, +1.5].
+  - **ImageReward sign: not confirmed.** Screen: full +0.023 [−0.016, +0.066], DCT-4 +0.002; untouched: full −0.045
+    [−0.107, +0.009], DCT-4 −0.042 [−0.103, +0.017]. Signs flip between sets and every CI includes 0. Quantized arms score
+    at or above the bf16 reference on both sets, so ImageReward does not resolve differences at this scale.
+  - The PixArt ImageReward component of Read D therefore fails independently of the unrun PixArt FID.
