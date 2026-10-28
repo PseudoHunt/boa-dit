@@ -4,6 +4,7 @@
 cd "$(dirname "$0")/.."
 python scripts/make_stage3.py > /dev/null 2>&1
 python scripts/make_implementation.py > /dev/null 2>&1
+python scripts/make_ext.py > /dev/null 2>&1
 python - "$1" <<'PY'
 import json, os, sys, subprocess, datetime as dt
 R = "results/temporal"

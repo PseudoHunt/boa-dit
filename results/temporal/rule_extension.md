@@ -142,3 +142,13 @@ Run only if PixArt's stage-3 or E1 feedback gain is flat or markedly weaker than
 - 2026-10-28, block-2 result so far: E2 confirmation (seeds 3100–3611): full −18.2% [−21.4, −15.1] vs none; dct4
   −13.3% [−15.5, −11.1]; R(dct4) = 0.73 [0.66, 0.81]. **Added before its result:** rand4 on the same 512 seeds, to
   settle the "dct4 beats rand4" clause of the low-frequency read (dct4 must beat rand4 on latent MSE, paired CI > 0).
+- 2026-10-28, block-2 results: attention-only R = 0.66 [0.59, 0.72] (−12.0% vs none, 63 MiB/image). W16A4
+  diagnostic: feedback +22% latent, −1.10 dB, +0.122 LPIPS vs the W16A4 base, the same harm as at W4A4, so weight error
+  is not hiding an activation gain. With clipping also excluded (guarded arm), dynamic per-token A4 is the setting where
+  feedback fails. **Block 4, recorded before its results:**
+  1. **dct4 at attention sites only** (attn.qkv, attn.proj; k = 4 DCT state), on seeds 3100–3611. Reported: latent vs
+     none, R vs full, state.
+  2. **E4 step count** (pre-registered above), run although its trigger (PixArt flat) did not fire, because it tests
+     the many-step explanation directly. Read: the relative improvement of feedback over the single table at 10 vs 50
+     steps (and 20 from stage 3), each with its paired CI over 16 prompts. The many-step explanation predicts a larger
+     relative gain at more steps.

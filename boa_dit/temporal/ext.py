@@ -31,6 +31,9 @@ SITES = {"all": None, "fc2": ("mlp.fc2",), "mlp": ("mlp.fc1", "mlp.fc2"), "attn"
 
 
 def quantizer(m, dev, arm, family):
+    if family == "e6":                                                       # block 4: compressed state at a site subset
+        site, comp = arm.split("_")
+        return Quantize(m, "single8", "none", dev, feedback=True, log=False, fb_types=SITES[site], compress=comp)
     if family == "e5":
         return Quantize(m, "single8", "none", dev, feedback=True, log=False, fb_types=SITES[arm])
     if arm == "none":
@@ -158,7 +161,7 @@ def runtime(arms, dev, reps=5):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["e2", "e3", "e5"])
+    ap.add_argument("cmd", choices=["e2", "e3", "e5", "e6"])
     ap.add_argument("--seeds", default="screen", choices=list(SEEDS))
     ap.add_argument("--arms", default=None)
     a = ap.parse_args()
@@ -168,6 +171,8 @@ def main():
         eval_family("e2", a.seeds, (a.arms or "none,full,mean,dct4,rand4").split(","), dev)
     elif a.cmd == "e5":
         eval_family("e5", a.seeds, (a.arms or "all,fc2,mlp,attn").split(","), dev)
+    elif a.cmd == "e6":
+        eval_family("e6", a.seeds, (a.arms or "attn_dct4").split(","), dev)
     else:
         runtime((a.arms or "none,unif,full").split(","), dev)
 
