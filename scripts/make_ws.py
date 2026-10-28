@@ -33,5 +33,34 @@ L += ["", f"Alternating vs shuffled (ordering ablation): {p(ras)}. Static refit 
       "- **Static refit:** c* differs from 1 by ≈ 3×10⁻⁴, yet the refit improves the endpoint by 1.6% (CI excluding 0): a small but real static correction.",
       "- **Caveat:** the amplitude fit did not pass its resolution check, so these results test particular small-amplitude coefficients, not the best achievable scale schedule. A resolved test needs fp32 (or larger-ε) finite differences.",
       "- **Cost:** storage 112 fp16 multipliers (folded into scales) + 4 amplitudes + the pattern rule. The simulation's sampling time rises from 77 s to 136 s because the c ≠ 1 hook runs in fp32 eager mode; a deployed kernel would fold c into its existing scale (not measured)."]
+if os.path.exists(os.path.join(OUT, "eval2.json")):
+    c, cs_, e2 = J("controls.json"), J("cs.json"), J("eval2.json")
+    B = e2["arms"]
+    L += ["", "## Review follow-up", "",
+          "**Absolute coherence (reserved seeds 4100–4227):** alternating leaves C unchanged (1551 vs original 1545). I rises 5787 → 6728 and the total "
+          "prediction-error energy rises 229 → 259, so the lower C/I is added fluctuating error, not reduced coherent error. **Lowering C/I is insufficient.**",
+          "",
+          "**FD failure:** at |a| = 0.02 the alternating response moves the endpoint by only 2.0–4.3% of the baseline error (constant: 31–71%). The R(2ε)–R(ε) "
+          "discrepancy is 1.4–2.3% of the baseline error in absolute terms. The relative failure mainly reflects a very small alternating response.",
+          "",
+          f"**Implementation controls:** amplitude-zero schedules reproduce the static refit bit for bit for every pattern ({all(c['zero_amplitude_bitexact'].values())}). "
+          f"The hook's fp32 path with c = 1 matches the original ({p(c['fp32_path_c1']['vs_original'])}), and the static refit still beats it "
+          f"({p(c['fp32_path_c1']['static_refit_vs_fp32_path_c1'])}). The refit gain is the multiplier, not changed arithmetic.",
+          "",
+          "**Direct coordinate search** (no linear model; constant vs alternating; 25 calibration evaluations each; |a| ≤ 0.02; δ = 0.01, 0.005, 0.0025; selection on "
+          f"5008–5023): constant picked {cs_['constructions']['constant']['a']}. Alternating's validation picked **a = 0**: every non-zero candidate was worse on validation "
+          f"({[round(v['val_rel_mse'], 4) for v in cs_['constructions']['alternating']['candidates']]}).",
+          "",
+          "| arm (new untouched seeds 4300–4427) | latent rel. MSE | vs static refit | C (abs.) | I | total energy |", "| --- | ---: | --- | ---: | ---: | ---: |"]
+    for k, x in B.items():
+        L.append(f"| {k} | {x['rel_mse_mean']:.5f} | {p(x['vs_static_refit']) if 'vs_static_refit' in x else '—'} | {x['diag']['C']:.4g} | {x['diag']['I']:.4g} | {sum(x['diag']['per_step_err']):.4g} |")
+    L += ["", "## Conclusion", "",
+          "> Across the tested weight constructions, temporal variation reduced some measures of error coherence but did not establish a storage-efficient accuracy "
+          "advantage over static alternatives. Fixed-code scale modulation was also negative for the evaluated coefficients, although its finite-difference "
+          "fitting model failed the response-consistency check.",
+          "",
+          "The direct coordinate search, which needs no linear-response model, also found no temporal advantage. **Fixed-code scalar modulation is parked.** It is "
+          "a restricted family: it rescales each layer's quantized weights but cannot change their rounding directions, so its failure does not rule out richer weight "
+          "constructions. **Deployed latency is unmeasured:** folding a multiplier into an existing scale is a plausible route, not a measured result."]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))
