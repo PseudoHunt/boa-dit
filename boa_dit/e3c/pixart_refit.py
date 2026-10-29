@@ -38,7 +38,7 @@ TRAIN_SET = "mjhq1k"
 DESIGN = list(range(24, 32))                     # `design` prompt set indices (E2 used design[0:24])
 SETS = {"mjhq64": (0, 64), "confirm": (288, 352)}
 STEPS, G, K = WC.STEPS, WC.GUIDANCE, 5
-LRS, LAMS = [1e-4, 3e-4], [0.5, 2.0]
+LRS, LAMS = [1e-5, 3e-5, 1e-4, 3e-4], [0.5, 2.0]          # 1e-5, 3e-5 added by the 2026-10-29 amendment
 ACK = {"resolution": None, "aspect_ratio": None}
 TAG = ""
 
@@ -356,30 +356,45 @@ def design_latent(dev, pipe, qpath, C):
 
 
 def design(dev):
-    prof = json.load(open(os.path.join(OUT, "profile.json")))
+    """lr (P1 short runs; design-local loss, guarded by P1's design endpoint <= P0's), then λ (P2 short runs, endpoint latent); frozen.
+    Short runs already present (q file + earlier design json) are reused unchanged."""
     tt = json.load(open(os.path.join(OUT, "plan.json")))["T_train_hours"]
     short = tt / 4
-    res = {"T_train_hours": tt, "short_hours": short, "lr": {}, "lam": {}}
-    with Run(STAGE, "e3c_px_design", dev, {"lrs": LRS, "lams": LAMS, "short_h": short}) as run:
+    f = os.path.join(OUT, "design.json")
+    prev = json.load(open(f)) if os.path.exists(f) else {}
+    res = {"T_train_hours": tt, "short_hours": short, "lr": {}, "lam": {}, "previous_frozen": prev.get("lr_star")}
+    with Run(STAGE, "e3c_px_design2", dev, {"lrs": LRS, "lams": LAMS, "short_h": short}) as run:
         C = torch.load(os.path.join(CK, "cache.pt"))
         pipe, _ = setup(dev, trainable=False)
         tch = teacher(dev)
-        res["P0_design_local"] = design_local(dev, pipe, tch, QBASE, C)
-        res["P0_design_latent"] = design_latent(dev, pipe, QBASE, C)
+        res["P0_design_local"] = prev.get("P0_design_local") or design_local(dev, pipe, tch, QBASE, C)
+        res["P0_design_latent"] = prev.get("P0_design_latent") or design_latent(dev, pipe, QBASE, C)
         for lr in LRS:
-            p, lg = train(dev, "P1", 0.0, lr, short, f"design_P1_lr{lr:g}", pipe=pipe, tch=tch)
-            res["lr"][str(lr)] = {"design_local": design_local(dev, pipe, tch, p, C), "updates": lg["updates"]}
-            print(f"  lr {lr:g}: design local {res['lr'][str(lr)]['design_local']:.4f} (P0 {res['P0_design_local']:.4f})", flush=True)
-        lr_star = min(LRS, key=lambda l: res["lr"][str(l)]["design_local"])
-        res["lr_star"] = lr_star
+            p = os.path.join(CK, f"q_design_P1_lr{lr:g}.pt")
+            r = dict(prev.get("lr", {}).get(str(lr), {}))
+            if not (os.path.exists(p) and r):
+                p, lg = train(dev, "P1", 0.0, lr, short, f"design_P1_lr{lr:g}", pipe=pipe, tch=tch)
+                r = {"design_local": design_local(dev, pipe, tch, p, C), "updates": lg["updates"]}
+            r.setdefault("design_latent", design_latent(dev, pipe, p, C))
+            res["lr"][str(lr)] = r
+            print(f"  lr {lr:g}: design local {r['design_local']:.4f} latent {r['design_latent']:.4f} (P0 {res['P0_design_local']:.4f} / {res['P0_design_latent']:.4f})", flush=True)
+        order = sorted(LRS, key=lambda l: res["lr"][str(l)]["design_local"])
+        ok = [l for l in order if res["lr"][str(l)]["design_latent"] <= res["P0_design_latent"]]
+        lr_star = ok[0] if ok else min(LRS)
+        res["lr_star"], res["lr_guard_satisfied"] = lr_star, bool(ok)
         for lam in LAMS:
-            p, lg = train(dev, "P2", lam, lr_star, short, f"design_P2_lam{lam:g}", pipe=pipe, tch=tch)
-            res["lam"][str(lam)] = {"design_latent": design_latent(dev, pipe, p, C), "updates": lg["updates"]}
-            print(f"  P2 λ {lam:g}: design latent {res['lam'][str(lam)]['design_latent']:.5f} (P0 {res['P0_design_latent']:.5f})", flush=True)
+            p = os.path.join(CK, f"q_design_P2_lam{lam:g}_lr{lr_star:g}.pt")
+            r = dict(prev.get("lam", {}).get(str(lam), {})) if lr_star == prev.get("lr_star") else {}
+            if not r:
+                p, lg = train(dev, "P2", lam, lr_star, short, f"design_P2_lam{lam:g}_lr{lr_star:g}", pipe=pipe, tch=tch)
+                r = {"design_latent": design_latent(dev, pipe, p, C), "updates": lg["updates"]}
+            res["lam"][str(lam)] = r
+            print(f"  P2 λ {lam:g} (lr {lr_star:g}): design latent {r['design_latent']:.5f} (P0 {res['P0_design_latent']:.5f})", flush=True)
         res["lam_star"] = min(LAMS, key=lambda l: res["lam"][str(l)]["design_latent"])
+        res["previous_design"] = prev
         res.update(run.record())
-    atomic_write_json(os.path.join(OUT, "design.json"), res)
-    print("  frozen: lr", res["lr_star"], "λ", res["lam_star"], flush=True)
+    atomic_write_json(f, res)
+    print("  frozen: lr", res["lr_star"], "λ", res["lam_star"], "guard satisfied", res["lr_guard_satisfied"], flush=True)
 
 
 def final(dev):
@@ -477,9 +492,15 @@ def pilot_profile(dev):
     atomic_write_json(os.path.join(OUT, "profile.json"), res)
 
 
+def pilot_lr():
+    """2026-10-29 amendment: the pilot uses Part 2's frozen lr (selected on Part 2's design data only)."""
+    return json.load(open(os.path.join(RESULTS, "e3c", "pixart", "design.json")))["lr_star"]
+
+
 def pilot_final(dev):
     global K
     K = json.load(open(os.path.join(OUT, "profile.json")))["K"]
+    lr = pilot_lr()
     pipe, _ = setup(dev, trainable=False)
     tch = teacher(dev)
     for arm in ("P1", "P2"):
@@ -487,8 +508,8 @@ def pilot_final(dev):
         if os.path.exists(f):
             continue
         lam = 0.0 if arm == "P1" else 0.5
-        with Run(STAGE, f"e3c_pxpilot_train_{arm}", dev, {"lam": lam, "lr": 1e-4, "hours": 0.4, "K": K, "seed": 0}) as run:
-            p, lg = train(dev, arm, lam, 1e-4, 0.4, f"pilot_{arm}", pipe=pipe, tch=tch)
+        with Run(STAGE, f"e3c_pxpilot_train_{arm}", dev, {"lam": lam, "lr": lr, "hours": 0.4, "K": K, "seed": 0}) as run:
+            p, lg = train(dev, arm, lam, lr, 0.4, f"pilot_{arm}", pipe=pipe, tch=tch)
             lg.update({"q": p, "K": K, **run.record()})
         atomic_write_json(f, lg)
 

@@ -179,3 +179,21 @@ So the deployed base branch is bf16(L1, L2). The export (bf16, the deployed prec
 The criterion now compares against the deployed bf16 base. The pre-registered requirement ("reproduces the base bit-exactly in sampling") passed in the first run.
 
 The master chain had already moved on to the DNS queue, so the order is now E3C → DNS → PixArt Part 2 → pilot. The pilot stays last, as requested.
+
+### 2026-10-29 09:40: Part 2 design amendment (design data only; before any final training, PixArt confirmation or pilot step)
+**Observed on the design prompts.**
+- Both registered learning rates make held-out (design) prompts worse than the base: design-local loss 1.003 (lr 1e-4) and 1.332 (lr 3e-4), against 0.994 for P0.
+- The short P2 runs at lr 1e-4 more than doubled the design endpoint latent error: 0.59 (λ 0.5) and 0.79 (λ 2), against 0.206.
+- In a fresh process, P0 reproduces 0.206 and the P1 lr 1e-4 branch gives 1.28, so this is not an evaluation artefact.
+- The most-changed tensors are the cross-attention output branches (`attn2.to_out.0` L2, mean |·| ≈ 1e-3), which moved by up to 330% of their norm.
+- The local-loss criterion samples steps 0, 4, 8, 12 and 16 only, and did not reveal the endpoint damage.
+
+**Amendment.**
+1. The lr grid is extended downward to {1e-5, 3e-5, 1e-4, 3e-4}; the existing short runs are reused.
+2. Selection keeps the registered criterion (lowest design-local loss), with a guard: the chosen lr's P1 design endpoint latent must not exceed P0's.
+   Otherwise the next lr by local loss is taken. If no lr satisfies the guard, the smallest lr is used and this is reported.
+3. λ ∈ {0.5, 2} is re-selected at the chosen lr by the registered endpoint criterion.
+4. The Part 3 pilot's lr, which was this report's own choice (1e-4, "E3's value"; the user did not specify one), is set to the same Part 2 frozen lr.
+   That lr is selected on Part 2's design data only, with no pilot data involved.
+
+The first design record is kept as `results/e3c/pixart/design_v1.json`.
