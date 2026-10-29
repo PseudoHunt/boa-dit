@@ -70,13 +70,21 @@ class QLinearT(QLinear):
         super().__init__(lin, q["R"], None, None, q.get("d"), act_shift=q.get("act_shift"))
         self.L1p = torch.nn.Parameter(q["L1"].float().to(dev))
         self.L2p = torch.nn.Parameter(q["L2"].float().to(dev))
+        self.register_buffer("L10", q["L1"].to(torch.bfloat16).to(dev))     # initial branch (drift penalty reference)
+        self.register_buffer("L20", q["L2"].to(torch.bfloat16).to(dev))
+        self.track, self.dnum, self.dden = False, None, None
 
     def forward(self, x):
         dt = x.dtype
         xs = x.float() if self.d is None else x.float() / self.d
         xq = _STE.apply(xs, self.act_shift)
         y = F.linear(xq.to(torch.bfloat16), self.R, self.bias)
-        y = y + (xs.to(torch.bfloat16) @ self.L1p.to(torch.bfloat16)) @ self.L2p.to(torch.bfloat16)
+        xb = xs.to(torch.bfloat16)
+        br = (xb @ self.L1p.to(torch.bfloat16)) @ self.L2p.to(torch.bfloat16)
+        y = y + br
+        if self.track:                                                        # functional drift of the branch output vs the initial branch
+            self.dnum = (br - (xb @ self.L10) @ self.L20).float().pow(2).sum()
+            self.dden = y.detach().float().pow(2).sum()
         return y.to(dt)
 
 
@@ -266,7 +274,7 @@ def cache(dev):
 
 
 # --------------------------------------------------------------------------------------------- training
-def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
+def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None, ckpt_at=(), max_updates=None, mu=0.0):
     C = torch.load(os.path.join(CK, "cache.pt"))
     if pipe is None:
         pipe, _ = setup(dev, trainable=False)
@@ -279,8 +287,11 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
     X, H = C["train"]["x"], C["train"]["hist"]
     nl, nr = C["norm"]["loc"], C["norm"]["roll"]
     g = torch.Generator().manual_seed(seed)
+    for m in mods.values():
+        m.track = mu > 0
+    saved = {}
     log, n_up, t0 = [], 0, time.time()
-    while time.time() - t0 < hours * 3600:
+    while time.time() - t0 < hours * 3600 and (max_updates is None or n_up < max_updates):
         n = int(torch.randint(0, len(X), (1,), generator=g))
         i = int(torch.randint(0, STEPS, (1,), generator=g))
         k = min(K, STEPS - i)
@@ -292,6 +303,9 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
             es = pred(pipe.transformer, x, new_sched(pipe, dev).timesteps[i], ehs, mask)
             loss = (es.float() - et.float()).pow(2).sum() / float(nl[i])
             ll = lroll = None
+            if mu > 0:
+                drift = sum(m.dnum for m in mods.values()) / sum(m.dden for m in mods.values())
+                loss = loss + mu * drift
         else:
             es, xs = rollout(pipe, pipe.transformer, x, h, i, k, ehs, mask, dev)
             ll = (es.float() - et.float()).pow(2).sum() / float(nl[i])
@@ -301,6 +315,10 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
         loss.backward()
         opt.step()
         n_up += 1
+        if n_up in ckpt_at:
+            pth = os.path.join(CK, f"q_{tag}_u{n_up}.pt")
+            atomic_torch_save(export(mods), pth)
+            saved[n_up] = {"q": pth, "seconds": time.time() - t0}
         if n_up % 20 == 0:
             log.append({"update": n_up, "t": time.time() - t0, "loss": float(loss), "local": None if ll is None else float(ll),
                         "roll": None if lroll is None else float(lroll)})
@@ -310,7 +328,8 @@ def train(dev, arm, lam, lr, hours, tag, seed=0, pipe=None, tch=None):
     atomic_torch_save(qs, path)
     install_q(pipe.transformer, torch.load(QBASE, map_location="cpu"))      # frozen base modules again for the next run
     pipe.transformer.disable_gradient_checkpointing()
-    return path, {"arm": arm, "lam": lam, "lr": lr, "hours": hours, "seed": seed, "updates": n_up, "train_seconds": time.time() - t0, "log": log}
+    return path, {"arm": arm, "lam": lam, "lr": lr, "hours": hours, "seed": seed, "mu": mu, "updates": n_up, "train_seconds": time.time() - t0,
+                  "checkpoints": saved, "log": log}
 
 
 def profile(dev):
