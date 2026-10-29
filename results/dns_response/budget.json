@@ -1,0 +1,19 @@
+{
+ "first_gpu_utc": "2026-10-29T18:51:49.800865+00:00",
+ "log": [
+  {
+   "stage": "checks",
+   "utc": "2026-10-29T18:51:49.800865+00:00",
+   "spent_gpu_h": 0,
+   "elapsed_h": 0.0,
+   "estimate_h": 0.15,
+   "ok": true
+  }
+ ],
+ "spent_gpu_h": 0,
+ "elapsed_h": 0.0,
+ "caps": {
+  "gpu_h": 6.0,
+  "elapsed_h": 6.0
+ }
+}
