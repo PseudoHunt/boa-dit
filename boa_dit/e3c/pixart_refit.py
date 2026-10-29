@@ -380,8 +380,9 @@ def design(dev):
             print(f"  lr {lr:g}: design local {r['design_local']:.4f} latent {r['design_latent']:.4f} (P0 {res['P0_design_local']:.4f} / {res['P0_design_latent']:.4f})", flush=True)
         order = sorted(LRS, key=lambda l: res["lr"][str(l)]["design_local"])
         ok = [l for l in order if res["lr"][str(l)]["design_latent"] <= res["P0_design_latent"]]
-        lr_star = ok[0] if ok else min(LRS)
+        lr_star = ok[0] if ok else min(LRS)                                  # lr used for the P2 screen only; promotion is decided below
         res["lr_star"], res["lr_guard_satisfied"] = lr_star, bool(ok)
+        res["P1_selection"] = f"lr {ok[0]:g}" if ok else "untrained (P0): no lr satisfies the endpoint guard"
         for lam in LAMS:
             p = os.path.join(CK, f"q_design_P2_lam{lam:g}_lr{lr_star:g}.pt")
             r = dict(prev.get("lam", {}).get(str(lam), {})) if lr_star == prev.get("lr_star") else {}
@@ -391,6 +392,7 @@ def design(dev):
             res["lam"][str(lam)] = r
             print(f"  P2 λ {lam:g} (lr {lr_star:g}): design latent {r['design_latent']:.5f} (P0 {res['P0_design_latent']:.5f})", flush=True)
         res["lam_star"] = min(LAMS, key=lambda l: res["lam"][str(l)]["design_latent"])
+        res["P2_guard_satisfied"] = res["lam"][str(res["lam_star"])]["design_latent"] <= res["P0_design_latent"]   # P2 gated on its own endpoint
         res["previous_design"] = prev
         res.update(run.record())
     atomic_write_json(f, res)
@@ -398,12 +400,21 @@ def design(dev):
 
 
 def final(dev):
+    """2026-10-29 (user review): no automatic promotion after a failed guard. An arm trains only if its own design guard passed, or a dated
+    decision file results/e3c/pixart/promote.json names it explicitly."""
     dz = json.load(open(os.path.join(OUT, "design.json")))
+    pf = os.path.join(OUT, "promote.json")
+    promote = json.load(open(pf)) if os.path.exists(pf) else {}
+    allowed = {"P1": dz.get("lr_guard_satisfied", False) or "P1" in promote.get("arms", []),
+               "P2": dz.get("P2_guard_satisfied", False) or "P2" in promote.get("arms", [])}
+    print(f"  promotion: {allowed} (decision file: {promote or 'none'})", flush=True)
+    if not any(allowed.values()):
+        raise SystemExit(8)
     pipe, _ = setup(dev, trainable=False)
     tch = teacher(dev)
     for arm in ("P1", "P2"):
         f = os.path.join(OUT, f"train_{arm}.json")
-        if os.path.exists(f):
+        if os.path.exists(f) or not allowed[arm]:
             continue
         lam = 0.0 if arm == "P1" else dz["lam_star"]
         with Run(STAGE, f"e3c_px_train_{arm}", dev, {"lam": lam, "lr": dz["lr_star"], "hours": dz["T_train_hours"]}) as run:

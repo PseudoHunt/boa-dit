@@ -197,3 +197,34 @@ The master chain had already moved on to the DNS queue, so the order is now E3C 
    That lr is selected on Part 2's design data only, with no pilot data involved.
 
 The first design record is kept as `results/e3c/pixart/design_v1.json`.
+
+### 2026-10-29 10:55: repair plan after the user's review (before any final training, PixArt confirmation or pilot step)
+**User's review, summary.** The amended "guard" was a fallback: if every lr failed, the smallest was used, and `final()` trained anyway.
+The review asks to:
+- finish the low-rate P2 screen;
+- disable automatic promotion after a failed guard;
+- diagnose before retraining;
+- hold the pilot.
+
+**Changes.**
+1. **No automatic promotion.** The queue was stopped after the P2 screen (the running design step finishes; nothing follows it automatically). `final()` trains an arm only if its own design guard passed:
+   - P1: an lr whose design endpoint ≤ P0's;
+   - P2: the selected λ's design endpoint ≤ P0's, gated independently of P1;
+   - or a dated decision file `results/e3c/pixart/promote.json` names it.
+
+   "Untrained (P0)" is a valid selection.
+2. **Diagnostics (design prompts only, existing checkpoints, no new training)** in `boa_dit/e3c/px_diag.py`:
+   - per-step prediction error at all 20 steps on cached base states and on each model's own states;
+   - free-running state error at every step vs the teacher trajectory;
+   - held-out short-rollout loss;
+   - ‖L1L2 − L10L20‖ and the branch-output change on probe activations, relative to the layer output energy;
+   - restore only the cross-attention output branches / keep only those trained (endpoint);
+   - α-interpolation of the factors toward the base, α ∈ {0.03, 0.1, 0.3} (endpoint, bf16 deployment path);
+   - loss denominators and per-step gradient norms at the base branch.
+3. **The next training screen**, if any, is specified after the diagnostics, in its own dated amendment. Candidates from the review:
+   - early checkpoints at 10/25/50/100 updates, selected on design endpoints;
+   - a drift constraint applied equally to P1 and P2;
+   - a normalization audit;
+   - refreshing latents together with DPM history when cached-state gains fail on own states;
+   - an update-matched P1 control.
+4. **The pilot is held.** It would otherwise inherit an lr that failed Part 2's guard. Confirmation prompts stay untouched.
