@@ -4,7 +4,7 @@
 - GPU: 1× NVIDIA A30, 24 GiB (24576 MiB). Driver 580.126.20. `nvcc` 12.6 present; the PyTorch wheel bundles its own CUDA 13.0 runtime.
 - CPU: 16 cores; RAM: 503 GiB (the PixArt calibration cache and the FID bootstraps used tens of GB of RAM; 64 GiB is enough for the DiT pilot).
 - OS: Ubuntu 22.04.5 LTS. Disk: the old data root used 85 GB, of which 58 GB are regenerable caches. A fresh VM needs about **60 GB** for the
-  DiT pilot (upstream 4.7 GB + DiT archive groups ≈ 7.7 GB + new checkpoints/latents ≈ 20 GB + headroom), and about **150 GB** to restore everything, PixArt included.
+  DiT pilot (upstream 4.7 GB + regenerated base ≈ 8 GB + new checkpoints/latents ≈ 20 GB + headroom), and about **150 GB** to restore everything, PixArt included.
 - **VRAM needed by the DiT pilot:** E3's rank-8 carry rollout training (K = 5, B = 4) peaked at **9.6 GiB** on the A30. With static A8 fake-quant and DCT-4 state
   the pilot needs more. Budget ≥ 16 GiB and measure in the pilot's profile step (results/dit_joint/PROTOCOL.md). PixArt work peaked at 6.1 GiB (B = 1).
 
@@ -36,7 +36,7 @@
 - `external/DiT` → https://github.com/facebookresearch/DiT.git @ ed81ce2229091fd4ecc9a223645f95cf379d582b
 - `external/boa` → https://github.com/PseudoHunt/boa-kronecker-gap.git @ 91813d573289841db96fd98bdea5ea256dc32abd (the BoA quantizer used by the heig builder)
 
-## Upstream models (pinned; not re-hosted; restore with `scripts/restore_assets.py --upstream`)
+## Upstream models (pinned; not re-hosted; `scripts/fetch_upstream.py`)
 | asset | source | revision / sha256 |
 |---|---|---|
 | DiT-XL-2-256x256.pt | https://dl.fbaipublicfiles.com/DiT/models/DiT-XL-2-256x256.pt | sha256 in SHA256SUMS |

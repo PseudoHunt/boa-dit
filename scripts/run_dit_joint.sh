@@ -1,6 +1,7 @@
 #!/bin/bash
 # One-command, resumable launcher for the DiT joint-feedback pilot (results/dit_joint/PROTOCOL.md). Runs ONLY the pilot's stages, in order;
 # every stage skips itself when its output JSON exists (resume = rerun this script). It never starts any parked queue (handoff/PARKED_WORK.md).
+# Checkpoints stay local (ckpt/dit_joint/); nothing trained is uploaded (user instruction 2026-10-29).
 # Usage: scripts/run_dit_joint.sh [stage ...]   (default: all stages)
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -17,7 +18,6 @@ for s in $STAGES; do
   echo "== $s $(date -u +%H:%MZ)"
   python -m boa_dit.dit_joint.run "$s" > "logs/j1_$s.log" 2>&1; rc=$?
   tail -5 "logs/j1_$s.log"; ck "$s (rc $rc)"
-  python scripts/backup_checkpoints.py --stage "$s" 2>/dev/null || true   # uploads new ckpt/dit_joint files to the release (if implemented)
   [ $rc -eq 0 ] || { echo "STAGE $s FAILED (rc $rc): fix, record, rerun this script (completed stages are skipped)"; exit $rc; }
 done
 echo DIT_JOINT_DONE

@@ -5,7 +5,7 @@ Everything else is **parked** (`handoff/PARKED_WORK.md`). Nothing parked runs un
 
 - Repository: https://github.com/PseudoHunt/boa-dit. Branch **`dit-joint-feedback`**. The handoff commit is identified by tag **`handoff/2026-10-29`** (pushed with this file).
 - Parked branch heads: immutable tags `park/2026-10-29/<branch>` (table in PARKED_WORK.md).
-- Non-Git assets: release **`park-assets-2026-10-29`** (tar parts), manifest `handoff/ASSETS.json`, checksums `handoff/SHA256SUMS`.
+- Non-Git assets: **none are hosted** (user instruction 2026-10-29). Public upstream inputs are fetched at pinned revisions; every project-generated or trained artifact is regenerated (`handoff/REGENERATION.md`). Old-VM hashes for comparison: `handoff/REFERENCE_HASHES.json`.
 - Environment: `handoff/ENVIRONMENT.md`. Seeds and prompts: `handoff/SEED_REGISTRY.md`. Code provenance: `handoff/INTEGRATION.md`.
 
 ## Restore order
@@ -20,18 +20,15 @@ Everything else is **parked** (`handoff/PARKED_WORK.md`). Nothing parked runs un
      && sudo apt-get update && sudo apt-get install -y gh
    gh auth login          # an account authorized for PseudoHunt/boa-dit (HTTPS + browser/device login; no token in URLs)
    ```
-2. **Clone and bootstrap** (≈ 10–20 min, plus downloads: about 2.9 GB of archive parts and 2.6 GB of DiT weights for the pilot):
+2. **Clone and bootstrap** (≈ 20 min install + ≈ 4.5 GB public downloads + ≈ 0.3 A30-h regeneration):
    ```
    git clone --branch dit-joint-feedback https://github.com/PseudoHunt/boa-dit.git && cd boa-dit
-   bash scripts/bootstrap_vm.sh          # venv + locked stack + submodules + A_dit_base + DiT/VAE upstream + smoke check
+   bash scripts/bootstrap_vm.sh          # venv + locked stack + submodules + pinned upstream + regenerate heig-8 base, ref stats, A8 tables + smoke check
    . .venv/bin/activate
    ```
    Defaults: data root `./data` (override with `BOA_DATA`), HF cache `./data/hf` (override with `BOA_HF_HOME`).
    `bootstrap_vm.sh` ends with `BOOTSTRAP_OK` after `scripts/verify_restore.py --smoke` passes.
-3. **Optional, for analysis or parked work only** (not needed for the pilot):
-   `python scripts/restore_assets.py --groups B_dit_analysis,C_pixart_base,D_pixart_analysis --upstream pixart --rebuild-pixart-refits`
-   (≈ 17 GB of parts plus the ≈ 12 GB PixArt upstream). On an A30 with the ENVIRONMENT.md stack, `python scripts/verify_restore.py --bitwise` checks bitwise agreement with archived latents.
-   On different hardware, do **not** reuse old baselines: the pilot's protocol re-measures its own controls on the new machine.
+3. **Parked work** is regenerated only if the user resumes it (REGENERATION.md §B).
 
 ## Exact next command (after BOOTSTRAP_OK)
 The pilot module does not exist yet. Implement `boa_dit/dit_joint/run.py` with the stages listed in `scripts/run_dit_joint.sh`, following PROTOCOL.md §D and the §C5 checks. Then run:
@@ -44,4 +41,4 @@ scripts/run_dit_joint.sh        # resumable; each stage commits/pushes small res
 - Implement and execute only the pilot. Proceed through the correctness checks and the bounded pilot without asking for routine reconfirmation.
 - Never tune on an old confirmation set. The sealed pilot set (61000–61127) is opened once, after the selections are frozen.
 - Record implementation decisions and amendments in PROTOCOL.md, dated, before the affected step runs.
-- Commit/push code and small results at milestones and back up new checkpoints remotely. Stop after the pilot report.
+- Commit/push code and small results at milestones. Checkpoints stay local (no uploads of trained artifacts). Stop after the pilot report.

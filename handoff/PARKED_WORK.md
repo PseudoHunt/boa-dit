@@ -2,7 +2,7 @@
 
 Parked by user instruction: the DiT joint-feedback pilot (results/dit_joint/PROTOCOL.md) is the only active work.
 All queues were stopped at ≈ 13:30 UTC (launchers before children); e3-confirm has one correction commit after its park tag (stop-time fix). Interrupted jobs are marked INTERRUPTED/PARTIAL, never complete or negative.
-Asset locations refer to `handoff/ASSETS.json` (release tag `park-assets-2026-10-29`, restore with `scripts/restore_assets.py --groups <G>`).
+No generated or trained artifact is hosted. To resume a thread, regenerate its inputs with `handoff/REGENERATION.md` §B (the old VM's files and hashes are listed in REFERENCE_HASHES.json). Lines below that say "Assets: <group>" name the old archive grouping, kept for reference only.
 
 ## Branch heads at parking (immutable tags)
 | branch | tag | commit |

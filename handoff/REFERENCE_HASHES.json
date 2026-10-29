@@ -1,0 +1,3761 @@
+{
+ "note": "SHA-256 of artifacts as they existed on the old VM (2026-10-29). These files are NOT uploaded anywhere; they are regenerated on the fresh VM. Use these hashes only to report whether a regeneration is bitwise identical (expected only for deterministic CPU steps or the same GPU/software stack).",
+ "generated": {
+  "data/ckpt/ckpt_deflate_heig_r8_w4/model.pt": {
+   "sha256": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761",
+   "bytes": 2700637793,
+   "class": "essential_resume_pilot",
+   "role": "heig-8 W4 DiT state (rebuild.py output; the W4 base of every DiT carry experiment)",
+   "regen": null
+  },
+  "data/ckpt/temporal/rebuild_quant/deflate_heig_r8_w4/carry.pt": {
+   "sha256": "f40ea01dd67ba226aa70ba74a70833240984f358f91c1752b4b0d3356ba06db4",
+   "bytes": 8322021,
+   "class": "essential_resume_pilot",
+   "role": "heig-8 rank-8 carry (bitwise equal to the git carry)",
+   "regen": null
+  },
+  "data/ckpt/temporal/dit_smooth_s.pt": {
+   "sha256": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26",
+   "bytes": 661995,
+   "class": "essential_resume_pilot",
+   "role": "DiT static-A8 smoothing vectors (temporal-oracles)",
+   "regen": null
+  },
+  "data/ckpt/temporal/dit_static_b_single6.pt": {
+   "sha256": "3c75a235c5be5f5f1b46346d1ba7aed35d84daef36c2c690702bdcd93fb27780",
+   "bytes": 311743,
+   "class": "essential_resume_pilot",
+   "role": "DiT static-A8 activation tables (single6/single8/step8)",
+   "regen": null
+  },
+  "data/ckpt/temporal/dit_static_b_single8.pt": {
+   "sha256": "3942ae0d5d565d81cce9f2df31d69a7f38f635aa15b1e62137334b5fe1c76a13",
+   "bytes": 311743,
+   "class": "essential_resume_pilot",
+   "role": "DiT static-A8 activation tables (single6/single8/step8)",
+   "regen": null
+  },
+  "data/ckpt/temporal/dit_static_b_step8.pt": {
+   "sha256": "6071e46be41a6d36a083eca5e9db56dab084742944c0afc9c75d47b97b48c123",
+   "bytes": 310547,
+   "class": "essential_resume_pilot",
+   "role": "DiT static-A8 activation tables (single6/single8/step8)",
+   "regen": null
+  },
+  "data/ckpt/temporal/fp_traj32_all.pt": {
+   "sha256": "38333f33d060b0f31b69f7034da8515cad7db9a9ffcd08e5765508070b303cf0",
+   "bytes": 52983096,
+   "class": "essential_analysis",
+   "role": "FP trajectory caches used by the temporal analyses",
+   "regen": null
+  },
+  "data/ckpt/temporal/fp_traj_calib1000_all.pt": {
+   "sha256": "45d33a61379679145267bc9d063df9c8873ec20b15c949d6d1ab8facd1a868a2",
+   "bytes": 52459393,
+   "class": "essential_analysis",
+   "role": "FP trajectory caches used by the temporal analyses",
+   "regen": null
+  },
+  "data/ckpt/temporal/stage1_delta_heig8.pt": {
+   "sha256": "5261783420dba7539fa0991bb0bfcd63fd12eaa9fc19d65896099e9407e9240b",
+   "bytes": 26740693,
+   "class": "essential_analysis",
+   "role": "temporal stage-1 records",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_latents.pt": {
+   "sha256": "b47c46947873916eab0a176478e9bffb8645dbcd4de2d62c3889ef5249d93a39",
+   "bytes": 8390262,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_latents_s3000.pt": {
+   "sha256": "964b67d62fc8f18aa0318c90ccffec466296aa6d777cb0edc08497874b4e46b9",
+   "bytes": 1050400,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_latents_s3100.pt": {
+   "sha256": "687d07cd41d8068ccd2790cbd50256e69dfc3aaf38c8aef4e35e2ccd08316694",
+   "bytes": 8390432,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_pixels64.pt": {
+   "sha256": "0a6fd421153734f38781c54d60409b966490bf4e17066e53afb3bc10a4e1b059",
+   "bytes": 12584637,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_pixels64_s3000.pt": {
+   "sha256": "002c16d65c692f37db2181feb31fd0aedd58ebebe093ee2c02a5fae10752b13f",
+   "bytes": 12584743,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "data/ckpt/fp_eval_pixels64_s3100.pt": {
+   "sha256": "10821463edb136e232c3f38001ef70a4e1e3d998a0af127b9136a164d2efa4e4",
+   "bytes": 12584743,
+   "class": "essential_analysis",
+   "role": "FP eval latents/pixels used by eval_latent_mse",
+   "regen": null
+  },
+  "results/stage0/ref_stats.npz": {
+   "sha256": "a11af8b0f80b2d77640c8dcef76674eebcff02c065a11bf4261e95cef635fab4",
+   "bytes": 33571558,
+   "class": "essential_resume_pilot",
+   "role": "pytorch-fid reference statistics of the ADM batch (sha a11af8b0...)",
+   "regen": null
+  },
+  "data/ckpt/ckpt_deflate_heig_r16_w4/model.pt": {
+   "sha256": "3c5c85ec3ee23cb4024a6a47a37a4eadec0ff54f6308c92ca0f84087f3f14afa",
+   "bytes": 2700632929,
+   "class": "essential_analysis",
+   "role": "heig-16 W4 DiT state (E3C comparator H16)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1L_s0.pt": {
+   "sha256": "2f4e0e7c84057471855afeb3c2657372112b3b0ee85f60f0a7ff2bbfe699bed6",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1L_s1.pt": {
+   "sha256": "837c0f1eb4aadf668eec6f47281705084d8c51610e64eeb8d040253440c3497c",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1L_s2.pt": {
+   "sha256": "2151c8f5ed7a4614e72c4008405ddcc81c2e1c696006dd4005b824dd8855e049",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1t_s0.pt": {
+   "sha256": "6efe04eb2913e45e5e0081c2e1421f7d811ebf8241c7b2032bd8d4c48d0e3b0a",
+   "bytes": 8324155,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1t_s1.pt": {
+   "sha256": "0ba02a32ae290861dde549997598fc078897e6ead8d3a1f0d020b12134c3051a",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1t_s2.pt": {
+   "sha256": "b0cbd85e0990365a9bc5db2c30868dfda55d8acd27734644ea7e1e0ead7d8afe",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1u_s0.pt": {
+   "sha256": "ea4b1635dc9473641b97f7d4a96430425cc97511e274a07ebf4237d5f90dcce0",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1u_s1.pt": {
+   "sha256": "ff38a71b13f00f71f1bacf3c29215139c8b181a36b0f0478e9fb5fcb03474816",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C1u_s2.pt": {
+   "sha256": "3cc4855498d223603d4c57f0ab10178362d15b633e3d3c677086e1510ebc46f4",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2L_s0.pt": {
+   "sha256": "0632a4e1f4feb4738bd9afb7d733213470a333078c17d54c746d0e427052ced8",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2L_s1.pt": {
+   "sha256": "4d623f179791d6839840982468de91c2d1ba759df862dbf3466e55d819abf79b",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2L_s2.pt": {
+   "sha256": "4f7a5fc55b63f4f0d718127df1d71c4b0944bcbe80250dd79a992dc4847ca3a9",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2_s0.pt": {
+   "sha256": "dd58859fbc9be3a3de570b5311874c7a1cc3b0ca1a51f0b976d548a93c32a808",
+   "bytes": 8324155,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2_s1.pt": {
+   "sha256": "b2cca433fd96a517313d14186436627ee3db93fd10dbc570220715b07b990676",
+   "bytes": 8324385,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/carry_C2_s2.pt": {
+   "sha256": "248729207fb48e1b96029b1ee24a5e40402a6d9e14d7015651ab9c2291e4fcfb",
+   "bytes": 8324385,
+   "class": "essential_analysis",
+   "role": "E3C trained carries (15 runs)",
+   "regen": null
+  },
+  "data/ckpt/e3c/eval_latents.pt": {
+   "sha256": "7aa86b64586d83977a14b5734c7d648030a0561bdd05667edac990031c3700a9",
+   "bytes": 39852530,
+   "class": "essential_analysis",
+   "role": "E3C paired-eval latents (seeds 20000-20127; FP + all arms)",
+   "regen": null
+  },
+  "data/ckpt/e3c/m_C2_s0.pt": {
+   "sha256": "c30cbf89df8c24d062b6297f3a97999a46d7b4eccd12f78bdb8a3607ce9cde53",
+   "bytes": 2363,
+   "class": "essential_analysis",
+   "role": "M coefficients for C2 s0",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_C0.npy": {
+   "sha256": "15f1f48005a105d915c28e1e815aeddff62a74fa67ab1c0674dc6e0b582052f3",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_C1t_s0.npy": {
+   "sha256": "bdc2231db53d2af66c1d266bd457fc3960339ee0f8c83bf831e22acc3b037a31",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_C2L_s0.npy": {
+   "sha256": "73b2db964a59df998e82296ddc619bb61390c0f6ed4a5382f7c21aa05181893f",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_C2M_s0.npy": {
+   "sha256": "78fed5273be79b1a3b7a0dc5aafa109dceb3b74b0fb637b4212cb719f6e431fe",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_C2_s0.npy": {
+   "sha256": "5be266b976f9a6742d79af0fca69d39162e1c412ec70ec7c0b26ecf8374160e9",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/feats_H16.npy": {
+   "sha256": "5f3346e638a0be9332e8f7ac553f6bdab9a5e8df888f5ecf0a852dd3385b6030",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_C0.pt": {
+   "sha256": "d9e15545ee492cde5cc20083cfbb02e5c3151c08e5c679ac64f8cc6d27f74355",
+   "bytes": 32769619,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_C1t_s0.pt": {
+   "sha256": "69d8685d3b2dba953e27ea76e52dfff1b7ad341862d413527a41f28e28abaf31",
+   "bytes": 32769647,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_C2L_s0.pt": {
+   "sha256": "ba1b4c623e71874926e8a58927eb47de745a938e1deaa27162247efda5530a54",
+   "bytes": 32769647,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_C2M_s0.pt": {
+   "sha256": "4bb67bb2974043b8c9d70578670420daa9776912a5972a866945be2629f21142",
+   "bytes": 32769647,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_C2_s0.pt": {
+   "sha256": "04a8c667dea06ba3ea5aa55877f54f1a428cca397392574ac443ded10c0f5948",
+   "bytes": 32769640,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/e3c/fid/latents_H16.pt": {
+   "sha256": "73afc0492ccfbcea76a23480629fa47fa9018f836b125e71ce4074bc4104e42d",
+   "bytes": 32769626,
+   "class": "essential_analysis",
+   "role": "E3C FID-2k latents and per-image Inception features",
+   "regen": null
+  },
+  "data/ckpt/dns/cal_x0.pt": {
+   "sha256": "a9a7f2070ce817fe2cc3449470b402e8d208271ca42787c2bcc6a8a4755c83bd",
+   "bytes": 49188343,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/cdns_traces.pt": {
+   "sha256": "8039182b2de1050f3756ec33d4e78e982c5213a7c883e6e3d6a6ec047c07f548",
+   "bytes": 528486901,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/feats_cdns_full.npy": {
+   "sha256": "c79b1e2bfe8b65d71f3dd545f1bdf1db82c74bcdf15674ce44aea43b51f58bea",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/feats_cdns_ind.npy": {
+   "sha256": "bd9ae82235bffde6ec3ad7d52f6611ee16538d9f3e0a01a047949a7e4c72d413",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/feats_dns.npy": {
+   "sha256": "ad1dfd3a9a6f631b367f96e907391d252fbf08716f0c733ad7cbe238dd66873f",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/feats_qdrift.npy": {
+   "sha256": "686873657fa15656ed22146bbeb6aec33844d55a69e0f9037454d5c9a1d7c4e6",
+   "bytes": 16384128,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/latents_cdns_full.pt": {
+   "sha256": "e60c836dda110294e6a76c3af34c6ac79964fb34932996532421d98e280c6b7c",
+   "bytes": 32769668,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/latents_cdns_ind.pt": {
+   "sha256": "4f52d3494fa54672898c3678f57687cad3d1c53eebdc064ffa3c8bb7d7f8c27a",
+   "bytes": 32769661,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/latents_dns.pt": {
+   "sha256": "6f57ad750e84e939ef00d37aea3c47a7036f2b24b55f5e2ff29b9f8b958a84ec",
+   "bytes": 32769626,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/fid/latents_qdrift.pt": {
+   "sha256": "8cceffd17337a0d0afe2b64213bd2ecfee5fe1ac60b31ac3bc10d774c82384b5",
+   "bytes": 32769647,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/paired/latents_cdns_full.pt": {
+   "sha256": "e9c959fb92250f88ff4f81e93c2c3b24206d2878bfad495029534b5e95cf3c4f",
+   "bytes": 2098820,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/paired/latents_cdns_ind.pt": {
+   "sha256": "bd134249f6d3957b1b9af63dae6e99fd7c29caba1e8bcd96870e5793143fce50",
+   "bytes": 2098813,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/paired/latents_dns.pt": {
+   "sha256": "7d91d780bbc656094a14fd6aab1f160b8cc5ed362980b631834c310f6153a684",
+   "bytes": 2098778,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/dns/paired/latents_qdrift.pt": {
+   "sha256": "77bb892cc37fd6cfa47d735819a34daf78693bcd5191e0a462e3517dfe36f659",
+   "bytes": 2098799,
+   "class": "essential_analysis",
+   "role": "DNS calibration samples, C-DNS traces",
+   "regen": null
+  },
+  "data/ckpt/observability/traces_cal.pt": {
+   "sha256": "89b645a0a99bfaf4c35735d62992a5ed365cf22f9fa84928b5f87be84eaf97bd",
+   "bytes": 211815581,
+   "class": "essential_analysis",
+   "role": "paired FP/heig-8 traces 7000-7063 / 7100-7163 (E1 and observability)",
+   "regen": null
+  },
+  "data/ckpt/observability/traces_eval.pt": {
+   "sha256": "cf46a1d3f51632b5474c5662b39a82c0e6aa1d67b1ba7253983261de590e966d",
+   "bytes": 211815593,
+   "class": "essential_analysis",
+   "role": "paired FP/heig-8 traces 7000-7063 / 7100-7163 (E1 and observability)",
+   "regen": null
+  },
+  "data/ckpt/followup/e1/confirm_images.pt": {
+   "sha256": "e275bb26b5bc87b4a74d5d3ff947b3e392434d267ebd68c61264bd9ebf94a730",
+   "bytes": 50334209,
+   "class": "essential_analysis",
+   "role": "follow-up E1 latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e1/confirm_latents.pt": {
+   "sha256": "14c92db480bb47efd9896ead7b50672599ae807011935a9d916fecb23da1111d",
+   "bytes": 4196875,
+   "class": "essential_analysis",
+   "role": "follow-up E1 latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e1/design_latents.pt": {
+   "sha256": "a00e89301b8e353ad72c0f473fe8b634bb1c9d031040f1cda55d54f5385e6b1d",
+   "bytes": 4197977,
+   "class": "essential_analysis",
+   "role": "follow-up E1 latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/cache.pt": {
+   "sha256": "0fcf5229a48d9eda21237f476032c82f36fc0a7e1a381c5e042c3d874f4a35f9",
+   "bytes": 79172635,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C1_lr0.0001.pt": {
+   "sha256": "c3ba9bdf8e13892d2b61f94aaa4a370b98e3a1e9f8fdf3a2b990ecf8c072bda9",
+   "bytes": 8326519,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C1_lr0.0003.pt": {
+   "sha256": "0ee219899e3979e2060975325b76e545cfbf67f677edf40e292276b0daa111e9",
+   "bytes": 8326519,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C2_lam0.5.pt": {
+   "sha256": "ab13673bf46ad981aa68485a9e0c5e261ced267b21db98343f279d90d6b6c41a",
+   "bytes": 8326059,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C2_lam2.pt": {
+   "sha256": "75dc9c61857ae3eaa3b3b4829f1482fe795d168d31ee0a7d860abab3f62928f0",
+   "bytes": 8325599,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C3_lam0.5.pt": {
+   "sha256": "4ae7f7426147f1e6535d3d4216bab87407ae7697c7625d9304517e6f8cd7d583",
+   "bytes": 8326059,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_design_C3_lam2.pt": {
+   "sha256": "64c41f837c96d8f6bc8dbc31c52533524c1387afe7aa36f002d549cb913aaa2f",
+   "bytes": 8325599,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_final_C1.pt": {
+   "sha256": "6efe04eb2913e45e5e0081c2e1421f7d811ebf8241c7b2032bd8d4c48d0e3b0a",
+   "bytes": 8324155,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_final_C2.pt": {
+   "sha256": "dd58859fbc9be3a3de570b5311874c7a1cc3b0ca1a51f0b976d548a93c32a808",
+   "bytes": 8324155,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_final_C3.pt": {
+   "sha256": "f54e133bbb5b124142faadba7d6752aa5cf36b0ebaa01e6bad23c652206a4990",
+   "bytes": 8324155,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_profile_C1.pt": {
+   "sha256": "cc01816332712ffe730fe6d07a8dca04aead24a98ed5477aa9dc63134110128e",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/carry_profile_C2.pt": {
+   "sha256": "722b2b9d9306bf4894bdb491baab42296da7b2656ce565a3294af8652de8a592",
+   "bytes": 8324615,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/eval_images.pt": {
+   "sha256": "d6aeae7b03f953b7d2881cae15df070dd0d8a345c675799126427702a597f8ea",
+   "bytes": 125831910,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/followup/e3/eval_latents.pt": {
+   "sha256": "5209454b416a2b8122861f3f15e752cfe81ac68752b2ecac6583440e95ab9293",
+   "bytes": 10488497,
+   "class": "essential_analysis",
+   "role": "follow-up E3 cache, final carries, eval latents/images",
+   "regen": null
+  },
+  "data/ckpt/w4a4/q_hsvd_r4_b0.5_kv16_u2_rs.pt": {
+   "sha256": "02931c36b4c825310c3751dd898c3c18b90dc17337a7406cc38d315ea0a280a4",
+   "bytes": 2094465873,
+   "class": "essential_resume_parked",
+   "role": "PixArt-\u03a3 corrected H-SVDQuant-r4 W4A4 base tables (R, L1, L2, d, act_shift)",
+   "regen": "python -m boa_dit.w4a4.quantize --arm <name> (needs calib_block0.pt)"
+  },
+  "data/ckpt/w4a4/embeds_calib.pt": {
+   "sha256": "2bae2d54882a20f25516818976e9f751ef660593976efb916fa6c478cacf5ee0",
+   "bytes": 81184429,
+   "class": "essential_resume_parked",
+   "role": "T5 prompt embeddings (calib/design/screen/mjhq1k)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/embeds_design.pt": {
+   "sha256": "2744ec3d0981c3801288a95bd0110b492c5c1b2aab0b403aef771aa624ecc6ef",
+   "bytes": 81184375,
+   "class": "essential_resume_parked",
+   "role": "T5 prompt embeddings (calib/design/screen/mjhq1k)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/embeds_mjhq1k.pt": {
+   "sha256": "0d733f8bb340757fbe5134c375f9beb98753d506362416f6578569dddc723dcc",
+   "bytes": 2462655095,
+   "class": "essential_resume_parked",
+   "role": "T5 prompt embeddings (calib/design/screen/mjhq1k)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/embeds_screen.pt": {
+   "sha256": "0ab2b69746a8bffb83f7d52c391bf999411177785b4af9c07785db5359f73e5c",
+   "bytes": 159915703,
+   "class": "essential_resume_parked",
+   "role": "T5 prompt embeddings (calib/design/screen/mjhq1k)",
+   "regen": null
+  },
+  "data/ext/deepcompressor/examples/diffusion/prompts/qdiff.yaml": {
+   "sha256": "54da57563342ef07e2bc0fddf1d224823f55cdd93a75b88df8f293d88da1a361",
+   "bytes": 62384,
+   "class": "essential_resume_parked",
+   "role": "calibration/design prompt list (deepcompressor qdiff.yaml)",
+   "regen": null
+  },
+  "data/ext/mjhq/meta_data.json": {
+   "sha256": "db9cc0a0c637adbb16eda4c644e46dd23b63111f70434649d66a601e0f0eef30",
+   "bytes": 8819316,
+   "class": "essential_resume_parked",
+   "role": "MJHQ-30K metadata (prompt order for screen/mjhq1k sets)",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P1_lr0.0001.pt": {
+   "sha256": "ca7092882fe527c12f5e85076f38c52470873c55edb94d0efd90afad52801f01",
+   "bytes": 5813995,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P1_lr0.0003.pt": {
+   "sha256": "7a279eacee7fba9cb74bf94146b5c116cd348bce28a078e9ff5c1c2c0803a969",
+   "bytes": 5813995,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P1_lr1e-05.pt": {
+   "sha256": "9a3235eb4c0bdf1102644d5382f9c442454412181bfdf51a0c3aec05c538b7af",
+   "bytes": 5813541,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P1_lr3e-05.pt": {
+   "sha256": "8afddc618034f576bbc1780287ac24d5c9549b139eeb6d9eab5e4bbc8aa2bb4c",
+   "bytes": 5813541,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P2_lam0.5.pt": {
+   "sha256": "509aff64942e8a3aea8638708cd60fe2c8c68ba6a07d1cb2e04625228c99d5a6",
+   "bytes": 5813087,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P2_lam0.5_lr1e-05.pt": {
+   "sha256": "4d9ee56af0cf33869ca4555642a8f0b7438fedd1115cf51f29bede7e76a54b9b",
+   "bytes": 5816719,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P2_lam2.pt": {
+   "sha256": "fa2b02de8ee395972793e0066cd0d862021e9ca7cf70cff708933511995c4e09",
+   "bytes": 5812115,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/branches/branch_design_P2_lam2_lr1e-05.pt": {
+   "sha256": "78b44dda2d7411f2c609b2765b1a75d2cb1a6e4548ae04cc890d190e88101f13",
+   "bytes": 5815811,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/cache.pt": {
+   "sha256": "717ab3a3a2283c4c74d453bbaf77fe48fea1ccacc6727815dee0c9fd7754393c",
+   "bytes": 378539614,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P0.pt": {
+   "sha256": "61ac640bc4808be1c36718274c6c4e1ae56b1be38bbf17a97cf9407acd2184cb",
+   "bytes": 4196301,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P1_lr1e-4.pt": {
+   "sha256": "a532152bef0259d87d113cac369ead649a7d34a82b7388ee1159054c6f4a48e9",
+   "bytes": 4196421,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P1_lr1e-5.pt": {
+   "sha256": "35a869f5446bc01497b2d12ddff49efcd5b23b40f6a57cdaeac24c1e44ad8b90",
+   "bytes": 4196421,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P1_lr3e-5.pt": {
+   "sha256": "1f37312dbf366ea8c9243c6af7c177c6588d49379e853a38addd582c948c88c7",
+   "bytes": 4196421,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P2_l0.5_lr1e-4.pt": {
+   "sha256": "d7d6c76e20aa64003c0d0cf692bc7aabe6056fbdcd4c1a10061a8f679a0fe535",
+   "bytes": 4196461,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P2_l0.5_lr1e-5.pt": {
+   "sha256": "774d42a631c486e7eb5cf6fb722496e8a0eab37ee95fca41d0d6af481c2189a3",
+   "bytes": 4196461,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P2_l2_lr1e-4.pt": {
+   "sha256": "91a94e99380028f536a4f3816e18e427c210ed2b6f9f0fbc125593b91d0e8081",
+   "bytes": 4196445,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/diag_endpoints_P2_l2_lr1e-5.pt": {
+   "sha256": "8a57557db4f30876926e705435f2032f66e0b3a1d6004a9107cde7dcdd90578f",
+   "bytes": 4196445,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P0.pt": {
+   "sha256": "db9adaaf32b23f96febffaa3ed31b01f12aedaa277a05efb5111ff212cab5571",
+   "bytes": 25167422,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr1e-5.pt": {
+   "sha256": "9a6f30ef5638e317a7f34af00a620fba61c6eb338d2505f20322c61571d2a5fa",
+   "bytes": 25167535,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr1e-5_restore_o.pt": {
+   "sha256": "71a9e6808f3c2cf35173a8b61b0ba7bfc7110272fbdcbb3f8666f4617d1c2a47",
+   "bytes": 25167669,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr1e-5_restore_qo.pt": {
+   "sha256": "5b671dc13d7482557b3424452fa16d5582303ab5d06596a3ab7725ccc14151a0",
+   "bytes": 25167676,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr3e-5.pt": {
+   "sha256": "6f16d5e7467ebc8baff5ba1fe41a6dac323b09ba2a803a6b3f8c620789d99993",
+   "bytes": 25167535,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr3e-5_restore_o.pt": {
+   "sha256": "753ac776812e1d9765f95e016ac3bb70b9fc0078e6973544c7c736b32b691e87",
+   "bytes": 25167669,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/e3c/pixart/grid_P1_lr3e-5_restore_qo.pt": {
+   "sha256": "25ea29a876382caecb60daf97bbbf55ae0c461ac067534828223ece38e69c1dd",
+   "bytes": 25167676,
+   "class": "essential_analysis",
+   "role": "PixArt refit cache, diagnostic endpoints, image grids, branch files",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/design20_cache.pt": {
+   "sha256": "6f403777eafdc623ee92e929d769008ded4efb6c1f431ae91055e9e830d0868f",
+   "bytes": 335583245,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/dither_w16.pt": {
+   "sha256": "96253efee8e3aa015ea76292bfec8dbe9b2f326d3d7bfd04f90dc54fed05f4ff",
+   "bytes": 94435,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00000.pt": {
+   "sha256": "9bc65db60d0fae900920a2c0ba5ef622c42fd60c4aefd21c41e7a76e2ea3d94f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00008.pt": {
+   "sha256": "512c17020cf613df5fd6d700a21fb67dec824b72052f4bbb3138570f7e4971a1",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00016.pt": {
+   "sha256": "c0ca13deeb047f4147cbcf0939c3ede3eb15cbfc07cae324a03b70498760c0cb",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00024.pt": {
+   "sha256": "11cc33abf6d2331fe44ef73373cadade6eddd9172e4d5087f40a1200707c6c1b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00032.pt": {
+   "sha256": "98339a7810e19e71f880d06c5cbbc3cc041f4d05b9d1b6f9ed350bf6172d38aa",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00040.pt": {
+   "sha256": "1f394fe94ca69faa2a4c5a9b8bca7e360d1a857791f1ae44a205f506df9c052f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00048.pt": {
+   "sha256": "c710e15ed36d2e93903e8dee059cb9fb3d22b1b8f3ab9a7703001b5bd05940fd",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16/00056.pt": {
+   "sha256": "8e4ff810dab3af3193e447d82b6e49882cf747b0a6263bc90030edb3621e849e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00000.pt": {
+   "sha256": "1c92fba072ec31ed5050df713f1845cd10e89f3f20cd1fdf3154b89ae609497e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00008.pt": {
+   "sha256": "de273942a7629a21b02e9ead3804f3714a64cc0c7994aaaf3b2e1610e747ef0d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00016.pt": {
+   "sha256": "cca9674f9465c2d3c542b592c20b52d644bfcfc6718bdae8413687b31ff590b8",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00024.pt": {
+   "sha256": "8337c20860cbb3adedf5b8d1ba331fd21c35a2c14c0ab8c0eda7a7446c8588c0",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00032.pt": {
+   "sha256": "a96b61e52df99744432820e926999edcac49010717a1b3d52dc11f582ad4502e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00040.pt": {
+   "sha256": "6f03c9fb75a01b960bf5a3ba82bc8c92711a291a233db2547158d1282cdb194b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00048.pt": {
+   "sha256": "c2f536cae354259b910dfb97d1ddaf0b685d33b6522de66f6c037101d378f3e7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1/00056.pt": {
+   "sha256": "1a67009dd1693df7c19a516d6ff0656b3d75cf76c2654672462d480a7883dc72",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/bf16_b1_smoke/00000.pt": {
+   "sha256": "6347bd5fa88cfcebc70d63a2f147373b827b7227e51eb61830e3556ca314ae04",
+   "bytes": 6817645,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00000.pt": {
+   "sha256": "0acc7fbd72bb5bc627dc51051adf6c4df6eeecccf7d748ccb6a32600efa0a1c6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00008.pt": {
+   "sha256": "29339ee01906afa8f4b5f908e1f263f5909e21317059151ae3f471c5a9e0f3bf",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00016.pt": {
+   "sha256": "a39242e7f05655b8bf02a7d71d254a5ab7535945376e2ccef11bd113accc732d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00024.pt": {
+   "sha256": "a8832aeb652567dfff4b0fa2b814e1ed7f4b5814d099a03b015fd2484c215322",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00032.pt": {
+   "sha256": "7711aad76d160b1cd0ea9ba5c72f6471b3b89024e8225d412fd921ad8f74e50c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00040.pt": {
+   "sha256": "06e16161726a71e047cf0acd13042f8375cdbc6d80a8f6179e3af693d2d1ad3d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00048.pt": {
+   "sha256": "448f26ae87edced18181b342f308a161e0cfdbd82265035a1bdc1810e163b430",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_base_screen/00056.pt": {
+   "sha256": "9819ce5abfa0711cf0eea00526795d321cbc48d1dbce907cc95dc7fd2e165175",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00000.pt": {
+   "sha256": "7f3308b1516b987198d56025baea81669407ef72e798b92644db02b8cbb3266c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00008.pt": {
+   "sha256": "ffe14bbe54ca0149337eb57926b493382da10d7c344536b4e2475b4a5a4b314b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00016.pt": {
+   "sha256": "817b79481969ba0e25830f34a68c7a6ffcc4703c9444d1b121ef1e499053cf25",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00024.pt": {
+   "sha256": "6d31b3323a591ce8a305662b6a73dddc4b27ea3b561d378916814b1c83d1491e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00032.pt": {
+   "sha256": "556f7c3301d04230e36f42f63ad8d7ccede0d2c6609ff9a73291e28b3c013e5a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00040.pt": {
+   "sha256": "f80bf8e2c9cda00655c174611f5cb74807b410b42c47cae2d4dbb44cc05859ab",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00048.pt": {
+   "sha256": "1fa80fd9e9785b31ae6e2d32b45cb897e2390bbee48d9172f15d39b2d836a918",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w16a4_feedback_screen/00056.pt": {
+   "sha256": "da57bf15b31ac3c3ff77a661c7f8c8491d3fbe185d59f8de5ffe59b4cfb8b450",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00000.pt": {
+   "sha256": "a8a13a2c8565f755c2e8a8809c50e353fd83d021dbf49dd4c2d8d97422680f4a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00008.pt": {
+   "sha256": "8b0361e5565908855c8d4764c1e2db9019e236f9cc96db90bf647b78750f904a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00016.pt": {
+   "sha256": "2ff40fc7cc74cd7fed747720a4de0ac33e7a5f3f3136b3886c4b58e55fe021c8",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00024.pt": {
+   "sha256": "cfa753c777a0373a2c7120a8e8be2fc927d82e2781da8eee20438411aa656ac1",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00032.pt": {
+   "sha256": "0d0643e35d03a97d1d51d28d10cd6fc9edcfdd49e0ae41e1827d8c17213cfeb2",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00040.pt": {
+   "sha256": "e4a75adace761f3df9c0ae6c4f44e475b0ad4719c7cb49cf94d878c986ee3371",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00048.pt": {
+   "sha256": "68399a73467d564b66301f7d7ba1ca37293c28b4095549ade56c528e49f4a3ef",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_base_screen/00056.pt": {
+   "sha256": "e147ab7df5c132ad4ca5cb90ff8c6800871a0b26bc4665876d94c550fe82084f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00000.pt": {
+   "sha256": "688afc63f72e1ad91a9447a843de9065c554f8f92bd96bb6d1f106783cc7d279",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00008.pt": {
+   "sha256": "cba74c66887a5e5ab03de80a475e559fc47c06896543e2d32436ddd067650f21",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00016.pt": {
+   "sha256": "3b168108afed337451a07f78e824b8bd61f2ab73b9c55917995675964fb8b0f0",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00024.pt": {
+   "sha256": "c5fb9fd9161865d361b6a80cef9c306f999b8d3ac9678abad15fb17704f4f9d7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00032.pt": {
+   "sha256": "b918778b360d8dc588de1514d01b187a511903f0e3e5d92f8462574642130c84",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00040.pt": {
+   "sha256": "107b7b596740053103a67c2d8661d993c2507688148fdc25240dbe94a8ae2784",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00048.pt": {
+   "sha256": "5c791d68cc8944d6809aeedb54de75127f49dc2c576a3934b306d37d5cee8e2f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_guard_screen/00056.pt": {
+   "sha256": "e2954ddfaaa1407610e6fc8c3e69e03f3ecb0a0b6dc54f5c015eb85e84bcd813",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00000.pt": {
+   "sha256": "0316ac84b8a548d82f42da8fb3dce032169723246f4d1b5cb69c15b546c919e6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00008.pt": {
+   "sha256": "cba74c66887a5e5ab03de80a475e559fc47c06896543e2d32436ddd067650f21",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00016.pt": {
+   "sha256": "3b168108afed337451a07f78e824b8bd61f2ab73b9c55917995675964fb8b0f0",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00024.pt": {
+   "sha256": "c5fb9fd9161865d361b6a80cef9c306f999b8d3ac9678abad15fb17704f4f9d7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00032.pt": {
+   "sha256": "b918778b360d8dc588de1514d01b187a511903f0e3e5d92f8462574642130c84",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00040.pt": {
+   "sha256": "107b7b596740053103a67c2d8661d993c2507688148fdc25240dbe94a8ae2784",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00048.pt": {
+   "sha256": "5c791d68cc8944d6809aeedb54de75127f49dc2c576a3934b306d37d5cee8e2f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_feedback_screen/00056.pt": {
+   "sha256": "e2954ddfaaa1407610e6fc8c3e69e03f3ecb0a0b6dc54f5c015eb85e84bcd813",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00000.pt": {
+   "sha256": "1a8ff6e6bbbf387dde3e21b8525c78210bdfe3906ed8466cff6ad2d656eee5c9",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00008.pt": {
+   "sha256": "3c7df5ea0a19d41be8b71ea2fd564240c74a505056a16ca2ba9eb41054b9140b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00016.pt": {
+   "sha256": "ffbe14b99ccf49a893df35173b8315f15a1494572aafadec74645bbe8e5449c5",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00024.pt": {
+   "sha256": "6fed77e04055225ae90da7b4c3c8690d94f252fbf1bc57da6e357c92d1ce79ca",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00032.pt": {
+   "sha256": "12aae64ccc37027c6de2beff2af4eb1b2b7573b3c16dca8cd0b79cf3d7bb79a2",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00040.pt": {
+   "sha256": "b25644b77cf04efabbcaa0eef7af05491892541387413b86a57de47252b619af",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00048.pt": {
+   "sha256": "82771008acec69ca8bfe591417484821dd02584a5ad08a81925a1d07e6f92ace",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e1_w4a4_unif_screen/00056.pt": {
+   "sha256": "329b6fa17be0102c1c3fdaadf1c88b4b91faa7b874aeec88d84d019fe3d7a8ae",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_bf16_s10/all.pt": {
+   "sha256": "3321f987b1b085e2f4332741972febdfdc88e4c3087162aae4931b1fcb855c33",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_bf16_s50/all.pt": {
+   "sha256": "181910901607086128caef8b48adbe157b7c39034885350023ae04a077cd9a4d",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_fb_s10/all.pt": {
+   "sha256": "66e38f7cb93647615d7a82dfbf2369afe5eda58fa960f6d660f7021ad224e0d3",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_fb_s50/all.pt": {
+   "sha256": "51240f4de5f208341d154f4c2f4945a9dafb2de76ee827013b525d01d3af10c6",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_single8_s10/all.pt": {
+   "sha256": "1f6c9a0961e6eff8ef834285464a6452d2ceec4a6f4a62a156c05706794238ec",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/e4_single8_s50/all.pt": {
+   "sha256": "dafd9f3213fc11b77891d8ed13a6a9088f51b9e795507d74b3b5840c616c7439",
+   "bytes": 54527773,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00000.pt": {
+   "sha256": "e7341611ff1ee6890ac17d861f4532f51e5784eac980b0bc682ce36cd6b55a3b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00008.pt": {
+   "sha256": "037170335e7b4ea50cf1a5dfe295e485ad07ab7b69999b3b32d2be568b1c18de",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00016.pt": {
+   "sha256": "9adba8640d37c7aac85cb2b51af521d3e1d3ac6f8f92f05dcb5f6d5b28e91a66",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00024.pt": {
+   "sha256": "a8e2f2bfed3b04de366658282d5a8b2650b8d282ebf5bbe8acb2947381f5029c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00032.pt": {
+   "sha256": "a580805419325b56bddf78cc9408281b3b41ce069753b9ffb0f74de1681cf854",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00040.pt": {
+   "sha256": "fc514ca2914baf0f4d0c462e875b5d2544db1047177fde82b120f9939c6c41d7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00048.pt": {
+   "sha256": "28fc11138319d74b73149a31e45fead5fd16d678a632014d273754943a0ae2ee",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback/00056.pt": {
+   "sha256": "8fd139a4016e53bef4d9d5f39c30ec21bc9a2d47401d47e9a4993a28bc36cc78",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00000.pt": {
+   "sha256": "9ebf8668e1605288f5fc891fbc644c34b8da904a3e873e5429f317983f30fce4",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00008.pt": {
+   "sha256": "533b35c8ec21a571553c006720295a698248e42400302a1479612a85212a3d98",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00016.pt": {
+   "sha256": "e520e812f4a63e6cf44938d51d5f82d63a55c6a101b7453a8ea219fa9f31aed3",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00024.pt": {
+   "sha256": "446767dd3d6362acfb649620df0ff18d49071b4cf88f23c2bc6fbc94712b2cb6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00032.pt": {
+   "sha256": "ac8234c3214fcf718c49e75fe1a17ba7c2c8618ac49b289c9f36bacf438c2422",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00040.pt": {
+   "sha256": "1282cc5b49d2d5ba8ccb9c066a440c1035af7a246aa7ab764e96eb025c60743b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00048.pt": {
+   "sha256": "751226e89eee32d01a5b1e324053d9395d4ee4c53f200a34fe4fa08f09326748",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct16/00056.pt": {
+   "sha256": "324c351c0ac904c66a8a4f5faddd8be2a6527b079375118cff03bd5a07be5357",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00000.pt": {
+   "sha256": "0dd7af8d7e43a41a9cb478540a3dac6c5bb75a92c2332c3c3b974b64f7444310",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00008.pt": {
+   "sha256": "718bd219facacd2bffb5ec8fd33ee2ee3d2660b3e32488d15ca517b0811a78c6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00016.pt": {
+   "sha256": "4445e94494787737897efbaded3f15f1f20898d5dafecdbd75df05e3bc9ee7a7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00024.pt": {
+   "sha256": "2050e0af39ba8dc5b848bcd353d598bc759b668bb9a39120d42cecf66559074e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00032.pt": {
+   "sha256": "d5d0a19d88f4310892226c9d7a27e0252f31355ff5f2e56faafa4f5e3fd9c333",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00040.pt": {
+   "sha256": "536c4edab4d227036646d26601ccb4a05002c4f9c3b1bcd83c20c8b92bed99e1",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00048.pt": {
+   "sha256": "b1fc294d16bab48bbafeffc9c6aa1cf1381010e8009e6184b3765ada7e0ff1c9",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_dct4/00056.pt": {
+   "sha256": "f963d4da6160ed90c24a8118cb6f4df16da4e6227580c09bf6824c50f4ebae40",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_feedback_smoke/00000.pt": {
+   "sha256": "2007b7c7b5fe0d549d1f26d71448ca442a5eadc38ee9668915f747bc9cef483f",
+   "bytes": 6817645,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00000.pt": {
+   "sha256": "134ed78b54f21e3c6411f43964a9c4892a70f092aed1a6c23aa9779dccb99317",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00008.pt": {
+   "sha256": "b1809682080c8def4eeb4f927b7bad110a7125f7014687143e4f1f22a539f77a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00016.pt": {
+   "sha256": "0d09a00dc2cdc355e2b33a1d8b245d9a1dbc42c7b83f7429a256ae545668fe5d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00024.pt": {
+   "sha256": "a16cd8fd729a3af96758f406336c2170a36e711e83ae2fc59cf5da3f64ff8bd8",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00032.pt": {
+   "sha256": "4ecc20196b0f966882f6ce85277d439bac8248976e9c6651ae02f181f6a28161",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00040.pt": {
+   "sha256": "df8048f045f4f725927afa20d8dad14d694ccd98e0599f637481d8b9d275f56b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00048.pt": {
+   "sha256": "d6bafa58e81c45437f70fced5ad080a977a6a5028debb3fb6a70b8f23f77e3c8",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_none/00056.pt": {
+   "sha256": "1b01964485b5e4c725493dc14bafaf0248cd6a7430e976134d14aef6a564df16",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00000.pt": {
+   "sha256": "9697eee5e7761295fdcc75b836e0cb92f9efc519ac5ad8daa507783947261dee",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00008.pt": {
+   "sha256": "b42422574e6ab475e49558154b105db94157d970a323cdad7945562fb4e14d3f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00016.pt": {
+   "sha256": "7b288334f50a4073a82017562df468f7e15afab87904b16030b94a081df09922",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00024.pt": {
+   "sha256": "cd674970f545d9f90f186fd6c1a6410cb908af60270d6c0d6754884f7d472432",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00032.pt": {
+   "sha256": "623a7657016f759f3d81dd39afd4c4e644ae1a03192ab86dd83ba799f5078a0f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00040.pt": {
+   "sha256": "5cada6a332bda0f791eef12295847715e4cfb7bc61187cec0393a489395f96f8",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00048.pt": {
+   "sha256": "af1fdc7b3f49a8497b0b4a9e9678d085a65ba850fdf63953412bd0b6eb165430",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_single8_unif/00056.pt": {
+   "sha256": "032ce6573f36bb523c637438539b95959908ec119180eee39d21733fbe4e5d67",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00000.pt": {
+   "sha256": "246f7016022b08f7368e345ea71296f79ba12af428d06b961237cc9b52968b6c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00008.pt": {
+   "sha256": "ad46ef269d10d11dac0d861f96826dea75be38c09275377a66b2e9524f960118",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00016.pt": {
+   "sha256": "2c3b5bd5a3c01c727ecf5e6d71a5b85897d11aaf66c78ccc31c97e418716108c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00024.pt": {
+   "sha256": "9db0d3c50d6e35ce292d1f8464a328e9ce788cb48f57c8e8eac8e5cfc2dcd0b5",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00032.pt": {
+   "sha256": "db3fdd9bf453700a22e1cd25e2209df21edcba771ee31d87ed4a329c7aac9019",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00040.pt": {
+   "sha256": "5f2a1dbf2aaaa7def6e504433ae8cb15e0639292fb6d2507d1bedf2aef25f175",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00048.pt": {
+   "sha256": "5e701055fc1e27b43f6f17bfedd91199a0a36362305b3e302d4888497150e0d1",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/s3_step8_none/00056.pt": {
+   "sha256": "e0a9039b5264eb3f3a37477b5325e8a8cec82535752ad5d11b289865810a471b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_bf16_b1/00064.pt": {
+   "sha256": "7d36a0db1ba46880b133912c5335d34534f8689b32a8b2a7cc92a933aef87945",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_bf16_b1/00072.pt": {
+   "sha256": "b6a9f43866b20d1c0dfd1f1c3d5d5fc9b297b1003c4208e8b15f614eff83f255",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_bf16_b1/00080.pt": {
+   "sha256": "0d335625e8abae6c6e0d01492642ee8bfc31bae7ef9d32bc05b4f5d48f715514",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_bf16_b1/00088.pt": {
+   "sha256": "a16db298764dbf48a4c9226a559939f7559f7a5ccef81da4f08ecceb36769c40",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback/00064.pt": {
+   "sha256": "9b0596f703cb224c87f7d0a04f1604fbbd6dbe0886ecc8b4b9f0052e7b820efa",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback/00072.pt": {
+   "sha256": "a405e86e18bbd6508d4add0a39a5ab71f3101f7da22ab39e8c4b658af34f272f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback/00080.pt": {
+   "sha256": "e22a81c4941e0716627f63c47e3209c6f5e611314350cd8b43560f6169851ac9",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback/00088.pt": {
+   "sha256": "8f967ce6b44bbe7699d42fbca533b4d84eda0460f0a9efa4233c3715be26b7a1",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct16/00064.pt": {
+   "sha256": "b056bd15163df9f1809497dedb70fcb94a8422214f0d764c1140f8811d04692c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct16/00072.pt": {
+   "sha256": "b4d19b3b6628e11c3a82f69e26e5ae03c0dd1a3067e763c5cc4f0717743fe42a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct16/00080.pt": {
+   "sha256": "ca209c21156160b602fa1a91fe19dfe1de725ac0d8e79049d4306f26e83e923d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct16/00088.pt": {
+   "sha256": "277f4240428ceeff59ab4994e886eb6834be3f53de9b1da27fca282bbc8b52ee",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct4/00064.pt": {
+   "sha256": "44fec073f31d6bd1914c7572b5be73dea38d719b91cf1f7bcc550502b1b813ab",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct4/00072.pt": {
+   "sha256": "8d71e87a05d464de0e5025670e82501771be1a7b8e14f750d3f662841fb7e5ec",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct4/00080.pt": {
+   "sha256": "04b3438b66ed687797b0dcf9bb470cc657214a6a5cff6a671fa01ff325fbaf1b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_feedback_dct4/00088.pt": {
+   "sha256": "e171b6e3afd7b8fa1fd797bc16bb57d4ec244826b66168251334bc115d6acae5",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_none/00064.pt": {
+   "sha256": "e2e8a857c3974d75e9936e271b2dcdaf268b15e7865bbb3463427ca882bfcf7f",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_none/00072.pt": {
+   "sha256": "1817c15add82d033755ae0e964746f2d913f3010f5a88415fd9bd4e4365ffacd",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_none/00080.pt": {
+   "sha256": "fa8de4738bccadbb1961ecac9af1d0de720a2f6ba135629d79f74bca694587ed",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/u_single8_none/00088.pt": {
+   "sha256": "762a83376557737bbbb4c07ad45559af2a4671ca0e58f7b43fa25bf4c0481852",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00000.pt": {
+   "sha256": "814f946505d0e105a87f926608cacd3b83736e4de4bbe3c744c62903c942c528",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00008.pt": {
+   "sha256": "0f10b7c6de9d358d4f60709ea12e8057b70db85083e0dbdbff2217b6b7411745",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00016.pt": {
+   "sha256": "a88f5692a7dd7ebc02433238df1f570bc20360fa8d44631212f0363f57a4c6a3",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00024.pt": {
+   "sha256": "460ba17e47f3fdf3af39f6edab9bc2d3ff0b81507f9a3a4d7b8fc2f9bf55f1ee",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00032.pt": {
+   "sha256": "9bb0b3bcedfa24c7ab36a7ff313cdb28cb58b5052b32470110ee2f526c506fa9",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00040.pt": {
+   "sha256": "f892ac1e2820d1f4a9e551ba8271cd38e34181999c9f2c508e99068b7da8e12d",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00048.pt": {
+   "sha256": "e0a5a941810e21c6d36c1b463e68093965bbc6a32c3f7b25e245080adb25312a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_calibrated/00056.pt": {
+   "sha256": "f9d4a3d66c0bd286a46a614b9d789433346820b90c16cdf64221595a8dd5613c",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00000.pt": {
+   "sha256": "fe9c62ab8f1d2400a0cd7ee4330b6cdd19392f638ae0aa7b24038625a1911026",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00008.pt": {
+   "sha256": "69b1aed94d7906d650b0ba5e5c6e2c86758bdd4aae449fdf7995f279a4e955a2",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00016.pt": {
+   "sha256": "19587cc2569fd937c7d7e534f5118d5128ed7163f86fc8694980fe2d52178d10",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00024.pt": {
+   "sha256": "6732d6d44bd155bea4e4c25f8bd9924bf249d8a4154e4c740572c53237975304",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00032.pt": {
+   "sha256": "4aaf8192ef7edf2e73a715e925ec4736f078f3731b616c620b4cb02b4a363abd",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00040.pt": {
+   "sha256": "4abbff6cc4f59f69b245604ea93949a92564bd0d27223a114be08d67ed6f56e7",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00048.pt": {
+   "sha256": "098e71d4b85c15f217e7585b02be9fff40d4b0305918ac5f335edc415df35b87",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_golden/00056.pt": {
+   "sha256": "c81d368751af250f0ae82cd9be98dadcdf30b02e2054b6a8dde8b7fffaf5ae44",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00000.pt": {
+   "sha256": "7aae07047ce09a724c8a440a0c6bb7865392c3be0be41c739b4b3a0f126f0bc9",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00008.pt": {
+   "sha256": "17b6415967bfef535a415deb13c693c5f693755b71ad7a4ac88050923892cc72",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00016.pt": {
+   "sha256": "a3ff80615a9586708c307f29c9c524bfaf78d2b6ab8c441a83f87a364b9450d2",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00024.pt": {
+   "sha256": "de20070058b774552bc55c83b09c3351066ecb927e25093dc2083f3e54e66446",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00032.pt": {
+   "sha256": "740bf95f58f2325bc39bcff1ef208596198ec9c80e8c6d3cb10e3afb6f4463ac",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00040.pt": {
+   "sha256": "34cac5a194877226cfb2e59ad771e02c0d007bb8806e22d66aa7b040c9ec77dc",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00048.pt": {
+   "sha256": "6472c55085e840a33c664fe3d22913140509350d72dc2b5ea7a8a2a803410466",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_none/00056.pt": {
+   "sha256": "07132d3dec7ea72d8e8223640db888ff8bee740df09120d085230e77a9a4a4ad",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00000.pt": {
+   "sha256": "6aae16be870ef6545a86c3969f346d2aafba1392323e3344f47ac6da1235a16e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00008.pt": {
+   "sha256": "6388b2fd7c6eac681fe2194c18d862269e7d917e60750064bebbe1fbde731d8a",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00016.pt": {
+   "sha256": "c8a145fbeacfbc9a071dcfcbdd27e2045f63ef786f05fe87212e346155d3e04b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00024.pt": {
+   "sha256": "9372bcfbf60e5402eb18b027883ba622b844c8a64aca7f5345e22b2cf5368ef6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00032.pt": {
+   "sha256": "1a240820d5ebb200bcd540df9c62de276cc8af48eab342a7b4a058ce78fa9a1b",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00040.pt": {
+   "sha256": "ec248182ba9d5a1d697faf12f33868d789885f6bb97c3cfb7369dd07417a7738",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00048.pt": {
+   "sha256": "28514a47663aacdb5bf43d1107ab6127ce614d474df54ad409a6d1f99eb4277e",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_period2/00056.pt": {
+   "sha256": "7705e0cba73a68aab3ca6656effdc068a5416d867993e024dbc79f23c6e81caa",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00000.pt": {
+   "sha256": "e4ca9a3a7f0a6bd97e64dc40918abd4cf057bae4ad8a31a4a74d3947a55c2b11",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00008.pt": {
+   "sha256": "24c1c71b68b86a34d438b65eb37cfca74a5d445b9b9ff8e9191140ea16307d53",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00016.pt": {
+   "sha256": "439a1ac2eeac86189bc51f25885d4d687c0d3a36d812990036ccfcace3c97b93",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00024.pt": {
+   "sha256": "f2ab149380e79cdfdeb9dddc7c208b61e5cdcc05c3c675e671555f128451cede",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00032.pt": {
+   "sha256": "f4a90d39ff08ccc58199f40bec683b260814a7aa9acad0c4401689758b2b98a5",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00040.pt": {
+   "sha256": "2bfe080f2b7d38d45bf13a209416471a4b0dcec5e862f0ef4c46069f85a21710",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00048.pt": {
+   "sha256": "58cb5e9836ac92f2505ae4fd972d1c22428f3351dfb06f6b4e2ae594d91ee2c6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/img/w16_a8s_random/00056.pt": {
+   "sha256": "af8f72f717777c228ec08b0a4b896033ca138e8bbb8cc5d13aeaa7e62a9b7ed6",
+   "bytes": 27264877,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/static_b_single6.pt": {
+   "sha256": "c713a8a9ebc17d87dc8a6cd92dad53404e119452616ee921be0bf0a77a4a2a6e",
+   "bytes": 418303,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/static_b_single8.pt": {
+   "sha256": "e5934575f010fdc663948cc200fbd1c4e42bddf51c26fed65a4e47e5e194fb64",
+   "bytes": 418303,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/static_b_step8.pt": {
+   "sha256": "d711f1f01efab909e5b53bd9c55bdb1b54b395da6082773588eb0faf42639bba",
+   "bytes": 416051,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/temporal/pixart/static_w16.pt": {
+   "sha256": "9fd49c38a4421f861f0b888b0396ee83b819d4ad5873fa212cb2fd40eb50a245",
+   "bytes": 410587,
+   "class": "essential_analysis",
+   "role": "PixArt static-A8 tables, design cache",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00008.pt": {
+   "sha256": "7beeb4fd8e563142043b3be610fa3474635eecf51712cb493cadd3f208293fac",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00009.pt": {
+   "sha256": "7fcb617749ee70b1d29402338d81b2592a20fcc798e564b53b61237a3aa926be",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00010.pt": {
+   "sha256": "42f71de8d14550ddbd28361ef1dfb35c937fe8ed751b255c13d85963c9cc9237",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00011.pt": {
+   "sha256": "84ab4dcd61cf307ddd27ddf485cf61de408f397ec377959e1f09bb2277fd0181",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00012.pt": {
+   "sha256": "1374d419f762a3dec8945a0dd8c336fcacb3bc379c5b0c0401e066b96cad3c1a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00013.pt": {
+   "sha256": "dab379abab223d7b6848398824ebc2e31e136a0baa479abffe684c813cd979ba",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00014.pt": {
+   "sha256": "0cea7f61d3b668a0881ab83d27d0ca87a59d5dea85c0feada9e6909f78f66d76",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00015.pt": {
+   "sha256": "1a6d6d344d01bd4546f4ed78f58287720d6c881c604f768d7cf542f3198bb9c8",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00016.pt": {
+   "sha256": "abe4cd0fe874019ba9a4d7bad1153aa16c1cfc8028b8317afa00834873bfbd2c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00017.pt": {
+   "sha256": "21b1902210ceab0161158c80b2cf81083936b8bc2f3396c06abe5495e0e88f64",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00018.pt": {
+   "sha256": "7c4bf326f9d6ec07f6b106604d98ee0f0ce5578ff745bbff5d5d8c098881a8d2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00019.pt": {
+   "sha256": "19d103b6d09d311d3b2980fec140f1814d9c91f13b58effecad9b64e0fe2baeb",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00020.pt": {
+   "sha256": "e2115df3eec3aac6f1c7e517049f0506f140574f49534ad6fcc64b5c3998a149",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00021.pt": {
+   "sha256": "fcbeee6e6eff4bd9323062717f6a799a2e5373d30101e3ee3568834aaaa6fea2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00022.pt": {
+   "sha256": "b196c61808b1f7f6062842bf18aeeeccca217e62109fd21b88bab1ffb083b679",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_0.25/design/00023.pt": {
+   "sha256": "ef12cd7d37d8a28669aaf458f8c3b2be1759d97f22dc6e7c582a3ae6c6647a77",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00008.pt": {
+   "sha256": "b1c083aa45e14014322e8b1657b42361df4a1701f8e2c6675f4c82047204f27e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00009.pt": {
+   "sha256": "8200e5bf7f54202939c00560c66889118620be6d81f9d0fc707ec286a4c5d884",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00010.pt": {
+   "sha256": "6c5c7f0f3333b2877a36726899375fe82c43c016dcfc50d9259feb5d8a918647",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00011.pt": {
+   "sha256": "0eade38c59e90ca4f6abe79890538dc312810c4582f516957f92c14361ffc828",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00012.pt": {
+   "sha256": "5afaccffb97e6e6bab54dd1bd0209d478290a7d969253b337a4eeae8c332a9a2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00013.pt": {
+   "sha256": "8a54b917a2cdd34ad370918f739dbf8aeb90189cebef0818529feb7acebeadc2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00014.pt": {
+   "sha256": "5b06c7767c9791a310034381979a15ef9347b9586776d223ac51def7a302694f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00015.pt": {
+   "sha256": "d520ea544dbd18d0db85c99c9e6d60120cfc87364cae2acca4f04b4571e5c6ed",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00016.pt": {
+   "sha256": "5ffdcb4887dabc8e856f205f13dcb32d3d8c6f23cc53d1abd8b2f7ba0880a234",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00017.pt": {
+   "sha256": "36f0fd4b8d95edffdbd05bbb9d60dfd6d961a8637d92b02dab59e6125e5e9f51",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00018.pt": {
+   "sha256": "699125a10d2367499226c91c3d809e687e447e5a9a066620bdf2fca6cdd25950",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00019.pt": {
+   "sha256": "284e87cd5ee5fbf6d6f4046dff2c120fb32d0fcc00dc462e5d83778302e8e9d0",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00020.pt": {
+   "sha256": "50db9b90c917ffa1a17fe8e9629e87ce3347fc5261ca67e68396debe631a2245",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00021.pt": {
+   "sha256": "8d46ebdcf8744829e61b49b585586eafd0539b7ea7e7e128b1e68e6772f34b36",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00022.pt": {
+   "sha256": "8960e43cf47298109dcab12261774b1812e6b61c2397bd316bc074b645dd6201",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_1/design/00023.pt": {
+   "sha256": "2614519e9a1ed415d2c70e6e995f09df5e55aa1abc1a1bd3d0e5bc9e6e6dc8e0",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00008.pt": {
+   "sha256": "e40de66eda41798f5fba0a780744d0c4e50f7be60db0760c9299bf1d8c881428",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00009.pt": {
+   "sha256": "fb17e003f795f9c13422faa37fb8335de1b959bba03b3f7185ca2f85b455eeba",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00010.pt": {
+   "sha256": "ff6f9229afb952487111db2060419a072e20bba1c64f86299cf8f1b478dea308",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00011.pt": {
+   "sha256": "1c9a55a204fa619586da6e4067fcd2ee7b3639d77c24cf4a92ee96f99ea4bb1d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00012.pt": {
+   "sha256": "c8abdcc16c832464f0da5b08045a669016fcb1f49cb84f431573c986e4df620d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00013.pt": {
+   "sha256": "7bf56f3e0917e638856aa4d509b372df05858720d215fa9d56f2a355775f5d91",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00014.pt": {
+   "sha256": "a57aa2aab5ec5c17cf8a0b5bc3d35b1f1dad3007788306241f0ab197bad2f146",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00015.pt": {
+   "sha256": "acc35dbbe950faefb8a5fbc6561180e876abb397be59f6d0dee9610f7b936bbd",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00016.pt": {
+   "sha256": "8a73fa5b337640b6b5f2d32e5f4aa1f808624b518f277e714bb45c951f93e92d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00017.pt": {
+   "sha256": "83515386fdd047dc789a0cdb8273a68517f93f3e74f22b3ed74fa138b37b99f6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00018.pt": {
+   "sha256": "949283b2a98fbb4eb6d07339917e733eed80eabc1fd909af8df186e67a5580d4",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00019.pt": {
+   "sha256": "295bae7462e2683b5f28328e603433205ec207166df49d67165dd547752c1e98",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00020.pt": {
+   "sha256": "0ba94c840e371f299bb7077bda0cd7a6080be3abea6a6979b59853f7e6fa199a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00021.pt": {
+   "sha256": "6c6ddbef9a65c3e8dfa466e648ef47218c6f8e4342ae42dcf64643bb29263970",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00022.pt": {
+   "sha256": "9c2cfff66ff5967c0eca8e29bdb1730ea4bf2dd5faa2b73bf47479d6977c09b2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/design/00023.pt": {
+   "sha256": "9663970114fae3ae0597ea66533a4775a195ecb6f7acb011912e97ac643ca5f6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00256.pt": {
+   "sha256": "e5dd61d5d570f8462e1a8fc8a5d052d8ce24cfa5efc75d75077e655f2ea21808",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00257.pt": {
+   "sha256": "4980234c8dd14f86d4a0b0471081bc39f41c0d917f5dfc63eb5b771338c00f3b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00258.pt": {
+   "sha256": "aa0e851333d2dd7d8870f6b2b0b5648ef9cc0816c4402b7374ddd9337fd2e2f7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00259.pt": {
+   "sha256": "81846f0c108aeb41bf53275408068421d58307df08b38709b00d338e464bb735",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00260.pt": {
+   "sha256": "91f26855782ee8df13db56c075fba01d62553584159fceec3cb17ba61cd9f9a7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00261.pt": {
+   "sha256": "ceb46e93c6dee3b78b97ade537f003d77bc6bbba445a93a1526371477b9503ff",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00262.pt": {
+   "sha256": "601634c85fc818ba1221b82a1f96175ff6b5e8bd3f94dde23dd631a52e95b0b8",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00263.pt": {
+   "sha256": "deef5b12643110a6074ec72f73721ecef22bdacd13d7817a1c934feba9da2d3d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00264.pt": {
+   "sha256": "df08d84c46c7593c6b258fdbf343ede545ef35ef3d0f8723769acdedf894ef56",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00265.pt": {
+   "sha256": "7b52676c696474717e20e866715643437e0ccf57bcd8089677a9ab76f4fc54ce",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00266.pt": {
+   "sha256": "2950634364862cde0950374d2d1245f747b7a3ff319d57b895b207c1833b0056",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00267.pt": {
+   "sha256": "dc60805600e8e51934a6586a3751d9b2f91438ef09c42ed26b6377912b713605",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00268.pt": {
+   "sha256": "0056334c8d2b39513f549f9c61cee81d4baf7a40dd7c50a23a15240c12842831",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00269.pt": {
+   "sha256": "3a2d276460527f8f70821b9b60894ecc695025b25fe96d06a782e0d1a1c3cd95",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00270.pt": {
+   "sha256": "98c414c7fc30cf620f92ea95bb0bd7de19b99ceaf1f811a51e92df1a85fc7b92",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00271.pt": {
+   "sha256": "9af9d61e45f92d1beb8fa5dfb7f12f3bca4914c3bad79571335c01cd627f8b22",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00272.pt": {
+   "sha256": "cb0a87407f85fe8ab45f18abeb4209e8bd7b726789efe844f1939217eb17c372",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00273.pt": {
+   "sha256": "266f3a20075402fa71d5f93ecbcf53141692294689a6bdd2954944641a8ba432",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00274.pt": {
+   "sha256": "fb0b3843f017f9d074d9c21b387a753ec1721dd11ce29d13055a2d790c0e4649",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00275.pt": {
+   "sha256": "73888b161b27423e7e7aee456a157a9dc7b3840accbe6f63348a459dea593e92",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00276.pt": {
+   "sha256": "8b0d932c42b5a780432b2e693fc9d2b26c7ccbdabc19f711e4c9fd6642fb6903",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00277.pt": {
+   "sha256": "e044200d21597e128cbd8f9fb41d331a6484c06b07a53e17444fc2621066f8c3",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00278.pt": {
+   "sha256": "7edc96f4331d6279ae41973c71fa14725dfc50a7693925e962d389aaf06813e2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00279.pt": {
+   "sha256": "49b1248cdc6c627d084b66033c062995cad48fbf8e315eee7eda44cc7a9fa8a0",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00280.pt": {
+   "sha256": "590562d2096f3a496d9d9b4aa617f5667e8af24d5ef05269c148ddd1da108d18",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00281.pt": {
+   "sha256": "52c865605bda47ed8453a2f6bde004a0578b0c60734ea266733559e6f963b10b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00282.pt": {
+   "sha256": "7f9b6c2ca00e360603cdeede16428fc2e6a5517901004a507026aecb2b206271",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00283.pt": {
+   "sha256": "494977be2b0cd19e0ed5c32a5698cf3ed5a41a5844395eb1b1385e3a6f7a6fe7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00284.pt": {
+   "sha256": "6fc9c846af010346a398a1dff58031144357d67529923395e9feb0140219eccc",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00285.pt": {
+   "sha256": "ba9d79601face82fb8b1258ffc435efbfbf78ee01ed4b4a42e66fc8ad5d5464d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00286.pt": {
+   "sha256": "6d41a566c7a66c6fdd5d0835ee74bb1d91304bf5bbbe8fb507eb33558ea4510c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/adj_4/mjhq1k/00287.pt": {
+   "sha256": "9569f98618b6cb8664fdade2ef0354948dc779d795fee839fecc882203037d54",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00008.pt": {
+   "sha256": "6c927193576b114afddfbc472f370eb901c5067d987df3259c0fd0391738b065",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00009.pt": {
+   "sha256": "115b614c83e5b998a9a89bfb88f23b6de0a058e88a79ab728d2cd28f8d35ce25",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00010.pt": {
+   "sha256": "e826806664fe66e27128bb5cdd57cb05722bb05aa878e2a05c44cc5d1c090711",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00011.pt": {
+   "sha256": "d4625de1a6097d0ed416b1cc67f7dd7d32d8ec5ecc696c1da8e53a02e78dc1a5",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00012.pt": {
+   "sha256": "0b519ce9aebb16ebdff9ae0920fe4975a0ce77b0316b7e1b71ecd32fecb5d7c1",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00013.pt": {
+   "sha256": "8019d1a478f5255a9820dc90950cf0483ec38e3485c1ff966d60a2bef773823c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00014.pt": {
+   "sha256": "9c27a01efb3afbc6aca12bac22c984939bc998b10907e3c0026f8b2fa8622641",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00015.pt": {
+   "sha256": "f01cc22baa0522074242125f1883172bec80ab35e3342900d89aef86deee2fc2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00016.pt": {
+   "sha256": "b7fb49773854432b20a5c77bd85e10b4a7f30f2de73530409796a7b4c4ac5135",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00017.pt": {
+   "sha256": "f2316ca5f92c29c24a705c2057d0a68f15125b504a64f6c2289b04ccf8555715",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00018.pt": {
+   "sha256": "7bc9d25001290be1a7591155e3199b91b2e36ad77b0a2ef88ce9f1fc1015f458",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00019.pt": {
+   "sha256": "b024785b9ed0534a204535de104ef668b1949092e8c1fc07cab15bc249cd14e0",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00020.pt": {
+   "sha256": "f91df86629c361854ec997af581fa12a8d9dad68917666a8ff7d565948be79f5",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00021.pt": {
+   "sha256": "e6a6cdbbc313db67a08c4d5fb4ca0219309a3fec61695c5c56fcd70e6fdad4fb",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00022.pt": {
+   "sha256": "2c536eaed580bbe375928e3b3f4da2fb43350dfbf7540ce01386a99e89262fc7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/design/00023.pt": {
+   "sha256": "61b3e927aa87538afaf84b2dcaccd4e1582e5d59436085d3ac314efadbfb1908",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00256.pt": {
+   "sha256": "c6abea52d2b3e5681690ee78659436fefd2f757e56d296c59bf6c38e38cb20e2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00257.pt": {
+   "sha256": "a9d466545a7344bd9aaaf4d927cdfb367e2df5098dead0d817b6bf48dc823dc7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00258.pt": {
+   "sha256": "04af6d3d19798f7406b6f2d21ebd4a5cecdfc9aa7993e8a13d2cbe9d8830a637",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00259.pt": {
+   "sha256": "6aeccd80ad29cd9f5d516b4e93ab6fe704b0aecbe6d57f12abcbdf1a82e45d1f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00260.pt": {
+   "sha256": "5f9e3a9d931533ae689a24d801802daae81c9c076c057cf70da1e9fba0066bab",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00261.pt": {
+   "sha256": "ae15bf6418b8aa4f7e303318b1917a8e5403ea3260209be2244d01f11d5a5b63",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00262.pt": {
+   "sha256": "87f3f12c501a4ec649fe2808223d404c0189e1e409b63dcfcf69452791c4ebc3",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00263.pt": {
+   "sha256": "de840b2df83d7da83019c21030ff8a57b8710dd4016e702125a71cce64505fe8",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00264.pt": {
+   "sha256": "32a1ae8cbb41295150bc1e1cfa1c74f344566379f0d7d5ebabe1c632ec8aa410",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00265.pt": {
+   "sha256": "375b6646611c9c728da858d1c06fb74b54827a7769e7dcdce097bfeb5822c3ec",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00266.pt": {
+   "sha256": "b8e60ffa14ccccc111c5e80587ef004b726254ee8f88c32e7b1af7e02ac1190d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00267.pt": {
+   "sha256": "fe75a216e016f409678454246cb8d2e5611e3add7f3ae0f1ea1ec027ad98dc42",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00268.pt": {
+   "sha256": "4c801d5dd48c6399ce64ea85b86c4770a60cca6b7040f3aee05b010076333655",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00269.pt": {
+   "sha256": "8cf68db8914cd2a0f88161b96eae10388dcd00c9836d74a469cc1ceb0706fce7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00270.pt": {
+   "sha256": "566db990e0dbbc367936bed3bb50e8dc44c4bfd5b46cb64e0fd14494916c9e9c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00271.pt": {
+   "sha256": "962f81a5ccb409a5a121721e7cb8c05977df6c9ff316c4565639be51a35e71d5",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00272.pt": {
+   "sha256": "28f2b11deeb416283364afd4cdd1cbde69a01fee1a134a80354fc685fe31fb60",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00273.pt": {
+   "sha256": "152e563585f506e2bffa1db5fb4904b848d11989cc16f44799520a19f360c162",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00274.pt": {
+   "sha256": "6c46581820a4469df73052efee5efbd5bbe2d198149c38f8c6230875d6b0040b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00275.pt": {
+   "sha256": "4a3e4c91f9ed6e36722e477ffacb85b23068cacf3bade340d1d432483081ef3a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00276.pt": {
+   "sha256": "bd6f59d5c4f33f754104fe33db5ae8c0d7e176552aeeb49030d909ac116e5f9a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00277.pt": {
+   "sha256": "df6f83727753c592067d4d200576a7e3fbb400fbe45560f29138f961703e9472",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00278.pt": {
+   "sha256": "83d40f2c24dbbaadcfb08c4daa0bdd766f7d01481287a8494eef32f09ead41a4",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00279.pt": {
+   "sha256": "39c2b16d21c2d843025100af2d1a82a5ff8ae4ed9c39cc9c343b5fedbddad795",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00280.pt": {
+   "sha256": "1a06759d912b5e715801be77bd2c708321fb5b80927e8526e09c19ff25bfe448",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00281.pt": {
+   "sha256": "88d5db5ad12ec826ce37c9a5f53ce4447d256c6d6c336a9ea7461a3e2cb6f869",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00282.pt": {
+   "sha256": "f134821959bdaec54fcac3665b81bfd6cbbd3b07773ac02a4af8e67c98355dbc",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00283.pt": {
+   "sha256": "fdcca547365322d3e03ff9d9b3be6e42ea22d2b9fad01e273bc5227abb34fbc4",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00284.pt": {
+   "sha256": "138bbc1486b41d1a8507555a84344f82c8b2491741edfc1c124d4c043a660d5d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00285.pt": {
+   "sha256": "0a6faa200b070d8a035e7577f44354aacac26b020aff3a0d31f7b7b13720a865",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00286.pt": {
+   "sha256": "e17edd22d860fe50bb29137e55add3cdb7cb0c02e303e7896f754c8d12063c15",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/bf16/mjhq1k/00287.pt": {
+   "sha256": "c463ab95d3c5fe1ebe0c8fc8ed8279c6763611c41d9af0b0fff6e55c54ea2a4c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00008.pt": {
+   "sha256": "8979cae10afc361382a7b69bd28d27e17439eacc49419b1a1c202e0b1275bc2e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00009.pt": {
+   "sha256": "8eda27cec0793d99ad81c3a2b4329d38f91229a052ea1810ba914b6e7fa4c813",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00010.pt": {
+   "sha256": "4762515ce0424fb2d82cd9f4bebb821378be1144537fd1500430108a5275dd71",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00011.pt": {
+   "sha256": "a1d8e9b3169b13c860da5fb4bcefe6d6083f7c4e67c0b6593aca921885d80e5f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00012.pt": {
+   "sha256": "65a08c4bfd19b7efcd44f7e164e59349598815a9faf01a65171609672b263755",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00013.pt": {
+   "sha256": "0930bf30c544320a3ccffeaf8c1cb56115d50b02d5bda58cab7242fe47125d41",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00014.pt": {
+   "sha256": "e1eff9f1f1ab6dd106258d837a39f98b5dec9bc6afc44ce953769864d1e134cd",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00015.pt": {
+   "sha256": "7891183285239774c158a8544755b54debcb5e09f7ba876253eec2453772a929",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00016.pt": {
+   "sha256": "a6f00d660c20288761c761c7effff34e18ac2992cbf17abae6223c3f14193d93",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00017.pt": {
+   "sha256": "333d0427310c061b5d31cc31bd07654a8a42b6398f63568632e0ad22f2a3b328",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00018.pt": {
+   "sha256": "0ef2cc1d6079922164e1fcedd64c571157243ea33a7bcffdbec4e225971e7fae",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00019.pt": {
+   "sha256": "c1546efb91aa3b16ab3e75821c044f6cc3d8cfc540284b7734fe5c95923b3b48",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00020.pt": {
+   "sha256": "39a4ad1ade902eb5e9a74507a1313d87ed4fd0058e9300af1baa3d724acc1ef7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00021.pt": {
+   "sha256": "0a052d375296d4cb7c8809c3ec761992f2eb440a14d91298603a68a6aedeceff",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00022.pt": {
+   "sha256": "771486c41efd88de8b8432556a33429594d1c7af610139d4b6a21ed5415c7892",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/design/00023.pt": {
+   "sha256": "65fa5de9cf761f7ce4eb1b70caa61b3fdf3f10035a5baf9a804557e6b673daea",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00256.pt": {
+   "sha256": "f8c96be79e7e71fbf7fe81e9706f70ae20ae3ec0a9507f669580fa00648cbd88",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00257.pt": {
+   "sha256": "476f27ef5d2a41c4e725f9b070d76e6a25f47eb631d8ae3075ad407e84ae6501",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00258.pt": {
+   "sha256": "7fd6b33c4d1d52c8c53752dee33e2bbf610bcc4f68c9f5c047ee969eda58bdff",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00259.pt": {
+   "sha256": "f97dc120e64b8ddb850c8553b29900b725c2eaa1dbe8fec4897e021f25ec9e04",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00260.pt": {
+   "sha256": "57b550f12f8c471dd6371f6ae236859004d44897c1e6a0596bf0ed0514e9e370",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00261.pt": {
+   "sha256": "4614ae6fb731461840d536a0d2be03e3d15d587137f0acedc6dd025eae78a121",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00262.pt": {
+   "sha256": "a8d29d3f698a5b5e345229e355bb3f4ae2c78d9d412e706e41cf15db4926c5ad",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00263.pt": {
+   "sha256": "f9f1c44407ea5cca1453cf85ea7ba07c994f00225b37eb91091171af55e44656",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00264.pt": {
+   "sha256": "198115155e3ab8c3cc6a850e6c4914022d30bc9e81aecb4d2a64aed2de41caa6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00265.pt": {
+   "sha256": "cf39fa953d677c50733af51bc61725ded99839f8fde99d4fe99045256a8c9c0a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00266.pt": {
+   "sha256": "697a6e76c0efb1af744efcc34e319013c84ac60a1ec122cd1fbce8558a3b7c20",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00267.pt": {
+   "sha256": "167349b42e615ff8167ad3f6e07d7ff7d67d9a64c0d0358764d9f2f4ffc4c683",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00268.pt": {
+   "sha256": "f34f50c1e6135c363c12874b6cb31ea550cfcda8671b88d1aecfc14a725f20bd",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00269.pt": {
+   "sha256": "956ac6d46007f9bb6b98e8d37d22856af01359925d1b18bd93909f0bcabcecd2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00270.pt": {
+   "sha256": "6bcb78c4fd85f23943e63ea17c966bd7d259924eca35bf551f6da92121421081",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00271.pt": {
+   "sha256": "1a18a11ebe9f4e9ef2d70b9b5ba010789fb9f6cd14250179a52f0b069f53f450",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00272.pt": {
+   "sha256": "fd198a2fe079ae72498e7a7da17e1062ae5aeacf5fc669f10df4cb0cb71da717",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00273.pt": {
+   "sha256": "23b1d22f24bf74fe341185b41e210442e7bce7539cb925f4a29433d4d451410d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00274.pt": {
+   "sha256": "0f6e4fa7e9ecfbf05a888f05c1eccc0d348e7c44358f99dfc8d56145c18655a9",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00275.pt": {
+   "sha256": "71a85dfc1356dc2ec4aa08dab4b6f76caf90433450be628b892abb3d5db1e687",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00276.pt": {
+   "sha256": "fa736851270cd6ba56e8e594acd34862e2b4770a4ea8cb58df3b16b70fb7bc80",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00277.pt": {
+   "sha256": "4017f0893eedcbd72bf869661ff4fcea40ad7da1664e2a09b95b54abd80bba57",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00278.pt": {
+   "sha256": "41e047fc928026de8baa7ce94b480f732b8ac86a401bccf52d06a2254a6c053e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00279.pt": {
+   "sha256": "335084ce29fefbf258b984b9f20a1e9c25ba674c87be68d8867f4deafbfd0274",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00280.pt": {
+   "sha256": "3ad680cd8bd0512807f78424f06cf5a9e59792d8e7eb6d9afc7c47f8b67251e8",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00281.pt": {
+   "sha256": "01cd4a414826e4c83b1e09b057aa6a92f1fa4bd67afc88eb7930e0df09a0a454",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00282.pt": {
+   "sha256": "472391ed24d5f0cc6b47eb6913eb2afcdd10cb33e2c84256e9def29e3077a6cb",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00283.pt": {
+   "sha256": "c144051b7392d79a86a344337952016643f93290baa6e4343dc46845db751cc7",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00284.pt": {
+   "sha256": "9b00815cd95081b709b2ba195f927aaaa38717f0d23b5ae717468ec0d8db7894",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00285.pt": {
+   "sha256": "2a848acb302936794b6383801305db9beb348733aba66b9348091223a39af125",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00286.pt": {
+   "sha256": "f311918a086939fb262c45a72fbba25320c5701bfd75d55af98d309cd407d32f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/nearest/mjhq1k/00287.pt": {
+   "sha256": "895d9dc76126e20ef0e35bf09bb97d8a2ffa920708851ceab84a3b3bf58de5ed",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00008.pt": {
+   "sha256": "c4e8d0ccf02d883c2c0f411d937fccf03295e55e335f9784ec3b8e8ade9d163f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00009.pt": {
+   "sha256": "a22ae3fb56d2845ac90bba06cd1f79534190e4e2a0d85b985eae6b19bcff08dc",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00010.pt": {
+   "sha256": "ae14c6eb57469e114abd7caf1e7c63ad973b56d3206343df483c0da0215ad556",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00011.pt": {
+   "sha256": "0f398ccd5796780ab8c614eda6d275cc4c1559b6ba69b0d16cafb510fce8dc8b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00012.pt": {
+   "sha256": "b79d3ceafd3783d9495342bb85f60da48d8e47d0e42c6d19e6d7eb2b59e0de02",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00013.pt": {
+   "sha256": "1800ac2afb7fe90642bf7f35938a9064bb923e0357d9bc2e0d5c2e3bcdc0c601",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00014.pt": {
+   "sha256": "28d4b5d66e264501bb45d09974a9038e7ac75975b4e5419c36cabb9d68b14a58",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00015.pt": {
+   "sha256": "902c5ecd53cabb574e6a1cd3a9f876f74e0ec9f18adbb6dfa5aa39f507b151d3",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00016.pt": {
+   "sha256": "b93d9d2104de91b3364f73c77df9911b409bd2475a8aa0182029fe4422fabf54",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00017.pt": {
+   "sha256": "75d31a64f81824d4bc7d5a072b577a9fdcb27726985e9ac15e924e33e1c5f8fc",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00018.pt": {
+   "sha256": "2ce4da471bd32b8025e7711f3b855f5f5d2035dbb8af330f1c77bc85e3213dec",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00019.pt": {
+   "sha256": "fc26212fbc47f16e70fafeb89c619945b6f05fb444e08ab52723a38ed5ad0e22",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00020.pt": {
+   "sha256": "40681b5674a2a7859950d7791cc10dfb0665881814c5df20d5e7898e77a431c4",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00021.pt": {
+   "sha256": "8385d672938d5b1fc34e33977e08ddbb83fa3c87da0941fe334bb500424cb61c",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00022.pt": {
+   "sha256": "dcc38fa95345007755b149b993e9e6a50ff858f7f6a89e62e51a37c10ac6220e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/design/00023.pt": {
+   "sha256": "d740aa709d6ee094f51a92493e98dda7f24436b4748c2e98415322920f1360aa",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00256.pt": {
+   "sha256": "99cbe2cbec8cdc0af58f0c03c7593d67e71b0d9879b6f518ec875d2536b6d996",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00257.pt": {
+   "sha256": "3b06038ff11fab555d7d342cc0012fdae95185ff80c16091c661f6356df5eac2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00258.pt": {
+   "sha256": "40c354d7dbdd09b3f68b683f38c0839d3155fd3de96d0e1251cf142d66f166ad",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00259.pt": {
+   "sha256": "c06364cbb0b6284b8228eda3209ea849a7e5e96d080d6a7d02690e3618ef8c61",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00260.pt": {
+   "sha256": "099eb20f259bac57e21deb5129047e8e3da9e5f63f0ecad56f3b1935567f427e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00261.pt": {
+   "sha256": "e458b96109302d2ad1e3ca2b6a7c0f0a2217b8b9085637fd27032390545d42f6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00262.pt": {
+   "sha256": "cd06a61481bcd51246745a645f7a0a76ab5859ff957c7f131f2163dfa1fca869",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00263.pt": {
+   "sha256": "adcb392732e6bc3531cf135f90b6a8cca1b3e26fdf24a3a8e45e5b61377b9146",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00264.pt": {
+   "sha256": "809606982644976fa6e99149f5de50bf79a69c277fd24775daa229884e441f92",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00265.pt": {
+   "sha256": "e20a67b598001f5d501ee7e26ca49f86d994b6f68dd8b1abdbd4daae8c854ab6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00266.pt": {
+   "sha256": "120df7f9319952b600fd223b9cd1c3a6f6e0efb6de698b0523ef75f5bdb97954",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00267.pt": {
+   "sha256": "df2af80e5d771023fee171a6198031d243a72b978d84c2ad234ab87d0459450b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00268.pt": {
+   "sha256": "7bd9cf755b84d063fb40c51629350bead28ff5907dd67ec1b3bc849bd1cbe389",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00269.pt": {
+   "sha256": "4b9f96d7915c7da6c0875a0c322ef6a083baf7fec0a975622efe306a83eb54c0",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00270.pt": {
+   "sha256": "b02c9b6b845205d6c9efc011c919da058e9abf893181e08e7755fb63c5cdf3f2",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00271.pt": {
+   "sha256": "1c4f220f351574e861078236c6e10a19dab30be90867f66822709bc5ac3f4d05",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00272.pt": {
+   "sha256": "baea02f066668b52c529181ae49a54bc43f506b0e5cc5b86fffabfa158316b1b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00273.pt": {
+   "sha256": "22ae266c7eca7777cec14d1adb022ba67b6d9f1feb3ee6649b42c98cc9dabe8d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00274.pt": {
+   "sha256": "5fddac44ac80e64fc23636002359cf2bb4a264814ff440f39cb8ea617887a2db",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00275.pt": {
+   "sha256": "06b9f518e511ed837ac591743e836004543a5e66cf6d2d3515a365c3e4b5cef6",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00276.pt": {
+   "sha256": "1cf479ef920ec61656a0733b06e9a446d6444c047e74acce32a2c153dce7d8dc",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00277.pt": {
+   "sha256": "9414e79b47a10b7f216dd4e8e051c663513fdd2613deb8fb85754458360f3e9f",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00278.pt": {
+   "sha256": "a83f1e3a240caf569dc2bace1df85ab1747f7d1d47a7bee014d6918d7f94bd5b",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00279.pt": {
+   "sha256": "972327aff8a7b6827ed7282f8e71d330ecfcbc1a05b11f25a0ff10a1703982bf",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00280.pt": {
+   "sha256": "eb7c31dab2097e8e0105c5b5c2fb1d1b7ef1f8a2f33686f81aedac6da4c1816e",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00281.pt": {
+   "sha256": "244e03f575658925564f1263eed68044b457055540c2c69b9d676644dce27984",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00282.pt": {
+   "sha256": "f0382d341099456a70bc90e923209339e12d96dd511fb728fa09fcf01e39b7e3",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00283.pt": {
+   "sha256": "8565a46fbb4a9b7736ae95f9f300383b627a561b59c7bc0e65d0f4c98f32c54d",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00284.pt": {
+   "sha256": "2fc12bf504faa19b84ac1280b301b0da46ae916390a4478445744dcb84680966",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00285.pt": {
+   "sha256": "716224061f4f51b7960371ad55cd12fadf242bdbb389892db91a84c63944835a",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00286.pt": {
+   "sha256": "aac216b51a7c2e04c82b04d97c53cce82f3e13c10c715d65d948a96faa690c82",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/followup/e2/img/rnd_4/mjhq1k/00287.pt": {
+   "sha256": "facdea7dd567e748b065acb98d9de6149f93501ef9ac0a3ce4d9c9a5992d2947",
+   "bytes": 3409773,
+   "class": "essential_analysis",
+   "role": "follow-up E2 images",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00000.pt": {
+   "sha256": "846238680e08c7a9ad72228e7c0753733ea72b08edc0e0a3d5e4b97beeaaeb98",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00008.pt": {
+   "sha256": "dbc4a5f52f5ea0f1338bc766b83d8faf31a34534922fb88be3f33e86e74df4d1",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00016.pt": {
+   "sha256": "25d6b3734da078e7b275afee9813b0597b9f7173d51c6ff647fdf518070a5200",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00024.pt": {
+   "sha256": "009bc190a4f23f645d2181c779bf8712fc0eb485f9c6a29f36f94f46b689a52f",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00032.pt": {
+   "sha256": "5f217db96097232ec762d17013045a00210e634c6e690df21c6ad7cc356576b5",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00040.pt": {
+   "sha256": "4471ac6d9c53185a59b5d4a73b4322921e86cbdff9aa49adadf8dca5e07d2742",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00048.pt": {
+   "sha256": "fc4d25b4ee869440117a95908e72ca9acc619c4d030fa0d22151a84b58908caf",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/bf16/00056.pt": {
+   "sha256": "829aa503ba5e7ddc7513d0b8adcbd1607fada663b23dd157bcb82e4bb3a10ae2",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00000.pt": {
+   "sha256": "5c7bb2171027c7cabb27847f973f5824e70255db823e9d300f6837e042929d47",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00008.pt": {
+   "sha256": "84651a8bf4d492d68ddee0053dfbe78e155cfdff33c3b204fc233612da5ca88a",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00016.pt": {
+   "sha256": "d0a439c82d34180268e2b62b60a70919892c0d3848c8621bf1a8062a00da1686",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00024.pt": {
+   "sha256": "55ab8e95dbea51d428d3a4d36bf0a768b9e808fd6da794d922cf54a5d3e2ab2f",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00032.pt": {
+   "sha256": "6562cba35bee007047c41763b3abfbd79bd053f6d7803dc7159b57bb1d1a946d",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00040.pt": {
+   "sha256": "47af281dde2bad00408525cdff7a320e45146c6996cd1e362b4fb371d5b80f31",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00048.pt": {
+   "sha256": "0cc018b6453e4b936484f46638811412fb54180abe3e569d2599be4858f7cf75",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  },
+  "data/ckpt/w4a4/img/fp16_unquantized/00056.pt": {
+   "sha256": "43eee851dde92ba997bc3f0d910b5cb0d324e5aef408786ade788707d49d8e4c",
+   "bytes": 25167408,
+   "class": "essential_analysis",
+   "role": "W4A4 phase images (bf16, fp16)",
+   "regen": null
+  }
+ },
+ "upstream": {
+  "DiT-XL-2-256x256.pt": "9ec1876e4c03471bca126663a30e2d1b20610b6d2f87850a39a36f25cc685521",
+  "VIRTUAL_imagenet256_labeled.npz": "b32732719497e42660a9affb4a966068cba0855ac449b82015e34ec376d20758"
+ }
+}

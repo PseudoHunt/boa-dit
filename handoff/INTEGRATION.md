@@ -10,6 +10,6 @@ Selectively taken from `park/2026-10-29/temporal-oracles` = 216e4e6d0ba01ceaba24
 
 Other changes on this branch (2026-10-29, at parking):
 - absolute paths made configurable (`BOA_HF_HOME`, `BOA_PIXART_DIR`, `BOA_EXT_DIR`, `BOA_EXTRA_CSVS`, `BOA_FOLLOWUP_ACT_RESULTS`; repo-relative defaults);
-- handoff documents and restore scripts.
+- handoff documents; `scripts/fetch_upstream.py`, `scripts/regenerate_base.sh`, `scripts/verify_restore.py`, `scripts/bootstrap_vm.sh`; `assets_static/deepcompressor_qdiff.yaml` (BOA_QDIFF).
 
 No research branch was merged wholesale. The joint pilot's module (`boa_dit/dit_joint/`) is new; record its sources here as it is written.
