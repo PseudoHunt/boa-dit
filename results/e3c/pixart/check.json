@@ -5,21 +5,21 @@
  "rollout_rel_err_from_0": 0.0,
  "rollout_rel_err_from_9": 0.0,
  "rollout_rel_err_from_17": 0.0,
- "grad_block0_L1": 0.03810577467083931,
- "grad_block27_L2": 0.004829234443604946,
+ "grad_block0_L1": 0.0383480004966259,
+ "grad_block27_L2": 0.004828199278563261,
  "peak_mem_GiB": 4.907935619354248,
  "exported_branch_sampling_bitwise": true,
  "exported_branch_pipeline_bitwise": true,
- "export_bitwise_untrained": false,
- "pass": false,
+ "export_bitwise_untrained": true,
+ "pass": true,
  "stage": "f5",
  "run": "e3c_px_check",
  "device": "cuda:0",
  "config": {
   "K": 5
  },
- "git_sha": "3a7e6034a60294216f4690136c00a1cc46271c84",
- "start_utc": "2026-10-29T03:47:41Z",
- "wall_s": 90.78413558006287,
- "gpu_hours": 0.025217815438906353
+ "git_sha": "5a84cc8e4cde16feb252a19e58ee611bd53e5582",
+ "start_utc": "2026-10-29T06:54:14Z",
+ "wall_s": 172.19718623161316,
+ "gpu_hours": 0.047832551731003654
 }
