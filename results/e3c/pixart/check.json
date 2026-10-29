@@ -5,8 +5,8 @@
  "rollout_rel_err_from_0": 0.0,
  "rollout_rel_err_from_9": 0.0,
  "rollout_rel_err_from_17": 0.0,
- "grad_block0_L1": 0.0383480004966259,
- "grad_block27_L2": 0.004828199278563261,
+ "grad_block0_L1": 0.0379747599363327,
+ "grad_block27_L2": 0.004828801844269037,
  "peak_mem_GiB": 4.907935619354248,
  "exported_branch_sampling_bitwise": true,
  "exported_branch_pipeline_bitwise": true,
@@ -18,8 +18,8 @@
  "config": {
   "K": 5
  },
- "git_sha": "5a84cc8e4cde16feb252a19e58ee611bd53e5582",
- "start_utc": "2026-10-29T06:54:14Z",
- "wall_s": 172.19718623161316,
- "gpu_hours": 0.047832551731003654
+ "git_sha": "e4d28c7d21914511ef7c18bb2a40e7de3eb616a9",
+ "start_utc": "2026-10-29T07:24:55Z",
+ "wall_s": 89.88089299201965,
+ "gpu_hours": 0.024966914720005458
 }
