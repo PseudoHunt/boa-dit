@@ -1,0 +1,57 @@
+{
+ "fit": {
+  "file": "/home/boa-dit-ac/ckpt/analytic_carry/e2_stats_fit.pt",
+  "sha256": "8dc739c8533c48ff31f2ebb84586df03a4dea5f9acd770d867db7998b635fdcb",
+  "seeds": [
+   83000,
+   83031
+  ],
+  "steps": [
+   0,
+   5,
+   10,
+   15,
+   20,
+   25,
+   30,
+   35,
+   40,
+   45,
+   49
+  ],
+  "tokens_per_row": 64,
+  "rows_per_site": 45056
+ },
+ "dev": {
+  "file": "/home/boa-dit-ac/ckpt/analytic_carry/e2_stats_dev.pt",
+  "sha256": "663af456cffe80f4e905b2da4f0cbbee0913ae1f9ac1c395975fb63d0647aa08",
+  "seeds": [
+   83100,
+   83131
+  ],
+  "steps": [
+   0,
+   5,
+   10,
+   15,
+   20,
+   25,
+   30,
+   35,
+   40,
+   45,
+   49
+  ],
+  "tokens_per_row": 64,
+  "rows_per_site": 45056
+ },
+ "token_rule": "token 4k + ((image index within split + step) mod 4), k = 0..63, shared across sites and both CFG rows",
+ "stage": "ac1",
+ "run": "ac1_e2_stats",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "8a19ab2f8ba49a60b34f0cb9e2348ba8edf45140",
+ "start_utc": "2026-10-29T23:46:37Z",
+ "wall_s": 144.3265540599823,
+ "gpu_hours": 0.0400907094611062
+}
