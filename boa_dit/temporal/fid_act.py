@@ -1,7 +1,7 @@
 """FID-2k for a stage-3 DiT activation-quantization arm (rule_feedback.md): eval_fid.py protocol (seeds 0..n-1, cfg 1.5,
 DDIM-50, bs 32, pytorch-fid vs the ADM reference batch), quantizer dit_act.Quantize with log=False (no counters; the
 sampled latents are bit-identical to log=True, verified on a 32-seed batch). Resumable per batch.
-Run: python -m boa_dit.temporal.fid_act --kind single8 --dither none [--feedback] --n 2000
+Run: python -m boa_dit.temporal.fid_act --kind single8 --dither none [--feedback [--compress dct4]] --n 2000 [--lo 2000] [--stage c3]
 """
 import argparse
 import os
@@ -25,18 +25,21 @@ def main():
     ap.add_argument("--dither", default="none", choices=list(ACT.DITHERS))
     ap.add_argument("--feedback", action="store_true")
     ap.add_argument("--n", type=int, default=2000)
+    ap.add_argument("--compress", default=None, help="compressed feedback state (dit_act token_basis), e.g. dct4")
+    ap.add_argument("--lo", type=int, default=0, help="first seed (second-set confirmation: 2000)")
+    ap.add_argument("--stage", default=STAGE)
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
-    name = f"bp_{a.kind}_{'feedback' if a.feedback else a.dither}"
+    name = f"bp_{a.kind}_{'feedback' if a.feedback else a.dither}" + (f"_{a.compress}" if a.compress else "") + (f"_s{a.lo}" if a.lo else "")
     if not os.path.exists(REF_STATS):
         with Run(STAGE, "fid_ref_stats", dev, {}):
             compute_ref(dev)
-    with Run(STAGE, f"fid{a.n}_dit_{name}", dev, vars(a)) as run:
+    with Run(a.stage, f"fid{a.n}_dit_{name}", dev, vars(a)) as run:
         m = load_dit(dev)
-        q = Quantize(m, a.kind, a.dither, dev, feedback=a.feedback, log=False)
+        q = Quantize(m, a.kind, a.dither, dev, feedback=a.feedback, log=False, compress=a.compress)
         part = os.path.join(CK, f"fid{a.n}_dit_{name}.partial")
-        x = sample_seeds(m, make_diffusion(50), list(range(a.n)), 1.5, 32, partial=part, resume=True)
+        x = sample_seeds(m, make_diffusion(50), list(range(a.lo, a.lo + a.n)), 1.5, 32, partial=part, resume=True)
         q.remove()
         del m
         torch.cuda.empty_cache()

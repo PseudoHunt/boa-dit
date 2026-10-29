@@ -11,7 +11,7 @@ import torch.nn.functional as F
 
 from boa_dit.common import CKPT_DIR, RESULTS, atomic_torch_save
 
-MODEL_DIR = "/home/jl_fs/pixart_sigma_1024"
+from boa_dit.w4a4.common import MODEL_DIR  # configurable (BOA_PIXART_DIR)
 OUT = os.path.join(RESULTS, "attn_share", "pixart")
 CK = os.path.join(CKPT_DIR, "pixart")
 PROMPTS = ["a red double-decker bus driving down a city street",

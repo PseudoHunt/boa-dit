@@ -10,7 +10,8 @@ EXTRA_RUNS = {("deflate", "quant_deflate_heig_r16_w4")}
 
 def spent(prefix=None):
     s = 0.0
-    for f in glob.glob("/home/boa-dit*/results/gpu_hours.csv"):
+    import os
+    for f in [os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results", "gpu_hours.csv")]:
         for r in csv.reader(open(f)):
             if r and (r[0] == STAGE or (r[0], r[1]) in EXTRA_RUNS) and (prefix is None or r[1].startswith(prefix)):
                 s += float(r[-1])

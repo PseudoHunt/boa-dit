@@ -20,7 +20,7 @@ from boa_dit.sampler_corr.run import band_split, heig
 from boa_dit.weights_joint.common import step_outputs
 
 import importlib.util as _ilu                                                       # shared c3 budget (temporal-oracles branch)
-_spec = _ilu.spec_from_file_location("c3", "/home/boa-dit/boa_dit/temporal/c3.py")
+_spec = _ilu.spec_from_file_location("c3", __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.dirname(__import__("os").path.abspath(__file__))), "temporal", "c3.py"))
 _c3 = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_c3)
 STAGE, guard = _c3.STAGE, _c3.guard
 

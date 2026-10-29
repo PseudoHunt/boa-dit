@@ -6,7 +6,7 @@ sys.path.insert(0, ROOT)
 from boa_dit.common import atomic_write_text
 from boa_dit.f4 import spent, CAP
 
-FW, FA = os.path.join(ROOT, "results", "followup"), "/home/boa-dit-fa/results/followup"
+FW, FA = os.path.join(ROOT, "results", "followup"), os.environ.get("BOA_FOLLOWUP_ACT_RESULTS", os.path.join(ROOT, "results", "followup"))  # followup-act branch results (E2)
 J = lambda base, *p: json.load(open(os.path.join(base, *p)))
 S1, D1, C1 = J(FW, "e1", "screen.json"), J(FW, "e1", "live_design.json"), J(FW, "e1", "live_confirm.json")
 B2, P2, SC2, CF2 = (J(FA, "e2", f) for f in ("bench.json", "probe.json", "screen.json", "confirm.json"))

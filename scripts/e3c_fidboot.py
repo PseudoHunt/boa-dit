@@ -6,7 +6,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from boa_dit.common import atomic_write_json
 from boa_dit.fidboot import FIDRef, paired_boot
-CK = "/home/boa-dit/ckpt/e3c/fid"
+CK = os.path.join(ROOT, "ckpt", "e3c", "fid")
 arms = [a for a in ["C0", "H16", "C1t_s0", "C2_s0", "C2M_s0", "C2L_s0"] if os.path.exists(os.path.join(CK, f"feats_{a}.npy"))]
 feats = {a: np.load(os.path.join(CK, f"feats_{a}.npy")).astype(np.float64) for a in arms}
 pairs = [(a, "C0") for a in arms if a != "C0"] + [p for p in [("C2_s0", "H16"), ("C2_s0", "C1t_s0"), ("C2M_s0", "C2_s0"), ("C2L_s0", "C2_s0"), ("C2L_s0", "H16")] if p[0] in arms and p[1] in arms]

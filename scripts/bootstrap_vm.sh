@@ -1,0 +1,21 @@
+#!/bin/bash
+# Fresh-VM bootstrap for boa-dit (handoff/START_HERE.md). Run from the repo root after cloning branch dit-joint-feedback.
+# Creates .venv (Python 3.10), installs the locked stack, initializes submodules, restores the DiT pilot's assets and verifies them.
+# Needs: NVIDIA driver (nvidia-smi works), git, python3.10 + venv, gh authenticated (gh auth login) for release downloads.
+# Optional env: BOA_DATA (data root, default ./data), BOA_HF_HOME (HF cache, default $BOA_DATA/hf).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+command -v nvidia-smi >/dev/null && nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader || { echo "nvidia-smi missing: install the NVIDIA driver first"; exit 1; }
+command -v gh >/dev/null || { echo "gh (GitHub CLI) missing: see handoff/START_HERE.md step 1"; exit 1; }
+gh auth status >/dev/null 2>&1 || { echo "run: gh auth login"; exit 1; }
+git submodule update --init --recursive
+PY=${PYTHON:-python3.10}; command -v $PY >/dev/null || PY=python3
+$PY -m venv .venv
+. .venv/bin/activate
+pip install -q --upgrade pip
+pip install -q torch==2.11.0 torchvision==0.26.0 torchaudio==2.11.0 --index-url https://download.pytorch.org/whl/cu130
+pip install -q -r requirements-lock.txt
+python -c "import torch; assert torch.cuda.is_available(), 'CUDA not available to torch'; print('torch', torch.__version__, torch.cuda.get_device_name(0))"
+python scripts/restore_assets.py --groups "${BOA_GROUPS:-A_dit_base}" --upstream "${BOA_UPSTREAM:-dit,vae}"
+python scripts/verify_restore.py --smoke
+echo "BOOTSTRAP_OK: activate with '. .venv/bin/activate'; next: see handoff/START_HERE.md"

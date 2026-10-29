@@ -17,7 +17,7 @@ for _p in (os.path.join(ROOT, "external", "DiT"), os.path.join(ROOT, "external",
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-os.environ.setdefault("HF_HOME", "/home/jl_fs/hf")
+os.environ.setdefault("HF_HOME", os.environ.get("BOA_HF_HOME", os.path.join(ROOT, "data", "hf")))   # configurable; old VM used /home/jl_fs/hf
 torch.backends.cuda.matmul.allow_tf32 = False
 torch.backends.cudnn.allow_tf32 = False
 torch.backends.cudnn.benchmark = False

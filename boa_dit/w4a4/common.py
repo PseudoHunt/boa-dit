@@ -9,11 +9,12 @@ import torch
 
 from boa_dit.common import CKPT_DIR, RESULTS, atomic_torch_save
 
-MODEL_DIR = "/home/jl_fs/pixart_sigma_1024"
+MODEL_DIR = os.environ.get("BOA_PIXART_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "ext", "pixart_sigma_1024"))
 OUT = os.path.join(RESULTS, "w4a4")
 CK = os.path.join(CKPT_DIR, "w4a4")
-QDIFF = "/root/ext/deepcompressor/examples/diffusion/prompts/qdiff.yaml"
-MJHQ_META = "/root/ext/mjhq/meta_data.json"
+_EXT = os.environ.get("BOA_EXT_DIR", os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "ext"))
+QDIFF = os.path.join(_EXT, "deepcompressor", "examples", "diffusion", "prompts", "qdiff.yaml")
+MJHQ_META = os.path.join(_EXT, "mjhq", "meta_data.json")
 STEPS, GUIDANCE, MAX_SEQ = 20, 4.5, 300
 LAYERS = ("attn1.to_q", "attn1.to_k", "attn1.to_v", "attn1.to_out.0", "attn2.to_q", "attn2.to_k", "attn2.to_v",
           "attn2.to_out.0", "ff.net.0.proj", "ff.net.2")

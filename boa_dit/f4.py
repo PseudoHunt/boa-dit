@@ -8,7 +8,7 @@ import sys
 
 STAGE = "f4"
 CAP = 4.0
-CSVS = [f"/home/{d}/results/gpu_hours.csv" for d in ("boa-dit", "boa-dit-wj", "boa-dit-fw", "boa-dit-fa")]
+CSVS = [os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results", "gpu_hours.csv")] + [p for p in os.environ.get("BOA_EXTRA_CSVS", "").split(":") if p]
 
 
 def spent(prefix=None):
