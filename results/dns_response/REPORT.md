@@ -3,19 +3,57 @@
 Question: does a small band-wise latent impulse on top of faithful DNS (x ← x + θ_j·P_low(x) after updates 9/19/29/39/48; **not** a per-band timestep), calibrated against the signed moment mismatch through measured downstream responses (T), beat the same actuator calibrated locally (L) and faithful DNS?
 Bed: DiT-XL/2 256, heig-8 W4 + rank-8 carry, A16, DDIM-50, cfg 1.5; frozen DNS calibration. Protocol: `results/dns_response/PROTOCOL.md`.
 
-Budget: 0.00 of 6.0 GPU-h; elapsed 0.00 of 6.0 h. Stage log in budget.json.
+Budget: 1.15 of 6.0 GPU-h; elapsed 1.17 of 6.0 h. Stage log in budget.json.
 
 ## Stages
 
-- correctness checks: completed (pass False)
-- component removals: NOT RUN
-- responses / L / T fits: NOT RUN
-- development selection: NOT RUN
-- fidelity confirmation: NOT RUN
+- correctness checks: completed (pass True)
+- component removals: completed
+- responses / L / T fits: completed
+- development selection: completed
+- fidelity confirmation: completed
 - FID-2k / KID plain: NOT RUN
 - FID-2k / KID dns: NOT RUN
 - FID-2k / KID L: NOT RUN
 - FID-2k / KID T: NOT RUN
+
+## Component removals (frozen DNS calibration; context only)
+
+| arm | fit latent | fit J | dev latent | dev J |
+| --- | ---: | ---: | ---: | ---: |
+| plain | 0.07181 | 0.0069 | 0.05479 | 0.0070 |
+| affine | 0.07125 | 0.0058 | 0.05469 | 0.0043 |
+| sched | 0.07181 | 0.0069 | 0.05479 | 0.0071 |
+| affsched | 0.07124 | 0.0060 | 0.05473 | 0.0044 |
+| dns | 0.07140 | 0.0060 | 0.05478 | 0.0044 |
+
+## Response matrix at θ = 0 (fit seeds, live rollouts)
+- Column norms [7.166, 6.423, 4.803, 3.559, 2.912]; ±0.002 vs ±0.004 relative differences [0.01, 0.013, 0.001, 0.0, 0.0]; usable [True, True, True, True, True].
+- Singular values [11.1651, 2.577, 1.6766, 1.2516, 1.0696] (condition 10.4); off-time block norms [6.869, 6.083, 4.338, 2.902, 2.059].
+- Repeat-run variation: 0.0. DNS on fit: latent 0.07140, J_full 0.0060, J_local 0.0036.
+- **L** iterates: it0 θ [0.0, 0.0, 0.0, 0.0, 0.0] J_arm 0.0036 latent 0.07140; it1 θ [0.0, 0.0, 0.0, 0.01, 0.01] J_arm 0.0024 latent 0.07152 (accepted True; predicted 0.0028); it2 θ [0.0, 0.0, 3e-05, 0.01, 0.00997] J_arm 0.0024 latent 0.07152 (accepted True; predicted 0.0024)
+- **T** iterates: it0 θ [0.0, 0.0, 0.0, 0.0, 0.0] J_arm 0.0060 latent 0.07140; it1 θ [0.00348, 0.00677, 0.00975, 0.0, -0.0] J_arm 0.0024 latent 0.07470 (accepted True; predicted 0.0024); it2 θ [0.00291, 0.00709, 0.01, 0.0, 0.0] J_arm 0.0024 latent 0.07464 (accepted True; predicted 0.0024)
+
+## Development selection (common full objective; fidelity guard 1.25× DNS)
+- DNS dev: latent 0.05478, J 0.0044.
+- L: selected it2 θ [0.0, 0.0, 3e-05, 0.01, 0.00997], J_dev 0.0031, latent 0.05493
+- T: selected it2 θ [0.00291, 0.00709, 0.01, 0.0, 0.0], J_dev 0.0024, latent 0.05631
+
+## Fidelity confirmation (seeds 72200–72327, n = 128; paired bootstrap over images)
+
+| arm | latent rel. MSE | PSNR | LPIPS | J (moments) |
+| --- | ---: | ---: | ---: | ---: |
+| plain | 0.06019 | 23.40 | 0.1915 | 0.0041 |
+| dns | 0.05952 | 23.49 | 0.1894 | 0.0035 |
+| L | 0.05969 | 23.49 | 0.1886 | 0.0022 |
+| T | 0.06203 | 23.28 | 0.1927 | 0.0013 |
+
+| contrast | latent | PSNR | LPIPS |
+| --- | --- | --- | --- |
+| dns vs plain | -1.12% [-2.57, +0.17] | +0.0907 [+0.0395, +0.1412] | -0.0021 [-0.0038, -0.0005] |
+| L vs dns | +0.30% [+0.08, +0.50] | +0.0047 [-0.0132, +0.0231] | -0.0008 [-0.0010, -0.0006] |
+| T vs dns | +4.22% [+1.12, +8.14] | -0.2091 [-0.3161, -0.1126] | +0.0033 [+0.0001, +0.0067] |
+| T vs L | +3.91% [+0.94, +7.73] | -0.2137 [-0.3153, -0.1237] | +0.0041 [+0.0010, +0.0073] |
 
 ## Interpretation (protocol §7 rules)
 - T better on moments only: a better calibration diagnostic, not a demonstrated generation method.
