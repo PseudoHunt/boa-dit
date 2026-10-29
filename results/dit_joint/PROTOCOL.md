@@ -147,3 +147,13 @@ GPU model, seconds per update per arm (prefix included), peak memory, projected 
   Evaluation uses `sample.ddim_sample`. Check 4 reports the difference.
 - **Normalizers.** From the untrained common base with A8 static (feedback off), on training seeds 60100–60115, using its own prefix states, per start step.
 - **Checkpoint-safety.** The feedback state is passed as explicit arguments to each checkpointed denoiser call. Check 5 asserts bitwise forward agreement, gradients ≤ 1e-4, and equal end-of-window states with checkpointing on and off.
+
+### 2026-10-29 15:15: check 5 size (after the first checks run hit OOM, before any training)
+The first `checks` run hit OOM at check 5: the no-checkpoint side of a 5-step window stores every call's activations for 8 rows.
+Check 5 now uses a **2-step window on 2 seeds** (4 rows). It still asserts:
+- bitwise forward equality;
+- gradients ≤ 1e-4 relative;
+- equal end-of-window feedback states;
+- the call counts (2 without, 4 with checkpointing).
+
+Checkpoint safety does not depend on the window length. Training rollouts always use checkpointing; local arms make a single call.

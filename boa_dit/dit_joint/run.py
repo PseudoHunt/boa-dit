@@ -391,13 +391,15 @@ def stage_checks(dev):
     res["c4_prefix_restore_bitwise"] = bool(torch.equal(xa, xb))
     res["c4_training_path_vs_ddim_sample_rel"] = float((xa.cpu() - b).norm() / b.norm())
     # 5. checkpointing on/off: forward bitwise, gradients within 1e-4 relative, one state update per call per site
-    x20, lab20, st20 = prefix(m, jq, seeds, 20, sch, dev)
+    torch.cuda.empty_cache()
+    K5, s5 = 2, seeds[:2]                                                     # memory: the no-checkpoint side stores every call's activations
+    x20, lab20, st20 = prefix(m, jq, s5, 20, sch, dev)
     grads, outs = {}, {}
     for ck in (False, True):
         c.zero_grad(set_to_none=True)
         jq.calls = {k: 0 for k in KEYS}
         window.st = st20
-        e0, xe = window(m, jq, x20.clone(), lab20, 20, K, sch, grad=True, ckpt=ck)
+        e0, xe = window(m, jq, x20.clone(), lab20, 20, K5, sch, grad=True, ckpt=ck)
         window.st = None
         (xe.pow(2).mean() + e0.pow(2).mean()).backward()
         grads[ck] = torch.cat([p.grad.flatten() for p in c.parameters()])
@@ -438,8 +440,8 @@ def stage_checks(dev):
     res["tolerances"] = {"c1": "bitwise", "c2": "bitwise", "c3": "bitwise", "c4": "bitwise (training path); ddim_sample reported", "c5": "forward bitwise, grad <= 1e-4", "c7": "bitwise"}
     res["pass"] = all([res["c1_off_equals_reference"], res.get("c1_orig_heig8_equals_e3c_C0_batch32", True), res["c2_static_equals_temporal_Quantize"],
                        res["c2_fb_equals_temporal_Quantize"], res["c3_trainable_init_equals_installed"], res["c3_export_bitwise"],
-                       res["c4_prefix_restore_bitwise"], res["c5_forward_bitwise"], res["c5_end_state_equal (no double advance)"], res["c5_grad_rel"] <= 1e-4, res["c5_calls_per_site_ckpt0"] == K,
-                       res["c5_calls_per_site_ckpt1"] == 2 * K, res["c6_grad_first_last_nonzero"], res["c6_grads_finite"], res["c6_frozen_unchanged"],
+                       res["c4_prefix_restore_bitwise"], res["c5_forward_bitwise"], res["c5_end_state_equal (no double advance)"], res["c5_grad_rel"] <= 1e-4, res["c5_calls_per_site_ckpt0"] == 2,
+                       res["c5_calls_per_site_ckpt1"] == 4, res["c6_grad_first_last_nonzero"], res["c6_grads_finite"], res["c6_frozen_unchanged"],
                        res["c7_export_install_bitwise"], res["c8_calls_per_site_per_sample"] == T])
     jdump("checks.json", res)
     print(json.dumps(res, indent=1), flush=True)
