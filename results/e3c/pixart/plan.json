@@ -1,0 +1,9 @@
+{
+ "T_train_hours": 1.0,
+ "P1_sec_per_update": 1.9654610043480283,
+ "P2_sec_per_update": 7.6964660584926605,
+ "expected_updates": {
+  "P1": 1831,
+  "P2": 467
+ }
+}
