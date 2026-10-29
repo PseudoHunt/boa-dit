@@ -14,11 +14,19 @@ class FIDRef:
         self.tr_r = float(np.trace(self.s_r))
 
     def fid(self, F):
-        F = F.astype(np.float64)
-        mu, S = F.mean(0), np.cov(F, rowvar=False)
-        M = self.sq @ S @ self.sq
-        ev = np.linalg.eigvalsh((M + M.T) / 2)
-        return float(((mu - self.mu_r) ** 2).sum() + np.trace(S) + self.tr_r - 2 * np.sqrt(np.clip(ev, 0, None)).sum())
+        """float64 throughout; on the GPU when one is available (same arithmetic, much faster than numpy here)."""
+        import torch
+        dev = "cuda" if torch.cuda.is_available() else "cpu"
+        if not hasattr(self, "_t"):
+            self._t = (torch.as_tensor(self.sq, device=dev), torch.as_tensor(self.mu_r, device=dev))
+        sq, mu_r = self._t
+        X = torch.as_tensor(np.asarray(F, dtype=np.float64), device=dev)
+        mu = X.mean(0)
+        Xc = X - mu
+        S = Xc.T @ Xc / (X.shape[0] - 1)
+        M = sq @ S @ sq
+        ev = torch.linalg.eigvalsh((M + M.T) / 2)
+        return float(((mu - mu_r) ** 2).sum() + torch.trace(S) + self.tr_r - 2 * ev.clamp_min(0).sqrt().sum())
 
 
 def paired_boot(ref, feats, pairs, n_boot=1000, seed=0):
