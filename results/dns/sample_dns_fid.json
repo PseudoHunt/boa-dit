@@ -1,0 +1,20 @@
+{
+ "arm": "dns",
+ "set": "fid",
+ "denoiser_calls_per_batch": 50.0,
+ "stage": "f6",
+ "run": "dns_sample_dns_fid",
+ "device": "cuda:0",
+ "config": {
+  "arm": "dns",
+  "seeds": [
+   30000,
+   31999
+  ]
+ },
+ "git_sha": "5ed87ec8d12c737c7a68f4b8ba1d00a6dc00cef5",
+ "start_utc": "2026-10-29T03:55:15Z",
+ "wall_s": 1429.8184206485748,
+ "gpu_hours": 0.397171783513493,
+ "fid": 27.85559301112289
+}
