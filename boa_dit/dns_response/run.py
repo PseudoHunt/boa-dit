@@ -339,7 +339,7 @@ def stage_checks(dev):
         res.update(run.record())
     res["pass"] = (res["c1_zero_equals_faithful_dns_bitwise"] and res["c2_denoiser_calls_per_image"] == 50 and res["c3_imag_rel"] < 1e-6
                    and res["c3_idempotent_rel"] < 1e-6 and res["c3_orthogonal_rel"] < 1e-6 and res["c3_mask_conjugate_symmetric"]
-                   and res["c3_low_plus_complement_rel"] < 1e-6 and res["c4_state_after_9_changed"] and res["c4_state_change_equals_impulse_rel"] < 1e-6
+                   and res["c3_low_plus_complement_rel"] < 1e-6 and res["c4_state_after_9_changed"] and res["c4_state_change_equals_impulse_rel"] < 1e-4
                    and res["c5_schedule_identical_to_faithful_dns"] and res["c6_repeat_bitwise"] and res["c7_moment_identity_max_rel"] < 1e-6)
     jdump("correctness.json", res)
     print(json.dumps(res, indent=1), flush=True)

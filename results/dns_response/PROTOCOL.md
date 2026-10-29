@@ -127,3 +127,14 @@ Saved per arm: endpoint latent rel. MSE vs FP, decoded PSNR/LPIPS (dev, if the b
 ---
 ## Amendments
 (dated; before the affected stage)
+
+### 2026-10-29 19:00: check 4 tolerance (after the first checks run, before any candidate output)
+The first `checks` run failed on c4 only. The state change after update 9 differed from θ·P_low(x) by 1.0e-5 relative to the impulse (tolerance was 1e-6).
+- **Diagnosis:** the state is fp32 with |x| ≈ 1 and the impulse is about 5e-3·|P_low x|, so the fp32 add rounds at ≈ 6e-8 per element. Re-measured on synthetic fp32 data, that is ≈ 1e-5 relative to the impulse.
+- **Placement is correct:** the state after the DNS update of step 9 changes, and the prediction at step 9 is computed before the insertion by construction.
+- **Amended tolerance:** 1e-4, from fp32 resolution. Every other check passed unchanged:
+  - c1 bitwise; c2: 50 calls;
+  - c3 at ≈ 1e-16; c7 at 4e-13;
+  - c6 bitwise repeat.
+
+The failed record is kept as `correctness_attempt1.json`.
