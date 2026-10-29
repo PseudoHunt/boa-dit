@@ -1,0 +1,25 @@
+{
+ "L": [
+  0.0,
+  0.0,
+  3.1269e-05,
+  0.01,
+  0.009968731
+ ],
+ "T": [
+  0.002913477,
+  0.007086523,
+  0.01,
+  0.0,
+  0.0
+ ],
+ "insert_after_updates": [
+  9,
+  19,
+  29,
+  39,
+  48
+ ],
+ "projector": "objective.d2.band_masks(32)[0] (lowest radial band incl. DC), shared over channels",
+ "frozen_utc": "2026-10-29T19:53:32.271684+00:00"
+}
