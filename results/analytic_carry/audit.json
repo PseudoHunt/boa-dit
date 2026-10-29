@@ -1,0 +1,143 @@
+{
+ "coherence": {
+  "definition": "c = ||mean_t e_t||^2 / mean_t ||e_t||^2 = C_old / (T*I), T = 50; old field kept unchanged",
+  "raw_error_tensors_available": false,
+  "note": "diag_ci stored only per-image C and I, not e_t; consistency checked against the stored lists only",
+  "configs": {
+   "A": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.622665126320783,
+    "C_over_I_recomputed_from_stored_lists": 9.622665126320783,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.19245330252641565,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.19010033938794596,
+    "n_images": 32
+   },
+   "B": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.352677105976214,
+    "C_over_I_recomputed_from_stored_lists": 9.352677105976213,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.18705354211952424,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.1845322104248041,
+    "n_images": 32
+   },
+   "D_R": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.379981818612464,
+    "C_over_I_recomputed_from_stored_lists": 9.379981818612464,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.18759963637224927,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.18543141050541073,
+    "n_images": 32
+   },
+   "E_R": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.307411350227676,
+    "C_over_I_recomputed_from_stored_lists": 9.307411350227676,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.18614822700455352,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.18382055355473115,
+    "n_images": 32
+   },
+   "D_L": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.39884940358159,
+    "C_over_I_recomputed_from_stored_lists": 9.39884940358159,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.1879769880716318,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.1858155749725368,
+    "n_images": 32
+   },
+   "E_L": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.344409506286384,
+    "C_over_I_recomputed_from_stored_lists": 9.344409506286386,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.18688819012572772,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.18455423251462288,
+    "n_images": 32
+   },
+   "C_R": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.541306543277473,
+    "C_over_I_recomputed_from_stored_lists": 9.541306543277475,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.1908261308655495,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.18863336918439633,
+    "n_images": 32
+   },
+   "C_L": {
+    "C_over_I_old (sum C / sum I; C = T*||mean_t e_t||^2)": 9.573085576118276,
+    "C_over_I_recomputed_from_stored_lists": 9.573085576118274,
+    "coherent_fraction_ratio_of_sums (= C_over_I / T)": 0.19146171152236546,
+    "coherent_fraction_mean_of_imagewise_ratios": 0.18927922350958315,
+    "n_images": 32
+   }
+  }
+ },
+ "dns_response_budget": {
+  "source": "dns-response-pilot results/gpu_hours.csv (r1 rows; unique attempts incl. FAILED)",
+  "rows": [
+   [
+    "r1_checks",
+    "2026-10-29T18:51:49Z",
+    "2026-10-29T18:53:11Z",
+    0.0228
+   ],
+   [
+    "r1_checks",
+    "2026-10-29T18:53:53Z",
+    "2026-10-29T18:54:47Z",
+    0.0151
+   ],
+   [
+    "r1_components",
+    "2026-10-29T18:54:55Z",
+    "2026-10-29T19:01:36Z",
+    0.1114
+   ],
+   [
+    "r1_fit",
+    "2026-10-29T19:01:44Z",
+    "2026-10-29T19:51:17Z",
+    0.826
+   ],
+   [
+    "r1_select",
+    "2026-10-29T19:51:26Z",
+    "2026-10-29T19:53:32Z",
+    0.035
+   ],
+   [
+    "r1_confirm",
+    "2026-10-29T19:53:39Z",
+    "2026-10-29T20:01:57Z",
+    0.1381
+   ],
+   [
+    "r1_fid2000_dns(FAILED)",
+    "2026-10-29T20:02:05Z",
+    "2026-10-29T20:27:39Z",
+    0.4262
+   ],
+   [
+    "r1_fid2000_dns",
+    "2026-10-29T20:28:33Z",
+    "2026-10-29T20:33:08Z",
+    0.0764
+   ],
+   [
+    "r1_fid2000_L",
+    "2026-10-29T20:33:16Z",
+    "2026-10-29T20:59:05Z",
+    0.4304
+   ],
+   [
+    "r1_fid2000_T",
+    "2026-10-29T20:59:17Z",
+    "2026-10-29T21:25:05Z",
+    0.4301
+   ],
+   [
+    "r1_fid2000_plain",
+    "2026-10-29T21:25:13Z",
+    "2026-10-29T21:51:00Z",
+    0.4297
+   ]
+  ],
+  "actual_total_gpu_h": 2.9412000000000003,
+  "budget_json_spent_gpu_h": 2.5115000000000003,
+  "explanation": "budget.json logs the spend BEFORE each stage, so the last stage (fid_plain) is missing from its total"
+ },
+ "feedback_refit_overlap": {
+  "status": "skipped",
+  "reason": "aligned prediction-error tensors for A, B, C_L, D_L were not cached (eval_latents.pt holds final latents only); no new GPU collection for this optional diagnostic"
+ }
+}
