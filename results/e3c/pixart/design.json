@@ -2,34 +2,96 @@
  "T_train_hours": 1.0,
  "short_hours": 0.25,
  "lr": {
+  "1e-05": {
+   "design_local": 0.9201493412256241,
+   "updates": 472,
+   "design_latent": 0.36152213253080845
+  },
+  "3e-05": {
+   "design_local": 0.9488606698811054,
+   "updates": 472,
+   "design_latent": 0.9127739928662777
+  },
   "0.0001": {
    "design_local": 1.0027303889393806,
-   "updates": 472
+   "updates": 472,
+   "design_latent": 1.2761581093072891
   },
   "0.0003": {
    "design_local": 1.3322376981377602,
-   "updates": 472
+   "updates": 472,
+   "design_latent": 1.300959825515747
   }
  },
  "lam": {
   "0.5": {
-   "design_latent": 0.5918951258063316,
+   "design_latent": 0.21601147390902042,
    "updates": 109
   },
   "2.0": {
-   "design_latent": 0.788339901715517,
+   "design_latent": 0.20945204980671406,
    "updates": 109
   }
  },
+ "previous_frozen": 0.0001,
  "P0_design_local": 0.9940320894122123,
  "P0_design_latent": 0.20626496523618698,
- "lr_star": 0.0001,
- "lam_star": 0.5,
+ "lr_star": 1e-05,
+ "lr_guard_satisfied": false,
+ "lam_star": 2.0,
+ "previous_design": {
+  "T_train_hours": 1.0,
+  "short_hours": 0.25,
+  "lr": {
+   "0.0001": {
+    "design_local": 1.0027303889393806,
+    "updates": 472
+   },
+   "0.0003": {
+    "design_local": 1.3322376981377602,
+    "updates": 472
+   }
+  },
+  "lam": {
+   "0.5": {
+    "design_latent": 0.5918951258063316,
+    "updates": 109
+   },
+   "2.0": {
+    "design_latent": 0.788339901715517,
+    "updates": 109
+   }
+  },
+  "P0_design_local": 0.9940320894122123,
+  "P0_design_latent": 0.20626496523618698,
+  "lr_star": 0.0001,
+  "lam_star": 0.5,
+  "stage": "f5",
+  "run": "e3c_px_design",
+  "device": "cuda:0",
+  "config": {
+   "lrs": [
+    0.0001,
+    0.0003
+   ],
+   "lams": [
+    0.5,
+    2.0
+   ],
+   "short_h": 0.25
+  },
+  "git_sha": "46d6d9b7573c5f3107494aa40b9577d2bd730a68",
+  "start_utc": "2026-10-29T07:50:02Z",
+  "wall_s": 4013.7076354026794,
+  "gpu_hours": 1.1149187876118554
+ },
  "stage": "f5",
- "run": "e3c_px_design",
+ "run": "e3c_px_design2",
  "device": "cuda:0",
  "config": {
   "lrs": [
+   1e-05,
+   3e-05,
    0.0001,
    0.0003
   ],
@@ -39,8 +101,8 @@
   ],
   "short_h": 0.25
  },
- "git_sha": "46d6d9b7573c5f3107494aa40b9577d2bd730a68",
- "start_utc": "2026-10-29T07:50:02Z",
- "wall_s": 4013.7076354026794,
- "gpu_hours": 1.1149187876118554
+ "git_sha": "fd75e1668657bf26c450ba6e5024fc4ad8c35815",
+ "start_utc": "2026-10-29T09:04:00Z",
+ "wall_s": 4250.921011686325,
+ "gpu_hours": 1.1808113921350902
 }
