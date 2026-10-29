@@ -79,3 +79,20 @@ One training seed per arm (a pilot); the image bootstraps do not measure trainin
 | E_L | 79.98 | 8.559 | 9.344 |
 | C_R | 80.72 | 8.46 | 9.541 |
 | C_L | 81.34 | 8.497 | 9.573 |
+
+## Correction (2026-10-30): coherence normalization
+`C_over_I` in eval.json (and the C/I column above) is ΣC/ΣI with C = T·||mean_t e_t||², summed over the 32 diagnostic images. It is unchanged, and the field is kept.
+The normalized coherent fraction is c = ||mean_t e_t||²/mean_t||e_t||² = (C/I)/T with T = 50. A ratio of about 9.3 therefore means c ≈ 0.186, not a fraction above one.
+
+| config | old C/I | c (ratio of sums) | c (mean of imagewise ratios) |
+| --- | ---: | ---: | ---: |
+| A | 9.623 | 0.1925 | 0.1901 |
+| B | 9.353 | 0.1871 | 0.1845 |
+| D_R | 9.380 | 0.1876 | 0.1854 |
+| E_R | 9.307 | 0.1861 | 0.1838 |
+| D_L | 9.399 | 0.1880 | 0.1858 |
+| E_L | 9.344 | 0.1869 | 0.1846 |
+| C_R | 9.541 | 0.1908 | 0.1886 |
+| C_L | 9.573 | 0.1915 | 0.1893 |
+
+This was checked against the stored per-image C and I lists only, because raw e_t tensors were not stored. No sampling was rerun. Source: results/analytic_carry/audit.json (branch analytic-carry-pilot).

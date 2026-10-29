@@ -698,7 +698,8 @@ def diag_ci(dev, configs):
         E = torch.stack([(ep[i] - cap[i]).double() for i in range(T)], 1)
         Cc = T * E.mean(1).pow(2).flatten(1).sum(1)
         I = E.pow(2).flatten(2).sum(2).mean(1)
-        out[name] = {"C": Cc.tolist(), "I": I.tolist(), "C_over_I": float(Cc.sum() / I.sum())}
+        out[name] = {"C": Cc.tolist(), "I": I.tolist(), "C_over_I": float(Cc.sum() / I.sum()),                        # ratio of sums; C carries a factor T
+                     "coherent_fraction": float(Cc.sum() / I.sum() / T), "coherent_fraction_mean_imagewise": float((Cc / I).mean() / T)}
         print(f"  diag {name}: C {Cc.mean():.4g} I {I.mean():.4g} C/I {out[name]['C_over_I']:.3f}", flush=True)
     CTX.step = None
     return out
