@@ -14,7 +14,15 @@
    "estimate_h": 0.12,
    "kept_for_later_h": 0.0,
    "ok": true
+  },
+  {
+   "stage": "profile",
+   "utc": "2026-10-29T23:09:26Z",
+   "spent_before_h": 0.0362,
+   "estimate_h": 0.06,
+   "kept_for_later_h": 0.0,
+   "ok": true
   }
  ],
- "spent_gpu_h": 0
+ "spent_gpu_h": 0.0362
 }

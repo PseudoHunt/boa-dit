@@ -1,0 +1,29 @@
+{
+ "gpu": "NVIDIA A30",
+ "sec_per_sampling_bs32": 44.21983790397644,
+ "sec_per_sampling_bs8": 11.675409078598022,
+ "sec_per_forward_bs32": 0.882874329884847,
+ "sec_per_stats_step_bs8": 0.4715538024902344,
+ "peak_mem_GiB": 7.763117790222168,
+ "projected_h": {
+  "e1_resp": 0.21791615166046,
+  "e1_select": 0.4299150907331043,
+  "e1_confirm": 0.32479891935984295,
+  "e2_stats": 0.03609344734085931,
+  "e2_solve": 0.01,
+  "e2_resp": 0.21791615166046,
+  "e2_select": 0.4299150907331043,
+  "e2_confirm": 0.32479891935984295
+ },
+ "projected_total_h": 1.9913537708476738,
+ "spent_before_h": 0.0362,
+ "fits_ceiling": true,
+ "stage": "ac1",
+ "run": "ac1_profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "486229819921dc6cbcb28f25443fc52b74959734",
+ "start_utc": "2026-10-29T23:09:26Z",
+ "wall_s": 84.77000045776367,
+ "gpu_hours": 0.023547222349378796
+}
