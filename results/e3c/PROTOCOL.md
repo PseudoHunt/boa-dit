@@ -228,3 +228,33 @@ The review asks to:
    - refreshing latents together with DPM history when cached-state gains fail on own states;
    - an update-matched P1 control.
 4. **The pilot is held.** It would otherwise inherit an lr that failed Part 2's guard. Confirmation prompts stay untouched.
+
+### 2026-10-29 12:20: second review. Interpretation corrections, diagnostics v2, update-matched screen (registered before any of it runs)
+**Corrections to earlier statements.**
+1. P2's lower design damage vs P1 is confounded by update count: the time-matched short runs gave P1 ≈ 4× the updates.
+2. "Keep only X trained" / "restore X" are **transplants within a jointly trained checkpoint**. They show interactions between updates, not the effect of training with X frozen.
+3. A latent rel. MSE above 2 does not by itself show a blow-up. RMS ratio, cosine, per-prompt errors and decoded images are reported before any claim of collapse.
+4. The `attn2.to_q` ranking came from one prompt at three timesteps, averaged as a mean of ratios. It is preliminary.
+
+**Diagnostics v2** (`px_diag v2`; the old `steps` run is stopped before it starts):
+- `steps`: per-prompt arrays, medians, final latents of every model and of the teacher, and endpoint detail (rel. MSE, RMS ratio, cosine per prompt).
+- `branch2`: functional drift on all 8 design prompts × steps {0, 5, 10, 15, 19}, as a ratio of sums per type and in total.
+- `interv2`: transplants of `attn2.to_q` alone and of `attn2.to_q` + `attn2.to_out.0` together (restore / keep-only), plus the earlier `attn2.to_out.0` pair, all with endpoint detail. Decoded image grids for P0, every trained checkpoint, and the restore cases.
+
+**Update-matched screen** (`boa_dit/e3c/px_screen.py`; design prompts only; no promotion decision is made by it).
+- **Common to all arms:** start from the base branch, seed 0, so every arm makes the identical prompt/start-step draw at every update. lr 1e-4 (the registered rate, where damage onset is visible); B = 1; K = 5.
+- **Arms:**
+  - P1 (L_local);
+  - P2 (L_local + 0.5·L_roll; λ = 0.5 is the better λ at lr 1e-4 in design_v1 and E3's value);
+  - P1-drift: L_local + μ·D, where D = Σ_layers ‖x̃(L1L2 − L10L20)‖² / Σ_layers ‖y‖² on the update's own forward pass.
+- **Checkpoints:** 10, 25, 50 and 100 updates per arm. Update counts and seconds are reported.
+- **μ ∈ {1, 10, 100}:** each trained to 100 updates. The μ whose functional drift at 100 updates is closest to P2's is kept (matching on movement, not on endpoint), and only that arm's checkpoints are evaluated in full.
+- **Per checkpoint:**
+  - design endpoint detail (mean, median, per-prompt, cosine, RMS ratio);
+  - functional drift (as `branch2`);
+  - held-out local loss at all 20 steps (cached base states);
+  - held-out short-rollout loss at start steps {0, 5, 10, 15}.
+- **Reads (descriptive; 8 design prompts, no CIs claimed):**
+  - P2 vs P1 at equal updates and at comparable drift: lower endpoint error for P2 at comparable drift supports the rollout objective.
+  - P1-drift vs P2 at matched drift: if they are equal, limiting movement explains P2's stability.
+- **Not changed yet:** no timestep-specific reweighting of the rollout loss, no refreshed caches, no extra regularizers. Global gradient clipping is only a later control, if needed.

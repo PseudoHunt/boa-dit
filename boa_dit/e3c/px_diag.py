@@ -15,7 +15,7 @@ import os
 import numpy as np
 import torch
 
-from boa_dit.common import Run, atomic_write_json
+from boa_dit.common import Run, atomic_torch_save, atomic_write_json
 from boa_dit.e3c import pixart_refit as R
 from boa_dit.f5 import STAGE
 from boa_dit.w4a4 import common as WC
@@ -28,6 +28,21 @@ CKPTS = {"P0": R.QBASE,
          "P2_l0.5_lr1e-5": f"{PQ}/q_design_P2_lam0.5_lr1e-05.pt", "P2_l2_lr1e-5": f"{PQ}/q_design_P2_lam2_lr1e-05.pt"}
 CKPTS = {k: v for k, v in CKPTS.items() if os.path.exists(v)}
 XATTN = "attn2.to_out.0"
+
+
+EPD = {}
+
+
+def endpoint_detail(x, t):
+    """per prompt: latent rel. MSE, RMS ratio to the teacher latent, cosine similarity (distinguishes changed direction from magnitude blow-up)."""
+    if x is None:
+        return None
+    x, t = x.flatten(1).double(), t.flatten(1).double()
+    rel = ((x - t).pow(2).sum(1) / t.pow(2).sum(1))
+    rms = x.pow(2).mean(1).sqrt() / t.pow(2).mean(1).sqrt()
+    cos = (x * t).sum(1) / (x.norm(dim=1) * t.norm(dim=1))
+    return {"rel_mse": rel.tolist(), "rel_mse_mean": float(rel.mean()), "rel_mse_median": float(rel.median()), "rms_ratio": rms.tolist(),
+            "cos": cos.tolist(), "cos_median": float(cos.median()), "rms_ratio_median": float(rms.median())}
 
 
 def load_out():
@@ -54,6 +69,7 @@ def steps(dev, pipe, tch, C):
     for name, q in CKPTS.items():
         R.install_q(pipe.transformer, torch.load(q, map_location="cpu"))
         A, B, Cst, D = np.zeros((8, 20)), np.zeros((8, 20)), np.zeros((8, 21)), np.zeros((8, 20))
+        ends, tends = [], []
         for n, j in enumerate(R.DESIGN):
             ehs, mask = R.emb(e, [j], dev)
             for i in range(20):                                               # (A) cached base states
@@ -72,8 +88,13 @@ def steps(dev, pipe, tch, C):
             for i in range(21):                                               # (C) free-running state error vs the teacher trajectory
                 a, b = own[i].float(), teach[n][i]
                 Cst[n, i] = float((a - b).pow(2).sum() / b.pow(2).sum())
+            ends.append(own[20].float()); tends.append(teach[n][20])
+        EPD["last"] = endpoint_detail(torch.cat(ends), torch.cat(tends))
+        atomic_torch_save({"own_final": torch.cat(ends), "teacher_final": torch.cat(tends)}, os.path.join(PQ, f"diag_endpoints_{name}.pt"))
         res[name] = {"local_cached": A.mean(0).tolist(), "local_own": B.mean(0).tolist(), "state_err": Cst.mean(0).tolist(), "rollout_heldout": D.mean(0).tolist(),
-                     "endpoint": float(Cst[:, 20].mean())}
+                     "endpoint": float(Cst[:, 20].mean()), "endpoint_median": float(np.median(Cst[:, 20])),
+                     "per_prompt": {"local_cached": A.tolist(), "local_own": B.tolist(), "state_err": Cst.tolist(), "rollout_heldout": D.tolist()},
+                     "endpoint_detail": EPD.pop("last")}
         print(f"  {name}: endpoint {res[name]['endpoint']:.4f} | local cached mean {A.mean():.3f} own {B.mean():.3f} | rollout held-out {D.mean():.3f} | "
               f"state err at steps 5/10/15/20 {[round(Cst[:, i].mean(), 4) for i in (5, 10, 15, 20)]}", flush=True)
     save("steps", res)
@@ -147,10 +168,21 @@ def mix(base, q, alpha=1.0, only=None, restore=None):
 
 
 @torch.no_grad()
-def endpoint(dev, pipe, qs, C):
-    tmp = os.path.join(PQ, "diag_tmp_q.pt")
-    torch.save(qs, tmp)
-    return R.design_latent(dev, pipe, tmp, C)
+def endpoint(dev, pipe, qs, C, detail=False, grid=None):
+    """design endpoint through the deployment path; detail -> per-prompt rel. MSE, RMS ratio, cosine; grid -> decoded uint8 images saved."""
+    R.install_q(pipe.transformer, qs)
+    e = WC.load_embeds("design")
+    X = []
+    for n, j in enumerate(R.DESIGN):
+        ehs, mask = R.emb(e, [j], dev)
+        X.append(R.run_loop(pipe, pipe.transformer, R.init_latents(pipe, [j], dev), ehs, mask, dev).float().cpu())
+    X = torch.cat(X)
+    d = endpoint_detail(X, C["design"]["x0fp"].float())
+    if grid:
+        from boa_dit.temporal import pixart as PX
+        imgs = torch.cat([PX.decode(pipe, X[k:k + 1].to(dev)) for k in range(len(X))])
+        atomic_torch_save(imgs, os.path.join(PQ, f"grid_{grid}.pt"))
+    return d if detail else d["rel_mse_mean"]
 
 
 def interv(dev, pipe, C):
@@ -162,6 +194,74 @@ def interv(dev, pipe, C):
                      "only_xattn_out": endpoint(dev, pipe, mix(base, q, only=XATTN), C)}
         print(f"  {name}: restore {XATTN} -> {out[name]['restore_xattn_out']:.4f}; only {XATTN} trained -> {out[name]['only_xattn_out']:.4f}", flush=True)
     save("interv", out)
+
+
+QO = ("attn2.to_q", "attn2.to_out.0")
+
+
+def mix2(base, q, keep):
+    """keep: predicate on the layer key -> use the trained factors; else base."""
+    return {k: (dict(base[k], L1=q[k]["L1"], L2=q[k]["L2"]) if keep(k) else base[k]) for k in base}
+
+
+def interv2(dev, pipe, C):
+    """attn2.to_q alone and attn2.to_q + attn2.to_out.0 together (restore / keep-only), with per-prompt endpoint detail; checkpoint transplants,
+    not frozen-subset training. Also re-reports the attn2.to_out-only cases with detail, the trained checkpoints, and image grids."""
+    base = torch.load(R.QBASE, map_location="cpu")
+    out = {"P0": endpoint(dev, pipe, base, C, detail=True, grid="P0")}
+    for name in [k for k in CKPTS if k != "P0"]:
+        q = torch.load(CKPTS[name], map_location="cpu")
+        r = {"trained": endpoint(dev, pipe, q, C, detail=True, grid=name)}
+        for lab, keep in (("restore_q", lambda k: not k.endswith("attn2.to_q")), ("only_q", lambda k: k.endswith("attn2.to_q")),
+                          ("restore_qo", lambda k: not k.endswith(QO)), ("only_qo", lambda k: k.endswith(QO)),
+                          ("restore_o", lambda k: not k.endswith("attn2.to_out.0")), ("only_o", lambda k: k.endswith("attn2.to_out.0"))):
+            r[lab] = endpoint(dev, pipe, mix2(base, q, keep), C, detail=True, grid=f"{name}_{lab}" if lab in ("restore_o", "restore_qo") else None)
+        out[name] = r
+        print(f"  {name}: " + "; ".join(f"{k} mean {v['rel_mse_mean']:.3f} med {v['rel_mse_median']:.3f} cos {v['cos_median']:.3f} rms {v['rms_ratio_median']:.3f}"
+                                        for k, v in r.items()), flush=True)
+    save("interv2", out)
+
+
+@torch.no_grad()
+def branch2(dev, pipe, C):
+    """functional drift on all 8 design prompts x steps {0, 5, 10, 15, 19}; per layer and per type as a ratio of sums (not a mean of ratios)."""
+    base = torch.load(R.QBASE, map_location="cpu")
+    ck = {k: torch.load(v, map_location="cpu") for k, v in CKPTS.items() if k != "P0"}
+    keys = sorted(base)
+    R.install_q(pipe.transformer, base)
+    e = WC.load_embeds("design")
+    ts = R.new_sched(pipe, dev).timesteps
+    num = {n: {k: 0.0 for k in keys} for n in ck}
+    den = {k: 0.0 for k in keys}
+    W = {n: {k: (q[k]["L1"].to(dev).to(torch.bfloat16), q[k]["L2"].to(dev).to(torch.bfloat16)) for k in keys} for n, q in ck.items()}
+    B0 = {k: (base[k]["L1"].to(dev).to(torch.bfloat16), base[k]["L2"].to(dev).to(torch.bfloat16)) for k in keys}
+    hs = []
+    for k in keys:
+        l, ln = k.split(".", 1)
+        mod = R.WC.block_linear(pipe.transformer.transformer_blocks[int(l)], ln)
+
+        def hook(m, inp, out, k=k):
+            x = inp[0].float()
+            xs = (x if m.d is None else x / m.d).to(torch.bfloat16)
+            den[k] += float(out.float().pow(2).sum())
+            b0 = (xs @ B0[k][0]) @ B0[k][1]
+            for n in ck:
+                num[n][k] += float(((xs @ W[n][k][0]) @ W[n][k][1] - b0).float().pow(2).sum())
+        hs.append(mod.register_forward_hook(hook))
+    for n_, j in enumerate(R.DESIGN):
+        ehs, mask = R.emb(e, [j], dev)
+        for i in (0, 5, 10, 15, 19):
+            R.pred(pipe.transformer, C["design"]["x"][n_, i:i + 1].to(dev), ts[i], ehs, mask)
+    for h in hs:
+        h.remove()
+    out = {}
+    for n in ck:
+        types = sorted({k.split(".", 1)[1] for k in keys})
+        out[n] = {"by_type": {t: float(np.sqrt(sum(num[n][k] for k in keys if k.endswith(t)) / sum(den[k] for k in keys if k.endswith(t)))) for t in types},
+                  "total": float(np.sqrt(sum(num[n].values()) / sum(den.values()))),
+                  "top_layers": sorted(((k, float(np.sqrt(num[n][k] / max(den[k], 1e-12)))) for k in keys), key=lambda kv: -kv[1])[:10]}
+        print(f"  {n}: total drift {out[n]['total']:.4f}; by type {json.dumps({t: round(v, 4) for t, v in out[n]['by_type'].items()})}", flush=True)
+    save("branch2", out)
 
 
 def alpha(dev, pipe, C):
@@ -208,19 +308,20 @@ def norm(dev, pipe, tch, C):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["steps", "branch", "interv", "alpha", "norm", "all"])
+    ap.add_argument("cmd", choices=["steps", "branch", "branch2", "interv", "interv2", "alpha", "norm", "all", "v2"])
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     C = torch.load(os.path.join(R.CK, "cache.pt"))
     pipe, _ = R.setup(dev, trainable=False)
     tch = R.teacher(dev)
-    todo = ["norm", "branch", "interv", "alpha", "steps"] if a.cmd == "all" else [a.cmd]
+    todo = {"all": ["norm", "branch", "interv", "alpha", "steps"], "v2": ["steps", "branch2", "interv2"]}.get(a.cmd, [a.cmd])
     with Run(STAGE, f"e3c_px_diag_{a.cmd}", dev, {"ckpts": list(CKPTS)}) as run:
         for c in todo:
             print(f"== {c}", flush=True)
             {"steps": lambda: steps(dev, pipe, tch, C), "branch": lambda: branch(dev, pipe, C), "interv": lambda: interv(dev, pipe, C),
-             "alpha": lambda: alpha(dev, pipe, C), "norm": lambda: norm(dev, pipe, tch, C)}[c]()
+             "alpha": lambda: alpha(dev, pipe, C), "norm": lambda: norm(dev, pipe, tch, C), "branch2": lambda: branch2(dev, pipe, C),
+             "interv2": lambda: interv2(dev, pipe, C)}[c]()
         run.record()
 
 
