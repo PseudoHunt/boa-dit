@@ -1,0 +1,30 @@
+{
+ "c1_off_equals_reference": true,
+ "c1_orig_heig8_equals_e3c_C0_batch32": true,
+ "c2_static_equals_temporal_Quantize": true,
+ "c2_fb_equals_temporal_Quantize": true,
+ "c3_trainable_init_equals_installed": true,
+ "c3_export_bitwise": true,
+ "c4_prefix_restore_bitwise": true,
+ "c4_training_path_vs_ddim_sample_rel": 0.02559007704257965,
+ "c5_calls_per_site_ckpt0": 2,
+ "c5_calls_per_site_ckpt1": 4,
+ "c5_forward_bitwise": true,
+ "c5_end_state_equal (no double advance)": true,
+ "c5_grad_rel": 0.0,
+ "c6_grad_first_last_nonzero": true,
+ "c6_grads_finite": true,
+ "c6_frozen_unchanged": true,
+ "c7_export_install_bitwise": true,
+ "c8_tables_sha256": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+ "c8_calls_per_site_per_sample": 50,
+ "tolerances": {
+  "c1": "bitwise",
+  "c2": "bitwise",
+  "c3": "bitwise",
+  "c4": "bitwise (training path); ddim_sample reported",
+  "c5": "forward bitwise, grad <= 1e-4",
+  "c7": "bitwise"
+ },
+ "pass": true
+}
