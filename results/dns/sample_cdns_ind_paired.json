@@ -1,0 +1,19 @@
+{
+ "arm": "cdns_ind",
+ "set": "paired",
+ "denoiser_calls_per_batch": 50.0,
+ "stage": "f6",
+ "run": "dns_sample_cdns_ind_paired",
+ "device": "cuda:0",
+ "config": {
+  "arm": "cdns_ind",
+  "seeds": [
+   20000,
+   20127
+  ]
+ },
+ "git_sha": "50d8609f2328a6b6790cc8f2b586bff8c2cfe431",
+ "start_utc": "2026-10-29T04:56:09Z",
+ "wall_s": 106.72398352622986,
+ "gpu_hours": 0.029645550979508294
+}
