@@ -1,0 +1,20 @@
+{
+ "arm": "cdns_full",
+ "set": "fid",
+ "denoiser_calls_per_batch": 50.0,
+ "stage": "f6",
+ "run": "dns_sample_cdns_full_fid",
+ "device": "cuda:0",
+ "config": {
+  "arm": "cdns_full",
+  "seeds": [
+   30000,
+   31999
+  ]
+ },
+ "git_sha": "3083aeaf49f909cf0afdff68537b27ee31a772bc",
+ "start_utc": "2026-10-29T05:26:16Z",
+ "wall_s": 1428.0423436164856,
+ "gpu_hours": 0.3966784287823571,
+ "fid": 44.5489235945584
+}
