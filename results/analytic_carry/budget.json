@@ -54,7 +54,15 @@
    "estimate_h": 0.03609344734085931,
    "kept_for_later_h": 0.0,
    "ok": true
+  },
+  {
+   "stage": "e2_resp",
+   "utc": "2026-10-29T23:49:15Z",
+   "spent_before_h": 0.6871,
+   "estimate_h": 0.21791615166046,
+   "kept_for_later_h": 0.0,
+   "ok": true
   }
  ],
- "spent_gpu_h": 0.647
+ "spent_gpu_h": 0.6871
 }
