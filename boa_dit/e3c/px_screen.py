@@ -83,11 +83,23 @@ def evaluate(dev, pipe, tch, C, qpath, tag):
 
 
 def main():
+    global OUTF, LR, CKS
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lr", type=float, default=1e-4)
+    ap.add_argument("--tag", default="")
+    ap.add_argument("--cks", default="10,25,50,100")
+    ap.add_argument("--no-drift", action="store_true")
+    a = ap.parse_args()
+    LR, CKS = a.lr, tuple(int(x) for x in a.cks.split(","))
+    if a.tag:
+        OUTF = os.path.join(R.OUT, f"screen_{a.tag}.json")
+    sfx = f"_{a.tag}" if a.tag else ""
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     C = torch.load(os.path.join(R.CK, "cache.pt"))
     res = json.load(open(OUTF)) if os.path.exists(OUTF) else {"lr": LR, "lam": LAM, "checkpoints": list(CKS), "arms": {}}
-    with Run(STAGE, "e3c_px_screen", dev, {"lr": LR, "lam": LAM, "cks": CKS, "mus": MUS}) as run:
+    with Run(STAGE, f"e3c_px_screen{sfx}", dev, {"lr": LR, "lam": LAM, "cks": CKS, "mus": MUS, "no_drift": a.no_drift}) as run:
         pipe, _ = R.setup(dev, trainable=False)
         tch = R.teacher(dev)
         if "P0" not in res["arms"]:
@@ -97,12 +109,16 @@ def main():
         for name, (arm, lam, mu) in runs.items():
             if name in res["arms"]:
                 continue
-            _, lg = R.train(dev, arm, lam, LR, 10.0, f"screen_{name}", pipe=pipe, tch=tch, ckpt_at=CKS, max_updates=max(CKS), mu=mu)
+            _, lg = R.train(dev, arm, lam, LR, 10.0, f"screen{sfx}_{name}", pipe=pipe, tch=tch, ckpt_at=CKS, max_updates=max(CKS), mu=mu)
             res["arms"][name] = {"train": {k: v for k, v in lg.items() if k != "log"}}
             for u in CKS:
                 res["arms"][name][f"u{u}"] = evaluate(dev, pipe, tch, C, lg["checkpoints"][u]["q"], f"{name} u{u}")
                 res["arms"][name][f"u{u}"]["seconds"] = lg["checkpoints"][u]["seconds"]
             atomic_write_json(OUTF, res)
+        if a.no_drift:
+            res["run"] = run.record()
+            atomic_write_json(OUTF, res)
+            return
         # μ selection for P1-drift by functional drift at 100 updates (closest to P2's), then full evaluation of the chosen arm
         target = res["arms"]["P2"]["u100"]["drift"]["total"]
         if "mu_select" not in res:

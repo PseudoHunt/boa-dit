@@ -264,6 +264,41 @@ def branch2(dev, pipe, C):
     save("branch2", out)
 
 
+def alpha2(dev, pipe, C):
+    """paired per-prompt α analysis (third review): P1 lr 1e-5 and the four P2 checkpoints, α in {0.03, 0.1, 0.3, 1}; plus identical repeats
+    of P0 and of P2 λ0.5 lr1e-4 at α 0.1 (numerical reproducibility)."""
+    base = torch.load(R.QBASE, map_location="cpu")
+    out = {"P0": endpoint(dev, pipe, base, C, detail=True), "P0_repeat": endpoint(dev, pipe, base, C, detail=True)}
+    for name in ("P1_lr1e-5", "P2_l0.5_lr1e-4", "P2_l2_lr1e-4", "P2_l0.5_lr1e-5", "P2_l2_lr1e-5"):
+        if name not in CKPTS:
+            continue
+        q = torch.load(CKPTS[name], map_location="cpu")
+        out[name] = {str(a): endpoint(dev, pipe, mix(base, q, alpha=a) if a < 1 else q, C, detail=True) for a in (0.03, 0.1, 0.3, 1.0)}
+        if name == "P2_l0.5_lr1e-4":
+            out[name]["0.1_repeat"] = endpoint(dev, pipe, mix(base, q, alpha=0.1), C, detail=True)
+        print(f"  {name}: " + ", ".join(f"α {a}: {v['rel_mse_mean']:.4f}" for a, v in out[name].items()), flush=True)
+    p0 = np.asarray(out["P0"]["rel_mse"])
+    g = np.random.default_rng(0)
+    idx = g.integers(0, len(p0), (2000, len(p0)))
+    paired = {}
+    for name, v in out.items():
+        if not isinstance(v, dict) or "rel_mse" in v:
+            continue
+        for a, d in v.items():
+            x = np.asarray(d["rel_mse"]) - p0
+            bs = x[idx].mean(1)
+            paired[f"{name}@{a}"] = {"mean_diff": float(x.mean()), "ci": [float(np.percentile(bs, 2.5)), float(np.percentile(bs, 97.5))],
+                                     "median_diff": float(np.median(x)), "wins": int((x < 0).sum()), "n": int(len(x))}
+    out["paired_vs_P0"] = paired
+    out["reproducibility"] = {"P0_max_abs_diff": float(np.abs(np.asarray(out["P0"]["rel_mse"]) - np.asarray(out["P0_repeat"]["rel_mse"])).max()),
+                              "P2_l0.5_lr1e-4@0.1_max_abs_diff": float(np.abs(np.asarray(out["P2_l0.5_lr1e-4"]["0.1"]["rel_mse"]) -
+                                                                              np.asarray(out["P2_l0.5_lr1e-4"]["0.1_repeat"]["rel_mse"])).max()) if "P2_l0.5_lr1e-4" in out else None}
+    print("  reproducibility:", out["reproducibility"], flush=True)
+    for k, v in paired.items():
+        print(f"  {k}: diff {v['mean_diff']:+.4f} [{v['ci'][0]:+.4f}, {v['ci'][1]:+.4f}] median {v['median_diff']:+.4f} wins {v['wins']}/{v['n']}", flush=True)
+    save("alpha2", out)
+
+
 def alpha(dev, pipe, C):
     base = torch.load(R.QBASE, map_location="cpu")
     out = {}
@@ -308,7 +343,7 @@ def norm(dev, pipe, tch, C):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["steps", "branch", "branch2", "interv", "interv2", "alpha", "norm", "all", "v2"])
+    ap.add_argument("cmd", choices=["steps", "branch", "branch2", "interv", "interv2", "alpha", "alpha2", "norm", "all", "v2"])
     a = ap.parse_args()
     dev = "cuda:0"
     torch.cuda.set_device(dev)
@@ -321,7 +356,7 @@ def main():
             print(f"== {c}", flush=True)
             {"steps": lambda: steps(dev, pipe, tch, C), "branch": lambda: branch(dev, pipe, C), "interv": lambda: interv(dev, pipe, C),
              "alpha": lambda: alpha(dev, pipe, C), "norm": lambda: norm(dev, pipe, tch, C), "branch2": lambda: branch2(dev, pipe, C),
-             "interv2": lambda: interv2(dev, pipe, C)}[c]()
+             "interv2": lambda: interv2(dev, pipe, C), "alpha2": lambda: alpha2(dev, pipe, C)}[c]()
         run.record()
 
 
