@@ -1,0 +1,20 @@
+{
+ "arm": "qdrift",
+ "set": "fid",
+ "denoiser_calls_per_batch": 50.0,
+ "stage": "f6",
+ "run": "dns_sample_qdrift_fid",
+ "device": "cuda:0",
+ "config": {
+  "arm": "qdrift",
+  "seeds": [
+   30000,
+   31999
+  ]
+ },
+ "git_sha": "3560cd7fb1cc8ab3a705c503f1367aeb7e47246d",
+ "start_utc": "2026-10-29T04:21:49Z",
+ "wall_s": 1433.4182920455933,
+ "gpu_hours": 0.39817174779044257,
+ "fid": 28.22541800727322
+}
