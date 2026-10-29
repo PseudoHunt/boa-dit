@@ -1,0 +1,20 @@
+{
+ "cap_gpu_h": 4.0,
+ "allocations_h": {
+  "audit_checks": 0.15,
+  "e1": 1.1,
+  "e2": 2.25,
+  "reserve": 0.5
+ },
+ "log": [
+  {
+   "stage": "checks",
+   "utc": "2026-10-29T23:07:09Z",
+   "spent_before_h": 0,
+   "estimate_h": 0.12,
+   "kept_for_later_h": 0.0,
+   "ok": true
+  }
+ ],
+ "spent_gpu_h": 0
+}

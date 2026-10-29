@@ -1,0 +1,68 @@
+{
+ "hash_base_model": true,
+ "hash_base_carry": true,
+ "hash_tables": true,
+ "hash_smoothing": true,
+ "source_C_L_u200_sha256": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69",
+ "carry_shapes_rank8": true,
+ "ridge_unit_checks": {
+  "stationarity_rel": 1.6428676861312747e-16,
+  "vs_direct_lstsq_rel": 9.964695402728805e-16,
+  "lam0_exact_fit_rel": 1.9241207378778397e-16,
+  "surrogate_decreases": true,
+  "V_unchanged_and_rank8": true,
+  "pass": true
+ },
+ "quantNL_equals_JointQuant_static_bitwise": true,
+ "repeat_baseline_rel_diff_4img": 0.0,
+ "batch4_vs_batch32_rel_diff (context)": 0.011364438571035862,
+ "e1_zero_tensors_bitwise": true,
+ "e1_zero_sample_bitwise": true,
+ "e2_zero_tensors_bitwise": true,
+ "e2_zero_sample_bitwise": true,
+ "e1_ones_tensors_bitwise_C_L_u200": true,
+ "e1_ones_sample_bitwise_C_L_u200": true,
+ "calls_per_site_per_sample": [
+  50
+ ],
+ "forward_hooks_per_linear": [
+  1
+ ],
+ "pre_hooks_per_linear (smoothing at fc1/fc2 + A8)": {
+  "fc": [
+   2
+  ],
+  "attn": [
+   1
+  ]
+ },
+ "guided_eps_vs_sampler_eps_rel": {
+  "0": 0.0,
+  "25": 0.0,
+  "49": 0.0
+ },
+ "fp_teacher_pre_hooks": [
+  0
+ ],
+ "bias_equal_student_fp": true,
+ "pairing_sites": 112,
+ "pairing_rows_per_site": [
+  256
+ ],
+ "pairing_finite": true,
+ "tolerances": {
+  "bitwise": "QuantNL, zero coefficients, E1 ones, export path",
+  "guided_eps_vs_sampler": "<= 1e-4 relative",
+  "repeat": "reported",
+  "ridge": "stationarity < 1e-10, vs lstsq < 1e-8, lam=0 exact < 1e-8"
+ },
+ "pass": true,
+ "stage": "ac1",
+ "run": "ac1_checks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "33c7bbac0141cbf47ad573a3fea30569002c7fbd",
+ "start_utc": "2026-10-29T23:07:09Z",
+ "wall_s": 130.22316336631775,
+ "gpu_hours": 0.03617310093508826
+}
