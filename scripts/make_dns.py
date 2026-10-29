@@ -100,7 +100,9 @@ L += ["", "## C-DNS: the covariance model and the §5 gate (held-out seeds 44100
       "- **Does DNS help on this bed?** See the FID table and the paired rows. DNS moves FID and the paired metrics in the same direction here, by small amounts. "
       "Its assumptions (a)–(e) are approximations on this bed: the residual is heavy-tailed mid-trajectory, and the late-step error is partly proportional to the prediction (k ≈ −0.08).",
       "- **Does temporal covariance add benefit beyond the matched ablation?** The covariance model predicts held-out accumulated-error variance far better (gate passed). "
-      "Fed through this construction (C-DNS, a variance multiplier on DNS's timestep shift), however, the full model **degrades** every metric, while the ablation stays close to DNS. "
+      "Fed through this construction (C-DNS, a variance multiplier on DNS's timestep shift), however, the full model **degrades** every metric (FID +17 vs the ablation). "
+      "The temporal-independence ablation, which keeps the measured denoiser response and trajectory statistics but no cross-step dependence, improves FID over DNS "
+      "(see the FID table) while its paired latent error is slightly higher than DNS's. That gain is attributable to the response/trajectory statistics, not to temporal covariance. "
       "There is **no demonstrated advantage under these conditions**. The failure is specific to this construction: an open-loop closure and DNS's shrink-to-match-variance map. "
       "When the error grows faster than noise (A > g), shrinking the whole state is not a correction for it. This is not evidence against covariance-aware correction in general.",
       "- **Preservation:** no preservation guarantee is claimed for C-DNS. DNS's own guarantee rests on assumptions (a)–(c) (exact FP denoiser, independent Gaussian residual, no accumulation), "
