@@ -294,3 +294,25 @@ The review asks to:
    - It is specified in detail in its own dated amendment before it runs.
 
 **Not combined with any of the above:** timestep reweighting, cache refresh, stronger regularization.
+
+### 2026-10-29 15:40: fourth review. Exact identities, selection rule, outcome definitions, provenance (before any affected result)
+1. **The α candidate, exactly.**
+   - Parent: P2 (L_local + 0.5·L_roll,full, K = 5), lr 1e-4, Adam, seed 0, B = 1, trained 0.25 h = **109 updates** on mjhq1k[600:664] training states.
+   - Short design run `design_P2_lam0.5`, file `ckpt/e3c/pixart/q_design_P2_lam0.5.pt` (sha256 prefix b3cac1f2079d3611); design endpoint 0.592.
+   - Interpolated **per factor**: L_j(0.1) = L_j0 + 0.1·(L_j − L_j0) for both L1 and L2, exported bf16.
+   - It was chosen from a broader search (7 checkpoints × 3 α values on the same 8 design prompts), so it had **more selection opportunities** than the screen candidates. Its fresh-dev result is read with that in mind.
+2. **The low-rate screen's selection rule (frozen).**
+   - λ = **0.5 only** for P2, the same λ as the lr 1e-4 screen; λ = 2 is not screened.
+   - P1 and P2 each get the **same five options**: checkpoints at 10, 25, 50, 100 and 200 updates. Each arm's candidate is the checkpoint with the lowest design-endpoint mean (8 design prompts).
+3. **Fresh-dev outcome definitions** (paired per-prompt difference vs P0, 32 prompts, bootstrap 95% CI):
+   - **improvement:** CI entirely below 0;
+   - **deterioration:** CI entirely above 0;
+   - **inconclusive:** CI crossing 0, reported with its point estimate and interval, never as "no benefit".
+
+   "Fresh-dev shows no endpoint gain" (the trigger for the conditional trajectory-anchored experiment) means **no candidate shows an improvement**: every candidate is inconclusive or deteriorates.
+   An inconclusive result can justify the conditional experiment; it is not evidence that the method has no benefit.
+4. **Provenance.** mjhq1k[400:432] is used once, for validating the candidates above.
+   If the trajectory-anchored target is designed or tuned after these 32 prompts are inspected, they become **development data for that extension**.
+   Its own validation would then need another untouched development set, nominated now: **mjhq1k[432:464]** (32 prompts). The final confirmation sets (0:64 and 288:352) remain the final test throughout.
+
+**Claim currently defensible:** short-rollout fitting improves its held-out target (held-out 5-step rollout error 0.872 → 0.784 / 0.808 at lr 1e-5). The endpoint benefit is unresolved.
