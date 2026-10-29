@@ -258,3 +258,39 @@ The review asks to:
   - P2 vs P1 at equal updates and at comparable drift: lower endpoint error for P2 at comparable drift supports the rollout objective.
   - P1-drift vs P2 at matched drift: if they are equal, limiting movement explains P2's stability.
 - **Not changed yet:** no timestep-specific reweighting of the rollout loss, no refreshed caches, no extra regularizers. Global gradient clipping is only a later control, if needed.
+
+### 2026-10-29 15:10: third review. Corrections and the next steps (registered before any of them runs)
+**Corrections.**
+- The α-interpolation does **not** establish a ±0.02 noise floor. Different α values are different models, not repeated measurements.
+  P2 λ 0.5 lr 1e-4 at α 0.1 (0.188 vs 0.206, −8.7% on 8 prompts) is a selected exploratory result: not confirmed, not dismissed.
+- Low-rate P2 is described as "no clear endpoint improvement or deterioration detected", not as "no damage".
+- Low-rate P1 lowers prediction error on cached **and** own states (0.982 → 0.881), yet its endpoint gets worse (0.206 → 0.362).
+  Distribution shift alone does not explain this case, and cache refresh alone is not expected to fix it.
+- Low-rate P2 lowers held-out 5-step rollout error by ≈ 10% (0.872 → 0.784). The objective transfers to held-out short windows, not yet to the full trajectory.
+- The lr 1e-4 screen informs instability only. It cannot close the low-rate case.
+
+**Steps, in order.**
+1. Finish diagnostics v2 and the lr 1e-4 matched screen (already queued).
+2. **α, paired** (`px_diag alpha2`). For P1 lr 1e-5 and the four P2 checkpoints at α ∈ {0.03, 0.1, 0.3}, plus each trained checkpoint (α 1):
+   - per-prompt endpoints;
+   - paired differences vs P0 per prompt;
+   - bootstrap 95% CI over prompts (2,000 resamples), median difference, and win count out of 8.
+   - **Reproducibility:** P0 and P2 λ 0.5 lr 1e-4 at α 0.1 are each evaluated twice, identically, to separate numerical reproducibility from prompt uncertainty.
+3. **Low-rate matched-update screen** (`px_screen --lr 1e-5 --tag lr1e-5 --no-drift`):
+   - P1 and P2 (λ 0.5), from the base, seed 0, identical draws;
+   - checkpoints at 10, 25, 50, 100 and 200 updates;
+   - same per-checkpoint measures as the high-rate screen.
+4. **Fresh development set:** mjhq1k[400:432] (32 prompts). It is untouched: not training (600:664), not confirmation (0:64, 288:352), not E2 (256:288), not D2 (64:96), not inside the MJHQ-256 base validation (0:256).
+   **Candidates, fixed by rule before the low-rate screen's results:**
+   - P0;
+   - the low-rate screen's P1 and P2 checkpoints with the lowest design endpoint mean;
+   - the exploratory P2 λ 0.5 lr 1e-4 at α 0.1.
+
+   **Metrics:** endpoint rel. MSE vs the bf16 teacher, with paired per-prompt bootstrap CI, median and wins vs P0.
+   Final confirmation sets stay untouched. A candidate that improves on fresh dev with its CI excluding 0 would be proposed for confirmation in a separate decision, not promoted automatically.
+5. **Conditional on step 4 showing no endpoint gain: the trajectory-anchored objective (not implemented yet).**
+   - Paired student/FP trajectories come from identical noise. The student window starts from **its own** state and matching DPM history, and targets the **FP trajectory's** state at the window end. The local loss is kept.
+   - It is compared against the current P2 with identical windows, updates and parameterization. Teacher states are used in calibration only; deployment is unchanged.
+   - It is specified in detail in its own dated amendment before it runs.
+
+**Not combined with any of the above:** timestep reweighting, cache refresh, stronger regularization.
