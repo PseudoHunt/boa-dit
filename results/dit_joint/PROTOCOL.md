@@ -131,3 +131,19 @@ GPU model, seconds per update per arm (prefix included), peak memory, projected 
 ---
 ## Amendments
 (dated; appended before the affected step runs)
+
+### 2026-10-29 15:10: run on the current VM; implementation details (before any pilot output)
+- **Machine.** The user elected to run the pilot directly on the current VM ("directly move to the actual DiT experiments"). The regeneration drill is skipped, and the existing on-disk artifacts are used:
+  - DiT weights;
+  - the original heig-8 W4 + carry (W4A16 control);
+  - `dit_smooth_s.pt` (sha in base.json).
+
+  The common smoothed base and the A8 tables are built fresh by the pilot.
+- **Smoothing reparameterization.** W̃ = W·diag(s) at mlp.fc1/fc2, plus a permanent forward pre-hook x̃ = x/s, registered before every other hook.
+  So the builder's Gram hooks, the A8 quantizer and the carry all see x̃. The divided input is cast back to the incoming dtype (fp16 under autocast).
+- **STE.** The quantizer's forward returns the deployed value bit-exactly (custom autograd function); backward is identity w.r.t. the site input, including through the clip interval.
+  The feedback residual is computed without gradients, i.e. detached at each update.
+- **Training-path sampler.** `followup.carry_opt.guided_eps` + `ddim_step` (the E3 differentiable re-implementation, ≤ 2e-4 from `ddim_sample` over 5 steps in E3).
+  Evaluation uses `sample.ddim_sample`. Check 4 reports the difference.
+- **Normalizers.** From the untrained common base with A8 static (feedback off), on training seeds 60100–60115, using its own prefix states, per start step.
+- **Checkpoint-safety.** The feedback state is passed as explicit arguments to each checkpointed denoiser call. Check 5 asserts bitwise forward agreement, gradients ≤ 1e-4, and equal end-of-window states with checkpointing on and off.

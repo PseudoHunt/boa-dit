@@ -57,7 +57,8 @@ L += ["", "`*` = checkpoint selected on development seeds 60200–60231 (seconda
 if S:
     L += ["", "| arm | dev latent at 0 / 25 / 50 / 100 / 200 updates | selected |", "| --- | --- | --- |"]
     for a, v in S["arms"].items():
-        L.append(f"| {a} | {' / '.join(f'{v['dev_latent'][f'u{u}']:.5f}' for u in (0, 25, 50, 100, 200))} | {v['label']} |")
+        dl = " / ".join("%.5f" % v["dev_latent"]["u%d" % u] for u in (0, 25, 50, 100, 200))
+        L.append(f"| {a} | {dl} | {v['label']} |")
 L += ["", "## Predeclared contrasts (paired bootstrap over the 128 images, 2,000 resamples)", "",
       "| contrast | latent (rel. change) | PSNR | LPIPS | latent wins / 128 | median latent diff |", "| --- | --- | --- | --- | ---: | ---: |"]
 for k, v in RES.items():
