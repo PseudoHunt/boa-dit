@@ -138,3 +138,7 @@ The first `checks` run failed on c4 only. The state change after update 9 differ
   - c6 bitwise repeat.
 
 The failed record is kept as `correctness_attempt1.json`.
+
+### 2026-10-29 20:45: fid_dns failure record
+The first `fid_dns` run generated all 2,000 latents and Inception features, then failed loading `results/stage0/ref_stats.npz`. The file was absent from this new worktree: it is untracked and must be copied in, which the earlier worktrees needed too.
+The identical file was copied (sha256 a11af8b0…). The stage resumes from its complete partial file without resampling, and the failed run's GPU time stays in the budget log.
