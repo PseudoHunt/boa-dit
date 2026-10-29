@@ -3,7 +3,7 @@
 Question: does a small band-wise latent impulse on top of faithful DNS (x ← x + θ_j·P_low(x) after updates 9/19/29/39/48; **not** a per-band timestep), calibrated against the signed moment mismatch through measured downstream responses (T), beat the same actuator calibrated locally (L) and faithful DNS?
 Bed: DiT-XL/2 256, heig-8 W4 + rank-8 carry, A16, DDIM-50, cfg 1.5; frozen DNS calibration. Protocol: `results/dns_response/PROTOCOL.md`.
 
-Budget: 1.15 of 6.0 GPU-h; elapsed 1.17 of 6.0 h. Stage log in budget.json.
+Budget: 2.51 of 6.0 GPU-h; elapsed 2.56 of 6.0 h. Stage log in budget.json.
 
 ## Stages
 
@@ -12,10 +12,10 @@ Budget: 1.15 of 6.0 GPU-h; elapsed 1.17 of 6.0 h. Stage log in budget.json.
 - responses / L / T fits: completed
 - development selection: completed
 - fidelity confirmation: completed
-- FID-2k / KID plain: NOT RUN
-- FID-2k / KID dns: NOT RUN
-- FID-2k / KID L: NOT RUN
-- FID-2k / KID T: NOT RUN
+- FID-2k / KID plain: completed
+- FID-2k / KID dns: completed
+- FID-2k / KID L: completed
+- FID-2k / KID T: completed
 
 ## Component removals (frozen DNS calibration; context only)
 
@@ -54,6 +54,15 @@ Budget: 1.15 of 6.0 GPU-h; elapsed 1.17 of 6.0 h. Stage log in budget.json.
 | L vs dns | +0.30% [+0.08, +0.50] | +0.0047 [-0.0132, +0.0231] | -0.0008 [-0.0010, -0.0006] |
 | T vs dns | +4.22% [+1.12, +8.14] | -0.2091 [-0.3161, -0.1126] | +0.0033 [+0.0001, +0.0067] |
 | T vs L | +3.91% [+0.94, +7.73] | -0.2137 [-0.3153, -0.1237] | +0.0041 [+0.0010, +0.0073] |
+
+## Generation (seeds 74000–75999; exploratory finite-sample points, no percentile-bootstrap CIs)
+
+| arm | FID-2k | KID (subset sd) |
+| --- | ---: | --- |
+| plain | 27.637 | 0.00270 (0.00050) |
+| dns | 27.157 | 0.00237 (0.00046) |
+| L | 27.192 | 0.00237 (0.00046) |
+| T | 27.385 | 0.00262 (0.00049) |
 
 ## Interpretation (protocol §7 rules)
 - T better on moments only: a better calibration diagnostic, not a demonstrated generation method.
