@@ -8,10 +8,18 @@
    "elapsed_h": 0.0,
    "estimate_h": 0.15,
    "ok": true
+  },
+  {
+   "stage": "checks",
+   "utc": "2026-10-29T18:53:53.243160+00:00",
+   "spent_gpu_h": 0.0228,
+   "elapsed_h": 0.03428952638888889,
+   "estimate_h": 0.15,
+   "ok": true
   }
  ],
- "spent_gpu_h": 0,
- "elapsed_h": 0.0,
+ "spent_gpu_h": 0.0228,
+ "elapsed_h": 0.03428952638888889,
  "caps": {
   "gpu_h": 6.0,
   "elapsed_h": 6.0
