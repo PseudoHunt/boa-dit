@@ -1,0 +1,28 @@
+{
+ "gpu": "NVIDIA A30",
+ "C_L": {
+  "sec_per_update": 4.180153767267863,
+  "peak_mem_GiB": 9.73495101928711
+ },
+ "E_L": {
+  "sec_per_update": 6.417703946431478,
+  "peak_mem_GiB": 9.978972434997559
+ },
+ "C_R": {
+  "sec_per_update": 6.212249517440796,
+  "peak_mem_GiB": 9.751668453216553
+ },
+ "E_R": {
+  "sec_per_update": 9.23267380396525,
+  "peak_mem_GiB": 10.037071704864502
+ },
+ "projected_training_h": 1.4468211686169659,
+ "stage": "j1",
+ "run": "j1_profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "f8b186fed372dec90bca5eb3b971c9f79dcd9362",
+ "start_utc": "2026-10-29T15:09:20Z",
+ "wall_s": 994.3717601299286,
+ "gpu_hours": 0.27621437781386904
+}
