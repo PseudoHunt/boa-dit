@@ -1,0 +1,19 @@
+{
+ "arm": "plain",
+ "n": 2000,
+ "fid2000": 27.637298587116504,
+ "kid": 0.0026987752295378176,
+ "kid_subset_sd": 0.0005023024560601314,
+ "theta": null,
+ "stage": "r1",
+ "run": "r1_fid2000_plain",
+ "device": "cuda:0",
+ "config": {
+  "arm": "plain",
+  "theta": null
+ },
+ "git_sha": "193ed97bb7b1e67335914a207bd2607f9819f2ca",
+ "start_utc": "2026-10-29T21:25:13Z",
+ "wall_s": 1546.8693976402283,
+ "gpu_hours": 0.4296859437889523
+}
