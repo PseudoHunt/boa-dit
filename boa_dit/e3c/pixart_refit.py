@@ -257,8 +257,8 @@ def cache(dev):
                 h = None if i == 0 else h
                 es, xs = rollout(pipe, pipe.transformer, x, h, i, k, ehs, mask, dev)
                 et, xt = rollout(pipe, tch, x, h, i, k, ehs, mask, dev)
-                nl[i] += (es.float() - et.float()).pow(2).sum() / 4
-                nr[i] += (xs.float() - xt.float()).pow(2).sum() / 4
+                nl[i] += float((es.float() - et.float()).pow(2).sum()) / 4
+                nr[i] += float((xs.float() - xt.float()).pow(2).sum()) / 4
         out["norm"] = {"loc": nl, "roll": nr}
         run.record()
     atomic_torch_save(out, os.path.join(CK, "cache.pt"))
