@@ -1,0 +1,22 @@
+{
+ "P1": {
+  "sec_per_update": 1.9654610043480283,
+  "updates_in_120s": 63,
+  "peak_mem_GiB": 4.036096572875977
+ },
+ "P2": {
+  "sec_per_update": 7.6964660584926605,
+  "updates_in_120s": 16,
+  "peak_mem_GiB": 6.085295677185059
+ },
+ "stage": "f5",
+ "run": "e3c_px_profile",
+ "device": "cuda:0",
+ "config": {
+  "K": 5
+ },
+ "git_sha": "27a7974fba6a9b809ce2716de5c51304fa737660",
+ "start_utc": "2026-10-29T07:45:30Z",
+ "wall_s": 256.69367504119873,
+ "gpu_hours": 0.0713037986225552
+}
