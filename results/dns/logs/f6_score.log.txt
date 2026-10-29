@@ -1,0 +1,11 @@
+/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py:206: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/root/miniconda3/envs/py3.10/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+  base: latent 0.07531 PSNR 22.94 LPIPS 0.2061
+  cdns_full: latent 0.16924 PSNR 19.92 LPIPS 0.4008
+  cdns_ind: latent 0.07643 PSNR 22.97 LPIPS 0.2107
+  dns: latent 0.07381 PSNR 23.11 LPIPS 0.2015
+  qdrift: latent 0.07530 PSNR 22.95 LPIPS 0.2060

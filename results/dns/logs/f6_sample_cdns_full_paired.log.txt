@@ -1,0 +1,2 @@
+/home/boa-dit-dns/boa_dit/dns/port.py:69: RuntimeWarning: invalid value encountered in sqrt
+  C1 = np.sqrt(1 - p) - np.sqrt((p * (1 - abar_t)) / abar_t)

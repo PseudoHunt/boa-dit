@@ -1,0 +1,32 @@
+early start Wed Oct 28 17:39:43 UTC 2026
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "9c0b337d57ce6174e72c39eb527b41b51997a1f1",
+ "start_utc": "2026-10-28T17:39:46Z",
+ "wall_s": 58.28462266921997,
+ "gpu_hours": 0.016190172963672214,
+ "pass": false
+}
+PUSHED: checks (rc 0)
+  step 42 t 140: k [-0.0097, -0.0092, -0.008, -0.008] sigma_o 0.0470 kurt 3.95 sigma 0.0788 a 0.0219
+  step 43 t 120: k [-0.0111, -0.0105, -0.0091, -0.0094] sigma_o 0.0506 kurt 3.34 sigma 0.0827 a 0.0226
+  step 44 t 100: k [-0.0129, -0.0121, -0.0108, -0.0112] sigma_o 0.0545 kurt 2.65 sigma 0.0859 a 0.0230
+  step 45 t 80: k [-0.015, -0.0139, -0.0124, -0.0133] sigma_o 0.0585 kurt 2.03 sigma 0.0887 a 0.0231
+  step 46 t 60: k [-0.0178, -0.0162, -0.0149, -0.0163] sigma_o 0.0624 kurt 1.53 sigma 0.0910 a 0.0230
+  step 47 t 40: k [-0.0218, -0.0198, -0.0191, -0.0207] sigma_o 0.0647 kurt 1.15 sigma 0.0910 a 0.0222
+  step 48 t 20: k [-0.0294, -0.0259, -0.0269, -0.0291] sigma_o 0.0600 kurt 1.41 sigma 0.0866 a 0.0216
+  step 49 t 0: k [-0.0806, -0.0726, -0.0825, -0.0811] sigma_o 0.0147 kurt 22.62 sigma 0.0339 a 0.0106
+PUSHED: calib (rc 0)
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "1bfb12baf18bebd25a3d56f1d64499ca049b56e9",
+ "start_utc": "2026-10-28T21:00:59Z",
+ "wall_s": 121.09130311012268,
+ "gpu_hours": 0.03363647308614519,
+ "pass": true
+}
+PUSHED: checks2 (rc 0)
+  traces fit done
+  traces held done
+PUSHED: traces (rc 0)
+EARLY_DONE Wed Oct 28 21:13:22 UTC 2026

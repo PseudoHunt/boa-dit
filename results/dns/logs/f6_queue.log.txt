@@ -1,0 +1,61 @@
+{'finite': True, 'base_rel_mse': 0.06793934106826782, 'dns_rel_mse': 0.06588193774223328, 'endpoint_rms': {'fp': 0.8327077627182007, 'base': 0.8130321502685547, 'dns': 0.808073103427887}, 'dns_vs_base_rel': 0.05739811062812805, 'note': 'trace mode makes one extra (diagnostic) denoiser call per step with DCNC on; never used for reported samples', 'stage': 'f6', 'run': 'dns_design', 'device': 'cuda:0', 'config': {'seeds': [43000, 43031]}, 'git_sha': '917e6359a478e2a9aea5cb34267e3e304b20ba6a', 'start_utc': '2026-10-29T03:49:21Z', 'wall_s': 113.71423625946045, 'gpu_hours': 0.031587287849850126}
+PUSHED: design (rc 0)
+PUSHED: sample_dns_paired (rc 0)
+PUSHED: sample_qdrift_paired (rc 0)
+  FID-2k dns: 27.856
+PUSHED: sample_dns_fid (rc 0)
+  FID-2k qdrift: 28.225
+PUSHED: sample_qdrift_fid (rc 0)
+ ],
+ "lag1_corr_band_mean": [
+  0.9473370417105523,
+  0.9344856981387133,
+  0.9378734645716971,
+  0.9500990696441476
+ ]
+}
+On branch dns-cov
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	typechange: external/DiT
+	typechange: external/boa
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	ckpt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+C-DNS GATE PASSED: running the frozen ablation and full arms
+  C1 = np.sqrt(1 - p) - np.sqrt((p * (1 - abar_t)) / abar_t)
+PUSHED: sample_cdns_ind_paired (rc 0)
+  C1 = np.sqrt(1 - p) - np.sqrt((p * (1 - abar_t)) / abar_t)
+  FID-2k cdns_ind: 27.476
+PUSHED: sample_cdns_ind_fid (rc 0)
+  C1 = np.sqrt(1 - p) - np.sqrt((p * (1 - abar_t)) / abar_t)
+PUSHED: sample_cdns_full_paired (rc 0)
+  C1 = np.sqrt(1 - p) - np.sqrt((p * (1 - abar_t)) / abar_t)
+  FID-2k cdns_full: 44.549
+PUSHED: sample_cdns_full_fid (rc 0)
+  base: latent 0.07531 PSNR 22.94 LPIPS 0.2061
+  cdns_full: latent 0.16924 PSNR 19.92 LPIPS 0.4008
+  cdns_ind: latent 0.07643 PSNR 22.97 LPIPS 0.2107
+  dns: latent 0.07381 PSNR 23.11 LPIPS 0.2015
+  qdrift: latent 0.07530 PSNR 22.95 LPIPS 0.2060
+PUSHED: score (rc 0)
+Terminated
+Terminated
+On branch dns-cov
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	typechange: external/DiT
+	typechange: external/boa
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	ckpt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+PUSHED: e3c fidboot + report
+F6_DONE

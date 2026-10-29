@@ -42,6 +42,26 @@ Central novelty test, paired: C-DNS full vs ablation, latent +121.43% [+102.14, 
 
 ### FID-2k (seeds 30000–31999; ADM reference statistics; primary)
 
+| arm | FID-2k | 95% CI |
+| --- | ---: | --- |
+| heig-8 baseline (E3C C0, reused) | 28.25 | [44.06, 46.77] |
+| DNS (faithful) | 27.86 | [43.65, 46.37] |
+| Q-Drift (reference) | 28.23 | [44.04, 46.74] |
+| C-DNS, temporal-independence ablation | 27.48 | [43.17, 45.82] |
+| C-DNS, full covariance | 44.55 | [59.18, 62.82] |
+
+| difference | value [95% CI] |
+| --- | --- |
+| dns − base | -0.39 [-0.61, -0.21] |
+| qdrift − base | -0.02 [-0.05, +0.00] |
+| cdns_ind − base | -0.77 [-1.31, -0.60] |
+| cdns_full − base | +16.30 [+14.32, +16.79] |
+| dns − qdrift | -0.37 [-0.59, -0.19] |
+| cdns_ind − dns | -0.38 [-0.79, -0.30] |
+| cdns_full − cdns_ind | +17.07 [+15.35, +17.75] |
+| cdns_full − dns | +16.69 [+14.78, +17.22] |
+
+CIs come from a paired bootstrap over the 2,000 generated images (1,000 resamples). They are conditional on the reference statistics and n = 2000, and are not population-quality estimates.
 
 ## C-DNS: the covariance model and the §5 gate (held-out seeds 44100–44163)
 - Lag-1 correlation of the local prediction error ξ (fit set), band means: 0.947, 0.934, 0.938, 0.950.

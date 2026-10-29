@@ -1,0 +1,29 @@
+{
+ "c1_base_equals_e3c_C0_latents": false,
+ "c1_disabled_is_ddim_sample": true,
+ "c8_calls_dns": 50,
+ "c2_zero_stats_rel_diff_vs_base": 0.001628028228878975,
+ "c2_zero_stats_rel_diff_vs_base_fp32": 3.1820663934922777e-06,
+ "c2_zero_stats_schedule_identity": true,
+ "c3_ddim_step_rel_err_max": 4.3542931393858453e-07,
+ "c4_timestep_is_timestep_map": true,
+ "c4_abar_matches_respaced": true,
+ "c5_cfg_identical": true,
+ "c8_calls_base": 50,
+ "c6_schedule_valid": true,
+ "c6_boundary": {
+  "penultimate_no_solve": true,
+  "final_no_rescale": true,
+  "final_no_dcnc": true
+ },
+ "c7_stats_sha256": "edc74f16f62b5d193ab05114a0d7a8fd6aec42a5450c1001d78dc40a51663e2e",
+ "stage": "f6",
+ "run": "dns_checks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "1bfb12baf18bebd25a3d56f1d64499ca049b56e9",
+ "start_utc": "2026-10-28T21:00:59Z",
+ "wall_s": 121.09130311012268,
+ "gpu_hours": 0.03363647308614519,
+ "pass": true
+}

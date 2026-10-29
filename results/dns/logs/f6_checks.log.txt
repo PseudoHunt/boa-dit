@@ -1,0 +1,20 @@
+{
+ "c1_disabled_is_ddim_sample": true,
+ "c8_calls_dns": 50,
+ "c2_zero_stats_rel_diff_vs_base": 0.001628028228878975,
+ "c2_zero_stats_schedule_identity": true,
+ "c3_ddim_step_rel_err_max": 4.3542931393858453e-07,
+ "c4_timestep_is_timestep_map": true,
+ "c4_abar_matches_respaced": true,
+ "c5_cfg_identical": true,
+ "c8_calls_base": 50,
+ "stage": "f6",
+ "run": "dns_checks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "9c0b337d57ce6174e72c39eb527b41b51997a1f1",
+ "start_utc": "2026-10-28T17:39:46Z",
+ "wall_s": 58.28462266921997,
+ "gpu_hours": 0.016190172963672214,
+ "pass": false
+}
