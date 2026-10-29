@@ -721,5 +721,35 @@
     ]
    ]
   }
+ },
+ "interv": {
+  "P1_lr1e-5": {
+   "restore_xattn_out": 2.426987960934639,
+   "only_xattn_out": 0.42935805581510067
+  },
+  "P1_lr3e-5": {
+   "restore_xattn_out": 5.329143166542053,
+   "only_xattn_out": 0.5590117238461971
+  },
+  "P1_lr1e-4": {
+   "restore_xattn_out": 5.67725083231926,
+   "only_xattn_out": 1.2672883532941341
+  },
+  "P2_l0.5_lr1e-4": {
+   "restore_xattn_out": 1.0754635259509087,
+   "only_xattn_out": 0.38469812646508217
+  },
+  "P2_l2_lr1e-4": {
+   "restore_xattn_out": 0.963871031999588,
+   "only_xattn_out": 0.33036595210433006
+  },
+  "P2_l0.5_lr1e-5": {
+   "restore_xattn_out": 0.27667911164462566,
+   "only_xattn_out": 0.2122197225689888
+  },
+  "P2_l2_lr1e-5": {
+   "restore_xattn_out": 0.2264363644644618,
+   "only_xattn_out": 0.2255614036694169
+  }
  }
 }
