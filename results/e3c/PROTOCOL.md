@@ -166,3 +166,16 @@ User text (verbatim):
 A CPU-only FID bootstrap (numpy, all cores) ran alongside the first ~37 min of the time-matched C2L s0 run. It slowed training to ≈ 0.74
 updates/s, against ≈ 0.78 for the C2 runs. The bootstrap was stopped at 22:40 and moved to after all training. C2L s0's update count is
 reported, and it is flagged in the report as having received ≈ 4% fewer updates than an uncontended run would.
+
+### 2026-10-29 03:55: PixArt check criterion fix (after the first check run, before any training)
+The first `px_check` failed on one item only, `export_bitwise_untrained`. Every functional item passed bit-exactly:
+- own loop == pipeline;
+- untrained trainable layer == deployed layer;
+- rollouts at 0.0 error;
+- sampling with the exported untrained branch == base sampling, both through the own loop and through the diffusers pipeline.
+
+The cause: the base file stores L1/L2 in fp32, not exactly bf16-representable, and the deployed `QLinear` casts them to bf16 at install.
+So the deployed base branch is bf16(L1, L2). The export (bf16, the deployed precision) was compared against the raw fp32 tensors.
+The criterion now compares against the deployed bf16 base. The pre-registered requirement ("reproduces the base bit-exactly in sampling") passed in the first run.
+
+The master chain had already moved on to the DNS queue, so the order is now E3C → DNS → PixArt Part 2 → pilot. The pilot stays last, as requested.

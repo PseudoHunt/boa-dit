@@ -213,7 +213,8 @@ def check(dev):
         with torch.no_grad():
             res["exported_branch_sampling_bitwise"] = bool(torch.equal(run_loop(pipe, pipe.transformer, lat0, ehs, mask, dev), ownq))
             res["exported_branch_pipeline_bitwise"] = bool(torch.equal(WC.sample(pipe, e, idx, dev), refq))
-        res["export_bitwise_untrained"] = all(torch.equal(exp[k]["L1"], qb[k]["L1"]) and torch.equal(exp[k]["L2"], qb[k]["L2"]) for k in qb)
+        bf = lambda t: t.to(torch.bfloat16)                                   # the deployed base: QLinear casts the stored fp32 branch to bf16
+        res["export_bitwise_untrained"] = all(torch.equal(exp[k]["L1"], bf(qb[k]["L1"])) and torch.equal(exp[k]["L2"], bf(qb[k]["L2"])) for k in qb)
         res["pass"] = (res["own_loop_bitwise_w4a4"] and res["exported_branch_sampling_bitwise"] and res["exported_branch_pipeline_bitwise"] and res["untrained_qlineart_bitwise"] and res["export_bitwise_untrained"]
                        and max(v for k, v in res.items() if k.startswith("rollout")) <= 1e-3 and res["grad_block0_L1"] > 0)
         res.update(run.record())
