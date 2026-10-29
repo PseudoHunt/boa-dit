@@ -1,0 +1,24 @@
+{
+ "tables_sha256": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+ "clip_rate_by_type": {
+  "single8": {
+   "attn.proj": 4.5183688858482386e-05,
+   "attn.qkv": 4.537309949422966e-05,
+   "mlp.fc1": 8.356007375758574e-05,
+   "mlp.fc2": 1.297476173281861e-05
+  }
+ },
+ "stage": "j1",
+ "run": "j1_calib_act",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   60000,
+   60031
+  ]
+ },
+ "git_sha": "e43b62679a05c2be0e58ea87162a31c9b0f7b200",
+ "start_utc": "2026-10-29T14:55:44Z",
+ "wall_s": 390.0857801437378,
+ "gpu_hours": 0.10835716115103827
+}
