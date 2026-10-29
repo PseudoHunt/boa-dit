@@ -56,10 +56,18 @@
    "elapsed_h": 1.1709709227777778,
    "estimate_h": 0.45,
    "ok": true
+  },
+  {
+   "stage": "fid_dns",
+   "utc": "2026-10-29T20:28:33.577078+00:00",
+   "spent_gpu_h": 1.5746000000000002,
+   "elapsed_h": 1.6121600591666667,
+   "estimate_h": 0.45,
+   "ok": true
   }
  ],
- "spent_gpu_h": 1.1484,
- "elapsed_h": 1.1709709227777778,
+ "spent_gpu_h": 1.5746000000000002,
+ "elapsed_h": 1.6121600591666667,
  "caps": {
   "gpu_h": 6.0,
   "elapsed_h": 6.0

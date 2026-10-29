@@ -1,0 +1,19 @@
+{
+ "arm": "dns",
+ "n": 2000,
+ "fid2000": 27.156587440144108,
+ "kid": 0.0023715323176522274,
+ "kid_subset_sd": 0.0004644655391452499,
+ "theta": null,
+ "stage": "r1",
+ "run": "r1_fid2000_dns",
+ "device": "cuda:0",
+ "config": {
+  "arm": "dns",
+  "theta": null
+ },
+ "git_sha": "f8ec7522f0f261de3a81c542e2faa50b77ef8c13",
+ "start_utc": "2026-10-29T20:28:33Z",
+ "wall_s": 274.99379086494446,
+ "gpu_hours": 0.07638716412915124
+}
