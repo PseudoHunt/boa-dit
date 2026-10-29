@@ -69,3 +69,8 @@ Budget: 2.51 of 6.0 GPU-h; elapsed 2.56 of 6.0 h. Stage log in budget.json.
 - T better than DNS but not L: the correction may help; the downstream-calibration contribution is not established.
 - T better than both DNS and L on generation quality, with acceptable fidelity and cost: promising, needs replication and a second bed (≈ 0.5 FID-2k vs both motivates replication; not a significance threshold).
 - No gain: a bounded result for this actuator, objective, data and model. It does not show that all covariance-aware or sampler-side corrections fail.
+
+## Correction (2026-10-30): budget total
+The 2.51 GPU-h above comes from budget.json, which records the spend *before* each stage, so the last stage (fid_plain, 0.43 GPU-h) is not in it.
+The actual total, summed over the 11 unique r1 rows in results/gpu_hours.csv (including the failed fid_dns attempt), is **2.94 GPU-h**, within the 6 GPU-h ceiling.
+The results are unchanged. budget.json is left as it was; its log entries are pre-stage snapshots.
