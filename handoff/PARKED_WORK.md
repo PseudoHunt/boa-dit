@@ -81,3 +81,14 @@ and a modified `results/w4a4/quant/hsvd_r4_b0.5_kv16_u2_rs.json`. Both predate t
 
 ## 6. weights-joint / weights-scale (weights-joint branch): COMPLETE (results in git)
 - Caches are regenerable (ASSETS.json).
+
+## 7. Shared / nested weight quantization (weight-anchor-shared, `results/weight_anchor_shared/REPORT.md`): COMPLETE, PARKED BY USER DECISION (2026-10-30)
+- Parked by user decision in favour of the activation-anchor pilot; **not** a failed read and not a closure of nested quantization.
+- State at parking: every pre-registered stage ran (selftest, build+pack, checks, dev, A-RTN dev control, traces, freeze, confirmation); head 80db0aa.
+  No job was running or queued when the stop instruction arrived. GPU 0.367 of 2.0 A30-h (ledger tag ws1).
+- Result: reuse useful (R_shared vs A_shared −54%); R_shared 1.95× R8 (degradation beyond the 1.10 / 0.01 margins); shared artifact 223.0 MB (23.9%) smaller.
+- Artifacts (not hosted; regenerate): `ckpt/weight_anchor_shared/{q4,h8,pair,A_gptq,A_rtn,B_gptq}.safetensors` (sha256 in `results/weight_anchor_shared/storage.json`),
+  `build.pt`, `conf_latents.pt`, `checks_dev_latents_*.pt`; logs `logs/ws1_*.log` in the /home/boa-dit-ws worktree.
+- Resume: `GIT_LFS_SKIP_SMUDGE=1 git worktree add <dir> weight-anchor-shared`; symlink external/DiT, external/boa, ckpt, data; then
+  `python -m boa_dit.weight_anchor.shared selftest|build|checks|dev|conf` (prerequisites: `temporal.rebuild`, `weight_anchor.w8 build`). See `implementation.md`.
+- Not started (would need a new protocol and budget): joint (MatGPTQ-style) nested construction with its own low-model baseline.
