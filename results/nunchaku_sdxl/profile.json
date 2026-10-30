@@ -1,0 +1,150 @@
+{
+ "utc": "2026-10-30T06:18:36Z",
+ "device": "NVIDIA A30",
+ "dtype": "bfloat16",
+ "resolution": 1024,
+ "batch_images": 1,
+ "cfg_batch": 2,
+ "guidance": 5.0,
+ "resident_bytes": {
+  "fp_unet": 5134927368,
+  "int4_unet": 2558517768,
+  "vae": 167307726
+ },
+ "mem_after_load": {
+  "allocated": 7998684160,
+  "reserved": 8218738688
+ },
+ "int4_modules": {
+  "SVDQW4A4Linear_count": 420,
+  "other_linear_count": 183,
+  "conv2d_count": 51,
+  "param_dtypes_first_module": {
+   "qweight": "torch.int8",
+   "wscales": "torch.bfloat16",
+   "smooth_factor": "torch.bfloat16",
+   "smooth_factor_orig": "torch.bfloat16",
+   "proj_down": "torch.bfloat16",
+   "proj_up": "torch.bfloat16"
+  }
+ },
+ "attn_processors": {
+  "fp": [
+   "AttnProcessor2_0"
+  ],
+  "int4": [
+   "NunchakuSDXLFA2Processor"
+  ]
+ },
+ "sanity_rel_err_t500": 0.00035919740912504494,
+ "per_call_ms": {
+  "fp": {
+   "999": {
+    "ms_median": 199.0666275024414,
+    "ms_min": 197.83885192871094,
+    "ms_max": 200.94668579101562
+   },
+   "750": {
+    "ms_median": 199.52691650390625,
+    "ms_min": 198.21363830566406,
+    "ms_max": 201.01632690429688
+   },
+   "500": {
+    "ms_median": 199.78496551513672,
+    "ms_min": 199.17312622070312,
+    "ms_max": 200.8668212890625
+   },
+   "250": {
+    "ms_median": 199.89708709716797,
+    "ms_min": 198.64268493652344,
+    "ms_max": 201.4730224609375
+   },
+   "1": {
+    "ms_median": 200.00153350830078,
+    "ms_min": 199.39942932128906,
+    "ms_max": 201.41261291503906
+   }
+  },
+  "int4": {
+   "999": {
+    "ms_median": 185.9773406982422,
+    "ms_min": 184.93746948242188,
+    "ms_max": 186.9793243408203
+   },
+   "750": {
+    "ms_median": 186.19903564453125,
+    "ms_min": 184.72653198242188,
+    "ms_max": 187.4370574951172
+   },
+   "500": {
+    "ms_median": 186.25074768066406,
+    "ms_min": 185.312255859375,
+    "ms_max": 187.2189483642578
+   },
+   "250": {
+    "ms_median": 186.5344009399414,
+    "ms_min": 185.2620849609375,
+    "ms_max": 187.0899200439453
+   },
+   "1": {
+    "ms_median": 186.6588134765625,
+    "ms_min": 185.73004150390625,
+    "ms_max": 187.14930725097656
+   }
+  }
+ },
+ "r_per_t": {
+  "999": 0.9342467043902741,
+  "750": 0.9332025919464652,
+  "500": 0.9322560744269456,
+  "250": 0.933152171693572,
+  "1": 0.9332869113666845
+ },
+ "r_pooled": 0.9323731809042274,
+ "per_call_peak": {
+  "allocated": 8341212672,
+  "reserved": 8810135552
+ },
+ "trajectory_50_euler_s": {
+  "fp": {
+   "s_median": 10.042256484273821,
+   "s_min": 10.038317882921547,
+   "s_max": 10.04384731175378,
+   "finite": true
+  },
+  "int4": {
+   "s_median": 9.33680444676429,
+   "s_min": 9.336264452897012,
+   "s_max": 9.339798246975988,
+   "finite": true
+  }
+ },
+ "trajectory_ratio": 0.92975164111629,
+ "peak": {
+  "allocated": 8342261760,
+  "reserved": 8810135552
+ },
+ "kernel_share": {
+  "fp": {
+   "w4a4_gemm_or_quant": 0.0,
+   "conv": 0.1916672874509308,
+   "attention": 0.10705915417904432,
+   "norm": 0.04229872680150569,
+   "other": 0.6589748315685194
+  },
+  "int4": {
+   "w4a4_gemm_or_quant": 0.4062147328704204,
+   "conv": 0.19900609466752844,
+   "attention": 0.11061074587763375,
+   "norm": 0.04384697336040543,
+   "other": 0.240321453224012
+  }
+ },
+ "decision": {
+  "fit_le_22GB_reserved": true,
+  "r_pooled": 0.9323731809042274,
+  "band": "no margin (r >= 0.74)",
+  "anchored_K4_estimate_over_fp": 1.1923731809042275,
+  "eligible_for_anchor_follow_up": false
+ }
+}

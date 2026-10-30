@@ -71,3 +71,13 @@ The GPU ledger is `results/gpu_hours.csv`. Commit and push after each step.
 
 ## Deviations and results
 (appended below, dated)
+- 2026-10-30, deviation (environment):
+  - `conda create --clone` stopped with CondaToSNonInteractiveError (Anaconda channel Terms of Service not accepted).
+  - I did not accept the terms on the user's behalf. The separate environment is a Python venv (`/home/nk_env`, Python 3.10 from py3.10) with torch 2.11.0+cu130 from the PyTorch index.
+  - The pins are as registered.
+- 2026-10-30, results:
+  - **Fit:** peak reserved 8.81 GB.
+  - **Pooled r = 0.932** (per t 0.932–0.934); the 50-step trajectory ratio is 0.930.
+  - **Kernels:** W4A4 GEMM kernels are executing, at 40.6% of INT4 CUDA time.
+  - **Band:** "no margin". The anchor follow-up is not eligible and was not run.
+  - **GPU:** 0.050 h.
