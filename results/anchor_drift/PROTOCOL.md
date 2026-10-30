@@ -77,3 +77,7 @@ Cut order: diagnostics, unanchored dev references.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30, checks (0.102 h) + profile: D1–D5 pass (restore bitwise; anchor-term gradient rel. L2 3.31 of the full gradient; checkpoint forward bitwise,
+  gradient identical; 8 = 2 × 4 quantizer calls per site in the gradient pass; u0 export = base; base carry reproduces aa1 C / AC bitwise; carry swap
+  reproduces joint C_L / E_L / A latents bitwise). D6 training-path vs eval-sampler endpoint rel. L2 0.042 (AC0, 4 images; reported, joint plain path 0.026).
+  Profile 7.26 s/update (C_D), 10.67 (E_D), peak 16.0 GiB → training ≈ 0.40 + 0.59 h.

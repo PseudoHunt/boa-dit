@@ -1,0 +1,18 @@
+{
+ "C_D": {
+  "sec_per_update": 7.26340115070343,
+  "peak_mem_GiB": 15.9959397315979
+ },
+ "E_D": {
+  "sec_per_update": 10.66558837890625,
+  "peak_mem_GiB": 15.9959397315979
+ },
+ "stage": "ad1",
+ "run": "profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "5177a8f8b07ec8046bb5f6e55b04d9af5a1ea188",
+ "start_utc": "2026-10-30T16:18:50Z",
+ "wall_s": 208.94460821151733,
+ "gpu_hours": 0.0580401689476437
+}
