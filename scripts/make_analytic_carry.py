@@ -122,6 +122,8 @@ for exp, title in (("e1", "E1 — calibrating the C_L u200 Adam update"), ("e2",
 atomic_write_json(os.path.join(OUT, "contrasts.json"), CON)
 L += ["", "## Budget ledger", "", "| run | start | end | GPU-h |", "| --- | --- | --- | ---: |"] + [f"| {r[1]} | {r[3]} | {r[4]} | {float(r[5]):.4f} |" for r in rows]
 L += [f"| **total** | | | **{spent:.3f}** |", "", "Resume: `bash scripts/run_ac1.sh` (every stage skips itself when complete; partial selection/confirmation files are resumed).", "",
-      "## Interpretation (protocol §6)", "", "_Filled in after the results; see the closing section below._"]
+      ]
+_i = os.path.join(OUT, "interpretation.md")
+L += [open(_i).read()] if os.path.exists(_i) else ["## Interpretation (protocol §6)", "", "_Not yet written._"]
 atomic_write_text(os.path.join(OUT, "REPORT.md"), "\n".join(L) + "\n")
 print("\n".join(L))
