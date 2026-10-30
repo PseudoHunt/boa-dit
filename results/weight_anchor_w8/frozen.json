@@ -1,0 +1,33 @@
+{
+ "frozen_utc": "2026-10-30T10:41:50Z",
+ "code_commit": "326fe6d14016cb665772f3620110cbbc2d0c01e3",
+ "confirmation_seeds": [
+  94100,
+  94163
+ ],
+ "arms": [
+  "FP50",
+  "Q4",
+  "H8",
+  "A8",
+  "R8",
+  "S8",
+  "R_FP"
+ ],
+ "K": 4,
+ "beta": 1.0,
+ "batch": 32,
+ "h8_sha256": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad",
+ "primary": "R8 vs A8",
+ "secondary": [
+  "R8 vs S8",
+  "R8 vs Q4",
+  "R8 vs H8",
+  "R8 vs R_FP",
+  "H8 vs Q4",
+  "A8 vs Q4"
+ ],
+ "readings": "boa_dit/weight_anchor/w8.py reading() and retained(); anchor adequacy = H8 vs Q4 CI upper < 0",
+ "report": "scripts/make_weight_anchor_w8.py",
+ "note": "nothing was selected from development; all settings are as pre-registered at 53f48e0"
+}

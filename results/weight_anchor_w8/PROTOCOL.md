@@ -145,3 +145,5 @@ H8-50: 50·C_Q4 + 13·C_H8 + overhead vs 50·C_H8, so C_Q4/C_H8 < 0.74 is necess
   C6b (recorded only): H8 at batch 8 vs batch 32 differs by max-abs 0.0187 in the endpoint latent (GEMM tiling); all arms use batch 32 throughout.
 - 2026-10-30, dev + traces (32 images, all mandatory arms): written to dev.json / drift.json. The K = 8 drift prediction in drift.json is frozen
   by this commit, before any K = 8 endpoint is generated.
+- 2026-10-30, optional K = 8 dev check run after the prediction commit (dev_k8.json). Freeze record `frozen.json`: all confirmation settings as
+  pre-registered; nothing selected from development. Confirmation 94100–94163 opens after this commit.
