@@ -133,3 +133,4 @@ Commit and push after every stage. If push fails, keep local commits and report 
   Local diagnostics and bytes in build.json / storage.json (summarized in REPORT.md).
 - 2026-10-30, checks (0.128 h): K1–K7 pass for A-GPTQ and B-GPTQ; low model bitwise identical to heig-8 (state, forward, trajectory).
 - 2026-10-30, dev: selected A_gptq by the frozen rule (E_R: A 0.0388, B 0.0600; both eligible). Recorded in dev.json before any optional stage.
+- 2026-10-30, optional dev_rtn and traces run (dev only); freeze record frozen.json (A_gptq). Confirmation 95100–95163 opens after this commit.

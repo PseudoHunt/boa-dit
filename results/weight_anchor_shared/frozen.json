@@ -1,0 +1,29 @@
+{
+ "frozen_utc": "2026-10-30T12:18:24Z",
+ "code_commit": "d5f0a3019e0b5f31ced73dadb90772713408e672",
+ "selected": "A_gptq",
+ "confirmation_seeds": [
+  95100,
+  95163
+ ],
+ "arms": [
+  "FP50",
+  "Q4",
+  "H8",
+  "R8",
+  "H_shared",
+  "A_shared",
+  "R_shared"
+ ],
+ "K": 4,
+ "beta": 1.0,
+ "batch": 32,
+ "bootstrap": {
+  "replicates": 10000,
+  "seed": 0
+ },
+ "artifact_sha256": "c10b139c3b6369e24cc2ba58a6257da30b49fc21ea404a4534fc0732ecdcd075",
+ "pair_sha256": "85a38b2ed3b4c44ed6edb38e7c5285c1ef92b2fad439f03a4d13fdb2ee2dc71d",
+ "decisions": "shared.decisions(): 1 useful reuse (R_shared/A_shared <= 0.90, CI upper < 1, no clear LPIPS regression); 2 margins 1.10 ratio / 0.01 LPIPS upper bounds; 3 on-disk shared < pair",
+ "note": "A-RTN and traces were run on development only; not used for selection"
+}

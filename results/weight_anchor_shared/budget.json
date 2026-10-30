@@ -24,6 +24,22 @@
    "estimate_h": 0.13,
    "reserved_h": 0.55,
    "ok": true
+  },
+  {
+   "stage": "dev_rtn",
+   "utc": "2026-10-30T12:15:25Z",
+   "spent_before_h": 0.20949999999999996,
+   "estimate_h": 0.08,
+   "reserved_h": 0.55,
+   "ok": true
+  },
+  {
+   "stage": "traces (optional)",
+   "utc": "2026-10-30T12:17:26Z",
+   "spent_before_h": 0.24179999999999996,
+   "estimate_h": 0.03,
+   "reserved_h": 0.55,
+   "ok": true
   }
  ]
 }
