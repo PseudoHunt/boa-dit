@@ -1,0 +1,22 @@
+{
+ "location": "ckpt/activation_bridge_overnight/ (local; not uploaded per standing instruction)",
+ "regenerate": "bash scripts/abn1_queue.sh after deleting the stage JSON (stages resume per batch)",
+ "files": {
+  "s1_latents.pt": {
+   "sha256": "8add111d5c3de0726e05fe715ffdfcc06642edbc12db2a3c0c17efe37cbc338b",
+   "bytes": 29363423
+  },
+  "s2_latents.pt": {
+   "sha256": "1d8beab4a87b0f14a2d233939973afb4684f8546e57b76e3d0bc10989826971e",
+   "bytes": 33558824
+  },
+  "s3_latents.pt": {
+   "sha256": "b962fb8d632dbdc76c468938b98436c5229840e1f3f24bd5692cf6541fd4bb04",
+   "bytes": 41948532
+  },
+  "s4_latents.pt": {
+   "sha256": "b870436f16aa214329555c77044289b2cad157b18493667abf863c6278fe851e",
+   "bytes": 16779931
+  }
+ }
+}

@@ -1,0 +1,319 @@
+{
+ "status": "complete",
+ "note": "diagnostics off; warm-up + 5 synchronized whole-trajectory repeats (denoising only); only the arm's models resident; fake-quant simulation (fp32 dequantized weights), not packed-kernel evidence",
+ "arms": {
+  "FP50@bs1": {
+   "load_s": 9.583712777122855,
+   "warmup_s": 1.9140956150367856,
+   "timed_s": [
+    1.3759453031234443,
+    1.4106886046938598,
+    1.424956473056227,
+    1.4236877970397472,
+    1.4232250289060175
+   ],
+   "median_s": 1.4232250289060175,
+   "spread_s": [
+    1.3759453031234443,
+    1.424956473056227
+   ],
+   "per_image_s": 1.4232250289060175,
+   "peak_allocated": 2760636928,
+   "peak_reserved": 2965372928,
+   "model_bytes_resident": 2724898304,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 0,
+    "high": 50,
+    "corrections": 0
+   }
+  },
+  "C@bs1": {
+   "load_s": 16.861948462203145,
+   "warmup_s": 4.980335072148591,
+   "timed_s": [
+    4.9970836360007524,
+    5.000070862937719,
+    4.994018271099776,
+    4.991972920950502,
+    4.996307543944567
+   ],
+   "median_s": 4.996307543944567,
+   "spread_s": [
+    4.991972920950502,
+    5.000070862937719
+   ],
+   "per_image_s": 4.996307543944567,
+   "peak_allocated": 5525212160,
+   "peak_reserved": 5916065792,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 0
+   }
+  },
+  "CB@bs1": {
+   "load_s": 13.627518565859646,
+   "warmup_s": 4.891603386960924,
+   "timed_s": [
+    4.957144296262413,
+    5.0284150671213865,
+    5.025759859010577,
+    5.022997898980975,
+    5.01729134330526
+   ],
+   "median_s": 5.022997898980975,
+   "spread_s": [
+    4.957144296262413,
+    5.0284150671213865
+   ],
+   "per_image_s": 5.022997898980975,
+   "peak_allocated": 5525228544,
+   "peak_reserved": 5916065792,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 16384,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 12
+   }
+  },
+  "AC@bs1": {
+   "load_s": 13.590042899828404,
+   "warmup_s": 7.306862817145884,
+   "timed_s": [
+    7.392062682192773,
+    7.47816690383479,
+    7.467637837864459,
+    7.476490864064544,
+    7.477579057682306
+   ],
+   "median_s": 7.476490864064544,
+   "spread_s": [
+    7.392062682192773,
+    7.47816690383479
+   ],
+   "per_image_s": 7.476490864064544,
+   "peak_allocated": 5583747072,
+   "peak_reserved": 5981077504,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 3612672.0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 0
+   }
+  },
+  "ACB@bs1": {
+   "load_s": 13.628932337742299,
+   "warmup_s": 7.634595108218491,
+   "timed_s": [
+    7.630490161012858,
+    7.627234895247966,
+    7.628297762013972,
+    7.646501446142793,
+    7.620212211739272
+   ],
+   "median_s": 7.628297762013972,
+   "spread_s": [
+    7.620212211739272,
+    7.646501446142793
+   ],
+   "per_image_s": 7.628297762013972,
+   "peak_allocated": 5583763456,
+   "peak_reserved": 5981077504,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 3612672.0,
+   "bridge_state_bytes_per_image": 16384,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 12
+   }
+  },
+  "FP50@bs32": {
+   "load_s": 6.3243469931185246,
+   "warmup_s": 19.2490440919064,
+   "timed_s": [
+    19.23489457881078,
+    19.2764400257729,
+    19.2854272169061,
+    19.293970835395157,
+    19.297058502212167
+   ],
+   "median_s": 19.2854272169061,
+   "spread_s": [
+    19.23489457881078,
+    19.297058502212167
+   ],
+   "per_image_s": 0.6026696005283156,
+   "peak_allocated": 3470643712,
+   "peak_reserved": 4085252096,
+   "model_bytes_resident": 2724545536,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 0,
+    "high": 50,
+    "corrections": 0
+   }
+  },
+  "C@bs32": {
+   "load_s": 13.72528705606237,
+   "warmup_s": 57.41429312573746,
+   "timed_s": [
+    57.450166252907366,
+    57.45078981574625,
+    57.45911537017673,
+    57.46041574701667,
+    57.46127348486334
+   ],
+   "median_s": 57.45911537017673,
+   "spread_s": [
+    57.450166252907366,
+    57.46127348486334
+   ],
+   "per_image_s": 1.795597355318023,
+   "peak_allocated": 7503676928,
+   "peak_reserved": 9441378304,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 0
+   }
+  },
+  "CB@bs32": {
+   "load_s": 13.521835210733116,
+   "warmup_s": 57.40957993501797,
+   "timed_s": [
+    57.45225172908977,
+    57.45720528718084,
+    57.45363049488515,
+    57.487668900284916,
+    57.51539471000433
+   ],
+   "median_s": 57.45720528718084,
+   "spread_s": [
+    57.45225172908977,
+    57.51539471000433
+   ],
+   "per_image_s": 1.7955376652244013,
+   "peak_allocated": 7504201216,
+   "peak_reserved": 9441378304,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 0,
+   "bridge_state_bytes_per_image": 16384,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 12
+   }
+  },
+  "AC@bs32": {
+   "load_s": 13.597847445867956,
+   "warmup_s": 89.28037942713127,
+   "timed_s": [
+    89.28380381315947,
+    89.29705542279407,
+    89.3420236040838,
+    89.28825562866405,
+    89.29150693677366
+   ],
+   "median_s": 89.29150693677366,
+   "spread_s": [
+    89.28380381315947,
+    89.3420236040838
+   ],
+   "per_image_s": 2.790359591774177,
+   "peak_allocated": 9360317440,
+   "peak_reserved": 11012145152,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 3612672.0,
+   "bridge_state_bytes_per_image": 0,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 0
+   }
+  },
+  "ACB@bs32": {
+   "load_s": 13.69374909484759,
+   "warmup_s": 89.31941165588796,
+   "timed_s": [
+    89.3512766789645,
+    89.34122097119689,
+    89.34688786230981,
+    89.332476190757,
+    89.3208114807494
+   ],
+   "median_s": 89.34122097119689,
+   "spread_s": [
+    89.3208114807494,
+    89.3512766789645
+   ],
+   "per_image_s": 2.791913155349903,
+   "peak_allocated": 9360841728,
+   "peak_reserved": 11012145152,
+   "model_bytes_resident": 5459423232,
+   "feedback_state_bytes_per_image_incl_cfg": 3612672.0,
+   "bridge_state_bytes_per_image": 16384,
+   "calls": {
+    "cheap": 50,
+    "high": 13,
+    "corrections": 12
+   }
+  }
+ },
+ "bridge_increment_s@bs1": {
+  "static": 0.02669035503640771,
+  "feedback": 0.15180689794942737
+ },
+ "feedback_overhead_s@bs1": {
+  "anchored": 2.480183320119977,
+  "bridge": 2.6052998630329967
+ },
+ "cost_condition@bs1": {
+  "rule": "50 C_cheap + n C_high + overhead < 50 C_high (measured whole pipelines)",
+  "C_vs_FP50": false,
+  "CB_vs_FP50": false,
+  "ACB_vs_FP50": false
+ },
+ "bridge_increment_s@bs32": {
+  "static": -0.001910082995891571,
+  "feedback": 0.04971403442323208
+ },
+ "feedback_overhead_s@bs32": {
+  "anchored": 31.832391566596925,
+  "bridge": 31.88401568401605
+ },
+ "cost_condition@bs32": {
+  "rule": "50 C_cheap + n C_high + overhead < 50 C_high (measured whole pipelines)",
+  "C_vs_FP50": false,
+  "CB_vs_FP50": false,
+  "ACB_vs_FP50": false
+ },
+ "sana": "not run: no previously validated real-kernel SANA timing command is installed in this environment (Monday handoff)",
+ "stage": "abn1",
+ "run": "s7",
+ "device": "cuda:0",
+ "config": {
+  "batches": [
+   1,
+   32
+  ],
+  "repeats": "1 warm-up + 5"
+ },
+ "git_sha": "dbc03188ebd287a80d7284b299ca399995c7b27e",
+ "start_utc": "2026-10-30T21:16:13Z",
+ "wall_s": 2164.6531178951263,
+ "gpu_hours": 0.6012925327486462
+}

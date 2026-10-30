@@ -65,6 +65,15 @@
    "estimate_h": 3.1490209070612765,
    "reserve_h": 0.35,
    "ok": false
+  },
+  {
+   "utc": "2026-10-30T21:16:13Z",
+   "stage": "s7 (batch 1 + 32)",
+   "spent_before_h": 2.8052,
+   "wall_left_h": 5.179049807190895,
+   "estimate_h": 0.6549794675250693,
+   "reserve_h": 0.15,
+   "ok": true
   }
  ],
  "spent_gpu_h": 2.8052
