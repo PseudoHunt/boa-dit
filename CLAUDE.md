@@ -3,8 +3,8 @@
 ## Active task (since 2026-10-30, branch anchor-drift-pilot)
 - **Active:** anchor-drift calibration of the branch (ad1). Protocol `results/anchor_drift/PROTOCOL.md`; cap 2.0 A30-h (ledger tag ad1);
   stage CLI `python -m boa_dit.anchor_drift.run checks|train C_D|train E_D|dev|diag|conf`; report `scripts/make_anchor_drift.py`. Stop after this pilot.
-- **Also active (user request 2026-10-30):** retrospective anchor-bridge correction (br1), branch anchor-bridge-pilot, worktree /home/boa-dit-br; protocol
-  `results/anchor_bridge/PROTOCOL.md`; cap 0.5 A30-h (tag br1); runs on the GPU only between/after ad1 jobs, never concurrently.
+- **Completed 2026-10-30 (no further runs):** retrospective anchor-bridge correction (br1), branch anchor-bridge-pilot; `results/anchor_bridge/REPORT.md`;
+  0.302 of 0.5 A30-h; confirmed useful (CBlam/C_last49 0.292, CB1/C 0.213 on 98100–98163). AC + bridge not run (needs its own registration).
 - Completed 2026-10-30: local-refresh ler1 (local-error-refresh-pilot, stopped at E1 headroom rule, 0.331 A30-h); aa1 (activation-anchor-pilot, 0.532 A30-h).
 - **Parked by user decision (2026-10-30, not a failed read):** shared/nested weight quantization (ws1, weight-anchor-shared; complete through confirmation). See `handoff/PARKED_WORK.md` §7.
 - Worktrees: create with `GIT_LFS_SKIP_SMUDGE=1 git worktree add ...` (the LFS smudge hangs otherwise).
