@@ -116,3 +116,8 @@ From now on:
 - The accounting identity and the 9×9 Gram stay float64 (first fit batch).
 - The identity residual is evaluated on that batch.
 The checks are rerun with the changed instrument before the traces: the old checks.json is renamed `checks_v1.json` and kept.
+
+### 2026-10-30 02:00 UTC: incident note (synthetic dry-run outputs)
+A CPU dry run of the analysis code on **synthetic random traces** (16/8/12 fake images) wrote headroom/site_accounting/errstats/observer_select/observer JSONs into this folder.
+The queue's automatic commit after trace_fit (71c744b) swept them in. They are not results: n = 16 fit "images" of Gaussian noise. They are deleted in the next commit.
+Real outputs are produced only by the stage CLI on the trace caches. In future, dry runs write only to the scratchpad.
