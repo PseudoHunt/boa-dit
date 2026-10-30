@@ -24,6 +24,14 @@
    "estimate_h": 0.6221593221028645,
    "reserved_h": 0.4,
    "ok": true
+  },
+  {
+   "stage": "dev",
+   "utc": "2026-10-30T17:37:01Z",
+   "spent_before_h": 1.0571,
+   "estimate_h": 0.15,
+   "reserved_h": 0.4,
+   "ok": true
   }
  ]
 }

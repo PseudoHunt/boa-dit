@@ -83,3 +83,4 @@ Cut order: diagnostics, unanchored dev references.
   Profile 7.26 s/update (C_D), 10.67 (E_D), peak 16.0 GiB → training ≈ 0.40 + 0.59 h.
 - 2026-10-30, train C_D (0.36 h): 200 updates; training-draw drift loss 0.54 → 0.35 (first/last 10), window local loss 0.88 → 5.3 (absolute error grew ~6×; drift loss is blind to window-constant error — recorded, not gated, per §5).
 - 2026-10-30, train E_D: 200 updates; see train_E_D.json (drift loss first/last and window local loss in REPORT).
+- 2026-10-30, dev: C.D/C.L 1.135 [0.934, 1.628], AC.D/AC.L 1.066 [0.912, 1.253]; unanchored Q.D/Q.L 9.9, A.D/A.L 11.1; C.L/C0 0.743; divergence guard not tripped (1.14, 1.07) → diag, freeze, confirmation proceed per §5.
