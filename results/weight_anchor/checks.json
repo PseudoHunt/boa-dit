@@ -1,0 +1,55 @@
+{
+ "C1_w4_harness_equals_cached_x0q": true,
+ "C1_max_abs": 0.0,
+ "C2_K1_equals_cached_x0fp": true,
+ "C2_max_abs": 0.0,
+ "C3_anchor_error_equals_cached": [
+  true,
+  true
+ ],
+ "C3_max_abs": [
+  0.0,
+  0.0
+ ],
+ "counts": {
+  "w4": {
+   "w4": 50,
+   "fp": 0
+  },
+  "K1": {
+   "w4": 2,
+   "fp": 50
+  }
+ },
+ "wall_s_w4_run": 22.701936721801758,
+ "wall_s_K1_run_plus_2_w4": 20.124581813812256,
+ "forward_latency_batch32_cfg": {
+  "fp": {
+   "ms_median": 383.7450256347656,
+   "ms_min": 382.4947204589844
+  },
+  "w4_sim": {
+   "ms_median": 450.42893981933594,
+   "ms_min": 449.0137634277344
+  }
+ },
+ "resident_model_bytes": {
+  "fp": 2700518528,
+  "w4_sim": 2700518528
+ },
+ "peak_mem_bytes": 6216791552,
+ "pass": true,
+ "stage": "wa1",
+ "run": "checks",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   7100,
+   7131
+  ]
+ },
+ "git_sha": "f93dac03e620453c895f2182be974273b1e096ce",
+ "start_utc": "2026-10-30T04:51:57Z",
+ "wall_s": 74.41615509986877,
+ "gpu_hours": 0.020671154194407994
+}

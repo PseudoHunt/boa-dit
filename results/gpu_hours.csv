@@ -515,3 +515,4 @@ qo1,qo1_trace_fit,cuda:0,2026-10-30T01:33:10Z,2026-10-30T01:50:07Z,0.2827
 qo1,qo1_trace_dev,cuda:0,2026-10-30T01:50:15Z,2026-10-30T01:56:38Z,0.1066
 qo1,qo1_dev_orig,cuda:0,2026-10-30T01:56:46Z,2026-10-30T01:58:57Z,0.0365
 qo1,qo1_trace_conf(ABORTED: stopped after dev selection chose H; manual row),cuda:0,2026-10-30T02:15:00Z,2026-10-30T02:16:39Z,0.0277
+wa1,checks,cuda:0,2026-10-30T04:51:57Z,2026-10-30T04:53:12Z,0.0207
