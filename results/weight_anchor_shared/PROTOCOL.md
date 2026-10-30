@@ -132,3 +132,4 @@ Commit and push after every stage. If push fails, keep local commits and report 
 - 2026-10-30, build + pack: completed; round-trips bitwise for every artifact and model half; B loop on the full 4-bit grid reproduces Q4 (layer 0).
   Local diagnostics and bytes in build.json / storage.json (summarized in REPORT.md).
 - 2026-10-30, checks (0.128 h): K1–K7 pass for A-GPTQ and B-GPTQ; low model bitwise identical to heig-8 (state, forward, trajectory).
+- 2026-10-30, dev: selected A_gptq by the frozen rule (E_R: A 0.0388, B 0.0600; both eligible). Recorded in dev.json before any optional stage.
