@@ -1,8 +1,9 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch activation-anchor-pilot; completed 2026-10-30, 0.532 of 1.5 A30-h, stopped — no further runs)
-- **Active:** activation feedback + measured anchoring (aa1), integration/accuracy pilot. Protocol `results/activation_anchor/PROTOCOL.md`; cap 1.5 A30-h (ledger tag aa1);
-  stage CLI `python -m boa_dit.activation_anchor.run checks|dev|diag|conf`; report `scripts/make_activation_anchor.py`. Stop after this pilot.
+## Active task (since 2026-10-30, branch local-error-refresh-pilot)
+- **Active:** local weight-error refresh + activation feedback (ler1). Protocol `results/local_error_refresh/PROTOCOL.md`; cap 2.0 A30-h (ledger tag ler1);
+  stage CLI `python -m boa_dit.local_refresh.run checks|screen|e1|e2|diag|conf|cost`; report `scripts/make_local_refresh.py`. Stop after this pilot.
+- Completed 2026-10-30: activation feedback + anchoring aa1 (activation-anchor-pilot, 0.532 A30-h, AC vs C inconclusive).
 - **Parked by user decision (2026-10-30, not a failed read):** shared/nested weight quantization (ws1, weight-anchor-shared; complete through confirmation). See `handoff/PARKED_WORK.md` §7.
 - Worktrees: create with `GIT_LFS_SKIP_SMUDGE=1 git worktree add ...` (the LFS smudge hangs otherwise).
 - Do NOT delete the GitHub release park-assets-2026-10-29 (user instruction 2026-10-30).
