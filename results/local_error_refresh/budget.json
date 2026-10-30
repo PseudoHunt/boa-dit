@@ -8,6 +8,14 @@
    "estimate_h": 0.3,
    "reserved_h": 0.55,
    "ok": true
+  },
+  {
+   "stage": "screen",
+   "utc": "2026-10-30T15:04:26Z",
+   "spent_before_h": 0.1899,
+   "estimate_h": 0.05,
+   "reserved_h": 0.55,
+   "ok": true
   }
  ]
 }

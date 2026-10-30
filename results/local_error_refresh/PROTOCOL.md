@@ -133,3 +133,4 @@ Stop with partial results at the cap.
   (tol 5e-3), C6 zero correction bitwise, MP structure/numerics bitwise, C7/C9 counts, C8 resume bitwise. Live fp16 M h defect 3.3–4.8e-4 (reported).
   Profile (16 images, 12 sites): FP50 9.9 s, G 43.3, A 43.3, L4 46.2, O3 52.7, C4 45.8, MP 43.1 → reforecast: screen 0.02 h, E1 ≈ 0.12 h, E2 ≈ 0.13 h,
   diag ≈ 0.05 h, conf ≈ 0.30 h, cost ≈ 0.15 h.
+- 2026-10-30, E0 screen: all 12 scores positive, max +1.16% of G's prediction SSE; selected b13.attn.qkv, b24.mlp.fc1, b3.attn.qkv (frozen).

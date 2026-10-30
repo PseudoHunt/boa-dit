@@ -1,0 +1,154 @@
+{
+ "pool": [
+  "b3.attn.qkv",
+  "b3.attn.proj",
+  "b3.mlp.fc1",
+  "b3.mlp.fc2",
+  "b13.attn.qkv",
+  "b13.attn.proj",
+  "b13.mlp.fc1",
+  "b13.mlp.fc2",
+  "b24.attn.qkv",
+  "b24.attn.proj",
+  "b24.mlp.fc1",
+  "b24.mlp.fc2"
+ ],
+ "seeds": [
+  60200,
+  60207
+ ],
+ "steps": [
+  5,
+  25,
+  45
+ ],
+ "G_sse_total": 441.5907506641147,
+ "score_abs_reduction": {
+  "b3.attn.qkv": 2.2676367849936767,
+  "b3.attn.proj": 1.348089975605978,
+  "b3.mlp.fc1": 0.23806237262218133,
+  "b3.mlp.fc2": 0.27917822330650566,
+  "b13.attn.qkv": 5.132940461542008,
+  "b13.attn.proj": 1.837931828236922,
+  "b13.mlp.fc1": 4.814460436077603,
+  "b13.mlp.fc2": 4.928215915468231,
+  "b24.attn.qkv": 1.7229427516771096,
+  "b24.attn.proj": 1.13519106528641,
+  "b24.mlp.fc1": 4.480414187314498,
+  "b24.mlp.fc2": 2.1609078524384593
+ },
+ "score_rel_reduction": {
+  "b3.attn.qkv": 0.005135154623558906,
+  "b3.attn.proj": 0.0030528039221350677,
+  "b3.mlp.fc1": 0.0005391018092298262,
+  "b3.mlp.fc2": 0.0006322103053260185,
+  "b13.attn.qkv": 0.011623749940012341,
+  "b13.attn.proj": 0.004162070481487282,
+  "b13.mlp.fc1": 0.010902539124374925,
+  "b13.mlp.fc2": 0.011160142978666595,
+  "b24.attn.qkv": 0.0039016730968344585,
+  "b24.attn.proj": 0.002570685784471662,
+  "b24.mlp.fc1": 0.010146077970556082,
+  "b24.mlp.fc2": 0.004893462666934574
+ },
+ "per_step": {
+  "5": {
+   "G_sse": 12.17099951618707,
+   "b3.attn.qkv": 0.0015857589427739072,
+   "b3.attn.proj": 0.03657235398347858,
+   "b3.mlp.fc1": 0.1035719132610069,
+   "b3.mlp.fc2": 0.015583824913822042,
+   "b13.attn.qkv": -0.023446978923102435,
+   "b13.attn.proj": -0.020113506654166002,
+   "b13.mlp.fc1": 0.005080800707084165,
+   "b13.mlp.fc2": 0.059505168927545427,
+   "b24.attn.qkv": 0.01230237542486634,
+   "b24.attn.proj": 0.029475509476046824,
+   "b24.mlp.fc1": 0.02324827094340165,
+   "b24.mlp.fc2": 0.01805617741857546
+  },
+  "25": {
+   "G_sse": 66.97816825930401,
+   "b3.attn.qkv": -0.007797381434315298,
+   "b3.attn.proj": -0.002150180761248066,
+   "b3.mlp.fc1": 0.1229578382436074,
+   "b3.mlp.fc2": -0.312983255163374,
+   "b13.attn.qkv": 0.4590136875807076,
+   "b13.attn.proj": 0.16920776623528866,
+   "b13.mlp.fc1": -0.020558264199692644,
+   "b13.mlp.fc2": 0.3502193177959185,
+   "b24.attn.qkv": -0.12548430158879853,
+   "b24.attn.proj": 0.028510716266609393,
+   "b24.mlp.fc1": 0.09501991783538699,
+   "b24.mlp.fc2": -0.03826511504159669
+  },
+  "45": {
+   "G_sse": 362.4415828886236,
+   "b3.attn.qkv": 2.273848407485218,
+   "b3.attn.proj": 1.3136678023837476,
+   "b3.mlp.fc1": 0.011532621117567032,
+   "b3.mlp.fc2": 0.5765776535560576,
+   "b13.attn.qkv": 4.697373752884403,
+   "b13.attn.proj": 1.6888375686557993,
+   "b13.mlp.fc1": 4.829937899570211,
+   "b13.mlp.fc2": 4.518491428744767,
+   "b24.attn.qkv": 1.8361246778410418,
+   "b24.attn.proj": 1.0772048395437537,
+   "b24.mlp.fc1": 4.362145998535709,
+   "b24.mlp.fc2": 2.1811167900614805
+  }
+ },
+ "ranking": [
+  "b13.attn.qkv",
+  "b13.mlp.fc2",
+  "b13.mlp.fc1",
+  "b24.mlp.fc1",
+  "b3.attn.qkv",
+  "b24.mlp.fc2",
+  "b13.attn.proj",
+  "b24.attn.qkv",
+  "b3.attn.proj",
+  "b24.attn.proj",
+  "b3.mlp.fc2",
+  "b3.mlp.fc1"
+ ],
+ "selected": [
+  "b13.attn.qkv",
+  "b24.mlp.fc1",
+  "b3.attn.qkv"
+ ],
+ "rule": "three highest absolute reductions of guided-prediction SSE (channels 0-3), at most one per block, ties by pool order; top three within this pool",
+ "note": "fresh K = 1 correction at one site, same latent, no-feedback G, FP reference computed once per state; intervention ranking, not an endpoint oracle",
+ "stage": "ler1",
+ "run": "screen",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   60200,
+   60207
+  ],
+  "steps": [
+   5,
+   25,
+   45
+  ],
+  "pool": [
+   "b3.attn.qkv",
+   "b3.attn.proj",
+   "b3.mlp.fc1",
+   "b3.mlp.fc2",
+   "b13.attn.qkv",
+   "b13.attn.proj",
+   "b13.mlp.fc1",
+   "b13.mlp.fc2",
+   "b24.attn.qkv",
+   "b24.attn.proj",
+   "b24.mlp.fc1",
+   "b24.mlp.fc2"
+  ]
+ },
+ "git_sha": "573134743dec139a3cbd193f8dfd9722d8dcddf3",
+ "start_utc": "2026-10-30T15:04:26Z",
+ "wall_s": 62.94428086280823,
+ "gpu_hours": 0.017484522461891173
+}
