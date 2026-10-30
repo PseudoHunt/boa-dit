@@ -1,0 +1,34 @@
+{
+ "dit": {
+  "path": "ckpt/DiT-XL-2-256x256.pt",
+  "sha256": "9ec1876e4c03471bca126663a30e2d1b20610b6d2f87850a39a36f25cc685521"
+ },
+ "heig8_model": {
+  "path": "ckpt/ckpt_deflate_heig_r8_w4/model.pt",
+  "sha256": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761"
+ },
+ "heig8_carry": {
+  "path": "ckpt/temporal/rebuild_quant/deflate_heig_r8_w4/carry.pt",
+  "sha256": "f40ea01dd67ba226aa70ba74a70833240984f358f91c1752b4b0d3356ba06db4"
+ },
+ "traces_cal": {
+  "path": "ckpt/observability/traces_cal.pt",
+  "sha256": "89b645a0a99bfaf4c35735d62992a5ed365cf22f9fa84928b5f87be84eaf97bd"
+ },
+ "traces_eval": {
+  "path": "ckpt/observability/traces_eval.pt",
+  "sha256": "cf46a1d3f51632b5474c5662b39a82c0e6aa1d67b1ba7253983261de590e966d"
+ },
+ "stage1_delta": {
+  "path": "ckpt/temporal/stage1_delta_heig8.pt",
+  "sha256": "5261783420dba7539fa0991bb0bfcd63fd12eaa9fc19d65896099e9407e9240b"
+ },
+ "settings": {
+  "sampler": "DDIM-50 eta 0",
+  "cfg": 1.5,
+  "cfg_channels": "eps 0-2 guided, eps 3 from cond half",
+  "consumed": "channels 0-3",
+  "precision": "fp16 autocast forward, fp32 output/sampler",
+  "batch": 32
+ }
+}
