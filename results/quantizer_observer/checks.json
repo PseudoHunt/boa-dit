@@ -15,9 +15,9 @@
    1152
   ]
  },
- "c5_identity_max_rel_resid_energy": 6.174783121275519e-33,
+ "c5_identity_max_rel_resid_energy": 6.174783121177073e-33,
  "c5_identity_max_abs_resid_energy": 4.89052303346129e-30,
- "c5_gram_sum_vs_qx_max_rel": 4.603231590510708e-15,
+ "c5_gram_sum_vs_qx_max_rel": 4.020434784255464e-10,
  "c5_consumed_recompute_mismatch": 0,
  "c6_aligned_closure_rel": [
   0.0,
@@ -37,8 +37,8 @@
  "run": "qo1_checks",
  "device": "cuda:0",
  "config": {},
- "git_sha": "733c922d935b6fa7f6c44994f7b55a6caa24b1ad",
- "start_utc": "2026-10-30T01:13:31Z",
- "wall_s": 264.6992702484131,
- "gpu_hours": 0.07352757506900363
+ "git_sha": "2c93d7f09968eca698a48f7400888db680ea1faf",
+ "start_utc": "2026-10-30T01:24:02Z",
+ "wall_s": 226.18908405303955,
+ "gpu_hours": 0.06283030112584433
 }

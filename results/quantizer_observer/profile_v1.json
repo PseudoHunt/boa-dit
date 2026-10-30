@@ -1,0 +1,31 @@
+{
+ "gpu": "NVIDIA A30",
+ "tf32": [
+  false,
+  false
+ ],
+ "dtype": "fp16 autocast",
+ "trace_4img_bs4_gram_s": 84.93849778175354,
+ "trace_bs32_per_step_gram0_s": 12.259302298227945,
+ "trace_bs32_per_step_gram1_s": 13.98364226023356,
+ "plain_WA_bs32_s": 84.6471061706543,
+ "W_bs32_s": 26.06074333190918,
+ "peak_mem_GiB": 17.007490634918213,
+ "projected_h": {
+  "trace_fit": 0.3934417225696422,
+  "trace_dev": 0.18474627821533765,
+  "trace_conf": 0.3694925564306753,
+  "dev_orig": 0.030752180417378743
+ },
+ "gram_policy": "full cross-term Gram on the first fit batch (32 images); energies/features on every batch",
+ "spent_before_h": 0.0735,
+ "projected_total_trace_h": 0.978432737633034,
+ "stage": "qo1",
+ "run": "qo1_profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "2c93d7f09968eca698a48f7400888db680ea1faf",
+ "start_utc": "2026-10-30T01:18:10Z",
+ "wall_s": 302.7103350162506,
+ "gpu_hours": 0.08408620417118072
+}

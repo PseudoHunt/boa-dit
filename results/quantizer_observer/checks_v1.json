@@ -1,0 +1,44 @@
+{
+ "primary_carry": {
+  "path": "/home/boa-dit-qo/ckpt/dit_joint/carry_E_L_u100.pt",
+  "sha256": "c2b70026eee388586c7a6881128469be360b2d3c26061819cd996507849f3550"
+ },
+ "hashes_ok": true,
+ "c1_quant_off_equals_W4A16_reference": true,
+ "c2_instrumented_trace_equals_deployed_WA": true,
+ "c4_repeat_bitwise": true,
+ "c3_row_independence_img0": true,
+ "c3_state_rows (2n for n=4)": {
+  "b0.attn.qkv": [
+   8,
+   4,
+   1152
+  ]
+ },
+ "c5_identity_max_rel_resid_energy": 6.174783121275519e-33,
+ "c5_identity_max_abs_resid_energy": 4.89052303346129e-30,
+ "c5_gram_sum_vs_qx_max_rel": 4.603231590510708e-15,
+ "c5_consumed_recompute_mismatch": 0,
+ "c6_aligned_closure_rel": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "c7_calls_per_site (4 images, 1 trace)": [
+  50
+ ],
+ "tolerances": {
+  "c1, c2, c3, c4": "bitwise",
+  "c5": "relative residual energy <= 1e-20 (float64 roundoff, squared)",
+  "c6": "<= 1e-6 relative"
+ },
+ "pass": true,
+ "stage": "qo1",
+ "run": "qo1_checks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "733c922d935b6fa7f6c44994f7b55a6caa24b1ad",
+ "start_utc": "2026-10-30T01:13:31Z",
+ "wall_s": 264.6992702484131,
+ "gpu_hours": 0.07352757506900363
+}

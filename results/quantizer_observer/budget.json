@@ -7,6 +7,20 @@
    "spent_before_h": 0,
    "estimate_h": 0.12,
    "ok": true
+  },
+  {
+   "stage": "profile",
+   "utc": "2026-10-30T01:18:10Z",
+   "spent_before_h": 0.0735,
+   "estimate_h": 0.08,
+   "ok": true
+  },
+  {
+   "stage": "checks",
+   "utc": "2026-10-30T01:24:02Z",
+   "spent_before_h": 0.1576,
+   "estimate_h": 0.12,
+   "ok": true
   }
  ]
 }

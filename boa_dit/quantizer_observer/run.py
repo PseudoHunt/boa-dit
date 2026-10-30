@@ -98,6 +98,7 @@ class InstrQuant(J.JointQuant):
         super().__init__(model, dev, "fb")
         self.gram, self.feats = gram, feats
         self.Pch = chan_proj(dev)
+        self.Pch32 = {k: v.float() for k, v in self.Pch.items()}
         self.Ud = self.U.double()
         self.acc = {}                                                         # (t, key) -> dict of float64 GPU tensors
         self.buf = {"R": {}, "S0": {}, "Sg": {}, "E": {}}
@@ -125,64 +126,57 @@ class InstrQuant(J.JointQuant):
         code = torch.clamp(torch.round(torch.clamp(uc, lo, hi_rep) / D[t]) + Z[t], 0, qm)
         Dd = float(D[t])
         rows = xs.shape[0]
-        G = torch.zeros(len(TERMS), len(TERMS), dtype=torch.float64, device=xs.device) if self.gram else None
-        qx = res = None
+        lhs32 = consumed - xs
         q_re = ACT.q_static(uc, D[t], Z[t], torch.zeros((), device=xs.device), qm, hi_code=qm).to(torch.float16).float()
         self.mismatch += int((q_re != consumed).sum())
-        E = torch.zeros(rows, len(EFEAT), dtype=torch.float64, device=xs.device)
-        S0 = torch.zeros(rows, 4, xs.shape[2], dtype=torch.float64, device=xs.device)
-        Sg = torch.zeros_like(S0)
-        for a0 in range(0, rows, 16):
-            sl = slice(a0, a0 + 16)
-            x_, p_, xcl_, rf_, u_, uc_, q_ = (v[sl].double() for v in (xs, p, xcl, r_fed, u, uc, consumed))
-            pn_ = torch.einsum("tk,rkc->rtc", Ud, s_out[sl].double())
-            c0 = xcl_ - x_
-            g = rf_ - p_
-            rho = u_ - (xcl_ + rf_)
-            c1 = uc_ - u_
-            r_raw = uc_ - q_
-            r = r_raw.clamp(-Dd / 2, Dd / 2)
-            a = r_raw - r
-            Pr = torch.einsum("tk,rkc->rtc", Ud, torch.einsum("tk,rtc->rkc", Ud, r))
-            Ir = r - Pr
-            eta = pn_ - Pr
-            terms = (p_, -pn_, c0, g, rho, c1, -Ir, -a, eta)
-            lhs = q_ - x_
-            resid = lhs - sum(terms)
-            if self.gram:
+        qx, res = lhs32.double().pow(2).sum(), torch.zeros((), dtype=torch.float64, device=xs.device)
+        if self.gram:                                                         # float64 accounting identity and Gram (row chunks of 16)
+            G = torch.zeros(len(TERMS), len(TERMS), dtype=torch.float64, device=xs.device)
+            qx_g = res_g = 0.0
+            for a0 in range(0, rows, 16):
+                sl = slice(a0, a0 + 16)
+                x_, p_, xcl_, rf_, u_, uc_, q_ = (v[sl].double() for v in (xs, p, xcl, r_fed, u, uc, consumed))
+                pn_ = torch.einsum("tk,rkc->rtc", Ud, s_out[sl].double())
+                c0, g = xcl_ - x_, rf_ - p_
+                rho, c1 = u_ - (xcl_ + rf_), uc_ - u_
+                r_raw = uc_ - q_
+                r = r_raw.clamp(-Dd / 2, Dd / 2)
+                a = r_raw - r
+                Pr = torch.einsum("tk,rkc->rtc", Ud, torch.einsum("tk,rtc->rkc", Ud, r))
+                terms = (p_, -pn_, c0, g, rho, c1, -(r - Pr), -a, pn_ - Pr)
+                lhs = q_ - x_
                 M = torch.stack([v.reshape(-1) for v in terms])
                 G += M @ M.T
-            acc_q = lhs.pow(2).sum()
-            acc_r = resid.pow(2).sum()
-            qx = acc_q if qx is None else qx + acc_q
-            res = acc_r if res is None else res + acc_r
-            if self.feats:
-                E[sl, 0] = c0.pow(2).sum((1, 2))
-                E[sl, 1] = g.pow(2).sum((1, 2))
-                E[sl, 2] = (uc[sl] - u[sl]).double().pow(2).sum((1, 2))
-                E[sl, 3] = a.pow(2).sum((1, 2))
-                E[sl, 4] = Ir.pow(2).sum((1, 2))
-                E[sl, 5] = eta.pow(2).sum((1, 2))
-                n = xs.shape[1] * xs.shape[2]
-                E[sl, 6] = (xcl[sl] != xs[sl]).sum((1, 2)).double() / n
-                E[sl, 7] = (r_fed[sl] != p[sl]).sum((1, 2)).double() / n
-                E[sl, 8] = (u[sl] != uc[sl]).sum((1, 2)).double() / n
-                E[sl, 9] = (code[sl] == qm).sum((1, 2)).double() / n
-                S0[sl] = torch.einsum("tk,rtc->rkc", Ud, c0)
-                Sg[sl] = torch.einsum("tk,rtc->rkc", Ud, g)
-            del x_, p_, xcl_, rf_, u_, uc_, q_, pn_, c0, g, rho, c1, r_raw, r, a, Pr, Ir, eta, terms, lhs, resid
+                qx_g = qx_g + lhs.pow(2).sum()
+                res_g = res_g + (lhs - sum(terms)).pow(2).sum()
+                del x_, p_, xcl_, rf_, u_, uc_, q_, pn_, c0, g, rho, c1, r_raw, r, a, Pr, terms, lhs, M
+            res = res_g
+        if self.feats:                                                        # features in fp32 (whole tensor)
+            U32 = self.U
+            c0, g, c1 = xcl - xs, r_fed - p, uc - u
+            r_raw = uc - consumed
+            r = r_raw.clamp(-Dd / 2, Dd / 2)
+            a = r_raw - r
+            Pr = torch.einsum("tk,rkc->rtc", U32, torch.einsum("tk,rtc->rkc", U32, r))
+            eta = torch.einsum("tk,rkc->rtc", U32, s_out.float()) - Pr
+            n = xs.shape[1] * xs.shape[2]
+            E = torch.stack([c0.pow(2).sum((1, 2)), g.pow(2).sum((1, 2)), c1.pow(2).sum((1, 2)), a.pow(2).sum((1, 2)), (r - Pr).pow(2).sum((1, 2)),
+                             eta.pow(2).sum((1, 2)), (xcl != xs).sum((1, 2)).float() / n, (r_fed != p).sum((1, 2)).float() / n,
+                             (u != uc).sum((1, 2)).float() / n, (code == qm).sum((1, 2)).float() / n], 1)
+            S0 = torch.einsum("tk,rtc->rkc", U32, c0)
+            Sg = torch.einsum("tk,rtc->rkc", U32, g)
         rec = {"qx": qx, "res": res, "n": xs.numel(),
                "cnt": torch.stack([(xcl != xs).sum(), (r_fed != p).sum(), (u != uc).sum(), ((consumed - uc).abs() > Dd / 2).sum(), (code == qm).sum()]).double()}
         if self.gram:
-            rec["G"], rec["qx_g"], rec["res_g"] = G, qx, res
+            rec["G"], rec["qx_g"], rec["res_g"] = G, qx_g, res_g
         prev = self.acc.get((t, key))
         self.acc[(t, key)] = rec if prev is None else {k: (prev[k] + v) for k, v in rec.items()}
         if self.feats:
-            P = self.Pch[key]
-            self.buf["E"][key] = E.float()
-            self.buf["S0"][key] = (S0 @ P).float()
-            self.buf["Sg"][key] = (Sg @ P).float()
-            self.buf["R"][key] = (s_out.double() @ P).float()
+            P = self.Pch32[key]
+            self.buf["E"][key] = E
+            self.buf["S0"][key] = S0 @ P
+            self.buf["Sg"][key] = Sg @ P
+            self.buf["R"][key] = s_out.float() @ P
 
     def acc_cpu(self):
         out = {}

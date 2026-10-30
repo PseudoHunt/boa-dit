@@ -108,3 +108,11 @@ trace_conf (traces may also be generated earlier; summaries stay unopened) → o
 
 ---
 ## Amendments
+
+### 2026-10-30 01:25 UTC: features computed in fp32 (before any trace)
+The profile (`profile.json`: 12.3 s per trace step at batch 32, against 1.7 s for plain WA sampling) showed that per-row float64 feature computation dominated.
+From now on:
+- The R/E/S features are computed in fp32 on whole tensors.
+- The accounting identity and the 9×9 Gram stay float64 (first fit batch).
+- The identity residual is evaluated on that batch.
+The checks are rerun with the changed instrument before the traces: the old checks.json is renamed `checks_v1.json` and kept.
