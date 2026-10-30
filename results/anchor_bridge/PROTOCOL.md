@@ -76,3 +76,4 @@ Confirmation reserve 0.30 h held by earlier guards.
 (appended below, dated)
 - 2026-10-30, checks (0.028 h): B1–B4 pass (coefficients ≤ 1.4e-7; aa1 C reproduced bitwise; λ = 0 = C; counts 50/13, 50/13, 62/25).
 - 2026-10-30, screen (S1+S2): bridge vs actual window deviation cos 0.682, ‖Ĥ‖/‖δx‖ 0.846, removes 43.8% of δx energy; coefficient-only H vs δx cos 0.994, ratio 1.08 (network response small within a window); λ_ls 0.806 [0.792, 0.823] → λ* = 0.8 frozen; forward-extrapolation cosine −0.24.
+- 2026-10-30, dev S3: CB1/C 0.434 [0.297, 0.619], CBlam/C 0.518, C_last49/C 1.012 [1.008, 1.021], CB1_re lowest (0.00322); gate passes → frozen.json (λ* = 0.8, primary CBlam / C_last49). Confirmation 98100–98163 opens after this commit.

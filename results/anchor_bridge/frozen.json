@@ -1,0 +1,28 @@
+{
+ "lambda_star": 0.8,
+ "arms": [
+  "FP50",
+  "C",
+  "C_last49",
+  "CB1",
+  "CBlam",
+  "CB1_re"
+ ],
+ "primary": "CBlam_vs_C_last49 (pre-registered: CBlam when kept)",
+ "K": 4,
+ "anchors_std": "0,4,...,48",
+ "cheap": "unrefitted common base + original carry, static single8, feedback off",
+ "dev_gate": {
+  "ratios_vs_min_C_Clast49": {
+   "CB1": 0.43439443085082086,
+   "CBlam": 0.5184832926492939
+  },
+  "proceed": true,
+  "rule": "confirm iff E(CB1) or E(CBlam) <= 0.95 min(E(C), E(C_last49))"
+ },
+ "conf_seeds": [
+  98100,
+  98163
+ ],
+ "frozen_utc": "2026-10-30"
+}
