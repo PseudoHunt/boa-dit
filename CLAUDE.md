@@ -1,9 +1,11 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch weight-anchor-controls)
-- **Active:** weight-anchor controls (wac1). Protocol `results/weight_anchor_controls/PROTOCOL.md`; 0.5 A30-h hard cap; stage CLI `python -m boa_dit.weight_anchor.controls <stage>`.
+## Active task (since 2026-10-30, branch weight-anchor-w8)
+- **Active:** W8 anchors for cross-precision error reuse (wa8), accuracy pilot. Protocol `results/weight_anchor_w8/PROTOCOL.md`; 1.0 A30-h hard cap (ledger tag wa8);
+  stage CLI `python -m boa_dit.weight_anchor.w8 build|checks|dev|dev_k8|conf`; report `scripts/make_weight_anchor_w8.py`. Supersedes the wac1 entry only.
+- Worktrees: create with `GIT_LFS_SKIP_SMUDGE=1 git worktree add ...` (the LFS smudge hangs otherwise).
 - Do NOT delete the GitHub release park-assets-2026-10-29 (user instruction 2026-10-30).
-- Completed (do not rerun): weight-anchor pilot wa1 (weight-anchor-pilot), quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
+- Completed (do not rerun): weight-anchor controls wac1 (weight-anchor-controls), Nunchaku SDXL feasibility nk1 (nunchaku-sdxl-feasibility, no margin), weight-anchor pilot wa1 (weight-anchor-pilot), quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
 - **Parked:** everything else (PixArt branch refit and its pilot, DNS / C-DNS and the deferred DNS proposal, activation-feedback extensions, weights-joint, follow-ups).
   Do not resume parked work unless the user explicitly asks. Its status and resume commands are in `handoff/PARKED_WORK.md`.
 
