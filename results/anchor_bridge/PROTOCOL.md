@@ -74,3 +74,4 @@ Confirmation reserve 0.30 h held by earlier guards.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30, checks (0.028 h): B1–B4 pass (coefficients ≤ 1.4e-7; aa1 C reproduced bitwise; λ = 0 = C; counts 50/13, 50/13, 62/25).
