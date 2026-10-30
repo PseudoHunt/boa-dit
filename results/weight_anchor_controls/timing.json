@@ -1,0 +1,419 @@
+{
+ "device": "cuda:0",
+ "conditions": "complete trajectories; warm (1 discarded warm-up per arm and batch size); synchronize around each; perf_counter wall + CUDA events; no recording; loading and decode excluded; both models resident in the process",
+ "resident_model_bytes": {
+  "fp": 2700518528,
+  "w4_sim": 2700518528,
+  "both": 5401037056
+ },
+ "models_needed": {
+  "FP50": [
+   "fp"
+  ],
+  "FP13": [
+   "fp"
+  ],
+  "S": [
+   "fp"
+  ],
+  "Q": [
+   "w4_sim"
+  ],
+  "A": [
+   "fp",
+   "w4_sim"
+  ],
+  "R": [
+   "fp",
+   "w4_sim"
+  ],
+  "R1": [
+   "fp",
+   "w4_sim"
+  ]
+ },
+ "batch32": {
+  "FP50": {
+   "wall_s": {
+    "median": 19.279127053916454,
+    "min": 19.24515685811639,
+    "max": 19.301156886853278,
+    "all": [
+     19.24515685811639,
+     19.261576166842133,
+     19.279127053916454,
+     19.28872425109148,
+     19.301156886853278
+    ]
+   },
+   "cuda_event_s": {
+    "median": 19.278953125,
+    "min": 19.244982421875,
+    "max": 19.3009765625
+   },
+   "working_mem_bytes": 745589760,
+   "peak_alloc_bytes_both_models_resident": 6214694400,
+   "calls": {
+    "w4": 0,
+    "fp": 50
+   },
+   "est_needed_mem_bytes (needed resident + working)": 3446108288
+  },
+  "R": {
+   "wall_s": {
+    "median": 27.63653027685359,
+    "min": 27.634113190229982,
+    "max": 27.638685835059732,
+    "all": [
+     27.636385010089725,
+     27.63787379534915,
+     27.634113190229982,
+     27.638685835059732,
+     27.63653027685359
+    ]
+   },
+   "cuda_event_s": {
+    "median": 27.636287109375,
+    "min": 27.6338671875,
+    "max": 27.63843359375
+   },
+   "working_mem_bytes": 747162624,
+   "peak_alloc_bytes_both_models_resident": 6216267264,
+   "calls": {
+    "w4": 50,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 6148199680
+  },
+  "S": {
+   "wall_s": {
+    "median": 5.073601620737463,
+    "min": 5.071778893005103,
+    "max": 5.075628036167473,
+    "all": [
+     5.071778893005103,
+     5.075628036167473,
+     5.073601620737463,
+     5.075000375043601,
+     5.071809100918472
+    ]
+   },
+   "cuda_event_s": {
+    "median": 5.07352685546875,
+    "min": 5.07169287109375,
+    "max": 5.07555419921875
+   },
+   "working_mem_bytes": 746638336,
+   "peak_alloc_bytes_both_models_resident": 6215742976,
+   "calls": {
+    "w4": 0,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 3447156864
+  },
+  "Q": {
+   "wall_s": {
+    "median": 22.634219203144312,
+    "min": 22.631134761031717,
+    "max": 22.63889971189201,
+    "all": [
+     22.63889971189201,
+     22.634219203144312,
+     22.632229337934405,
+     22.631134761031717,
+     22.635820389725268
+    ]
+   },
+   "cuda_event_s": {
+    "median": 22.634013671875,
+    "min": 22.630927734375,
+    "max": 22.638681640625
+   },
+   "working_mem_bytes": 745589760,
+   "peak_alloc_bytes_both_models_resident": 6214694400,
+   "calls": {
+    "w4": 50,
+    "fp": 0
+   },
+   "est_needed_mem_bytes (needed resident + working)": 3446108288
+  },
+  "A": {
+   "wall_s": {
+    "median": 21.768630305305123,
+    "min": 21.766297209076583,
+    "max": 21.771475692745298,
+    "all": [
+     21.766297209076583,
+     21.76728813862428,
+     21.768630305305123,
+     21.768773475661874,
+     21.771475692745298
+    ]
+   },
+   "cuda_event_s": {
+    "median": 21.7684296875,
+    "min": 21.7660859375,
+    "max": 21.771275390625
+   },
+   "working_mem_bytes": 745589760,
+   "peak_alloc_bytes_both_models_resident": 6214694400,
+   "calls": {
+    "w4": 37,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 6146626816
+  },
+  "R1": {
+   "wall_s": {
+    "median": 27.64082063594833,
+    "min": 27.63529872894287,
+    "max": 27.65429351478815,
+    "all": [
+     27.63529872894287,
+     27.65429351478815,
+     27.64082063594833,
+     27.639573961030692,
+     27.641399602871388
+    ]
+   },
+   "cuda_event_s": {
+    "median": 27.640578125,
+    "min": 27.63504296875,
+    "max": 27.654048828125
+   },
+   "working_mem_bytes": 747162624,
+   "peak_alloc_bytes_both_models_resident": 6216267264,
+   "calls": {
+    "w4": 50,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 6148199680
+  },
+  "FP13": {
+   "wall_s": {
+    "median": 5.020245548337698,
+    "min": 5.018280959688127,
+    "max": 5.022770337294787,
+    "all": [
+     5.021665581967682,
+     5.020245548337698,
+     5.018280959688127,
+     5.019511014223099,
+     5.022770337294787
+    ]
+   },
+   "cuda_event_s": {
+    "median": 5.0201669921875,
+    "min": 5.0182060546875,
+    "max": 5.022693359375
+   },
+   "working_mem_bytes": 745589760,
+   "peak_alloc_bytes_both_models_resident": 6214694400,
+   "calls": {
+    "w4": 0,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 3446108288
+  }
+ },
+ "batch1": {
+  "FP50": {
+   "wall_s": {
+    "median": 1.437989769037813,
+    "min": 1.4337406978011131,
+    "max": 1.4510430619120598,
+    "all": [
+     1.4345753719098866,
+     1.4337406978011131,
+     1.437989769037813,
+     1.4459168878383934,
+     1.4510430619120598
+    ]
+   },
+   "cuda_event_s": {
+    "median": 1.437939697265625,
+    "min": 1.4336932373046876,
+    "max": 1.45099462890625
+   },
+   "working_mem_bytes": 26554368,
+   "peak_alloc_bytes_both_models_resident": 5495151104,
+   "calls": {
+    "w4": 0,
+    "fp": 50
+   },
+   "est_needed_mem_bytes (needed resident + working)": 2727072896
+  },
+  "R": {
+   "wall_s": {
+    "median": 2.337401943746954,
+    "min": 2.336811644025147,
+    "max": 2.338168398011476,
+    "all": [
+     2.3380938773043454,
+     2.337190893944353,
+     2.337401943746954,
+     2.338168398011476,
+     2.336811644025147
+    ]
+   },
+   "cuda_event_s": {
+    "median": 2.3373466796875,
+    "min": 2.336755615234375,
+    "max": 2.338111572265625
+   },
+   "working_mem_bytes": 26570752,
+   "peak_alloc_bytes_both_models_resident": 5495167488,
+   "calls": {
+    "w4": 50,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 5427607808
+  },
+  "S": {
+   "wall_s": {
+    "median": 0.4412908870726824,
+    "min": 0.439737631008029,
+    "max": 0.4417943931184709,
+    "all": [
+     0.4405449228361249,
+     0.4414394902996719,
+     0.4417943931184709,
+     0.439737631008029,
+     0.4412908870726824
+    ]
+   },
+   "cuda_event_s": {
+    "median": 0.4412497863769531,
+    "min": 0.4396974182128906,
+    "max": 0.44175564575195314
+   },
+   "working_mem_bytes": 26587136,
+   "peak_alloc_bytes_both_models_resident": 5495183872,
+   "calls": {
+    "w4": 0,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 2727105664
+  },
+  "Q": {
+   "wall_s": {
+    "median": 1.974516182206571,
+    "min": 1.9701906046830118,
+    "max": 1.9908458008430898,
+    "all": [
+     1.9908458008430898,
+     1.9713622378185391,
+     1.9701906046830118,
+     1.9746931972913444,
+     1.974516182206571
+    ]
+   },
+   "cuda_event_s": {
+    "median": 1.97446142578125,
+    "min": 1.9701380615234374,
+    "max": 1.9907840576171876
+   },
+   "working_mem_bytes": 25006592,
+   "peak_alloc_bytes_both_models_resident": 5493603328,
+   "calls": {
+    "w4": 50,
+    "fp": 0
+   },
+   "est_needed_mem_bytes (needed resident + working)": 2725525120
+  },
+  "A": {
+   "wall_s": {
+    "median": 1.8439260236918926,
+    "min": 1.8343332060612738,
+    "max": 1.846921255812049,
+    "all": [
+     1.8343332060612738,
+     1.840620524249971,
+     1.8454028367996216,
+     1.8439260236918926,
+     1.846921255812049
+    ]
+   },
+   "cuda_event_s": {
+    "median": 1.8438758544921876,
+    "min": 1.834271728515625,
+    "max": 1.8468699951171874
+   },
+   "working_mem_bytes": 26554368,
+   "peak_alloc_bytes_both_models_resident": 5495151104,
+   "calls": {
+    "w4": 37,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 5427591424
+  },
+  "R1": {
+   "wall_s": {
+    "median": 2.337374741677195,
+    "min": 2.321631425060332,
+    "max": 2.343940689228475,
+    "all": [
+     2.343940689228475,
+     2.338229715358466,
+     2.337374741677195,
+     2.336210543755442,
+     2.321631425060332
+    ]
+   },
+   "cuda_event_s": {
+    "median": 2.337322021484375,
+    "min": 2.321577880859375,
+    "max": 2.343876708984375
+   },
+   "working_mem_bytes": 26570752,
+   "peak_alloc_bytes_both_models_resident": 5495167488,
+   "calls": {
+    "w4": 50,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 5427607808
+  },
+  "FP13": {
+   "wall_s": {
+    "median": 0.373470192309469,
+    "min": 0.3729323432780802,
+    "max": 0.3739115511998534,
+    "all": [
+     0.37330120196565986,
+     0.3735117018222809,
+     0.373470192309469,
+     0.3729323432780802,
+     0.3739115511998534
+    ]
+   },
+   "cuda_event_s": {
+    "median": 0.37343435668945313,
+    "min": 0.37289675903320313,
+    "max": 0.3738736572265625
+   },
+   "working_mem_bytes": 26554368,
+   "peak_alloc_bytes_both_models_resident": 5495151104,
+   "calls": {
+    "w4": 0,
+    "fp": 13
+   },
+   "est_needed_mem_bytes (needed resident + working)": 2727072896
+  }
+ },
+ "fp50_faster_than_R_batch32": true,
+ "fp50_faster_than_R_batch1": true,
+ "fpk": null,
+ "stage": "wac1",
+ "run": "timing",
+ "config": {
+  "batch": [
+   32,
+   1
+  ],
+  "nrep": 5
+ },
+ "git_sha": "0ac96a66f23a04a278456d9875e2aa27366fa022",
+ "start_utc": "2026-10-30T05:27:54Z",
+ "wall_s": 858.6022143363953,
+ "gpu_hours": 0.23850061509344314
+}
