@@ -1,0 +1,194 @@
+{
+ "files": {
+  "q4": {
+   "path": "weight_anchor_shared/q4.safetensors",
+   "file_bytes": 481809304,
+   "logical_bytes": 481660544,
+   "by_component": {
+    "carry_V": 3612672,
+    "base_plane": 222953472,
+    "scales_zeros": 1451520,
+    "carry_delta_low": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "b7f3751f06ccad1f415b578085aed19f8b91eaa35f3c344947c2196fab5bde41"
+  },
+  "h8": {
+   "path": "weight_anchor_shared/h8.safetensors",
+   "file_bytes": 704762408,
+   "logical_bytes": 704614016,
+   "by_component": {
+    "carry_V": 3612672,
+    "h8_plane": 445906944,
+    "scales_zeros": 1451520,
+    "carry_delta_high": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "6073ad6abc6301d670d6cbe1ee00e4ad4ca0b3b75f30472f3bd504a22a9d8d1e"
+  },
+  "pair": {
+   "path": "weight_anchor_shared/pair.safetensors",
+   "file_bytes": 933893744,
+   "logical_bytes": 933663872,
+   "by_component": {
+    "carry_V": 3612672,
+    "base_plane": 222953472,
+    "scales_zeros": 2903040,
+    "carry_delta_low": 4644864,
+    "h8_plane": 445906944,
+    "carry_delta_high": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "85a38b2ed3b4c44ed6edb38e7c5285c1ef92b2fad439f03a4d13fdb2ee2dc71d"
+  },
+  "A_gptq": {
+   "path": "weight_anchor_shared/A_gptq.safetensors",
+   "file_bytes": 710941080,
+   "logical_bytes": 710710400,
+   "by_component": {
+    "carry_V": 3612672,
+    "base_plane": 222953472,
+    "scales_zeros": 2903040,
+    "carry_delta_low": 4644864,
+    "refine_plane": 222953472,
+    "carry_delta_high": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "c10b139c3b6369e24cc2ba58a6257da30b49fc21ea404a4534fc0732ecdcd075"
+  },
+  "A_rtn": {
+   "path": "weight_anchor_shared/A_rtn.safetensors",
+   "file_bytes": 710941080,
+   "logical_bytes": 710710400,
+   "by_component": {
+    "carry_V": 3612672,
+    "base_plane": 222953472,
+    "scales_zeros": 2903040,
+    "carry_delta_low": 4644864,
+    "refine_plane": 222953472,
+    "carry_delta_high": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "ad105ed8931dae5aa049d6bcfb56c9957e826a38a0d288011e325a903e98c1c7"
+  },
+  "B_gptq": {
+   "path": "weight_anchor_shared/B_gptq.safetensors",
+   "file_bytes": 709450520,
+   "logical_bytes": 709258880,
+   "by_component": {
+    "carry_V": 3612672,
+    "base_plane": 222953472,
+    "scales_zeros": 1451520,
+    "carry_delta_low": 4644864,
+    "refine_plane": 222953472,
+    "carry_delta_high": 4644864,
+    "adaln": 223921152,
+    "other_fp32": 25076864
+   },
+   "sha256_file": "64302a3ae8ade3b02ecf92d066c826c70c984932df910b66c66887aa82768198"
+  }
+ },
+ "fp16_reference_computed": {
+  "bytes": 1350259264,
+  "MB": 1350.259264,
+  "MiB": 1287.7075805664062
+ },
+ "summary": {
+  "q4": {
+   "on_disk": {
+    "bytes": 481809304,
+    "MB": 481.809304,
+    "MiB": 459.4891586303711
+   },
+   "logical": {
+    "bytes": 481660544,
+    "MB": 481.660544,
+    "MiB": 459.3472900390625
+   }
+  },
+  "h8": {
+   "on_disk": {
+    "bytes": 704762408,
+    "MB": 704.762408,
+    "MiB": 672.1138076782227
+   },
+   "logical": {
+    "bytes": 704614016,
+    "MB": 704.614016,
+    "MiB": 671.9722900390625
+   }
+  },
+  "pair": {
+   "on_disk": {
+    "bytes": 933893744,
+    "MB": 933.893744,
+    "MiB": 890.6304779052734
+   },
+   "logical": {
+    "bytes": 933663872,
+    "MB": 933.663872,
+    "MiB": 890.4112548828125
+   }
+  },
+  "A_gptq": {
+   "on_disk": {
+    "bytes": 710941080,
+    "MB": 710.94108,
+    "MiB": 678.0062484741211
+   },
+   "logical": {
+    "bytes": 710710400,
+    "MB": 710.7104,
+    "MiB": 677.7862548828125
+   }
+  },
+  "A_rtn": {
+   "on_disk": {
+    "bytes": 710941080,
+    "MB": 710.94108,
+    "MiB": 678.0062484741211
+   },
+   "logical": {
+    "bytes": 710710400,
+    "MB": 710.7104,
+    "MiB": 677.7862548828125
+   }
+  },
+  "B_gptq": {
+   "on_disk": {
+    "bytes": 709450520,
+    "MB": 709.45052,
+    "MiB": 676.5847396850586
+   },
+   "logical": {
+    "bytes": 709258880,
+    "MB": 709.25888,
+    "MiB": 676.4019775390625
+   }
+  }
+ },
+ "ideal_dense_payload_saving_bytes": 222953472,
+ "resident_simulated_weights_note": "simulation holds each model as fp32 dequantized weights (2.70 GB each) + fp16 carry; a two-plane artifact does not reduce simulation RAM",
+ "shared_vs_pair": {
+  "A_gptq": {
+   "saving_bytes": 222952664,
+   "saving_frac_of_pair": 0.23873450853740807,
+   "smaller": true
+  },
+  "B_gptq": {
+   "saving_bytes": 224443224,
+   "saving_frac_of_pair": 0.24033057876442954,
+   "smaller": true
+  },
+  "A_rtn": {
+   "saving_bytes": 222952664,
+   "saving_frac_of_pair": 0.23873450853740807,
+   "smaller": true
+  }
+ }
+}
