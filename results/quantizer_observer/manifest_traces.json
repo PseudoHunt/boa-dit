@@ -1,0 +1,22 @@
+{
+ "fit": {
+  "file": "/home/boa-dit-qo/ckpt/quantizer_observer/trace_fit.pt",
+  "sha256": "a2da9ec06542ec973cced62944c405e3ab2bc0efc89c2e876787280e3f990b2f",
+  "bytes": 437640033,
+  "seeds": [
+   90000,
+   90063
+  ],
+  "gram_images": 32,
+  "stage": "qo1",
+  "run": "qo1_trace_fit",
+  "device": "cuda:0",
+  "config": {
+   "split": "fit"
+  },
+  "git_sha": "fef961b6f73ddaa0ec22d4670644a1d43942b400",
+  "start_utc": "2026-10-30T01:33:10Z",
+  "wall_s": 1017.676495552063,
+  "gpu_hours": 0.2826879154311286
+ }
+}
