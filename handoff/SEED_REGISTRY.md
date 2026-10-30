@@ -34,6 +34,7 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 90000–90063 / 90100–90131 | quantizer-observer pilot (qo1): fit / development (traced, opened 2026-10-30) | **used** |
 | 90200–90263 / 90300–90363 | qo1 observer confirmation / live confirmation | **untouched (registered, unopened; stopped by gate)** |
 | 92000–92031 / 92100–92163 | weight-anchor pilot (wa1): live development / live confirmation | **evaluated (2026-10-30)** |
+| 93000–93063 | weight-anchor controls (wac1): fresh confirmation | **registered 2026-10-30, unopened** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
