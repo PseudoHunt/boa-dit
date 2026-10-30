@@ -1,0 +1,39 @@
+{
+ "forward_ms_batch32_cfg_median": {
+  "fp": 383.7450256347656,
+  "w4_sim": 450.42893981933594
+ },
+ "sampling_wall_s_per_64_images": {
+  "fp": 38.68158435821533,
+  "w4": 45.188859701156616,
+  "anchor_only": 43.48719549179077,
+  "reuse": 55.23336386680603
+ },
+ "calls_per_image_trajectory": {
+  "fp": {
+   "w4": 0,
+   "fp": 50
+  },
+  "w4": {
+   "w4": 50,
+   "fp": 0
+  },
+  "anchor_only": {
+   "w4": 37,
+   "fp": 13
+  },
+  "reuse": {
+   "w4": 50,
+   "fp": 13
+  }
+ },
+ "resident_model_bytes": {
+  "fp": 2700518528,
+  "w4_sim": 2700518528
+ },
+ "peak_mem_bytes_live_conf (both models + VAE/LPIPS loaded later)": 11343300096,
+ "peak_mem_bytes_checks (both models)": 6216791552,
+ "residual_buffer_bytes_per_image": 16384,
+ "extra_w4_evaluations_at_anchors_per_trajectory": 13,
+ "note": "heig-8 is simulated quantization (dequantized weights stored at full precision, plus carry hooks): its forward is slower than FP here, and timing cannot establish any deployment speedup. FP16 + packed W4 copies resident together \u2248 20 bits/weight before overhead; no memory saving over FP is claimed."
+}

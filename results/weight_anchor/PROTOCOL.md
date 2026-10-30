@@ -163,3 +163,18 @@ The GPU-time ledger is `results/gpu_hours.csv`. Commit and push after every job.
 
 ## Deviations and results
 (appended below, dated)
+- 2026-10-30, results (no deviations from the procedure above):
+  - **Cached (exploratory):**
+    - calibrated reuse leaves 0.142 / 0.321 / 0.628 / 0.893 of the error energy at lags 1 / 2 / 4 / 8 on held-out 7100–7163;
+    - the W4-trajectory diagnostic is similar;
+    - the shuffled-anchor control is > 1;
+    - the one harmful interval is unit reuse at lag 8 with anchors 40–49 (calibrated 0.965).
+  - **Simulation:** non-anchor energy reduction vs anchors only is 67.4% [66.1, 68.6] at K = 4 and 40.1% [38.5, 41.6] at K = 8, with
+    temporal-sum reductions of 94% and 74%. **The gate passes for both; K = 4 is selected** (difference > 2 pp).
+  - **Checks:** C1, C2 and C3 are bitwise.
+  - **Development:** s = 1 is selected (mean rel. MSE 0.0515 / 0.0318 / 0.0167 for s = 0 / 0.5 / 1).
+  - **Confirmation** (92100–92163, opened once): reuse vs anchors only −69.3% [−78.8, −59.8] latent rel. MSE, 64/64 wins,
+    ΔLPIPS −0.102 [−0.117, −0.088]. **The criterion is met.**
+  - **GPU:** 0.124 A30-h.
+  - **Not tested:** cost-matched controls (deferred by protocol).
+  - **Cost note:** the simulated W4 forward is slower than FP in this harness.

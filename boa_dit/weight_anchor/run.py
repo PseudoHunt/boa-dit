@@ -245,6 +245,7 @@ def plots(res):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import matplotlib.ticker
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.2))
     for split, key, ls in (("eval (FP traj.)", "eval", "-"), ("Stage-1 (W4 traj.)", "w4traj_diag", "--")):
         w = res[key]["whole"]
@@ -265,6 +266,7 @@ def plots(res):
     ax[2].axhline(1, color="k", lw=0.8)
     ax[2].set(xscale="log", xticks=LAGS, xticklabels=LAGS, xlabel="lag k", title="calibrated reuse by anchor bucket (eval)")
     for a in ax:
+        a.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
         a.legend(fontsize=7)
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "lag_whole.png"), dpi=110)
@@ -274,6 +276,7 @@ def plots(res):
         ax.plot(LAGS, [w[f"k{k}"]["pooled"]["cal"]["v"] for k in LAGS], "o-", label=f"band {i} ({100 * res['energy_frac_by_band_eval'][i - 1]:.0f}% energy)")
     ax.axhline(1, color="k", lw=0.8)
     ax.set(xscale="log", xticks=LAGS, xticklabels=LAGS, xlabel="lag k", ylabel="energy remaining (calibrated, whole-output beta)", title="by radial band (eval)")
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "lag_bands.png"), dpi=110)
