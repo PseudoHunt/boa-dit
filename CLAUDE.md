@@ -1,8 +1,9 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch anchor-drift-pilot)
-- **Active:** anchor-drift calibration of the branch (ad1). Protocol `results/anchor_drift/PROTOCOL.md`; cap 2.0 A30-h (ledger tag ad1);
-  stage CLI `python -m boa_dit.anchor_drift.run checks|train C_D|train E_D|dev|diag|conf`; report `scripts/make_anchor_drift.py`. Stop after this pilot.
+## Active task (since 2026-10-30 evening, branch activation-bridge-overnight, worktree /home/boa-dit-abn)
+- **Active:** overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
+  `results/activation_bridge_overnight/PROTOCOL.md`; cap 6.0 A30-h + 8 h wall (tag abn1); queue `bash scripts/abn1_queue.sh` (resumable, flock); see RUN.md.
+- Completed 2026-10-30: anchor-drift ad1 (anchor-drift-pilot b42f065; drift vs local inconclusive, 1.518 A30-h).
 - **Completed 2026-10-30 (no further runs):** retrospective anchor-bridge correction (br1), branch anchor-bridge-pilot; `results/anchor_bridge/REPORT.md`;
   0.302 of 0.5 A30-h; confirmed useful (CBlam/C_last49 0.292, CB1/C 0.213 on 98100–98163). AC + bridge not run (needs its own registration).
 - Completed 2026-10-30: local-refresh ler1 (local-error-refresh-pilot, stopped at E1 headroom rule, 0.331 A30-h); aa1 (activation-anchor-pilot, 0.532 A30-h).

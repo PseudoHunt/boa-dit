@@ -40,6 +40,8 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 96100–96163 | activation-anchor pilot (aa1): fresh confirmation (dev reuses 60200–60215; G1 bitwise test on 61000–61031) | **evaluated (2026-10-30)** |
 | 97100–97163 | anchor-drift pilot (ad1): fresh confirmation (ler1 reserved it but stopped at E1 without opening it); dev 60208–60223 | **reserved (2026-10-30)** |
 | 98100–98163 | anchor-bridge pilot (br1): fresh confirmation (dev 60208–60223; bitwise test 60200–60215) | **evaluated (2026-10-30)** |
+| 110000–110255 | overnight abn1 (activation-bridge-overnight): confirmation cohort (Stages 2–4 use 110000–110127) | **reserved (2026-10-30)** |
+| 112000–113999 | overnight abn1: FID-2k cohort (labels index // 2, two per class) | **reserved (2026-10-30)** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
