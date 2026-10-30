@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch weight-anchor-w8)
+## Active task (since 2026-10-30, branch weight-anchor-w8; completed 2026-10-30, 0.395 A30-h, no further runs)
 - **Active:** W8 anchors for cross-precision error reuse (wa8), accuracy pilot. Protocol `results/weight_anchor_w8/PROTOCOL.md`; 1.0 A30-h hard cap (ledger tag wa8);
   stage CLI `python -m boa_dit.weight_anchor.w8 build|checks|dev|dev_k8|conf`; report `scripts/make_weight_anchor_w8.py`. Supersedes the wac1 entry only.
 - Worktrees: create with `GIT_LFS_SKIP_SMUDGE=1 git worktree add ...` (the LFS smudge hangs otherwise).

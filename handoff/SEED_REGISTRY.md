@@ -35,7 +35,7 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 90200–90263 / 90300–90363 | qo1 observer confirmation / live confirmation | **untouched (registered, unopened; stopped by gate)** |
 | 92000–92031 / 92100–92163 | weight-anchor pilot (wa1): live development / live confirmation | **evaluated (2026-10-30)** |
 | 93000–93063 | weight-anchor controls (wac1): fresh confirmation | **evaluated (2026-10-30)** |
-| 94000–94031 / 94100–94163 | W8-anchor pilot (wa8): development / confirmation | **reserved (verified unused 2026-10-30; confirmation unopened)** |
+| 94000–94031 / 94100–94163 | W8-anchor pilot (wa8): development / confirmation | **evaluated (2026-10-30)** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |

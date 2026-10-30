@@ -147,3 +147,5 @@ H8-50: 50·C_Q4 + 13·C_H8 + overhead vs 50·C_H8, so C_Q4/C_H8 < 0.74 is necess
   by this commit, before any K = 8 endpoint is generated.
 - 2026-10-30, optional K = 8 dev check run after the prediction commit (dev_k8.json). Freeze record `frozen.json`: all confirmation settings as
   pre-registered; nothing selected from development. Confirmation 94100–94163 opens after this commit.
+- 2026-10-30, confirmation (opened once): R8 vs A8 −78.4% [−83.9, −72.7] → useful reuse; H8 adequate; B = 0.983 [0.966, 0.997];
+  R8 vs H8 +358%. See REPORT.md / interpretation.md. Seeds 94000–94163 marked evaluated. No further runs.
