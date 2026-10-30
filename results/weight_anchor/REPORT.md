@@ -63,12 +63,12 @@ Plots: `lag_whole.png`, `lag_bands.png`.
 
 non-anchor reduction = 1 - sum_nonanchor ||e_i - beta e_a||^2 / sum_nonanchor ||e_i||^2 (reuse vs FP anchors only); temporal-sum energy = sum_images ||sum_i r_i||^2. Neither is an endpoint metric.
 
-| K | FP calls | anchors-only vs plain (per-step energy) | reuse vs anchors-only: non-anchor energy | wins | temporal-sum energy plain / anchors / reuse | temporal-sum reduction vs anchors | shuffled reuse: non-anchor / temporal-sum | gate | W4-traj. diag non-anchor |
+| K | FP calls | anchors-only: per-step energy reduction vs plain | reuse: non-anchor energy reduction vs anchors-only | wins | temporal-sum energy plain / anchors / reuse | temporal-sum reduction vs anchors | shuffled reuse: non-anchor / temporal-sum reduction | gate | W4-traj. diag non-anchor |
 | ---: | ---: | ---: | --- | ---: | --- | --- | --- | --- | --- |
 | 4 | 13 | +27.2% | +67.4% [+66.1, +68.6] | 64/64 | 1.583e+05 / 8.672e+04 / 4887 | +94.4% [+94.1, +94.6] | -65.0% / -65.8% | pass | +64.8% [+61.8, +67.4] |
 | 8 | 7 | +15.4% | +40.1% [+38.5, +41.6] | 64/64 | 1.583e+05 / 1.186e+05 / 3.053e+04 | +74.3% [+73.3, +75.2] | -37.2% / -38.6% | pass | +37.1% [+35.1, +39.2] |
 
-**Gate: PASS; selected K = 4** (frozen 2026-10-30T04:51:41Z, before any live image). Reductions are of per-call prediction-error energy, not endpoint quality.
+**Gate: PASS; selected K = 4** (frozen 2026-10-30T04:51:41Z, before any live image). Positive = reduction (better). Reductions are of per-call prediction-error energy, not endpoint quality.
 
 Frozen live coefficients β^4_(bucket of anchor, age):
 

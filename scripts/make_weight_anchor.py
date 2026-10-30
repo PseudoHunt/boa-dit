@@ -50,7 +50,7 @@ if LG:
           "Plots: `lag_whole.png`, `lag_bands.png`.", ""]
 if SM:
     L += ["## 3. Periodic anchors on the cached traces (held-out, FP trajectory)", "", SM["definition"], "",
-          "| K | FP calls | anchors-only vs plain (per-step energy) | reuse vs anchors-only: non-anchor energy | wins | temporal-sum energy plain / anchors / reuse | temporal-sum reduction vs anchors | shuffled reuse: non-anchor / temporal-sum | gate | W4-traj. diag non-anchor |",
+          "| K | FP calls | anchors-only: per-step energy reduction vs plain | reuse: non-anchor energy reduction vs anchors-only | wins | temporal-sum energy plain / anchors / reuse | temporal-sum reduction vs anchors | shuffled reuse: non-anchor / temporal-sum reduction | gate | W4-traj. diag non-anchor |",
           "| ---: | ---: | ---: | --- | ---: | --- | --- | --- | --- | --- |"]
     for K in ("4", "8"):
         e, w = SM["K"][K]["eval"], SM["K"][K]["w4traj_diag"]
@@ -59,7 +59,7 @@ if SM:
                  f"{ts['ts_plain']:.4g} / {ts['ts_anchor']:.4g} / {ts['ts_reuse']:.4g} | {pc(e['temporal_sum_reduction_vs_anchor'])} | "
                  f"{100 * e['shuffled_nonanchor_reduction']['mean']:+.1f}% / {100 * e['shuffled_temporal_sum_reduction_mean']:+.1f}% | {'pass' if e['gate_pass'] else 'fail'} | {pc(w['nonanchor_reduction'])} |")
     L += ["", f"**Gate: {'PASS' if SM['gate_pass'] else 'FAIL'}; selected K = {SM['selected_K']}** (frozen {SM['frozen_utc']}, before any live image). "
-              "Reductions are of per-call prediction-error energy, not endpoint quality.", ""]
+              "Positive = reduction (better). Reductions are of per-call prediction-error energy, not endpoint quality.", ""]
 if CO and CO.get("beta_K_deployed"):
     b = CO["beta_K_deployed"]
     L += [f"Frozen live coefficients β^{CO['selected_K']}_(bucket of anchor, age):", "", "| bucket | age 1 | age 2 | age 3 |", "| --- | ---: | ---: | ---: |"]
