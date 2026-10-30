@@ -135,3 +135,9 @@ H8-50: 50·C_Q4 + 13·C_H8 + overhead vs 50·C_H8, so C_Q4/C_H8 < 0.74 is necess
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30, build (0.07 h):
+  - Replay audit at bits = 4: weights, grid (scale, zero), carry δ4 and V bitwise on all 112 layers; W4 codes 0..15.
+  - H8: codes 0..255, dequantization bitwise, finite. Mean rel. weight error W4 0.202 → W8 0.0146.
+  - Note on `H_quad_after_carry`: the cached H is the projected metric P H P, which is blind to errors inside span(V), so the
+    carry barely changes that number by construction. It is not a measure of the carry's effect; no decision uses it.
+  - Hashes and restoration instructions in `provenance.json`; `h8.pt` is not committed.

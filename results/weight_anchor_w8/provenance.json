@@ -1,0 +1,27 @@
+{
+ "base_commit": "83f657c323c7490f898ff0d18a94c30bd91a67b0",
+ "preregistration_commit": "53f48e0",
+ "splits": {
+  "dev": [
+   94000,
+   94031
+  ],
+  "conf": [
+   94100,
+   94163
+  ],
+  "C1_checks": [
+   92000,
+   92031
+  ]
+ },
+ "seed_verification": "absent from handoff/SEED_REGISTRY.md and from *.py/*.md/*.csv on all 14 remote branches (fetched 2026-10-30) and all local worktrees",
+ "hashes_sha256": {
+  "h8.pt": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad",
+  "heig8_layers.pt": "b8039f3c9b52d0dc523fc0a5fb37de3732c4a46ac2bcc03491daf7d49f8d32b5",
+  "heig8_w4_model.pt": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761",
+  "heig8_carry.pt": "f40ea01dd67ba226aa70ba74a70833240984f358f91c1752b4b0d3356ba06db4",
+  "DiT-XL-2-256x256.pt": "9ec1876e4c03471bca126663a30e2d1b20610b6d2f87850a39a36f25cc685521"
+ },
+ "restore": "python -m boa_dit.weight_anchor.w8 build  (needs ckpt/temporal/heig8_layers.pt from `python -m boa_dit.temporal.rebuild`, ckpt/ckpt_deflate_heig_r8_w4/model.pt, ckpt/temporal/rebuild_quant/deflate_heig_r8_w4/carry.pt, DiT-XL-2-256x256.pt); compare the sha256 of ckpt/weight_anchor_w8/h8.pt"
+}
