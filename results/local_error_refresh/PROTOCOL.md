@@ -126,3 +126,10 @@ Stop with partial results at the cap.
   1e-6 where h is fp32, 1e-3 where h is fp16 under autocast (fc2 inputs are GELU outputs in fp16, so the smoothing pre-hook (x.float()/s).to(fp16) rounds;
   fp16 unit roundoff 4.9e-4). E0 uses the model inputs actually passed by the sampler (respaced timestep), recorded during G's trajectory.
   In the scalar C3 case "compressed state" discards the state entirely (the only nontrivial orthogonal projection of a 1-token state).
+- 2026-10-30, checks (0.184 h + 0.006 h diagnosis): all checks pass except C4 as written (fp32 helper vs module output minus bias: max rel. L2 1.24e-6 at fc2,
+  tol 1e-6). Diagnosis (`checks_c4_diagnosis.json`, `scripts/ler1_c4_diagnosis.py`): the bias-free module GEMM + carry hook equals the helper **bitwise** at all
+  12 sites; the residual is cuBLAS's fused-bias addmm kernel vs mm, unrelated to b (both terms of b use the bias-free path). C4 criterion amended to the
+  bias-free comparison (bitwise); original result kept as `C4_pass_original: false`. Other results: C1 Q/A bitwise vs joint-pilot latents, C5 max 5.2e-4
+  (tol 5e-3), C6 zero correction bitwise, MP structure/numerics bitwise, C7/C9 counts, C8 resume bitwise. Live fp16 M h defect 3.3–4.8e-4 (reported).
+  Profile (16 images, 12 sites): FP50 9.9 s, G 43.3, A 43.3, L4 46.2, O3 52.7, C4 45.8, MP 43.1 → reforecast: screen 0.02 h, E1 ≈ 0.12 h, E2 ≈ 0.13 h,
+  diag ≈ 0.05 h, conf ≈ 0.30 h, cost ≈ 0.15 h.

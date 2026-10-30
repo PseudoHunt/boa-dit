@@ -565,7 +565,7 @@ def checks(dev):
             hook = ms["fb"]["carry_hooks"][k]
             fn = lin._forward_hooks[hook.id]
             with torch.autocast("cuda", enabled=False):
-                mod = fn(lin, (h.float(),), lin.forward(h.float())) - lin.bias.float()
+                mod = fn(lin, (h.float(),), F.linear(h.float(), lin.weight))         # bias-free GEMM (amendment: fused-bias addmm differs by ~1e-6)
                 helper = R.mh(k, h.float())
             c4[k] = rl2(helper, mod)
             with torch.autocast("cuda", dtype=torch.float16):
