@@ -1,0 +1,12 @@
+{
+ "cap_gpu_h": 0.5,
+ "log": [
+  {
+   "stage": "dev+checks",
+   "utc": "2026-10-30T05:24:08Z",
+   "spent_before_h": 0,
+   "estimate_h": 0.1,
+   "ok": true
+  }
+ ]
+}

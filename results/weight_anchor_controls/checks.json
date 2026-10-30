@@ -1,0 +1,59 @@
+{
+ "C1": {
+  "FP50==fp": true,
+  "Q==w4": true,
+  "A==anchor_only": true,
+  "R==reuse_s1": true
+ },
+ "C2_S_K1_equals_FP50": true,
+ "C2_S_K1_counts": {
+  "w4": 0,
+  "fp": 50
+ },
+ "C3_counts": {
+  "FP50": {
+   "w4": 0,
+   "fp": 50
+  },
+  "Q": {
+   "w4": 50,
+   "fp": 0
+  },
+  "A": {
+   "w4": 37,
+   "fp": 13
+  },
+  "R": {
+   "w4": 50,
+   "fp": 13
+  },
+  "S": {
+   "w4": 0,
+   "fp": 13
+  },
+  "R1": {
+   "w4": 50,
+   "fp": 13
+  },
+  "FP13": {
+   "w4": 0,
+   "fp": 13
+  }
+ },
+ "C3_pass": true,
+ "C4_aux_zero_equals_FP50": true,
+ "pass": true,
+ "stage": "wac1",
+ "run": "dev_checks",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   92000,
+   92031
+  ]
+ },
+ "git_sha": "c23c95ac4b48520077ec6a801cab1f2fa4a9163b",
+ "start_utc": "2026-10-30T05:24:08Z",
+ "wall_s": 189.46782779693604,
+ "gpu_hours": 0.05262995216581556
+}
