@@ -85,3 +85,4 @@ Cut order: diagnostics, unanchored dev references.
 - 2026-10-30, train E_D: 200 updates; see train_E_D.json (drift loss first/last and window local loss in REPORT).
 - 2026-10-30, dev: C.D/C.L 1.135 [0.934, 1.628], AC.D/AC.L 1.066 [0.912, 1.253]; unanchored Q.D/Q.L 9.9, A.D/A.L 11.1; C.L/C0 0.743; divergence guard not tripped (1.14, 1.07) → diag, freeze, confirmation proceed per §5.
 - 2026-10-30, diag: held-out drift energy C.L 1226 → C.D 1154, AC.L 1312 → AC.D 1224; local energy ~3× higher for D; window ρ 0.69 → 0.91. frozen.json committed; confirmation 97100–97163 opens after this commit.
+- 2026-10-30, confirmation (opened once): C.D/C.L 1.185 [0.973, 1.466] inconclusive (ΔLPIPS +0.007 [+0.000, +0.015]); AC.D/AC.L 0.943 [0.701, 1.308] inconclusive; AC.D/C.D 1.076 inconclusive; C.L/C0 0.744 [0.545, 0.934]. 97100–97163 marked evaluated. Stopped.
