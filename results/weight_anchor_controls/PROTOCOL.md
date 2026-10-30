@@ -104,3 +104,17 @@ The GPU ledger is `results/gpu_hours.csv`. Seed registry updated. Stop after the
 
 ## Deviations and results
 (appended below, dated)
+- 2026-10-30, implementation note:
+  - The checks and the development metrics ran in one stage (`controls dev`).
+  - C1–C4 were evaluated and written to `checks.json` before any dev metric was computed. The stage would have stopped on a failure.
+  - No setting was selected from dev.
+- 2026-10-30, results (no other deviations):
+  - **Checks:** C1–C4 pass bitwise.
+  - **Timing** (batch 32, medians): FP-50 19.28 s, R 27.64 s, S 5.07 s, Q 22.63 s, A 21.77 s, R1 27.64 s, FP13 5.02 s.
+    **FP-50 is faster than R** at batch 32 and at batch 1 (1.44 vs 2.34 s), so no FP-k was built.
+  - **Confirmation** (93000–93063, opened once):
+    - R vs S −75.0% [−83.8, −65.2];
+    - R1 vs S −75.5% [−83.6, −66.6];
+    - R vs A −74.0% [−81.3, −66.6].
+    Both readings: **W4-increment signal**.
+  - **GPU:** see the ledger. No further runs.

@@ -14,6 +14,13 @@
    "spent_before_h": 0.0575,
    "estimate_h": 0.3,
    "ok": true
+  },
+  {
+   "stage": "conf",
+   "utc": "2026-10-30T05:42:30Z",
+   "spent_before_h": 0.296,
+   "estimate_h": 0.12,
+   "ok": true
   }
  ]
 }
