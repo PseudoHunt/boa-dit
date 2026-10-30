@@ -121,3 +121,14 @@ The checks are rerun with the changed instrument before the traces: the old chec
 A CPU dry run of the analysis code on **synthetic random traces** (16/8/12 fake images) wrote headroom/site_accounting/errstats/observer_select/observer JSONs into this folder.
 The queue's automatic commit after trace_fit (71c744b) swept them in. They are not results: n = 16 fit "images" of Gaussian noise. They are deleted in the next commit.
 Real outputs are produced only by the stage CLI on the trace caches. In future, dry runs write only to the scratchpad.
+
+### 2026-10-30 02:17 UTC: stop after development selection (gates do not justify more GPU)
+- The development selection (`observer_select.json`, committed) chose **H**:
+  - no added family reached the 1% development-value threshold;
+  - all deployable observers left about 100% of the low-band error (ratio vs zero prediction 1.02–1.04);
+  - only the non-deployable oracle helped.
+- With H selected, the observer gate fails by definition (§5: no added internal features), and the live arm cannot start.
+- Following the instruction ("stop earlier if the gates do not justify further GPU work"), the confirmation trace was stopped after about 1.7 min.
+  Nothing was saved or opened, and its GPU time is recorded manually as an ABORTED row.
+- **Observer confirmation (90200–90263) and live confirmation (90300–90363) remain unopened and unused.**
+- The confirmation-set headroom was not computed. The cost and report stages follow.

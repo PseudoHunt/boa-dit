@@ -29,6 +29,10 @@ PixArt uses prompt indices; the seed is the prompt index.
 | **60100–60163** | **DiT joint pilot: training trajectories** | **reserved** |
 | **60200–60231** | **DiT joint pilot: development / checkpoint selection** | **reserved** |
 | **61000–61127** | **DiT joint pilot: sealed pilot evaluation (128); evaluated after first use** | **reserved, sealed** |
+| 72000–72063 / 72100–72131 / 72200–72327 / 74000–75999 | DNS response pilot (r1): fit / dev / confirmation / FID-2k | **evaluated** |
+| 82000–82327 / 83000–83327 | analytic-carry E1 / E2: fit, dev, confirmation (see analytic-carry-pilot) | **evaluated** |
+| 90000–90063 / 90100–90131 | quantizer-observer pilot (qo1): fit / development (traced, opened 2026-10-30) | **used** |
+| 90200–90263 / 90300–90363 | qo1 observer confirmation / live confirmation | **untouched (registered, unopened; stopped by gate)** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
