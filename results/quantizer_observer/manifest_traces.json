@@ -18,5 +18,25 @@
   "start_utc": "2026-10-30T01:33:10Z",
   "wall_s": 1017.676495552063,
   "gpu_hours": 0.2826879154311286
+ },
+ "dev": {
+  "file": "/home/boa-dit-qo/ckpt/quantizer_observer/trace_dev.pt",
+  "sha256": "4762103574ae15344919e548fd528c346c0370e90c777407c914d7ed8490d670",
+  "bytes": 217086337,
+  "seeds": [
+   90100,
+   90131
+  ],
+  "gram_images": 0,
+  "stage": "qo1",
+  "run": "qo1_trace_dev",
+  "device": "cuda:0",
+  "config": {
+   "split": "dev"
+  },
+  "git_sha": "fe5cf7642e06b5e96adffd8007391ba767a59a14",
+  "start_utc": "2026-10-30T01:50:15Z",
+  "wall_s": 383.79080629348755,
+  "gpu_hours": 0.10660855730374653
  }
 }
