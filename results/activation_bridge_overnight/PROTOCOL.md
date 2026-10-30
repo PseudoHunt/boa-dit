@@ -80,3 +80,4 @@ A failed gate blocks all quality stages. Large artifacts stay local (standing in
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30 18:39 UTC, gate (0.194 A30-h): all checks pass (C1–C12; C7 independence bitwise; C8 resume bitwise at i = 8 and 9). C vs G not bitwise (rel. L2 0.044 on 60200–60215) → kept separate; GB.w8 stays in Stage 2. Stage 1 started 18:38:45 UTC.
