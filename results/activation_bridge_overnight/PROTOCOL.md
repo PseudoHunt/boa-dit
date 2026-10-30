@@ -85,3 +85,8 @@ A failed gate blocks all quality stages. Large artifacts stay local (standing in
   ACB/GB 1.677 [1.381, 2.096]; AC/G 1.038 [0.920, 1.174]; CB/C 0.257 [0.170, 0.384]; G/C 1.007. Matched interaction −0.0024 [−0.0049, −0.0000].
 - 2026-10-30 20:16 UTC, Stage 2 complete (128): CB.w8/C.w8 0.279 [0.192, 0.412]; ACB.w8/CB.w8 1.848 [1.279, 2.752]; ACB.w8/GB.w8 1.702; CB.w8/CB 1.010;
   CB.w8/H8_50 2.675.
+- 2026-10-30 21:52 UTC, queue finished. Stage 3 (0.681 h): bridge K8 gains 0.443 / 0.422; noninferiority vs ordinary K4 unresolved for all four. Stage 4
+  (0.184 h): LCB/CB 0.715 [0.529, 1.047], LACB/ACB 1.182 [0.920, 1.505]. Stage 5 (0.117 h) complete. Stage 6 skipped by the pre-registered fit rule
+  (estimate 3.149 h; 2.805 spent + 3.149 + 0.35 > 6.0); FID cohort never generated. Stage 7 (0.601 h) batch 1 and 32 complete. Total 3.407 A30-h.
+  Reporting bug (no data effect): s3.json's per-arm "calls" field was overwritten by a note string; counts were asserted equal to the expected values at
+  runtime for every trajectory (`gen` assert), and REPORT.md shows the frozen expected counts for s3. 110000–110255 marked evaluated.

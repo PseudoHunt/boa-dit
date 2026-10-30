@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30 evening, branch activation-bridge-overnight, worktree /home/boa-dit-abn)
+## Active task (since 2026-10-30 evening, branch activation-bridge-overnight, worktree /home/boa-dit-abn; queue finished 21:52 UTC, 3.407 of 6.0 A30-h — no further runs)
 - **Active:** overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
   `results/activation_bridge_overnight/PROTOCOL.md`; cap 6.0 A30-h + 8 h wall (tag abn1); queue `bash scripts/abn1_queue.sh` (resumable, flock); see RUN.md.
 - Completed 2026-10-30: anchor-drift ad1 (anchor-drift-pilot b42f065; drift vs local inconclusive, 1.518 A30-h).

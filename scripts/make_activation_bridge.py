@@ -27,8 +27,10 @@ def status(r, key):
 
 def tables(r, L, label):
     L += [f"*{label}*", "", "| arm | cheap / high calls | bridge corrections | latent rel. MSE mean | median | PSNR | LPIPS |", "|---|---|---:|---:|---:|---:|---:|"]
+    fr = j("frozen.json")["expected_counts"]
+    calls = r["calls"] if isinstance(r.get("calls"), dict) else {}
     for a, s in r["summary"].items():
-        c = r["calls"].get(a, {})
+        c = calls.get(a) or fr.get(a, {})                                     # s3.json: per-arm counts overwritten by a note (asserted at runtime = expected)
         L.append(f"| {a} | {c.get('cheap', '—')} / {c.get('high', '—')} | {c.get('corrections', '—')} | {s['rel_mse']['mean']:.5f} | {s['rel_mse']['median']:.5f} | "
                  f"{s['psnr']['mean']:.2f} | {s['lpips']['mean']:.4f} |")
     L += ["", "| contrast | mean-MSE ratio [95% CI] | mean diff [CI] | median diff | wins | ΔLPIPS [CI] | ΔPSNR [CI] |", "|---|---:|---:|---:|---:|---:|---:|"]
@@ -86,7 +88,7 @@ def main():
         if key == "s2":
             L += [f"- CB.w8 / C.w8 (bridge with W8 anchors): {r['reading_CB.w8_vs_C.w8']}; ACB.w8 / CB.w8: {r['reading_ACB.w8_vs_CB.w8']}. {r['note']}.", ""]
         if key == "s3":
-            L += [f"- Noninferiority ({r['margin']}): {r['noninferiority_vs_ordinary_K4']}. {r['calls']}.", ""]
+            L += [f"- Noninferiority ({r['margin']}): {r['noninferiority_vs_ordinary_K4']}. Calls: K8 = 50 cheap + 7 high (6 corrections); K4 = 50 + 13 (12).", ""]
         if key == "s4":
             L += [f"- LCB / CB: {r['reading_LCB_vs_CB']}; LACB / ACB: {r['reading_LACB_vs_ACB']}. {r['note']}.", ""]
         L.append("- Simulation timing (s per 32-image trajectory, harness with all stage models resident): " +
