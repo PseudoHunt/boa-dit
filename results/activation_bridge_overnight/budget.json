@@ -56,7 +56,16 @@
    "estimate_h": 0.12,
    "reserve_h": 0.15,
    "ok": true
+  },
+  {
+   "utc": "2026-10-30T21:16:06Z",
+   "stage": "s6",
+   "spent_before_h": 2.8052,
+   "wall_left_h": 5.1809121910731,
+   "estimate_h": 3.1490209070612765,
+   "reserve_h": 0.35,
+   "ok": false
   }
  ],
- "spent_gpu_h": 2.6881
+ "spent_gpu_h": 2.8052
 }

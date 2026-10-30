@@ -1,0 +1,6 @@
+{
+ "status": "skipped (full three-arm FID-2k does not fit the remaining budget/wall)",
+ "required_estimate_h": 3.1490209070612765,
+ "spent_at_decision_h": 2.8052,
+ "wall_left_h": 5.180911753972371
+}
