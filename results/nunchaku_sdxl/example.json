@@ -1,0 +1,18 @@
+{
+ "utc": "2026-10-30T06:17:30Z",
+ "hub_path_as_published": "ok",
+ "int4_pipeline_s_cold": 9.834504127502441,
+ "fp_pipeline_s_cold": 10.184494972229004,
+ "psnr_int4_vs_fp_same_seed": 23.124398084314628,
+ "images": {
+  "int4": {
+   "path": "/home/boa-dit/ckpt/nunchaku_sdxl/sdxl_int4.png",
+   "bytes": 1338744
+  },
+  "fp": {
+   "path": "/home/boa-dit/ckpt/nunchaku_sdxl/sdxl_fp.png",
+   "bytes": 1353369
+  }
+ },
+ "note": "installation check only (cold, single run, includes text encoding and VAE decode); not a timing result"
+}
