@@ -124,6 +124,8 @@ def main():
         L += [""] + [f"- {k}: {v}" for k, v in r.items() if k.startswith(("bridge_increment", "feedback_overhead", "cost_condition"))] + [f"- {r['note']}.", f"- SANA: {r['sana']}.", ""]
     else:
         L += [f"- **{status(r, 's7')}**", ""]
+    if os.path.exists(os.path.join(OUT, "ANSWERS.md")):
+        L += [open(os.path.join(OUT, "ANSWERS.md")).read()]
     open(os.path.join(OUT, "REPORT.md"), "w").write("\n".join(L) + "\n")
     M = ["# MORNING_STATUS (abn1)", "", f"Head commit: {head} on branch activation-bridge-overnight (worktree /home/boa-dit-abn).",
          f"GPU: {tot:.3f} of 6.0 A30-h. Running at shutdown: none (the queue exits after the last stage and releases its lock).", "", "| stage | status |", "|---|---|"]
@@ -131,7 +133,11 @@ def main():
         M.append(f"| {title} | {status(R[k], k)} |")
     M += ["", "Artifacts: `results/activation_bridge_overnight/` (JSON, REPORT.md, per-image metrics inside each stage JSON); latents and per-batch checkpoints in",
           "`ckpt/activation_bridge_overnight/` (local only, not uploaded — standing instruction: models/artifacts are regenerated from code; hashes in `artifacts.json`).",
-          "Answers to the six questions: see the end of REPORT.md (written after the queue finished)."]
+          "Answers to the six questions: end of REPORT.md / ANSWERS.md. In short: (1) feedback harms the bridge (ACB/CB 1.690 [1.335, 2.250]); (2) the harm",
+          "survives the matched-range control (ACB/GB 1.677); (3) bridge works with W8 anchors (CB.w8/C.w8 0.279); (4) K8 vs ordinary K4 unresolved; (5) local",
+          "refit + bridge inconclusive (LCB/CB 0.715 [0.529, 1.047]); (6) FID not measured (did not fit); efficiency only simulated, no anchored arm beats FP50.",
+          "Skipped: Stage 6 FID-2k (pre-registered budget rule; cohort 112000–113999 never generated). Blocked: none. Failed: none.",
+          "Queue lock released; no process running; GPU idle. Reporting bug noted in PROTOCOL (s3.json call-count field), no data effect."]
     open(os.path.join(OUT, "MORNING_STATUS.md"), "w").write("\n".join(M) + "\n")
     print("\n".join(L))
 
