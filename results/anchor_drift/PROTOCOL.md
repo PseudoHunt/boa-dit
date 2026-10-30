@@ -82,3 +82,4 @@ Cut order: diagnostics, unanchored dev references.
   reproduces joint C_L / E_L / A latents bitwise). D6 training-path vs eval-sampler endpoint rel. L2 0.042 (AC0, 4 images; reported, joint plain path 0.026).
   Profile 7.26 s/update (C_D), 10.67 (E_D), peak 16.0 GiB → training ≈ 0.40 + 0.59 h.
 - 2026-10-30, train C_D (0.36 h): 200 updates; training-draw drift loss 0.54 → 0.35 (first/last 10), window local loss 0.88 → 5.3 (absolute error grew ~6×; drift loss is blind to window-constant error — recorded, not gated, per §5).
+- 2026-10-30, train E_D: 200 updates; see train_E_D.json (drift loss first/last and window local loss in REPORT).

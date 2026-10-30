@@ -16,6 +16,14 @@
    "estimate_h": 0.42369840045770013,
    "reserved_h": 0.4,
    "ok": true
+  },
+  {
+   "stage": "train E_D",
+   "utc": "2026-10-30T16:45:14Z",
+   "spent_before_h": 0.5244,
+   "estimate_h": 0.6221593221028645,
+   "reserved_h": 0.4,
+   "ok": true
   }
  ]
 }
