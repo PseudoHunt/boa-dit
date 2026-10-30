@@ -42,6 +42,13 @@
    "spent_before_h": 0.5851999999999999,
    "estimate_h": 0.140707391500473,
    "ok": true
+  },
+  {
+   "stage": "dev_orig",
+   "utc": "2026-10-30T01:56:46Z",
+   "spent_before_h": 0.6918,
+   "estimate_h": 0.030756903092066447,
+   "ok": true
   }
  ]
 }
