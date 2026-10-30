@@ -1,9 +1,10 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch weight-anchor-controls)
-- **Active:** weight-anchor controls (wac1). Protocol `results/weight_anchor_controls/PROTOCOL.md`; 0.5 A30-h hard cap; stage CLI `python -m boa_dit.weight_anchor.controls <stage>`.
+## Active task (since 2026-10-30, branch nunchaku-sdxl-feasibility)
+- **Active:** Nunchaku SDXL feasibility on the A30 (nk1), installation + profiling only. Protocol `results/nunchaku_sdxl/PROTOCOL.md`; 0.5 A30-h cap; separate conda env `nunchaku`; script `scripts/nunchaku_sdxl_profile.py`.
+- Install Nunchaku only from the official GitHub release wheels (the PyPI package `nunchaku` is unrelated).
 - Do NOT delete the GitHub release park-assets-2026-10-29 (user instruction 2026-10-30).
-- Completed (do not rerun): weight-anchor pilot wa1 (weight-anchor-pilot), quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
+- Completed (do not rerun): weight-anchor controls wac1 (weight-anchor-controls), weight-anchor pilot wa1 (weight-anchor-pilot), quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
 - **Parked:** everything else (PixArt branch refit and its pilot, DNS / C-DNS and the deferred DNS proposal, activation-feedback extensions, weights-joint, follow-ups).
   Do not resume parked work unless the user explicitly asks. Its status and resume commands are in `handoff/PARKED_WORK.md`.
 
