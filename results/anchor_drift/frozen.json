@@ -1,0 +1,31 @@
+{
+ "carry_sha256": {
+  "C0": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+  "AC0": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+  "C.L": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69",
+  "AC.L": "77b5d0ac43b9ed3eb393d2a2c0f73fa5d8f9135731c3a0c555ac80300639572d",
+  "C.D": "fa8151abc809f9cc502dd5e16e3b2052c6ee537b319ad0f745c603b5c4b8f707",
+  "AC.D": "0df7a0dc6415750bb2b73c168b582ff21491d9ffedca27e1ea1967ed0add0a64"
+ },
+ "arms": [
+  "FP50",
+  "C0",
+  "AC0",
+  "C.L",
+  "AC.L",
+  "C.D",
+  "AC.D"
+ ],
+ "K_anchor": 4,
+ "checkpoint": "u200 for all refits",
+ "conf_seeds": [
+  97100,
+  97163
+ ],
+ "co_primary": [
+  "C.D_vs_C.L",
+  "AC.D_vs_AC.L"
+ ],
+ "stop": false,
+ "frozen_utc": "2026-10-30"
+}
