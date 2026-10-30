@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch weight-anchor-shared)
+## Active task (since 2026-10-30, branch weight-anchor-shared; completed 2026-10-30, 0.367 of 2.0 A30-h, no further runs)
 - **Active:** shared W4 / higher-precision anchors (ws1), storage-and-accuracy pilot. Protocol `results/weight_anchor_shared/PROTOCOL.md`; NEW 2.0 A30-h hard cap
   (ledger tag ws1); stage CLI `python -m boa_dit.weight_anchor.shared selftest|build|checks|dev|dev_rtn|traces|conf`; report `scripts/make_weight_anchor_shared.py`.
 - Worktrees: create with `GIT_LFS_SKIP_SMUDGE=1 git worktree add ...` (the LFS smudge hangs otherwise).
