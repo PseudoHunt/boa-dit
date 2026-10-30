@@ -106,3 +106,4 @@ DCT-4 ≈ 2.6 s/img at batch 32; FP ≈ 0.6 s/img): checks ≈ 0.20 h, dev ≈ 0
 - 2026-10-30, implementation note (before dev metrics): the dev stage scores the seven checks-stage reference runs on 60200–60215 (batch 16; same
   models, code and seeds) instead of regenerating identical trajectories.
 - 2026-10-30, diag run (dev only); freeze record frozen.json. Confirmation 96100–96163 opens after this commit.
+- 2026-10-30, confirmation (opened once): AC vs C 1.017 [0.789, 1.294] → inconclusive; I = −0.0102 [−0.0153, −0.0056]. Seeds 96100–96163 marked evaluated. Total 0.532 A30-h. Stopped.

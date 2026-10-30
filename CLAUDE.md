@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch activation-anchor-pilot)
+## Active task (since 2026-10-30, branch activation-anchor-pilot; completed 2026-10-30, 0.532 of 1.5 A30-h, stopped — no further runs)
 - **Active:** activation feedback + measured anchoring (aa1), integration/accuracy pilot. Protocol `results/activation_anchor/PROTOCOL.md`; cap 1.5 A30-h (ledger tag aa1);
   stage CLI `python -m boa_dit.activation_anchor.run checks|dev|diag|conf`; report `scripts/make_activation_anchor.py`. Stop after this pilot.
 - **Parked by user decision (2026-10-30, not a failed read):** shared/nested weight quantization (ws1, weight-anchor-shared; complete through confirmation). See `handoff/PARKED_WORK.md` §7.
