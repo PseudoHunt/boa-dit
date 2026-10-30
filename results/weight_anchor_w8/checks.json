@@ -1,0 +1,104 @@
+{
+ "C1": {
+  "FP50==FP50": true,
+  "Q4==Q": true,
+  "R_FP==R1": true
+ },
+ "C2_R8_K1_equals_H8": true,
+ "C2_counts": {
+  "q4": 50,
+  "h8": 50,
+  "fp": 0
+ },
+ "C3_Q_equals_H_zero_correction": true,
+ "C3_equals_Q4": true,
+ "C4_anchor_same_state": true,
+ "C4_n_anchors": 13,
+ "C5_counts": {
+  "FP50": {
+   "q4": 0,
+   "h8": 0,
+   "fp": 50
+  },
+  "Q4": {
+   "q4": 50,
+   "h8": 0,
+   "fp": 0
+  },
+  "H8": {
+   "q4": 0,
+   "h8": 50,
+   "fp": 0
+  },
+  "A8": {
+   "q4": 37,
+   "h8": 13,
+   "fp": 0
+  },
+  "R8": {
+   "q4": 50,
+   "h8": 13,
+   "fp": 0
+  },
+  "S8": {
+   "q4": 0,
+   "h8": 13,
+   "fp": 0
+  },
+  "R_FP": {
+   "q4": 50,
+   "h8": 0,
+   "fp": 13
+  }
+ },
+ "C5_pass": true,
+ "C6_build_audit": {
+  "w4_replay_all": {
+   "weight_bitexact": true,
+   "scale_bitexact": true,
+   "zero_bitexact": true,
+   "delta_bitexact": true,
+   "V_bitexact": true,
+   "dequant_bitexact": true
+  },
+  "w4_replay_codes_range": [
+   0,
+   15
+  ],
+  "w8_codes_range": [
+   0,
+   255
+  ],
+  "w8_dequant_bitexact_all": true,
+  "w8_finite_all": true
+ },
+ "C6_outputs_finite": true,
+ "C6b_batch8_vs_batch32_H8_max_abs": 0.018699944019317627,
+ "C6b_bitwise": false,
+ "C6c_aux_zero_equals_FP50": true,
+ "C6_rebuilt_w4_forward_bitexact": true,
+ "sanity_t500_eps_err": {
+  "q4": 12.630629539489746,
+  "h8": 0.14629970490932465
+ },
+ "pass": true,
+ "resident_model_bytes_simulation": {
+  "fp": 2700518528,
+  "q4": 2700518528,
+  "h8": 2700518528
+ },
+ "resident_carry_bytes_simulation": 8257536,
+ "stage": "wa8",
+ "run": "checks",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   92000,
+   92031
+  ]
+ },
+ "git_sha": "2d4952ae8ff9ad170c9246af25ef114a51a3ba10",
+ "start_utc": "2026-10-30T10:27:06Z",
+ "wall_s": 458.14807963371277,
+ "gpu_hours": 0.1272633554538091
+}
