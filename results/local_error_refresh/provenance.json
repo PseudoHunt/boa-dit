@@ -1,0 +1,29 @@
+{
+ "provenance": {
+  "base_model": {
+   "path": "/home/boa-dit-aa/ckpt/ckpt_deflate_heig_r8_w4_s/model.pt",
+   "sha256": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced",
+   "expected": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced"
+  },
+  "base_carry": {
+   "path": "/home/boa-dit-aa/results/deflate/quant/deflate_heig_r8_w4_s/carry.pt",
+   "sha256": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+   "expected": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5"
+  },
+  "tables": {
+   "path": "/home/boa-dit-aa/ckpt/dit_joint/static_single8.pt",
+   "sha256": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+   "expected": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67"
+  },
+  "smoothing": {
+   "path": "/home/boa-dit-aa/ckpt/temporal/dit_smooth_s.pt",
+   "sha256": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26",
+   "expected": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26"
+  }
+ },
+ "code": {
+  "boa_dit/local_refresh/run.py": "9c4c35abb86fdcef99dfd8e1c9e661b84734662a"
+ },
+ "carry_regeneration": "python -m boa_dit.dit_joint.run base (deflate.quantize_dc --mode heig --r 8 --bits 4 on W~ = W diag(s), calibration seeds 1000-1031); compare sha256",
+ "branch_parent": "activation-anchor-pilot d1eab46"
+}

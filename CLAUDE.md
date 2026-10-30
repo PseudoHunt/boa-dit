@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch local-error-refresh-pilot)
+## Active task (since 2026-10-30, branch local-error-refresh-pilot; stopped 2026-10-30 at the E1 headroom rule, 0.331 of 2.0 A30-h — no further runs)
 - **Active:** local weight-error refresh + activation feedback (ler1). Protocol `results/local_error_refresh/PROTOCOL.md`; cap 2.0 A30-h (ledger tag ler1);
   stage CLI `python -m boa_dit.local_refresh.run checks|screen|e1|e2|diag|conf|cost`; report `scripts/make_local_refresh.py`. Stop after this pilot.
 - Completed 2026-10-30: activation feedback + anchoring aa1 (activation-anchor-pilot, 0.532 A30-h, AC vs C inconclusive).
