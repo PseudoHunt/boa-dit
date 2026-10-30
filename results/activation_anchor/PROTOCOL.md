@@ -102,3 +102,6 @@ DCT-4 ≈ 2.6 s/img at batch 32; FP ≈ 0.6 s/img): checks ≈ 0.20 h, dev ≈ 0
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30, checks (0.225 h): G1–G8 pass (G1 Q, A, FP50 bitwise vs joint-pilot latents; save/resume bitwise; 50 feedback updates per site per trajectory).
+- 2026-10-30, implementation note (before dev metrics): the dev stage scores the seven checks-stage reference runs on 60200–60215 (batch 16; same
+  models, code and seeds) instead of regenerating identical trajectories.
