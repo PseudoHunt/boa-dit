@@ -1,0 +1,163 @@
+{
+ "seeds": [
+  60208,
+  60223
+ ],
+ "S1_cached": {
+  "cos_H_hhat": 0.6717978657849133,
+  "norm_hhat_over_H": 0.7821023034479861,
+  "residual_H_after_bridge": 0.5608546964950023,
+  "residual_H_after_bridge_ci": [
+   0.5467220450435912,
+   0.5740774317397905
+  ],
+  "forward_extrapolation_cosine": -0.243748269068937
+ },
+ "S2_replay": {
+  "cos_dx_hhat": 0.6821409298355414,
+  "norm_hhat_over_dx": 0.8462210875783542,
+  "residual_after_bridge": 0.5616060500080092,
+  "residual_after_bridge_ci": [
+   0.546006133469247,
+   0.5767596590866209
+  ],
+  "cos_dx_H": 0.9943456253976325,
+  "norm_H_over_dx": 1.081982604894134,
+  "residual_after_H": 0.018957017427861513,
+  "lambda_ls": 0.8061024947837641,
+  "lambda_ls_ci": [
+   0.7915646967329304,
+   0.8227784935600339
+  ]
+ },
+ "per_interval": {
+  "0": {
+   "cos_dx_hhat": 0.5889213763172506,
+   "norm_hhat_over_dx": 0.8932848021342604,
+   "cos_dx_H": 0.9952926875844962,
+   "norm_H_over_dx": 1.2049618972448017,
+   "residual_after_bridge": 0.745808707491662,
+   "cos_H_hhat": 0.5801503917190172,
+   "dx_energy": 1.0846223170220788
+  },
+  "4": {
+   "cos_dx_hhat": 0.574251233563415,
+   "norm_hhat_over_dx": 0.956878952243564,
+   "cos_dx_H": 0.996203503226614,
+   "norm_H_over_dx": 1.1706562947951795,
+   "residual_after_bridge": 0.8166394918532711,
+   "cos_H_hhat": 0.5658712005850951,
+   "dx_energy": 1.1461752044416857
+  },
+  "8": {
+   "cos_dx_hhat": 0.611269411876228,
+   "norm_hhat_over_dx": 0.9153306497338465,
+   "cos_dx_H": 0.9969567688451332,
+   "norm_H_over_dx": 1.1519990804187177,
+   "residual_after_bridge": 0.7188029424719976,
+   "cos_H_hhat": 0.5980530381793008,
+   "dx_energy": 1.2537429405889606
+  },
+  "12": {
+   "cos_dx_hhat": 0.6441791545272398,
+   "norm_hhat_over_dx": 0.848497277985914,
+   "cos_dx_H": 0.9979926927058597,
+   "norm_H_over_dx": 1.132602584795293,
+   "residual_after_bridge": 0.6267791124462443,
+   "cos_H_hhat": 0.6313122216559676,
+   "dx_energy": 1.7961625594693236
+  },
+  "16": {
+   "cos_dx_hhat": 0.6476834685677827,
+   "norm_hhat_over_dx": 0.7800556911965125,
+   "cos_dx_H": 0.9984091095065474,
+   "norm_H_over_dx": 1.120561232262024,
+   "residual_after_bridge": 0.5980285298676765,
+   "cos_H_hhat": 0.6357063539093822,
+   "dx_energy": 2.090222375491402
+  },
+  "20": {
+   "cos_dx_hhat": 0.6533694457227804,
+   "norm_hhat_over_dx": 0.7665483263824819,
+   "cos_dx_H": 0.9978386322847598,
+   "norm_H_over_dx": 1.0960029323665907,
+   "residual_after_bridge": 0.5859178264232895,
+   "cos_H_hhat": 0.6425227886201956,
+   "dx_energy": 2.1202932742738763
+  },
+  "24": {
+   "cos_dx_hhat": 0.6822076204102846,
+   "norm_hhat_over_dx": 0.7595428648401181,
+   "cos_dx_H": 0.9963552519311912,
+   "norm_H_over_dx": 1.0589276578960896,
+   "residual_after_bridge": 0.5405735026851591,
+   "cos_H_hhat": 0.6716117820421993,
+   "dx_energy": 2.397190444520776
+  },
+  "28": {
+   "cos_dx_hhat": 0.7203566801820032,
+   "norm_hhat_over_dx": 0.843528734808687,
+   "cos_dx_H": 0.9970573318781887,
+   "norm_H_over_dx": 1.0511326297900363,
+   "residual_after_bridge": 0.49625760835812194,
+   "cos_H_hhat": 0.7060422165049519,
+   "dx_energy": 2.5069693087227645
+  },
+  "32": {
+   "cos_dx_hhat": 0.7253827790633647,
+   "norm_hhat_over_dx": 0.8353221618244073,
+   "cos_dx_H": 0.997122903252211,
+   "norm_H_over_dx": 1.0491531848574707,
+   "residual_after_bridge": 0.4859064917201891,
+   "cos_H_hhat": 0.7164595654262426,
+   "dx_energy": 2.8060796730147435
+  },
+  "36": {
+   "cos_dx_hhat": 0.7250465888760274,
+   "norm_hhat_over_dx": 0.8461510893831229,
+   "cos_dx_H": 0.9957375216050244,
+   "norm_H_over_dx": 1.0340088626729464,
+   "residual_after_bridge": 0.48897374400230975,
+   "cos_H_hhat": 0.7195396520618863,
+   "dx_energy": 3.1419582113250675
+  },
+  "40": {
+   "cos_dx_hhat": 0.7265488073863323,
+   "norm_hhat_over_dx": 0.8648815768349913,
+   "cos_dx_H": 0.9944345439239184,
+   "norm_H_over_dx": 1.0392232821376222,
+   "residual_after_bridge": 0.49126278558883396,
+   "cos_H_hhat": 0.7220094106378626,
+   "dx_energy": 4.139097092248104
+  },
+  "44": {
+   "cos_dx_hhat": 0.6868016093161942,
+   "norm_hhat_over_dx": 0.8749573659977025,
+   "cos_dx_H": 0.9895702605508908,
+   "norm_H_over_dx": 1.0819971957495573,
+   "residual_after_bridge": 0.5637061382130765,
+   "cos_H_hhat": 0.6824593070311352,
+   "dx_energy": 5.762336327244052
+  }
+ },
+ "lambda_star": 0.8,
+ "lambda_rule": "lambda* = clip(floor(10 lambda_ls)/10, 0, 1) if the lambda_ls CI lower bound > 0, else CBlam dropped",
+ "note": "C's own trajectory; diagnostic same-state FP calls and FP window replays are not part of the method; uncentered cosines pooled over 12 intervals and 16 images; 2,000-draw image bootstrap",
+ "calls_C": {
+  "cheap": 50,
+  "fp": 13
+ },
+ "stage": "br1",
+ "run": "screen",
+ "device": "cuda:0",
+ "config": {
+  "seeds": [
+   60208,
+   60223
+  ]
+ },
+ "git_sha": "8b47dbfdaadc1af47e16424cbd4185dd24987fe3",
+ "start_utc": "2026-10-30T17:19:37Z",
+ "wall_s": 95.1540641784668,
+ "gpu_hours": 0.026431684494018556
+}
