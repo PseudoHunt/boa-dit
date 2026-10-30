@@ -81,3 +81,7 @@ A failed gate blocks all quality stages. Large artifacts stay local (standing in
 ## Amendments and results
 (appended below, dated)
 - 2026-10-30 18:39 UTC, gate (0.194 A30-h): all checks pass (C1–C12; C7 independence bitwise; C8 resume bitwise at i = 8 and 9). C vs G not bitwise (rel. L2 0.044 on 60200–60215) → kept separate; GB.w8 stays in Stage 2. Stage 1 started 18:38:45 UTC.
+- 2026-10-30 19:47 UTC, Stage 1 complete (1.137 A30-h, 256 images): primary ACB/CB 1.690 [1.335, 2.250], 59/256, ΔLPIPS +0.012 → harmful;
+  ACB/GB 1.677 [1.381, 2.096]; AC/G 1.038 [0.920, 1.174]; CB/C 0.257 [0.170, 0.384]; G/C 1.007. Matched interaction −0.0024 [−0.0049, −0.0000].
+- 2026-10-30 20:16 UTC, Stage 2 complete (128): CB.w8/C.w8 0.279 [0.192, 0.412]; ACB.w8/CB.w8 1.848 [1.279, 2.752]; ACB.w8/GB.w8 1.702; CB.w8/CB 1.010;
+  CB.w8/H8_50 2.675.
