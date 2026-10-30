@@ -122,3 +122,7 @@ Stop with partial results at the cap.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-30, before any check (implementation note): all check tolerances are relative L2 norms (square root of the energy ratio). C2 is dtype-aware:
+  1e-6 where h is fp32, 1e-3 where h is fp16 under autocast (fc2 inputs are GELU outputs in fp16, so the smoothing pre-hook (x.float()/s).to(fp16) rounds;
+  fp16 unit roundoff 4.9e-4). E0 uses the model inputs actually passed by the sampler (respaced timestep), recorded during G's trajectory.
+  In the scalar C3 case "compressed state" discards the state entirely (the only nontrivial orthogonal projection of a 1-token state).
