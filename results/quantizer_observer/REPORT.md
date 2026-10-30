@@ -12,9 +12,9 @@ Bed: DiT-XL/2 256, DDIM-50, cfg 1.5, common smoothed W4, frozen single8 A8 + DCT
 - site accounting: completed
 - A2 error statistics: completed
 - observer selection (fit/dev): completed
-- observer confirmation: completed
+- observer confirmation: NOT RUN (stopped by the gates-first rule; seeds unopened)
 - propagation audit (D): completed
-- live correction: completed
+- live correction: NOT RUN (stopped by the gates-first rule; seeds unopened)
 - cost: completed
 
 Checks pass: True (instrumented trace bit-exact vs deployed WA: True; identity residual 6.2e-33 relative; recompute mismatches 0; rows independent True).
