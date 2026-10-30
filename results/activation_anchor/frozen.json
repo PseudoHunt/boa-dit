@@ -1,0 +1,36 @@
+{
+ "frozen_utc": "2026-10-30T13:24:03Z",
+ "code_commit": "f4e84c355877a4cf77083cc4a4334245bb144896",
+ "confirmation_seeds": [
+  96100,
+  96163
+ ],
+ "arms": [
+  "FP50",
+  "Q",
+  "A",
+  "C",
+  "AC",
+  "C_anchor_only",
+  "AC_anchor_only"
+ ],
+ "K": 4,
+ "beta": 1.0,
+ "batch": 32,
+ "bootstrap": {
+  "draws": 10000,
+  "seed": 0
+ },
+ "primary": "AC vs C (useful: ratio<=0.95, CI upper<1, no clear LPIPS regression)",
+ "secondary": [
+  "A/Q",
+  "C/Q",
+  "AC/Q",
+  "AC/A",
+  "C/C_anchor_only",
+  "AC/AC_anchor_only",
+  "AC_anchor_only/C_anchor_only",
+  "interaction I"
+ ],
+ "note": "nothing selected from development or diagnostics"
+}
