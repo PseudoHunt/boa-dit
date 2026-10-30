@@ -1,7 +1,8 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-29)
-- **Active:** the DiT activation-feedback + weight-correction pilot. Authoritative handoff: `handoff/START_HERE.md`; protocol: `results/dit_joint/PROTOCOL.md`.
+## Active task (since 2026-10-30, branch quantizer-observer-pilot)
+- **Active:** quantizer-informed error observability (qo1). Protocol `results/quantizer_observer/PROTOCOL.md`; 2.0 A30-h hard ceiling; stage CLI `python -m boa_dit.quantizer_observer.run <stage>`.
+- Completed (do not rerun): joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
 - **Parked:** everything else (PixArt branch refit and its pilot, DNS / C-DNS and the deferred DNS proposal, activation-feedback extensions, weights-joint, follow-ups).
   Do not resume parked work unless the user explicitly asks. Its status and resume commands are in `handoff/PARKED_WORK.md`.
 
