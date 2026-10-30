@@ -1,8 +1,8 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch quantizer-observer-pilot)
-- **Active:** quantizer-informed error observability (qo1). Protocol `results/quantizer_observer/PROTOCOL.md`; 2.0 A30-h hard ceiling; stage CLI `python -m boa_dit.quantizer_observer.run <stage>`.
-- Completed (do not rerun): joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
+## Active task (since 2026-10-30, branch weight-anchor-pilot)
+- **Active:** measured weight-error anchoring pilot (wa1). Protocol `results/weight_anchor/PROTOCOL.md`; 1.0 A30-h hard cap; stage CLI `python -m boa_dit.weight_anchor.run <stage>`.
+- Completed (do not rerun): quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).
 - **Parked:** everything else (PixArt branch refit and its pilot, DNS / C-DNS and the deferred DNS proposal, activation-feedback extensions, weights-joint, follow-ups).
   Do not resume parked work unless the user explicitly asks. Its status and resume commands are in `handoff/PARKED_WORK.md`.
 
