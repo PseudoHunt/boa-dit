@@ -21,6 +21,13 @@
    "spent_before_h": 0.1576,
    "estimate_h": 0.12,
    "ok": true
+  },
+  {
+   "stage": "profile",
+   "utc": "2026-10-30T01:28:07Z",
+   "spent_before_h": 0.22039999999999998,
+   "estimate_h": 0.08,
+   "ok": true
   }
  ]
 }
