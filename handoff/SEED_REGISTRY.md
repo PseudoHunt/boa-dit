@@ -38,7 +38,7 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 94000–94031 / 94100–94163 | W8-anchor pilot (wa8): development / confirmation | **evaluated (2026-10-30)** |
 | 95100–95163 | shared-anchor pilot (ws1): fresh confirmation (dev reuses 94000–94031) | **evaluated (2026-10-30)** |
 | 96100–96163 | activation-anchor pilot (aa1): fresh confirmation (dev reuses 60200–60215; G1 bitwise test on 61000–61031) | **evaluated (2026-10-30)** |
-| 97100–97163 | local-refresh pilot (ler1): planned confirmation — **never opened** (pilot stopped at E1 headroom rule); still fresh | reserved, unopened (2026-10-30) |
+| 97100–97163 | anchor-drift pilot (ad1): fresh confirmation (ler1 reserved it but stopped at E1 without opening it); dev 60208–60223 | **reserved (2026-10-30)** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
