@@ -143,3 +143,5 @@ H8-50: 50·C_Q4 + 13·C_H8 + overhead vs 50·C_H8, so C_Q4/C_H8 < 0.74 is necess
   - Hashes and restoration instructions in `provenance.json`; `h8.pt` is not committed.
 - 2026-10-30, checks (0.127 h): C1 (FP50, Q4, R_FP = wac1 FP50, Q, R1 bitwise), C2, C3, C4 (13 anchors), C5, C6, C6c pass; rebuilt-W4 forward bitwise.
   C6b (recorded only): H8 at batch 8 vs batch 32 differs by max-abs 0.0187 in the endpoint latent (GEMM tiling); all arms use batch 32 throughout.
+- 2026-10-30, dev + traces (32 images, all mandatory arms): written to dev.json / drift.json. The K = 8 drift prediction in drift.json is frozen
+  by this commit, before any K = 8 endpoint is generated.
