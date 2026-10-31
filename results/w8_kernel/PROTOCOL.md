@@ -39,3 +39,4 @@ W8 packed vs fp16), cost table (measured or "hypothetical ratio only"), and the 
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-31 14:33 UTC, inventory (23 min CPU) found no installed/official-prebuilt packed implementation of either side (W4A8-static + rank-8 cheap; W8A16 + rank-8 anchor) on sm_80 → stop at step 2. One labelled partial microbenchmark of the installed single-side ops ran (0.034 A30-h, `bench.json`): W8A16 `_weight_int8pack_mm` is a naive kernel (158–306× fp16); only INT8×INT8 `_int_mm` (A8, a different precision) is a packed tensor-core GEMM. See REPORT.md.
