@@ -149,3 +149,38 @@ below). **Development screen not rerun** (repeatability unchanged). Confirmation
   K4 reuse to help, and the schedules short enough to benefit lose the speed margin.
 - The noise analysis explains the screen failure. Removing the noise is predicted to remove part of the harm, not to produce a gain at K4.
 - A deterministic build would test that prediction directly; it is the remaining unknown.
+
+## Amended conclusion (2026-10-31, user decision: SANA unit-gain K4 error reuse PARKED)
+**Scope:** the current model (Sana 1.0 1600M 1024px, Nunchaku 1.2.1 INT4 r32 SVDQuant), its native 20-step DPMSolverMultistep scheduler, and this A30.
+
+**Passed:**
+- Packed-kernel speed: per-call INT4/BF16 0.515; hybrid K4 loop 0.757 × BF16-20; loaded pipeline 2.11 s vs 2.68 s.
+- Dual-model residency: peak reserved 12.18 GiB of 23.6 GiB.
+
+**Did not pass:**
+- Accuracy transfer of unit-gain (β = 1) K4 measured-discrepancy reuse. On the 16-prompt development screen R/A was 1.110 [0.951, 1.276] against a
+  required ≤ 0.90.
+- The confirmation prompts mjhq1k 464–527 were never opened and remain reserved.
+
+**Distinctions:**
+- **Repeat-mean diagnostic ≠ deterministic implementation.**
+  - The 1.31 K4 held residual is computed on the *mean over 16 repeated calls* of the current non-deterministic implementation, using split-half
+    estimators. It describes the reproducible component of this implementation's error.
+  - A hypothetical deterministic implementation (for example, with fixed-point reductions in both float-atomic sites) would compute a different
+    function. Its error, and that error's persistence, could differ from this repeat mean, including fast-varying dynamic-A4 error. **It was not built
+    or measured.**
+  - So the repeat-mean result predicts, but does not establish, that removing nondeterminism alone would not rescue K4 reuse.
+- **Local prediction-error energy ≠ endpoint quality.**
+  - The held-residual and lag-correlation figures are local energies of the guided-prediction discrepancy at teacher-forced BF16 states.
+  - Endpoint fidelity was measured directly only on the dev screen (latent rel. MSE / PSNR / LPIPS vs H20).
+  - Generation quality (e.g. ImageReward, FID) was not measured at all.
+
+**Preserved:**
+- The repeatability reproducer: `scripts/sana_a30_det.py`, `scripts/sana_a30_det2.py`, `scripts/sana_a30_rep.py loc`. An extended, unrun reproducer
+  is on branch `sana-repeatability`.
+- The split-repeat results: `rep_split.json`, with per-prompt split-half statistics. Per-call trace tensors were not saved in snk1b; the unrun sr1
+  `traces` stage would save them.
+- The source findings: PR #820 covers `lora.cuh:91` only; the LiteLA epilogue atomic at `epilogues.cuh:665` is untouched.
+- The untouched confirmation prompts.
+
+**Not done, by decision:** CUDA 13 install, Nunchaku rebuild, kernel modification, the SANA bridge port.
