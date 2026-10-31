@@ -1,7 +1,7 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30 evening, branch activation-bridge-overnight, worktree /home/boa-dit-abn; queue finished 21:52 UTC, 3.407 of 6.0 A30-h — no further runs)
-- **Active:** overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
+## Active task (2026-10-31): handoff "anchor-aware refit + W8 spacing" on branch dit-anchor-refit (worktree /home/boa-dit-dar): dar1 (results/anchor_refit, cap 2.5 A30-h) and w8s1 (results/w8_spacing, cap 0.4); common 4.0 A30-h total with sr1 (SANA, parked, 0 h) via scripts/h1031_budget.py. Earlier: abn1 complete.
+- Completed 2026-10-30: overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
   `results/activation_bridge_overnight/PROTOCOL.md`; cap 6.0 A30-h + 8 h wall (tag abn1); queue `bash scripts/abn1_queue.sh` (resumable, flock); see RUN.md.
 - Completed 2026-10-30: anchor-drift ad1 (anchor-drift-pilot b42f065; drift vs local inconclusive, 1.518 A30-h).
 - **Completed 2026-10-30 (no further runs):** retrospective anchor-bridge correction (br1), branch anchor-bridge-pilot; `results/anchor_bridge/REPORT.md`;

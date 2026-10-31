@@ -42,6 +42,11 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 98100–98163 | anchor-bridge pilot (br1): fresh confirmation (dev 60208–60223; bitwise test 60200–60215) | **evaluated (2026-10-30)** |
 | 110000–110255 | overnight abn1 (activation-bridge-overnight): confirmation cohort (Stages 2–4 use 110000–110127) | **evaluated (2026-10-30)** |
 | 112000–113999 | overnight abn1: FID-2k cohort (labels index // 2) — **never generated** (stage skipped by budget); still fresh | reserved, unopened (2026-10-30) |
+| 124000–124127 | dar1 (dit-anchor-refit): fresh confirmation for the anchor-aware refit (dev reuses inspected 60200–60231; training 60100–60163) | **reserved, unopened (2026-10-31)** |
+| 126000–126063 | w8s1 (dit-anchor-refit): W8 anchor spacing probe | **reserved (2026-10-31)** |
+| 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **evaluated (2026-10-31)** |
+| 120000–120031 / 120100–120131 | cfb1 (coupled-feedback-bridge-pilot): fit / validation | **evaluated (2026-10-31)** |
+| 121000–121255 | cfb1 confirmation — **never opened** (validation gate failed); still fresh | reserved, unopened (2026-10-31) |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
@@ -59,6 +64,8 @@ PixArt uses prompt indices; the seed is the prompt index.
 | `mjhq1k` | 400–431 | PixArt fresh development set | **untouched (registered, unopened)** |
 | `mjhq1k` | 432–463 | reserve dev set for the conditional trajectory-anchored target | **untouched (reserved)** |
 | `mjhq1k` | 600–663 | PixArt refit training states | training |
-| `mjhq1k` | 352–399, 464–599, 664–999 | — | free |
+| `mjhq1k` | 352–367 | snk1 SANA development (timing prompts 358, 352, 361, 359 within it) | **evaluated (2026-10-31)** |
+| `mjhq1k` | 464–527 | snk1 SANA confirmation (64) — never opened (development rule failed); still fresh | **reserved, unopened (2026-10-31)** |
+| `mjhq1k` | 368–399, 528–599, 664–999 | — | free |
 
 Rule (all protocols): a range is untouched only if this registry says so. A range does not count as untouched just because one branch never used it.
