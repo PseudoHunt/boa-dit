@@ -42,6 +42,8 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 98100–98163 | anchor-bridge pilot (br1): fresh confirmation (dev 60208–60223; bitwise test 60200–60215) | **evaluated (2026-10-30)** |
 | 110000–110255 | overnight abn1 (activation-bridge-overnight): confirmation cohort (Stages 2–4 use 110000–110127) | **evaluated (2026-10-30)** |
 | 112000–113999 | overnight abn1: FID-2k cohort (labels index // 2) — **never generated** (stage skipped by budget); still fresh | reserved, unopened (2026-10-30) |
+| 124000–124127 | dar1 (dit-anchor-refit): fresh confirmation for the anchor-aware refit (dev reuses inspected 60200–60231; training 60100–60163) | **evaluated (2026-10-31)** |
+| 126000–126063 | w8s1 (dit-anchor-refit): W8 anchor spacing probe | **evaluated (2026-10-31)** |
 | 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **evaluated (2026-10-31)** |
 | 120000–120031 / 120100–120131 | cfb1 (coupled-feedback-bridge-pilot): fit / validation | **evaluated (2026-10-31)** |
 | 121000–121255 | cfb1 confirmation — **never opened** (validation gate failed); still fresh | reserved, unopened (2026-10-31) |
