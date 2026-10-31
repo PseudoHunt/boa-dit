@@ -1,0 +1,15 @@
+{
+ "note": "local only (standing instruction: nothing generated/trained is uploaded); regenerate with the stage commands in RUN.md",
+ "files": {
+  "conf_latents.pt": {
+   "path": "ckpt/reference_feedback_bridge/conf_latents.pt",
+   "sha256": "417d0c6737fc9c758865ad16db4a9c3fd148d583e9e252f3940ea24ff5de5f69",
+   "bytes": 14683385
+  },
+  "dev_latents.pt": {
+   "path": "ckpt/reference_feedback_bridge/dev_latents.pt",
+   "sha256": "1113d32e0b0a073e083eebfa67474e615b1fbb45e6525dd90028f8ddbd759c47",
+   "bytes": 3673324
+  }
+ }
+}
