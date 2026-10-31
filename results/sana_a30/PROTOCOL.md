@@ -153,3 +153,36 @@ multistep (latent, history) state and replay validation under its own protocol.
   - **LPIPS:** computed by a separate metrics script in the main DiT environment from saved uint8 images, because nk_env has no lpips and is not
     modified.
 - 2026-10-31 08:22 UTC, checks pass (Q paths judged against Q's own spread; routing/resume bitwise with a deterministic stand-in); development screen: R/A 1.110 [0.951, 1.276] (rule <= 0.90) → **fails**; confirmation 464–527 not opened; Hk not evaluated. Same-state diagnostics: Q run-to-run noise = 57% of Q−H energy; held subtraction leaves 1.56x. Report written; nothing running.
+
+## Follow-up snk1b — INT4 repeatability (registered 2026-10-31 ~08:45 UTC, before any of its measurements)
+Specification: the user's follow-up recommendation (2026-10-31): localize the INT4 variation, separate persistent error from repeat noise, inspect
+upstream PR #820, and rerun the development screen only if repeatability improves. Ledger tag **snk1b**, cap **0.5 A30-h** (part of the unused snk1
+envelope), wall ≤ 3 h. The confirmation set (mjhq1k 464–527) stays untouched. No new corrections; the bridge port is deferred.
+
+1. **Reproduce/localize** (`scripts/sana_a30_rep.py loc`)
+   - States: dev prompts 352, 356, 361, 365 at steps 0 / 10 / 19 of their H20 trajectories.
+   - Calls:
+     - Q is called 16× per state, with cloned inputs, synchronize after each call and outputs cloned.
+     - Checks: inputs bitwise unchanged after all calls; CPU/CUDA RNG state unchanged.
+     - Through the router wrapper and through the bare transformer (same module; the direct-pipeline equivalent).
+   - Per-block localization:
+     - A pre-hook captures the arguments of the Nunchaku block stack.
+     - Per-layer isolation: each of the 20 layers is run 16× via `forward_layer_at` on its fixed reference input.
+     - Chained stack: 16 chained runs, recording the divergence after each layer.
+     - Summaries: the first layer with non-bitwise output; per-layer isolated relative spread; growth of the chained spread.
+   - BF16 H is run 16× as a control.
+2. **Persistent vs repeat noise** (`scripts/sana_a30_rep.py split`)
+   - All 16 dev prompts, all 20 states of each H20 trajectory, Q called 16× per state; e = guided(Q) − guided(H).
+   - Split-half means m¹, m² (8 + 8 repeats) give unbiased cross estimators of the reproducible component p:
+     E‖p‖², the lag-1/2/4/8 correlation of p, and the K4 held-correction residual ‖p_t − p_a‖² / ‖p_t‖².
+   - Within-state variance V from the 16 repeats.
+   - Predicted single-call held error ‖p_t − p_a‖² + V_t + V_a, compared with the single-call measurement.
+   - Uncertainty: prompt-level bootstrap (2,000 draws, seed 0).
+   - This is offline only; averaging calls is not proposed for deployment.
+3. **PR #820** (head 3713fa96, open, unmerged): source inspection only of whether the pinned v1.2.1 SANA path uses the float atomic LoRA-activation
+   reduction that the PR replaces.
+   - A patched build is attempted only if (a) step 1 localizes variation to W4A4 linears consistent with that path, and (b) a CUDA-13 toolchain is
+     obtainable in an isolated venv within a 60 min setup cap.
+   - The working wheel and `/home/nk_env` are never modified.
+   - Accuracy (vs BF16) and speed are both checked; determinism alone is insufficient.
+4. The development screen is rerun only if repeatability materially improves.
