@@ -1,0 +1,15 @@
+{
+ "note": "local only (standing instruction: nothing generated/trained is uploaded); regenerate with RUN.md",
+ "files": {
+  "fit_latents.pt": {
+   "path": "ckpt/coupled_feedback_bridge/fit_latents.pt",
+   "sha256": "970357b9d04b34754d2297fe304aed160c8629ffbacc7b66c7bd04c22c4e4b0c",
+   "bytes": 14689341
+  },
+  "val_latents.pt": {
+   "path": "ckpt/coupled_feedback_bridge/val_latents.pt",
+   "sha256": "3251ac76df739ccf679f6f9833e40ecfd087fa47ec07a75bc6f4e104195b52df",
+   "bytes": 2624230
+  }
+ }
+}
