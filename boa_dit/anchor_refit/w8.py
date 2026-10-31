@@ -88,7 +88,9 @@ def run_stage(dev):
         M = AB.load_models(dev, ("fp", "h8", "static"))
         d = make_diffusion(AB.T)
         lat, cnt, tim = {a: [] for a in arms}, {}, {}
-        for b0 in range(0, len(SEEDS), BS):
+        lf = os.path.join(CK, "latents.pt")
+        prev = torch.load(lf, map_location="cpu") if os.path.exists(lf) else None      # resume: trajectories already generated (counts asserted then)
+        for b0 in range(0, len(SEEDS), BS if prev is None else len(SEEDS) + 1):
             s = SEEDS[b0:b0 + BS]
             nz, lb = noise_for_seeds(s, dev), labels_for_seeds(s)
             for a in arms:
@@ -98,15 +100,23 @@ def run_stage(dev):
                 assert torch.isfinite(x).all() and c == AB.expect(AB.ARMS[NAMES[a]]), (a, c)
                 lat[a].append(x.cpu()); cnt[a] = c; tim.setdefault(a, []).append(dt)
                 print(f"  seeds {s[0]}-{s[-1]} {a}: {dt:.1f} s {c}", flush=True)
-        lat = {a: torch.cat(v) for a, v in lat.items()}
-        os.makedirs(CK, exist_ok=True)
-        atomic_torch_save(lat, os.path.join(CK, "latents.pt"))
+        if prev is None:
+            lat = {a: torch.cat(v) for a, v in lat.items()}
+            os.makedirs(CK, exist_ok=True)
+            atomic_torch_save(lat, lf)
+        else:
+            lat = prev
+            cnt = {a: AB.expect(AB.ARMS[NAMES[a]]) for a in arms}
+            tim = json.load(open(os.path.join(OUT, "attempt1_timing.json")))
+        from boa_dit.sample import CTX
+        CTX.step, CTX.n = 25, BS                                               # quantizer step index for the out-of-sampler per-call timing
         # per-call simulated cost (bs 32, CFG 64 rows, warm, CUDA events): FP vs H8 vs cheap
         x = noise_for_seeds(SEEDS[:BS], dev)
         lb_ = torch.as_tensor(labels_for_seeds(SEEDS[:BS]), device=dev)
         y = torch.cat([lb_, torch.full_like(lb_, NULL_CLASS)])
         ts = torch.full((BS,), 500, device=dev, dtype=torch.long)
         mods = {"FP": M["fp"], "H8": M["h8"], "cheap": M["static"].m}
+        M["static"].use("0")
         for _ in range(5):
             for m in mods.values():
                 guided(m, x, ts, y, BS)
@@ -116,6 +126,7 @@ def run_stage(dev):
         for k in order:
             per[k].append(ev_ms(lambda: guided(mods[k], x, ts, y, BS)))
         pc = {k: float(np.median(v)) for k, v in per.items()}
+        CTX.step = None
         del M
         torch.cuda.empty_cache()
         pairs = [("W8-K2", "FP-K4"), ("W8-K2", "W8-K4"), ("W8-K4", "FP-K4"), ("FP-K4", "H8_50"), ("W8-K4", "H8_50"), ("W8-K2", "H8_50")]

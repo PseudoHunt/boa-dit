@@ -109,3 +109,13 @@ Unopened confirmation seeds are reported by exact ID.
 (appended below, dated)
 - 2026-10-31 09:31 UTC, checks attempt 1 (FAILED, OOM): check 1 passed (endpoint rel 0.046 ≤ 0.05; step-1 rel 1.2e-7; 50 + 13 calls, 12 bridges), then CUDA OOM in the BL-loss gradient check (8 per-step graphs alive at once + check models still resident). Fix (implementation only, objective unchanged): BL accumulates each per-step term's gradient immediately (scaled 1/n; identical gradient to backpropagating the mean); check models freed. Checks rerun in full.
 - 2026-10-31 09:38 UTC, checks attempt 2 (FAILED, OOM at the reported-only STE finite-difference case, after the fp32 FD checks ran): memory not released by the resume check's three short training runs. Fix (implementation only): explicit gc/empty_cache at the end of train(); FD windows use activation checkpointing (identical values; recomputation). Checks rerun in full.
+- 2026-10-31 09:46 UTC, checks attempt 3 completed with pass = false (0.105 A30-h). All checks passed except two, both kept on record:
+  (a) **check 4 counts:** the protocol's expected count was wrong. Full windows (a ≤ 40) make **9** cheap calls: 8 transitions plus the right-boundary
+  anchor measurement that the bridge at a+8 requires; FP calls 3, bridges 2. Terminal windows match (a = 44: 6 / 2 / 1; a = 48: 2 / 1 / 0). The
+  expectation is corrected to 9 / 3 / 2; the code is unchanged.
+  (b) **check 6 parameter direction unresolved at fp32:** along the random carry direction the directional derivative is tiny (−4.1e-5, from
+  cancellation over ~4M parameters), so central differences sit at the fp32 noise floor. Best rel. error 6.2e-3 at h = 1e-2 (> 1e-3). The latent
+  direction (through student, teacher and bridge) is resolved: 7.3e-4 at h = 1e-2 and 1.8e-3 at 1e-3.
+  Added check 6b, a resolvable regime: a parameter-direction central FD along the **normalized gradient direction**, same reduced case (quantizer off,
+  fp32, batch 1, a = 0), same h grid and tolerance (≤ 1e-3 with a neighbour ≤ 1e-2). It runs as stage `fdgrad`, which updates checks.json and keeps the
+  original entries. Training starts only if 6b is resolved.

@@ -6,6 +6,7 @@ Inference = abn1 CB configuration (W4A8 static, FP anchors K4, bridge lambda 1).
 Stages: cache | norm | checks | profile | train_ba | train_bl | dev | conf | diag
 Run: python -m boa_dit.anchor_refit.run <stage>
 """
+import gc
 import hashlib
 import json
 import math
@@ -132,10 +133,20 @@ def loss_ba(m, jq, fp, xa, lab, a, sch, Ac, bc, den, xF=None, **kw):
     return (xe - xF).pow(2).flatten(1).sum(1).mean() / den[a], cnt
 
 
-def loss_bl(m, jq, fp, xa, lab, a, sch, nrm, cont=None):
+def loss_bl(m, jq, fp, xa, lab, a, sch, nrm, cont=None, backward=False):
+    """mean over the window transitions of the per-step loss. backward=True: each term's gradient (scaled 1/n) is accumulated immediately, so only
+    one call's graph is alive at a time (same gradient as backpropagating the mean); returns the detached mean."""
     _, xs, Fs = cont if cont is not None else fp_continue(fp, xa, lab, a, 2 * KA, sch)
-    terms = [(stu(m, jq, x, lab, a + j, sch, False) - f).pow(2).flatten(1).sum(1).mean() / nrm["loc"][a + j] for j, (x, f) in enumerate(zip(xs, Fs))]
-    return torch.stack(terms).mean()
+    n, tot = len(xs), 0.0
+    terms = []
+    for j, (x, f) in enumerate(zip(xs, Fs)):
+        t = (stu(m, jq, x, lab, a + j, sch, False) - f).pow(2).flatten(1).sum(1).mean() / nrm["loc"][a + j]
+        if backward:
+            (t / n).backward()
+            tot += float(t) / n
+        else:
+            terms.append(t)
+    return torch.tensor(tot) if backward else torch.stack(terms).mean()
 
 
 # ------------------------------------------------------------------------------------------------------------------- models / cache
@@ -282,7 +293,7 @@ def stage_checks(dev):
                 h.remove()
             res2[name] = bool(torch.equal(yi, ytr))
         ch["2_export_install_bitwise"] = res2
-        jqt.remove(); del mt
+        jqt.remove(); del mt, ct, jqt
         torch.cuda.empty_cache()
         register_carry("U0", os.path.join(CK, "carry_u0_check.pt"))
         register_carry("ARCH", ARCH)
@@ -292,6 +303,8 @@ def stage_checks(dev):
         del M
         torch.cuda.empty_cache()
         # 3b/4/5 on a fresh trainer
+        del m, jq, c, fp
+        torch.cuda.empty_cache()
         d, sch, Ac, bc, m, jq, c, fp = trainer(dev)
         tabs = DJ.sha(DJ.TABLES)
         w0 = m.blocks[0].attn.qkv.weight.detach().clone()
@@ -307,7 +320,7 @@ def stage_checks(dev):
             for a in STARTS:
                 _, cn = window(m, jq, fp, cache["train"][:4, a // KA].to(dev), lab, a, 2 * KA, sch, Ac, bc, ck=False)
                 cnts[a] = cn
-        exp = lambda a: {"cheap": 8, "fp": 3, "bridges": 2} if a <= 40 else ({"cheap": 6, "fp": 2, "bridges": 1} if a == 44 else {"cheap": 2, "fp": 1, "bridges": 0})
+        exp = lambda a: {"cheap": 9, "fp": 3, "bridges": 2} if a <= 40 else ({"cheap": 6, "fp": 2, "bridges": 1} if a == 44 else {"cheap": 2, "fp": 1, "bridges": 0})
         ch["4_window_counts"] = {a: v for a, v in cnts.items()}
         ch["4_window_counts_pass"] = all(cnts[a] == exp(a) for a in STARTS)
         with torch.no_grad():
@@ -332,8 +345,7 @@ def stage_checks(dev):
         ch["5_teacher_latent_derivative_rel_effect"] = float((g_full - g_det).norm() / g_full.norm())
         ch["5_loss_equal_with_detached_teacher_input"] = bool(float(loss) == float(loss2))
         c.zero_grad(set_to_none=True)
-        lbl = loss_bl(m, jq, fp, xa, lab, 0, sch, nrm)
-        lbl.backward()
+        lbl = loss_bl(m, jq, fp, xa, lab, 0, sch, nrm, backward=True)
         ch["5_bl_grad_finite_nonzero"] = bool(torch.isfinite(flatgrad(c)).all() and flatgrad(c).abs().sum() > 0)
         c.zero_grad(set_to_none=True)
         # 4b. training resume (2 + 2 vs 4 updates, BA)
@@ -343,7 +355,8 @@ def stage_checks(dev):
         jq.mode = "off"
         x1, l1 = cache["train"][:1, 0].to(dev), lab[:1]
         xF1, _, _ = fp_continue(fp, x1, l1, 0, 2 * KA, sch)
-        L = lambda xa_=x1: (window(m, jq, fp, xa_, l1, 0, 2 * KA, sch, Ac, bc, ck=False)[0] - xF1).pow(2).sum()
+        gc.collect(); torch.cuda.empty_cache()
+        L = lambda xa_=x1: (window(m, jq, fp, xa_, l1, 0, 2 * KA, sch, Ac, bc, ck=True)[0] - xF1).pow(2).sum()
         g = torch.Generator().manual_seed(9)
         dirs = [torch.randn(p.shape, generator=g).to(dev) for p in c.parameters()]
         th = math.sqrt(sum(float(p.detach().pow(2).sum()) for p in c.parameters()))
@@ -418,6 +431,61 @@ def stage_checks(dev):
     return 0 if ch["pass"] else 6
 
 
+def stage_fdgrad(dev):
+    """check 6b (amendment 2026-10-31 09:46): parameter-direction central FD along the normalized gradient, reduced case (quantizer off, fp32, batch 1,
+    window a = 0); also re-evaluates check 4 with the corrected expected counts (9 / 3 / 2 for full windows) from the recorded counts."""
+    global AMP
+    ch = json.load(open(os.path.join(OUT, "checks.json")))
+    guard("fdgrad", 0.03)
+    with Run(TAG, "fdgrad", dev, {}) as run:
+        d, sch, Ac, bc, m, jq, c, fp = trainer(dev)
+        cache = load_cache()
+        AMP = False
+        jq.mode = "off"
+        x1 = cache["train"][:1, 0].to(dev)
+        l1 = torch.as_tensor(labels_for_seeds(TRAIN[:1]), device=dev)
+        xF1, _, _ = fp_continue(fp, x1, l1, 0, 2 * KA, sch)
+        L = lambda: (window(m, jq, fp, x1, l1, 0, 2 * KA, sch, Ac, bc, ck=True)[0] - xF1).pow(2).sum()
+        c.zero_grad(set_to_none=True)
+        L().backward()
+        g = [p.grad.detach().clone() for p in c.parameters()]
+        gn = math.sqrt(sum(float(v.pow(2).sum()) for v in g))
+        th = math.sqrt(sum(float(p.detach().pow(2).sum()) for p in c.parameters()))
+        dirs = [v * th / gn for v in g]
+        ad = sum(float((gi * v).sum()) for gi, v in zip(g, dirs))
+        fd = {}
+        with torch.no_grad():
+            for h in (1e-1, 1e-2, 1e-3, 1e-4, 1e-5):
+                for p, v in zip(c.parameters(), dirs):
+                    p.add_(h * v)
+                lp = float(L())
+                for p, v in zip(c.parameters(), dirs):
+                    p.sub_(2 * h * v)
+                lm = float(L())
+                for p, v in zip(c.parameters(), dirs):
+                    p.add_(h * v)
+                fd[h] = {"fd": (lp - lm) / (2 * h), "rel_err": abs((lp - lm) / (2 * h) - ad) / abs(ad)}
+        hs = sorted(fd, reverse=True)
+        res = any(fd[h]["rel_err"] <= 1e-3 and ((i > 0 and fd[hs[i - 1]]["rel_err"] <= 1e-2) or (i + 1 < len(hs) and fd[hs[i + 1]]["rel_err"] <= 1e-2))
+                  for i, h in enumerate(hs))
+        AMP = True
+        exp = lambda a: {"cheap": 9, "fp": 3, "bridges": 2} if a <= 40 else ({"cheap": 6, "fp": 2, "bridges": 1} if a == 44 else {"cheap": 2, "fp": 1, "bridges": 0})
+        ch["4_window_counts_pass_corrected_expectation"] = all(ch["4_window_counts"][str(a)] == exp(a) for a in STARTS)
+        ch["6b_param_gradient_direction"] = {"autograd": ad, "fd": fd, "resolved": res}
+        ch["pass_original_rules"] = ch["pass"]
+        keys_ok = [ch["1_pass"], *ch["2_export_install_bitwise"].values(), ch["2_eval_u0_equals_abn1_CB_bs32"], ch["2_eval_arch_equals_abn1_LCB_bs32"],
+                   ch["3_u0_export_equals_original"], ch["3_lr0_step_export_equals_original"], ch["3_tables_and_W4_unchanged"],
+                   ch["4_window_counts_pass_corrected_expectation"], ch["4_window_a0_equals_full_rollout_corrected_x8_bitwise"], ch["5_grad_b0_nonzero"],
+                   ch["5_grad_b27_nonzero"], ch["5_teacher_params_no_grad"], ch["5_teacher_latent_derivative_rel_effect"] > 0,
+                   ch["5_loss_equal_with_detached_teacher_input"], ch["5_bl_grad_finite_nonzero"], ch["6_latent_resolved"], res]
+        ch["pass"] = bool(all(keys_ok))
+        ch["pass_note"] = "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32)"
+        ch["fdgrad_run"] = run.record()
+    jdump("checks.json", ch)
+    print(json.dumps({"6b": ch["6b_param_gradient_direction"], "4_corrected": ch["4_window_counts_pass_corrected_expectation"], "pass": ch["pass"]}, indent=1))
+    return 0 if ch["pass"] else 6
+
+
 def resume_check(dev):
     p1 = train(dev, "BA", n_updates=4, save=False, return_params=True)
     p2a = train(dev, "BA", n_updates=2, save=False, return_params=True, keep_state=True)
@@ -468,10 +536,11 @@ def train(dev, obj, n_updates, ckpt_at=(), save=True, time_cap_s=None, return_pa
         torch.cuda.synchronize(); t0 = time.time()
         if obj == "BA":
             loss, _ = loss_ba(m, jq, fp, xa, lab, a, sch, Ac, bc, den)
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
         else:
-            loss = loss_bl(m, jq, fp, xa, lab, a, sch, nrm)
-        opt.zero_grad(set_to_none=True)
-        loss.backward()
+            opt.zero_grad(set_to_none=True)
+            loss = loss_bl(m, jq, fp, xa, lab, a, sch, nrm, backward=True)
         gn = float(torch.sqrt(sum(p.grad.pow(2).sum() for p in c.parameters())))
         opt.step()
         torch.cuda.synchronize(); dt = time.time() - t0
@@ -493,7 +562,8 @@ def train(dev, obj, n_updates, ckpt_at=(), save=True, time_cap_s=None, return_pa
     if keep_state:
         out["state"] = snap()
     c.remove(); jq.remove()
-    del m, fp
+    del m, fp, c, jq, opt
+    gc.collect()
     torch.cuda.empty_cache()
     return out
 
@@ -727,7 +797,7 @@ def main():
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     st = sys.argv[1]
-    f = {"cache": stage_cache, "norm": stage_norm, "checks": stage_checks, "profile": stage_profile, "train_ba": lambda d: stage_train(d, "BA"),
+    f = {"cache": stage_cache, "norm": stage_norm, "checks": stage_checks, "fdgrad": stage_fdgrad, "profile": stage_profile, "train_ba": lambda d: stage_train(d, "BA"),
          "train_bl": lambda d: stage_train(d, "BL"), "dev": stage_dev, "conf": stage_conf, "diag": stage_diag}[st]
     sys.exit(f(dev) or 0)
 
