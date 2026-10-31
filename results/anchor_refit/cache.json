@@ -1,0 +1,27 @@
+{
+ "train_shape": [
+  64,
+  13,
+  4,
+  32,
+  32
+ ],
+ "diag_shape": [
+  8,
+  13,
+  4,
+  32,
+  32
+ ],
+ "sha256": "7b27ff9e79a629feace83c441f4d5f3e80b9de6ccfe5ae25efed643e8f870c5d",
+ "stage": "dar1",
+ "run": "cache",
+ "device": "cuda:0",
+ "config": {
+  "seeds": "TRAIN 60100-60163, DIAG 60208-60215"
+ },
+ "git_sha": "cffcdcf420356aa4d586425fe1e3ef350e1800ca",
+ "start_utc": "2026-10-31T09:21:55Z",
+ "wall_s": 156.86468410491943,
+ "gpu_hours": 0.04357352336247762
+}

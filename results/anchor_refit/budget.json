@@ -1,0 +1,14 @@
+{
+ "cap_dar1_h": 2.5,
+ "total_cap_h": 4.0,
+ "log": [
+  {
+   "utc": "2026-10-31T09:21:55Z",
+   "stage": "cache",
+   "tag_spent": 0.0,
+   "total_spent": 0.18419999999999997,
+   "est": 0.05,
+   "ok": true
+  }
+ ]
+}

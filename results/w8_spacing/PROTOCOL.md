@@ -45,3 +45,4 @@ size is frozen before any quality result.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-31 09:22 UTC, checks pass (K2 25/24, coef ½·b, K1 = H8_50 bitwise, CB and CB.w8 reproduce bitwise; 0.050 A30-h). Run attempt 1: all 5 arms × 64 seeds generated and saved (counts asserted per trajectory), then a **crash in the out-of-sampler per-call timing** (the cheap model's static quantizer had no step index; CTX.step unset). Logged as FAILED. Fix: CTX.step = 25 during per-call timing; the rerun reuses the saved latents (no regeneration) and attempt 1's trajectory timings (results/w8_spacing/attempt1_timing.json). No metric had been computed.
