@@ -171,7 +171,10 @@ def load(dev="cuda"):
 
 @torch.no_grad()
 def embed(pipe, p):
-    pe, pm, ne, nm = pipe.encode_prompt(p, True, negative_prompt="", num_images_per_prompt=1, device="cuda")
+    import inspect
+    d = inspect.signature(type(pipe).__call__).parameters                      # the pipeline's own __call__ defaults (complex human instruction etc.)
+    kw = {k: d[k].default for k in ("complex_human_instruction", "max_sequence_length", "clean_caption")}
+    pe, pm, ne, nm = pipe.encode_prompt(p, True, negative_prompt="", num_images_per_prompt=1, device="cuda", **kw)
     return {"prompt_embeds": pe, "prompt_attention_mask": pm, "negative_prompt_embeds": ne, "negative_prompt_attention_mask": nm}
 
 
@@ -179,7 +182,7 @@ def embed(pipe, p):
 def run(pipe, R, mode, emb, seed, anchors=(), steps=STEPS, out="latent", sched_state=None):
     R.mode, R.anchors = mode, set(anchors)
     R.reset()
-    r = pipe(**emb, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=steps, generator=torch.Generator().manual_seed(seed),
+    r = pipe(**emb, negative_prompt=None, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=steps, generator=torch.Generator().manual_seed(seed),
              output_type=out)
     return r.images, dict(R.calls)
 
@@ -300,7 +303,7 @@ def kernels():
         lat0 = pipe.prepare_latents(1, 32, RES, RES, torch.float32, "cuda", torch.Generator().manual_seed(TIMING[0]))
         pipe.scheduler.set_timesteps(STEPS, device="cuda")
         ts = pipe.scheduler.timesteps
-        pipe(**emb, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS, generator=torch.Generator().manual_seed(TIMING[0]),
+        pipe(**emb, negative_prompt=None, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS, generator=torch.Generator().manual_seed(TIMING[0]),
              output_type="latent", callback_on_step_end=cb, callback_on_step_end_tensor_inputs=["latents"])
         st[0] = (lat0, ts[0])
         pe = torch.cat([emb["negative_prompt_embeds"], emb["prompt_embeds"]]).to(torch.bfloat16)
@@ -315,6 +318,13 @@ def kernels():
             iface[i] = {"timestep": float(t), "H_shape": list(h.shape), "Q_shape": list(q.shape), "H_dtype": str(h.dtype), "Q_dtype": str(q.dtype),
                         "rel_l2_Q_vs_H": rel(q, h), "finite": bool(torch.isfinite(q).all() and torch.isfinite(h).all())}
         out["interface"] = iface
+        pipe.transformer = R.H
+        dl = pipe(prompt=P[TIMING[0]], height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS,
+                  generator=torch.Generator().manual_seed(TIMING[0]), output_type="latent").images
+        pipe.transformer = R
+        rl, _ = run(pipe, R, "H", emb, TIMING[0])
+        out["router_vs_direct_H_bitwise"] = bool(torch.equal(rl, dl))
+        out["router_vs_direct_H_rel_l2"] = rel(rl, dl)
         out["interface_note"] = "same latent (CFG-duplicated), timestep (x timestep_scale), embeddings and mask; both return the flow prediction"
         # profiler: one call each (after a warm call)
         x, t = st[10]

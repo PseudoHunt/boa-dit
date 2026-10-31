@@ -1,0 +1,22 @@
+{
+ "encode_defaults_differ_from_call_defaults": true,
+ "call_defaults": {
+  "complex_human_instruction": "[\"Given a user prompt, generate an 'Enhanced prompt' that provides detailed visu",
+  "max_sequence_length": "300",
+  "clean_caption": "False"
+ },
+ "H": {
+  "bitwise_all": true,
+  "max_rel_l2": 0.0,
+  "max_abs": 0.0,
+  "out_norm_rel_QvsH": null
+ },
+ "Q": {
+  "bitwise_all": false,
+  "max_rel_l2": 0.08699989619279742,
+  "max_abs": 0.375,
+  "out_norm_rel_QvsH": null
+ },
+ "single_call_rel_l2_Q_vs_H": 0.22731143379844948,
+ "gpu_h": 0.001945124864578247
+}

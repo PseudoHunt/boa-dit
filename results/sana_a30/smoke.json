@@ -1,0 +1,45 @@
+{
+ "load": {
+  "load_int4_s": 0.4366550431586802,
+  "load_total_s": 2.64628228219226
+ },
+ "router_calls_H": {
+  "H": 20,
+  "Q": 0
+ },
+ "router_calls_Q": {
+  "H": 0,
+  "Q": 20
+ },
+ "H": {
+  "finite": true,
+  "repeat_bitwise": true,
+  "repeat_rel_l2": 0.0,
+  "router_vs_direct_bitwise": false,
+  "router_vs_direct_rel_l2": 0.39412213768175886,
+  "latent_shape": [
+   1,
+   32,
+   32,
+   32
+  ]
+ },
+ "Q": {
+  "finite": true,
+  "repeat_bitwise": false,
+  "repeat_rel_l2": 0.2782349353657356,
+  "router_vs_direct_bitwise": false,
+  "router_vs_direct_rel_l2": 0.41403057065789883,
+  "latent_shape": [
+   1,
+   32,
+   32,
+   32
+  ]
+ },
+ "example_psnr_Q_vs_H_dB": 12.23134593184523,
+ "tolerance_rel_l2": 2.7823493536573563,
+ "note": "official example settings (prompt, seed 42, guidance 4.5, 20 steps, 1024); upstream publishes no reference image hash, so parity = official code path, finite, coherent",
+ "pass": true,
+ "gpu_h": 0.006129221386379666
+}

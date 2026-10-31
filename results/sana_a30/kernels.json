@@ -1,0 +1,451 @@
+{
+ "load": {
+  "load_int4_s": 0.41813243366777897,
+  "load_total_s": 3.057361323852092
+ },
+ "bytes": {
+  "H_transformer": 3208925504,
+  "Q_transformer_torch_visible": 92099904,
+  "text_encoder": 5228684032,
+  "vae": 624500550
+ },
+ "bytes_note": "Q bytes = torch-visible parameters/buffers incl. Nunchaku's packed modules; allocator totals below are authoritative",
+ "allocated_after_load": 9254471680,
+ "Q_leaf_module_types": {
+  "Conv2d": {
+   "count": 1,
+   "examples": [
+    "patch_embed.proj"
+   ]
+  },
+  "Timesteps": {
+   "count": 1,
+   "examples": [
+    "time_embed.emb.time_proj"
+   ]
+  },
+  "Linear": {
+   "count": 6,
+   "examples": [
+    "time_embed.emb.timestep_embedder.linear_1",
+    "time_embed.emb.timestep_embedder.linear_2",
+    "time_embed.linear",
+    "caption_projection.linear_1",
+    "caption_projection.linear_2",
+    "proj_out"
+   ]
+  },
+  "SiLU": {
+   "count": 2,
+   "examples": [
+    "time_embed.emb.timestep_embedder.act",
+    "time_embed.silu"
+   ]
+  },
+  "GELU": {
+   "count": 1,
+   "examples": [
+    "caption_projection.act_1"
+   ]
+  },
+  "RMSNorm": {
+   "count": 1,
+   "examples": [
+    "caption_norm"
+   ]
+  },
+  "NunchakuSanaTransformerBlocks": {
+   "count": 1,
+   "examples": [
+    "transformer_blocks.0"
+   ]
+  },
+  "LayerNorm": {
+   "count": 1,
+   "examples": [
+    "norm_out.norm"
+   ]
+  }
+ },
+ "Q_bf16_linear_names": [
+  "time_embed.emb.timestep_embedder.linear_1",
+  "time_embed.emb.timestep_embedder.linear_2",
+  "time_embed.linear",
+  "caption_projection.linear_1",
+  "caption_projection.linear_2",
+  "proj_out"
+ ],
+ "interface": {
+  "0": {
+   "timestep": 999.0,
+   "H_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "Q_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "H_dtype": "torch.bfloat16",
+   "Q_dtype": "torch.bfloat16",
+   "rel_l2_Q_vs_H": 0.091786143354804,
+   "finite": true
+  },
+  "10": {
+   "timestep": 749.0,
+   "H_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "Q_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "H_dtype": "torch.bfloat16",
+   "Q_dtype": "torch.bfloat16",
+   "rel_l2_Q_vs_H": 0.05630110469785751,
+   "finite": true
+  },
+  "19": {
+   "timestep": 136.0,
+   "H_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "Q_shape": [
+    2,
+    32,
+    32,
+    32
+   ],
+   "H_dtype": "torch.bfloat16",
+   "Q_dtype": "torch.bfloat16",
+   "rel_l2_Q_vs_H": 0.13108800539692814,
+   "finite": true
+  }
+ },
+ "router_vs_direct_H_bitwise": true,
+ "router_vs_direct_H_rel_l2": 0.0,
+ "interface_note": "same latent (CFG-duplicated), timestep (x timestep_scale), embeddings and mask; both return the flow prediction",
+ "profile": {
+  "Q": {
+   "cuda_ms_total_self": 58.994434999999974,
+   "top25": [
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     20,
+     11.895591000000024
+    ],
+    [
+     "_ZN7cutlass6KernelINS_4conv6kernel17DirectConvolutionINS1_11threadblock37DepthwiseFpropDirectConvMultipleStageINS_4gemm9GemmShapeILi64ELi64ELi9EEENS4_73DepthwiseFpropActivationDirect2dConvTileAccessIteratorFixedStrideDilationINS_11MatrixShapeILi64ELi64EEENS1_15TensorNHWCShapeILi1ELi8ELi8ELi64EEENSA_ILi1ELi1EEESE_NSC_ILi1ELi10ELi10ELi64EEENS_10bfloat16_tENS_6layout10TensorNHWCENS_9transform30PitchLinearStripminedThreadMapINS_16PitchLinearShapeILi64ELi100EEELi128ELi8EEENS_12AlignedArrayISG_Li8ELi16EEEEENSJ_11threadblock35RegularTileAccessIteratorDirectConvINSA_ILi100ELi64EEESG_NSH_8RowMajorELi0ESN_Lb0ELi16EEELNS_4arch14CacheOperation4KindE1ENS4_57DepthwiseFpropFilterDirectConvTileAccessIteratorOptimizedINSA_ILi64ELi9EEESG_SI_NSK_INSL_ILi64ELi9EEELi128ELi8EEESP_EENSS_INSA_ILi9ELi64EEESG_SU_Li0ES12_Lb0ELi16EEELSY_1ENS4_28DepthwiseDirectConvMmaPolicyINS1_4warp26MmaDepthwiseDirectConvSimtINS7_ILi16ELi64ELi9EEENSA_ILi3ELi3EEENSC_ILi1ELi4ELi4ELi2EEESD_SG_SU_SG_SU_SG_SU_NS6_4warp13MmaSimtPolicyINSA_ILi1ELi32EEENSH_19RowMajorInterleavedILi1EEENS7_ILi2ELi2ELi1EEEEELNS1_17IteratorAlgorithmE4ESE_SE_SF_Li1ELNS_16ComplexTransformE0ELS1K_0EbEENSA_ILi0ELi0EEES1M_SN_S12_Li1EEELi4ENS_8epilogue11threadblock17EpilogueDepthwiseIS8_S1B_SD_S1L_NS1P_32PredicatedTileIteratorDirectConvINSK_INSL_ILi64ELi64EEELi128ELi8EEESG_S1B_SD_EENS1O_4warp20FragmentIteratorSimtIS19_NS1_6thread42DepthwiseDirectConvElementwiseInnerProductINS7_ILi16ELi2ELi1EEESG_SG_SG_NSW_13OpMultiplyAddEbEESU_S1I_EENS1V_28TileIteratorSimtDirect2dConvIS19_S1B_SD_S21_SG_SU_S1I_EENS1P_28SharedLoadIteratorPitchLinerIS1T_SG_Li16EEENS1O_6thread17LinearCombinationISG_Li8ESG_SG_LNS27_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ESG_EES1M_EELS1J_4EbEES2D_NS4_47DepthwiseDirect2dConvIdentityThreadblockSwizzleILi1ELi1ELi8ELi8EEELNS1_8OperatorE0ENS1_17Conv2dProblemSizeELNS1_9GroupModeE3ESD_EEEEvNT_6ParamsE",
+     20,
+     9.018367999999995
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     40,
+     8.737504999999983
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     20,
+     7.156444000000001
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     40,
+     5.421422999999996
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>, nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>::Arguments>(nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>::Arguments)",
+     100,
+     3.346920000000011
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>, nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>::Arguments>(nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>::Arguments)",
+     20,
+     2.5279429999999965
+    ],
+    [
+     "_ZN7cutlass6KernelINS_4gemm6kernel4GemmINS1_11threadblock12MmaPipelinedINS1_9GemmShapeILi128ELi256ELi32EEENS_9transform11threadblock22PredicatedTileIteratorINS_11MatrixShapeILi128ELi32EEENS_10bfloat16_tENS_6layout8RowMajorELi1ENS8_29PitchLinearWarpRakedThreadMapINS_16PitchLinearShapeILi32ELi128EEELi256ENSH_ILi4ELi8EEELi8EEELi8ELb0ENSE_9NoPermuteEEENS9_19RegularTileIteratorISC_SD_NSE_37RowMajorTensorOpMultiplicandCrosswiseILi16ELi32EEELi0ESK_Li16EEENSA_INSB_ILi32ELi256EEESD_NSE_11ColumnMajorELi0ENSG_INSH_ILi32ELi256EEELi256ESJ_Li8EEELi8ELb0ESL_EENSN_ISR_SD_NSE_40ColumnMajorTensorOpMultiplicandCrosswiseILi16ELi32EEELi1ESU_Li16EEEfSF_NS4_9MmaPolicyINS1_4warp11MmaTensorOpINS6_ILi64ELi64ELi32EEESD_SP_SD_SX_fSF_NS10_17MmaTensorOpPolicyINS_4arch3MmaINS6_ILi16ELi8ELi8EEELi32ESD_SF_SD_SS_fSF_NS14_13OpMultiplyAddEEENSB_ILi1ELi1EEEEELi1ELb0EbEENSB_ILi0ELi0EEES1C_Li1EEENS_21NumericArrayConverterISD_SD_Li16ELNS_15FloatRoundStyleE2ENS8_6thread14UnaryTransform8IdentityEEENS1E_ISD_SD_Li32ELS1F_2ES1I_EEbEENS_8epilogue11threadblock8EpilogueIS7_S1B_Li1ENS1N_22PredicatedTileIteratorINS1N_26OutputTileOptimalThreadMapINS1N_15OutputTileShapeILi256ELi8ELi2ELi1ELi1EEENS1R_ILi1ELi8ELi1ELi1ELi8EEELi256ELi8ELi16EEESD_Lb0ESL_Lb0EEENS1M_4warp24FragmentIteratorTensorOpIS12_S16_fNS_5ArrayIfLi4ELb1EEESF_EENS1W_20TileIteratorTensorOpIS12_S16_fSF_EENS1N_18SharedLoadIteratorINS1U_18CompactedThreadMapEfLi32EEENS1M_6thread17LinearCombinationISD_Li8EffLNS26_9ScaleType4KindE0ELS1F_2ESD_EENSB_ILi0ELi8EEELi1ELi1EEENS4_30GemmIdentityThreadblockSwizzleILi1EEELb0EEEEEvNT_6ParamsE",
+     20,
+     2.3809999999999922
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::vk_mul_q_kernel, __nv_bfloat16*, float*, float, int>(__nv_bfloat16*, float*, float, int)",
+     20,
+     2.233319999999992
+    ],
+    [
+     "void nunchaku::kernels::mul_add_kernel<__nv_bfloat16, 8, false>(__nv_bfloat16*, __nv_bfloat16*, __nv_bfloat16*, __nv_bfloat16, unsigned long, int, int, long, long, long)",
+     80,
+     1.6561949999999597
+    ],
+    [
+     "void vllm::generalLayerNorm<__nv_bfloat162, __half, true>(__nv_bfloat162 const*, __nv_bfloat162 const*, __nv_bfloat162 const*, __nv_bfloat162*, float, int, int, __half const*, __half*, signed char*, bool)",
+     40,
+     1.1789449999999824
+    ],
+    [
+     "void flash_fwd_kernel<Flash_fwd_kernel_traits<128, 128, 64, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<128, 128, 64, 4, cutlass::bfloat16_t> >, false, false, false, false, false, false, false>(Flash_fwd_params)",
+     20,
+     0.8388829999999744
+    ],
+    [
+     "void nunchaku::kernels::mul_add_kernel<__nv_bfloat16, 8, true>(__nv_bfloat16*, __nv_bfloat16*, __nv_bfloat16*, __nv_bfloat16, unsigned long, int, int, long, long, long)",
+     40,
+     0.5708189999999795
+    ],
+    [
+     "Memset (Device)",
+     140,
+     0.3124220000000223
+    ],
+    [
+     "aten::addmm",
+     6,
+     0.28121600000000035
+    ],
+    [
+     "aten::copy_",
+     9,
+     0.16438499999999986
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1})",
+     1,
+     0.12483200000000033
+    ],
+    [
+     "_ZN7cutlass6KernelINS_4conv6kernel13ReorderKernelINS2_23DirectConvolutionParamsINS1_11threadblock37DepthwiseFpropDirectConvMultipleStageINS_4gemm9GemmShapeILi64ELi64ELi9EEENS5_73DepthwiseFpropActivationDirect2dConvTileAccessIteratorFixedStrideDilationINS_11MatrixShapeILi64ELi64EEENS1_15TensorNHWCShapeILi1ELi8ELi8ELi64EEENSB_ILi1ELi1EEESF_NSD_ILi1ELi10ELi10ELi64EEENS_10bfloat16_tENS_6layout10TensorNHWCENS_9transform30PitchLinearStripminedThreadMapINS_16PitchLinearShapeILi64ELi100EEELi128ELi8EEENS_12AlignedArrayISH_Li8ELi16EEEEENSK_11threadblock35RegularTileAccessIteratorDirectConvINSB_ILi100ELi64EEESH_NSI_8RowMajorELi0ESO_Lb0ELi16EEELNS_4arch14CacheOperation4KindE1ENS5_57DepthwiseFpropFilterDirectConvTileAccessIteratorOptimizedINSB_ILi64ELi9EEESH_SJ_NSL_INSM_ILi64ELi9EEELi128ELi8EEESQ_EENST_INSB_ILi9ELi64EEESH_SV_Li0ES13_Lb0ELi16EEELSZ_1ENS5_28DepthwiseDirectConvMmaPolicyINS1_4warp26MmaDepthwiseDirectConvSimtINS8_ILi16ELi64ELi9EEENSB_ILi3ELi3EEENSD_ILi1ELi4ELi4ELi2EEESE_SH_SV_SH_SV_SH_SV_NS7_4warp13MmaSimtPolicyINSB_ILi1ELi32EEENSI_19RowMajorInterleavedILi1EEENS8_ILi2ELi2ELi1EEEEELNS1_17IteratorAlgorithmE4ESF_SF_SG_Li1ELNS_16ComplexTransformE0ELS1L_0EbEENSB_ILi0ELi0EEES1N_SO_S13_Li1EEELi4ENS_8epilogue11threadblock17EpilogueDepthwiseIS9_S1C_SE_S1M_NS1Q_32PredicatedTileIteratorDirectConvINSL_INSM_ILi64ELi64EEELi128ELi8EEESH_S1C_SE_EENS1P_4warp20FragmentIteratorSimtIS1A_NS1_6thread42DepthwiseDirectConvElementwiseInnerProductINS8_ILi16ELi2ELi1EEESH_SH_SH_NSX_13OpMultiplyAddEbEESV_S1J_EENS1W_28TileIteratorSimtDirect2dConvIS1A_S1C_SE_S22_SH_SV_S1J_EENS1Q_28SharedLoadIteratorPitchLinerIS1U_SH_Li16EEENS1P_6thread17LinearCombinationISH_Li8ESH_SH_LNS28_9ScaleType4KindE0ELNS_15FloatRoundStyleE2ESH_EES1N_EELS1K_4EbEES2E_NS5_47DepthwiseDirect2dConvIdentityThreadblockSwizzleILi1ELi1ELi8ELi8EEELNS1_8OperatorE0ENS2_17DirectConvolutionIS2F_S2E_S2H_LS2I_0ENS1_17Conv2dProblemSizeELNS1_9GroupModeE3ESE_E9ArgumentsENS1Q_27ConvOutputIteratorParameterISJ_SV_NS_9TensorRefISH_SJ_EELS2I_0ES2K_EES2K_LS2L_3ESE_EESH_EEEEvNT_6ParamsE",
+     20,
+     0.10921499999999741
+    ],
+    [
+     "void cutlass::Kernel2<cutlass_80_wmma_tensorop_bf16_s161616gemm_bf16_16x16_128x2_tn_align8>(cutlass_80_wmma_tensorop_bf16_s161616gemm_bf16_16x16_128x2_tn_align8::Params)",
+     1,
+     0.09372799999999984
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::BFloat16> const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::BFloat16> const&)::{lambda(int)#1})",
+     3,
+     0.09286300000000722
+    ],
+    [
+     "aten::mul",
+     7,
+     0.08006400000000155
+    ],
+    [
+     "ampere_bf16_s16816gemm_bf16_128x128_ldg8_relu_f2f_stages_32x5_tn",
+     1,
+     0.07299199999999996
+    ],
+    [
+     "Memcpy DtoD (Device -> Device)",
+     22,
+     0.07152199999999312
+    ],
+    [
+     "ampere_bf16_s16816gemm_bf16_256x128_ldg8_relu_f2f_stages_32x3_tn",
+     1,
+     0.06284799999999996
+    ],
+    [
+     "aten::add",
+     4,
+     0.05363000000000534
+    ]
+   ],
+   "w4a4_kernels": [
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueSilu::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     20,
+     11.895591000000024
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     40,
+     8.737504999999983
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<false, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     20,
+     7.156444000000001
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::gemm_w4a4_kernel<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueCombination<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop>, false>, uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool>(uint4 const*, uint4 const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_ascale_t const*, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::packed_wscale_t const*, int, int, int, std::tuple<nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueBias<true, false>::Arguments, std::tuple<nunchaku::kernels::Lora<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLoraUp::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueDefault::Arguments, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, nunchaku::kernels::GEMMBase<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueNop::Arguments>, bool, bool)",
+     40,
+     5.421422999999996
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>, nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>::Arguments>(nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<false, false>::Arguments)",
+     100,
+     3.346920000000011
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>, nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>::Arguments>(nunchaku::kernels::GEMM_W4A4<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::quantize_w4a4_fuse_lora_kernel<true, false>::Arguments)",
+     20,
+     2.5279429999999965
+    ],
+    [
+     "void nunchaku::kernels::invoke_kernel<nunchaku::kernels::Epilogues<nunchaku::kernels::GEMMConfig_W4A4<true, false> >::EpilogueLiteLA::vk_mul_q_kernel, __nv_bfloat16*, float*, float, int>(__nv_bfloat16*, float*, float, int)",
+     20,
+     2.233319999999992
+    ]
+   ],
+   "w4a4_ms": 41.319146,
+   "w4a4_launches": 260
+  },
+  "H": {
+   "cuda_ms_total_self": 231.18922199999992,
+   "top25": [
+    [
+     "ampere_bf16_s16816gemm_bf16_128x256_ldg8_f2f_stages_64x3_tn",
+     101,
+     31.261216000000008
+    ],
+    [
+     "aten::cudnn_convolution",
+     61,
+     29.82677999999997
+    ],
+    [
+     "aten::mm",
+     81,
+     15.116762999999999
+    ],
+    [
+     "aten::bmm",
+     40,
+     14.729405999999956
+    ],
+    [
+     "ampere_sgemm_128x128_nn",
+     40,
+     14.729405999999956
+    ],
+    [
+     "aten::copy_",
+     207,
+     13.203948000000015
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::BFloat16> const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::CUDAFunctor_add<c10::BFloat16> >(at::TensorIteratorBase&, at::native::CUDAFunctor_add<c10::BFloat16> const&)::{lambda(int)#1})",
+     126,
+     11.45998699999997
+    ],
+    [
+     "aten::addmm",
+     85,
+     10.629898000000038
+    ],
+    [
+     "aten::add_",
+     62,
+     9.303813999999996
+    ],
+    [
+     "void cutlass__5x_cudnn::Kernel<cutlass_tensorop_bf16_s16816fprop_optimized_bf16_128x256_32x3_nhwc_align8>(cutlass_tensorop_bf16_s16816fprop_optimized_bf16_128x256_32x3_nhwc_align8::Params)",
+     20,
+     8.706177999999968
+    ],
+    [
+     "ampere_bf16_s16816gemm_bf16_128x256_ldg8_relu_f2f_stages_64x3_tn",
+     39,
+     7.350301000000027
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 2, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1} const&)::{lambda(int)#1})",
+     60,
+     6.401782000000053
+    ],
+    [
+     "aten::mul",
+     107,
+     5.614513999999986
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > >(at::TensorIteratorBase&, at::native::BinaryFunctor<c10::BFloat16, c10::BFloat16, c10::BFloat16, at::native::binary_internal::MulFunctor<float> > const&)::{lambda(int)#1})",
+     102,
+     5.585233999999986
+    ],
+    [
+     "conv2d_c1_k1_nhwc",
+     20,
+     4.952052999999996
+    ],
+    [
+     "aten::silu",
+     42,
+     4.578096000000039
+    ],
+    [
+     "aten::_efficient_attention_forward",
+     20,
+     4.261810999999993
+    ],
+    [
+     "fmha_cutlassF_bf16_aligned_64x128_rf_sm80(PyTorchMemEffAttention::AttentionKernel<cutlass::bfloat16_t, cutlass::arch::Sm80, true, 64, 128, 128, true, true>::Params)",
+     20,
+     4.261810999999993
+    ],
+    [
+     "aten::add",
+     184,
+     4.218362999999884
+    ],
+    [
+     "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+     61,
+     3.1329659999999793
+    ],
+    [
+     "ampere_bf16_s16816gemm_bf16_128x128_ldg8_relu_f2f_stages_32x5_tn",
+     41,
+     3.068205000000002
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1})",
+     62,
+     2.997933999999968
+    ],
+    [
+     "void at::native::vectorized_elementwise_kernel<4, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul> >(int, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}, std::array<char*, 2ul>)",
+     22,
+     2.3111120000000294
+    ],
+    [
+     "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::(anonymous namespace)::silu_kernel(at::TensorIteratorBase&)::{lambda()#1}::operator()() const::{lambda()#6}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1})",
+     20,
+     2.2669840000000097
+    ],
+    [
+     "void at::native::vectorized_elementwise_kernel<4, at::native::CUDAFunctor_add<c10::BFloat16>, std::array<char*, 3ul> >(int, at::native::CUDAFunctor_add<c10::BFloat16>, std::array<char*, 3ul>)",
+     58,
+     1.7405559999999605
+    ]
+   ],
+   "w4a4_kernels": [],
+   "w4a4_ms": 0,
+   "w4a4_launches": 0
+  }
+ },
+ "memory": {
+  "peak_allocated": 11011896320,
+  "peak_reserved": 13073645568,
+  "device_total": 25337004032,
+  "fits_with_1GiB_reserve": true
+ },
+ "gpu_h": 0.005065947572390239
+}

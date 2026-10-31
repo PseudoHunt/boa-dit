@@ -127,3 +127,16 @@ multistep (latent, history) state and replay validation under its own protocol.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-31 08:20 UTC, smoke and determinism (before any timing or quality result; 0.016 A30-h incl. one FAILED attempt where precomputed embeddings
+  needed `negative_prompt=None`):
+  - Both models are finite and coherent on the official example; the example images are saved in ckpt/sana_a30/.
+  - **BF16 is bitwise repeatable. The official Nunchaku INT4 SANA transformer is not.** Six identical single calls differ by up to rel L2 0.087 (max
+    abs 0.375), against Q-vs-H 0.227. This is independent of the padding mask, unpadded tokens and batch size (determinism2.json); two identical
+    20-step runs differ by 0.278 in the endpoint latent. The cause is not investigated further (scope: no open-ended debugging).
+  - Consequences, fixed now:
+    - Any check involving Q cannot be bitwise. "Reproduces" for Q paths will be judged against Q's own measured run-to-run spread, reported, not
+      gated by the 10× rule (which would be vacuous at 2.78).
+    - Bitwise checks remain for H-only paths.
+    - Q's call-to-call noise (~9%) is a non-reusable component of any held discrepancy.
+  - Bug found: the router run did not match the direct pipeline even for BF16 (0.394), because `encode_prompt` was called without the pipeline's
+    `__call__` defaults (complex human instruction). Fixed: embeddings now use the pipeline's own defaults. Router vs direct is re-checked in `kernels`.

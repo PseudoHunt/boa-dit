@@ -1,0 +1,24 @@
+{
+ "tokens": 300,
+ "valid_tokens": [
+  1,
+  7
+ ],
+ "real_mask": {
+  "bitwise": false,
+  "max_rel_l2": 0.08650877877202123
+ },
+ "ones_mask": {
+  "bitwise": false,
+  "max_rel_l2": 0.08394303474921944
+ },
+ "truncated_to_max_valid": {
+  "bitwise": false,
+  "max_rel_l2": 0.0864930745341981
+ },
+ "batch1_cond_only": {
+  "bitwise": false,
+  "max_rel_l2": 0.08659181711902765
+ },
+ "gpu_h": 0.0019438262780507405
+}
