@@ -42,7 +42,7 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 98100–98163 | anchor-bridge pilot (br1): fresh confirmation (dev 60208–60223; bitwise test 60200–60215) | **evaluated (2026-10-30)** |
 | 110000–110255 | overnight abn1 (activation-bridge-overnight): confirmation cohort (Stages 2–4 use 110000–110127) | **evaluated (2026-10-30)** |
 | 112000–113999 | overnight abn1: FID-2k cohort (labels index // 2) — **never generated** (stage skipped by budget); still fresh | reserved, unopened (2026-10-30) |
-| 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **reserved (2026-10-31)** |
+| 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **evaluated (2026-10-31)** |
 | 120000–120031 / 120100–120131 / 121000–121255 | cfb1 (coupled-feedback-bridge-pilot): fit / validation / confirmation | **reserved (2026-10-31)** |
 
 ## PixArt prompt sets (indices into the named list; seed = index)

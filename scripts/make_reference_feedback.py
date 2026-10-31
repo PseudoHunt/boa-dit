@@ -51,7 +51,7 @@ def main():
             art[f] = {"path": os.path.join(CK, f), "sha256": sha(os.path.join(CK, f)), "bytes": os.path.getsize(os.path.join(CK, f))}
     json.dump({"note": "local only (standing instruction: nothing generated/trained is uploaded); regenerate with the stage commands in RUN.md",
                "files": art}, open(os.path.join(OUT, "artifacts.json"), "w"), indent=1)
-    st = lambda r: "not run" if r is None else r.get("status", "complete" if r.get("pass") is not None else "?")
+    st = lambda r: "not run" if r is None else r.get("status", "complete" if (r.get("pass") is not None or "batch_size" in r) else "?")
     L = ["# rfb1 — anchor-referenced feedback + anchor reuse + bridge (pilot R): report", "",
          f"Protocol: `PROTOCOL.md` (amendments dated). Spend: **{spent():.3f} of 3.0 A30-h** (ledger tag rfb1).", "",
          "## Status", "| stage | status |", "|---|---|"]
