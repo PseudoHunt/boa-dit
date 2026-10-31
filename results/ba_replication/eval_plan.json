@@ -1,0 +1,9 @@
+{
+ "spent_total": 2.0823,
+ "kernel_track_remaining_reserved": 0.0,
+ "required_eval_h": 1.12368,
+ "pilot_arms_h": 0.40488,
+ "include_pilot": true,
+ "rule": "include pilot arms iff spent + kernel remaining + required + pilot + 0.25 <= 4.0 (PROTOCOL \u00a73)",
+ "utc": "2026-10-31T16:17:49Z"
+}
