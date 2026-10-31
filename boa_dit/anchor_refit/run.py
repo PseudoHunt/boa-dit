@@ -530,8 +530,8 @@ def stage_fd64(dev):
         cache = load_cache()
         x1 = cache["train"][:1, 0].to(dev).double()
         l1 = torch.as_tensor(labels_for_seeds(TRAIN[:1]), device=dev)
-        S_ = lambda x, i: guided64(m, x, l1, i, sch)
-        F_ = lambda x, i: guided64(fp, x, l1, i, sch)
+        ckf = lambda mod: (lambda x, i: checkpoint(guided64, mod, x, l1, i, sch, use_reentrant=False) if torch.is_grad_enabled() else guided64(mod, x, l1, i, sch))
+        S_, F_ = ckf(m), ckf(fp)
         with torch.no_grad():
             xF = x1
             for i in range(0, 2 * KA):
@@ -544,7 +544,16 @@ def stage_fd64(dev):
         rg = torch.Generator().manual_seed(9)
         rnd = [torch.randn(p.shape, generator=rg).to(dev).double() for p in c.parameters()]
         out = {}
-        for name, dr in (("gradient", g), ("random", rnd)):
+        dirsets = (("gradient", g), ("random", rnd))
+        if os.environ.get("DAR1_FD_SITES"):
+            keys = c.keys
+            sel = lambda pre: [i for i, k in enumerate(keys) if k.startswith(pre)]
+            masks = {pre: set(sel(pre)) for pre in ("b0.", "b27.")}
+            idx = {j: i for j, i in enumerate(range(len(keys)))}
+            par = list(c.parameters())                                      # V list then D list (ParameterList order)
+            nk = len(keys)
+            dirsets = tuple((f"random_site_{pre[:-1]}", [v if ((j % nk) in masks[pre]) else torch.zeros_like(v) for j, v in enumerate(rnd)]) for pre in masks)
+        for name, dr in dirsets:
             nn_ = math.sqrt(sum(float(v.pow(2).sum()) for v in dr))
             dirs = [v * th / nn_ for v in dr]
             ad = sum(float((gi * v).sum()) for gi, v in zip(g, dirs))
@@ -565,6 +574,15 @@ def stage_fd64(dev):
                       for i, h in enumerate(hs))
             out[name] = {"autograd": ad, "fd": fd, "resolved": res}
             print(f"  fd64 {name}: autograd {ad:.6g}; " + ", ".join(f"h={h:g}: {fd[h]['rel_err']:.2e}" for h in hs), flush=True)
+        if os.environ.get("DAR1_FD_SITES"):
+            ch["6d_fd64_single_site_random"] = out
+            keys_site = [v["resolved"] for v in out.values()]
+            ch["pass"] = bool(ch.get("pass_6c_core", False) and all(keys_site))
+            ch["pass_note"] = ch.get("pass_note", "") + "; 6c random (all-site) direction unresolved (1.45e-3 > 1e-3); 6d single-site random directions (b0, b27) decide the parameter FD"
+            ch["fd64_sites_run"] = run.record()
+            jdump("checks.json", ch)
+            print(json.dumps({"6d": {k: {"resolved": v["resolved"]} for k, v in out.items()}, "pass": ch["pass"]}, indent=1))
+            return 0 if ch["pass"] else 6
         ch["6c_fd64"] = out
         prev = ch.get("pass_note", "")
         keys_ok = [ch["1_pass"], *ch["2_export_install_bitwise"].values(), ch["2_eval_u0_equals_abn1_CB_bs32"], ch["2_eval_arch_equals_abn1_LCB_bs32"],

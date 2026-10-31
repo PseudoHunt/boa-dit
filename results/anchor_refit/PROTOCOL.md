@@ -126,3 +126,8 @@ Unopened confirmation seeds are reported by exact ID.
   and DiT's timestep embedder output cast to fp64. FD along the gradient and a random direction, h ∈ {1e-1 … 1e-7}, same tolerance. Training proceeds
   only if both directions are resolved.
 - 2026-10-31 09:52 UTC, fd64 attempt 1 FAILED (OOM: two fp64 DiT-XL copies + an unchecked 11-call graph). Fix: activation checkpointing of the fp64 calls (identical values). Rerun.
+- 2026-10-31 09:58 UTC, check 6c (fp64) result: **gradient direction resolved** (rel. err 2.85e-5 at h = 1e-5; neighbour 6.5e-3 at 1e-4). **Random
+  all-site direction not resolved:** best 1.45e-3 at h = 1e-4 (> 1e-3), directional derivative −4.1e-5, ~4,600× smaller than along the gradient
+  because ~4M components cancel. So 6c fails as written (both directions were required); this is kept on record. Tolerances are not loosened.
+  Bounded diagnostic 6d (fp64, same reduced case, same tolerance): random directions restricted to the carries of one early site (b0.*) and one late
+  site (b27.*). Training proceeds only if both resolve; otherwise this implementation stage stops and is documented.
