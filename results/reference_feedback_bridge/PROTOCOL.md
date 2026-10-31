@@ -117,3 +117,4 @@ report; queue `bash scripts/rfb1_queue.sh` (flock, one retry after a crash, comm
   462 MB per image (both CFG rows). Profiled trajectory estimates at 16: FP50 9.8 s, G/ACB 45.4 s, RDB 46.1 s, RFB 61.6 s.
   Source hashes frozen in frozen.json.
 - 2026-10-31 05:05 UTC, gate (0.263 A30-h): all checks pass (S1 overnight G/GB/ACB/FP50 bitwise at batch 32; S2–S10, unit row independence, accounting identity rel. residual energy 1.3e-15 / 6.1e-14). Dev started next.
+- 2026-10-31 05:15 UTC, dev complete (32, inspected): RDB/GB 0.883 [0.588, 1.301], ΔLPIPS −0.0028 → gate pass (RDB); RFB/GB 1.506 → fail. Confirmation 122000–122127 opened with all six arms.
