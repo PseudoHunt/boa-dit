@@ -1,0 +1,27 @@
+{
+ "BA": {
+  "sec_per_update": 3.396303963661194,
+  "peak_mem_GiB": 9.754040718078613,
+  "sec_per_update_excl_first": 3.6247260835435657
+ },
+ "BL": {
+  "sec_per_update": 1.8184205293655396,
+  "peak_mem_GiB": 9.73708724975586,
+  "sec_per_update_excl_first": 1.949428743786282
+ },
+ "N": 330,
+ "ckpts": [
+  82,
+  165,
+  330
+ ],
+ "budget_limited": false,
+ "stage": "dar1",
+ "run": "profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "22ada85f50fab3cf4884485cfb1f4dd921ff572e",
+ "start_utc": "2026-10-31T09:59:05Z",
+ "wall_s": 87.9723129272461,
+ "gpu_hours": 0.024436753590901694
+}
