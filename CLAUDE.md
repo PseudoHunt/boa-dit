@@ -1,6 +1,7 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (2026-10-31): handoff "anchor-aware refit + W8 spacing" COMPLETE on dit-anchor-refit (/home/boa-dit-dar): dar1 BA/BL confirmation inconclusive (0.835 [0.489, 1.423], LPIPS better), w8s1 W8-K2/FP-K4 0.341 useful (accuracy only); SANA parked (sr1 0 h). Total 2.132 of 4.0 A30-h. Nothing running; see results/anchor_refit/ANSWERS.md.
+## Active task (2026-10-31): handoff "audit and replicate anchor-aware calibration" COMPLETE on ba-replication (/home/boa-dit-bar) + w8-kernel-feasibility (/home/boa-dit-wkf): BA/BL two-seed replication inconclusive (aggregate 0.947 [0.786, 1.150] on 128000–128255); mechanism: 5.5x raw = removable offset, corrected-window error lower; no packed W8-K2 kernels on sm_80. 3.593 of 4.0 A30-h. Nothing running; see results/ba_replication/ANSWERS.md.
+- Completed 2026-10-31: dar1 + w8s1 (dit-anchor-refit, /home/boa-dit-dar; 2.132 A30-h); SANA parked (sr1).
 - Completed 2026-10-30: overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
   `results/activation_bridge_overnight/PROTOCOL.md`; cap 6.0 A30-h + 8 h wall (tag abn1); queue `bash scripts/abn1_queue.sh` (resumable, flock); see RUN.md.
 - Completed 2026-10-30: anchor-drift ad1 (anchor-drift-pilot b42f065; drift vs local inconclusive, 1.518 A30-h).

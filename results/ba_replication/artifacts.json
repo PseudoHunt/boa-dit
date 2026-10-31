@@ -1,0 +1,123 @@
+{
+ "note": "local only (standing instruction: nothing trained is uploaded). Regenerate with the commands in RUN.md: training is deterministic given the draw seed (s0 reproduces the dar1 pilot's first updates exactly; resume verified bitwise); latents/traces by the mech/dev/eval stages. Storage: shared ckpt dir /home/boa-dit/ckpt/ba_replication.",
+ "files": {
+  "anchor_cache.pt": {
+   "symlink_to": "/home/boa-dit-bar/ckpt/anchor_refit/anchor_cache.pt"
+  },
+  "carry_BA_s1_u0.pt": {
+   "sha256": "7d635cce9083dd83d0d3eee9721b9fa6b36962b9afc3102f8877a1f3bb080b3c",
+   "bytes": 8324155
+  },
+  "carry_BA_s1_u165.pt": {
+   "sha256": "f40cf2b3ad1b89ddfcb121f38a0ea59ec8a1ec6f50b61878cdd90d9c32be746b",
+   "bytes": 8324615
+  },
+  "carry_BA_s1_u330.pt": {
+   "sha256": "c079f5f93eab5b693f0f7e23a31e910d030edd6a676f4e2e28d356df88a6e6bd",
+   "bytes": 8324615
+  },
+  "carry_BA_s1_u82.pt": {
+   "sha256": "d0e08160ed97b243c26a6b2ac4d647326432cacc0aa84e8525d06324215ec642",
+   "bytes": 8324385
+  },
+  "carry_BA_s2_u0.pt": {
+   "sha256": "03985e85b96b171b58dab90882f6b10e5b8143e527d078c102584c0a35c012ca",
+   "bytes": 8324155
+  },
+  "carry_BA_s2_u165.pt": {
+   "sha256": "48bbab22b3885575fa48655f322e9cc7ed00374cb342cde2ad7c3f6515beface",
+   "bytes": 8324615
+  },
+  "carry_BA_s2_u330.pt": {
+   "sha256": "83ecad202e1cefe8da4cb92b41c0c09ffa5ced738f11cc6ceb10fc3d753e7d40",
+   "bytes": 8324615
+  },
+  "carry_BA_s2_u82.pt": {
+   "sha256": "eb62a20771c3e59dbbdc1901bf3910541d00a88bdd5d553228f75ed6ee046414",
+   "bytes": 8324385
+  },
+  "carry_BL_s1_tm.pt": {
+   "sha256": "3796da0b5baf661d4ad1aa166ca146d1690ccd362e8df89bc28b075fdc75140a",
+   "bytes": 8324155
+  },
+  "carry_BL_s1_u0.pt": {
+   "sha256": "75f606662ff787c15a943ee2f9c0ee1dac179ffe66ea3998e699608c2d415922",
+   "bytes": 8324155
+  },
+  "carry_BL_s1_u165.pt": {
+   "sha256": "243a373f2a6415a726b263c636e5d90e061352ba57991aa30e7e3a1b511df1f8",
+   "bytes": 8324615
+  },
+  "carry_BL_s1_u330.pt": {
+   "sha256": "2c7b86f09efa5bc0698dda37c8a2cd8af1913bb2e1c64ac6db3092cbfaf982ce",
+   "bytes": 8324615
+  },
+  "carry_BL_s1_u82.pt": {
+   "sha256": "a27e313a8b776e2bd9dc881b042273bca1b908948d5f3dd56e522a6fd684ddf3",
+   "bytes": 8324385
+  },
+  "carry_BL_s2_tm.pt": {
+   "sha256": "4eec6c09ecfe7eecc2619a9d384456410553851e27c05ad3379a3d02a0b87783",
+   "bytes": 8324155
+  },
+  "carry_BL_s2_u0.pt": {
+   "sha256": "5bc858c01372c02483cb007a7eec2e57a906aa50d254f5925338f65443fb3f8a",
+   "bytes": 8324155
+  },
+  "carry_BL_s2_u165.pt": {
+   "sha256": "6e6831ba73ec86be8b1f1cb427f64caee3fa2277c7f637bb45e39a4f4dd4ee79",
+   "bytes": 8324615
+  },
+  "carry_BL_s2_u330.pt": {
+   "sha256": "fa9c161d45b115bd2f5d576ed8b252d21c994a471a05dc429679b1947e7cec77",
+   "bytes": 8324615
+  },
+  "carry_BL_s2_u82.pt": {
+   "sha256": "ed29fe8302f0aaea806ff9dec1641ddcb57b244742b00ddf1d55acf756c58486",
+   "bytes": 8324385
+  },
+  "den.pt": {
+   "symlink_to": "/home/boa-dit-bar/ckpt/anchor_refit/den.pt"
+  },
+  "dev_latents_s1.pt": {
+   "sha256": "68ccf3011b476fcb4da45b8e7ca840adba30de99f7bb9a1ac3f4a60aa4c9641a",
+   "bytes": 5247077
+  },
+  "dev_latents_s2.pt": {
+   "sha256": "1278fb11f48958a03830e9444a3cbd5048db9c785dc170c5a199761c74851bf4",
+   "bytes": 5247077
+  },
+  "eval_latents.pt": {
+   "sha256": "dee457c6d43f6df87c1bacd9e865e00a7b36ca65bf8768172d140058ecd94db5",
+   "bytes": 50336399
+  },
+  "eval_part.pt": {
+   "sha256": "829f2fa60cd66d58d230943329acfa0a21a91a1c905412d6b33ca9f6b956e376",
+   "bytes": 50360897
+  },
+  "mech_standalone_latents.pt": {
+   "sha256": "b4dbf187fffd0e4132cd1eaf32dd3ba8fbd7c892258ecd5f18da557c7f30ee4e",
+   "bytes": 2888325
+  },
+  "mech_traces.pt": {
+   "sha256": "dd82cde4718c83317cb8bf77fc20fd049747937047e1fdb92f08bb31de1ef0bd",
+   "bytes": 91753836
+  },
+  "resume_BA_s1.pt": {
+   "sha256": "9a2aa96f1cb15a6cfb47ac0ce035b7b03958abc91852c34dac44ab16a4c60e4e",
+   "bytes": 49827503
+  },
+  "resume_BA_s2.pt": {
+   "sha256": "eacc984d6ca6383d42db815201968f171198d98c12d76e424135944ab411879a",
+   "bytes": 49827503
+  },
+  "resume_BL_s1.pt": {
+   "sha256": "0de6591c4384527218d978f6a01ec15797acadf1c9252a988077389e26ec83e5",
+   "bytes": 49845807
+  },
+  "resume_BL_s2.pt": {
+   "sha256": "3d3af37c1db7ef6d91a76fc7ed8c92dfcf0892d0ef7a5337e529150ce17b4f60",
+   "bytes": 49845487
+  }
+ }
+}

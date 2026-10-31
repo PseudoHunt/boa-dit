@@ -3,7 +3,15 @@
 Protocol: `PROTOCOL.md`, pre-registered 2026-10-31 14:06 UTC; dated amendments keep every failure. Kernel track: branch `w8-kernel-feasibility`,
 `results/w8_kernel/REPORT.md`. Common ledger: `scripts/h1031b_budget.py`.
 
-__STATUS__
+**Complete.**
+- Spend: **3.593 of 4.0 A30-h** (bar1 3.560 incl. 0.011 failed eval attempt, 0.043 repchecks; wkf1 0.034). Nothing is running.
+- Fresh cohort 128000–128255 is evaluated; 128256–128511 stays unopened.
+- **Headline:**
+  - The 5.5× raw-error increase is real on common states. It is mostly a removable per-image offset.
+  - BA's absolute post-correction error is lower on short-window replay.
+  - On fresh full trajectories the BA/BL improvement **did not replicate decisively**. The aggregate over the two new pairs is 0.947
+    [0.786, 1.150]: **inconclusive**. Both point estimates are < 1.
+  - BA was no better than the original branch B0 on this cohort (aggregate 0.985 [0.745, 1.341]).
 
 ## 1A. Audit of the existing dar1 result (CPU; `audit_1a.json`, `audit_1a.png`)
 **No implementation or data bug**, by the predeclared criteria:
@@ -138,7 +146,97 @@ prediction and one shared FP prediction were evaluated with the step-indexed sta
   - the linearized coefficient summaries are approximations;
   - none of this substitutes for the fresh full-trajectory evaluation below, where the heavy-tail failures (e.g. 124092) live.
 
-__REPLICATION__
+## 3. Two new training-seed replications (`repchecks.json`, `train_s{1,2}.json`, `dev_s{1,2}.json`)
+**The completed dar1 procedure was replicated unchanged.**
+- Same code path (`anchor_refit.run.train`), only the draw-list generator seed changed: s = 1, 2; the pilot is s = 0.
+- STE through the static quantizer: a surrogate gradient, labelled as such.
+- Teacher input-state gradient retained.
+- Anchor discrepancies recomputed with the current student at the student's latent.
+- Windows start from the cached B0 corrected-trajectory anchor states (before anchor operations) with no bridge at a.
+- N = 330, checkpoints 82 / 165 / 330. BL-tm time cap = min(BA time, 1260 s).
+
+**Checks:**
+- s = 0 reproduces the pilot's draw sha and its first 3 BA and BL (loss, grad-norm) pairs exactly;
+- resume bitwise; trained export ↔ install bitwise;
+- teacher gets no gradient; W4 codes and tables unchanged; window counts 9/3/2.
+- The first attempt's `pass = false` came from a hash-prefix comparison bug. It was re-scored from the recorded provenance; see the amendment.
+
+| seed | BA updates / time | BL-tm updates / time | finite | dev BA@82 / 165 / 330 | dev BL@82 / 165 / 330 / tm | selected |
+|---|---|---|---|---|---|---|
+| 0 (pilot) | 330 / 1378 s | 565 / 1261 s | yes | 0.00325 / 0.00305 / 0.00208 | 0.00288 / 0.00279 / 0.00264 / 0.00298 | BA@330, BL@330 |
+| 1 | 330 / 1389 s | 561 / 1260 s | yes | **0.00222** / 0.00300 / 0.00263 | **0.00260** / 0.00264 / 0.00292 / 0.00314 | BA@82, BL@82 |
+| 2 | 330 / 1387 s | 557 / 1261 s | yes | 0.00310 / 0.00241 / **0.00204** | **0.00348** / 0.00456 / 0.00380 / 0.00394 | BA@330, BL@82 |
+
+(dev B0 0.00337, BL-arch 0.00374)
+
+Cost per new pair: 0.774 h training + 0.128 h dev ≈ 0.90 A30-h.
+
+## 4. Fresh evaluation (128000–128255, N = 256 frozen; `eval.json`, `analysis.json`, `eval.png`)
+**Setup:** 11 arms, same FP50 and noise, batch 32, counts asserted (50 + 13 / 12). The pilot arms were included by the predeclared budget rule.
+1.500 A30-h.
+
+| arm | mean rel. MSE | median | PSNR | LPIPS | share of total error from largest 1 / 5 / 10 |
+|---|---|---|---|---|---|
+| B0 | 0.00399 | 0.00133 | 36.31 | 0.0235 | 8% / 28% / 38% |
+| BL-arch | 0.00408 | 0.00132 | 36.17 | 0.0251 | 7% / 25% / 36% |
+| BA_s1 (@82) | 0.00366 | 0.00118 | 36.53 | 0.0215 | 14% / 30% / 42% |
+| BL_s1 (@82) | 0.00386 | 0.00134 | 36.29 | 0.0246 | 5% / 22% / 33% |
+| BL-tm_s1 | 0.00459 | 0.00149 | 36.31 | 0.0235 | 12% / 37% / 49% |
+| BA_s2 (@330) | 0.00420 | 0.00117 | 36.60 | 0.0236 | 11% / 30% / 43% |
+| BL_s2 (@82) | 0.00444 | 0.00130 | 36.18 | 0.0245 | 11% / 33% / 44% |
+| BL-tm_s2 | 0.00495 | 0.00136 | 36.20 | 0.0255 | 10% / 34% / 48% |
+| BA_s0 (pilot @330) | 0.00390 | 0.00125 | 36.63 | 0.0225 | 13% / 32% / 41% |
+| BL_s0 (pilot @330) | 0.00483 | 0.00121 | 36.21 | 0.0252 | 10% / 27% / 41% |
+| BL-tm_s0 (pilot) | 0.00444 | 0.00133 | 36.27 | 0.0248 | 5% / 22% / 38% |
+
+**Primary (BA-sel / BL-sel per seed):**
+
+| seed | ratio of means [95% CI] | mean paired diff [95% CI] | median diff | wins | ΔLPIPS [95% CI] | ΔPSNR [95% CI] |
+|---|---|---|---|---|---|---|
+| **1** | **0.949 [0.710, 1.288]** | −2.0e-4 [−1.2e-3, +1.1e-3] | −3.1e-5 | 135/256 | −0.0031 [−0.0064, −0.0000] | +0.24 [−0.19, +0.68] |
+| **2** | **0.946 [0.757, 1.203]** | −2.4e-4 [−1.3e-3, +7.5e-4] | −7.0e-5 | 141/256 | −0.0009 [−0.0040, +0.0025] | +0.41 [+0.01, +0.83] |
+| 0 (pilot, descriptive) | 0.808 [0.626, 1.051] | −9.3e-4 [−2.0e-3, +2.1e-4] | −1.0e-4 | 147/256 | −0.0027 [−0.0060, +0.0007] | +0.42 [−0.01, +0.85] |
+| **aggregate R̄ (two new pairs, joint image bootstrap)** | **0.947 [0.786, 1.150]** | | | | | |
+
+**Secondary (named in advance; aggregates over the two new pairs):**
+- BA / BL-tm 0.823 [0.653, 1.025];
+- BA / BL-arch 0.962 [0.733, 1.282];
+- BA / B0 0.985 [0.745, 1.341].
+
+Per seed:
+
+| | BA/BL-tm | BA/BL-arch | BA/B0 | BL-sel/B0 |
+|---|---|---|---|---|
+| s1 | 0.797 [0.597, 1.044] | 0.895 [0.658, 1.232] | 0.917 [0.653, 1.300] | 0.967 |
+| s2 | 0.848 [0.658, 1.103] | 1.028 [0.766, 1.373] | 1.053 [0.797, 1.411] | 1.113 |
+| s0 | 0.879 [0.635, 1.213] | 0.955 [0.700, 1.296] | 0.978 [0.693, 1.386] | 1.211 |
+
+BL-arch / B0 = 1.024.
+
+**Reading (fixed before the results).**
+- **Primary latent: inconclusive.** The aggregate CI crosses 1 (upper bound 1.150), even though both new pairs' point estimates are < 1 (0.949, 0.946).
+- **This is not a confirmed conditional mean-fidelity improvement.**
+- **LPIPS** is secondary.
+  - BA is lower than BL-sel in every pair (−0.0031, −0.0009, −0.0027), and only seed 1's CI just reaches 0.
+  - **No significant LPIPS regression** in any BA contrast.
+  - PSNR is higher for BA in every pair (+0.24 to +0.42 dB).
+- **No broad superiority:**
+  - BA is not distinguishable from the archived strong local refit (0.962) or from the original branch B0 (0.985).
+  - The pilot's BA/B0 0.665 [0.420, 0.964] on 124000–124127 did not recur on this cohort: s0 gives 0.978 [0.693, 1.386].
+  - On this cohort the update-matched local refits were themselves no better than B0 (BL-sel/B0 0.97–1.21). So BA's edge over BL-sel partly reflects
+    weak local comparators, not BA beating the original branch.
+- **Training-seed variability:**
+  - The point ratios over three seeds are 0.949, 0.946 and 0.808: consistent in direction, smaller than the pilot's 0.835 for the new seeds.
+  - The selected checkpoint differed between seeds (BA@82 vs @330). The dev rule picks noisily at 32 images.
+  - The exploratory nested bootstrap over seeds {1, 2, 0} and images gives [0.730, 1.117]. It is fragile with three seeds and does not establish
+    population-level seed robustness.
+- **Tails:**
+  - One image (128228) is the worst for BA_s0, BA_s2, BL_s0 and BL_s2 (rel. MSE about 0.12–0.13), so the failure is shared, not BA-specific.
+  - The largest image carries 11–14% of each BA arm's total error.
+- As projected in §1B (power ≈ 0.2 for a 10% effect), N = 256 was **not decisive**. The observed effect is about 5% vs BL-sel. This is a bounded
+  replication: it neither confirms nor rules out a modest gain.
+- No FID, perceptual-equivalence, speed or readiness claim follows. No further sample-size increase or objective change.
+
 
 ## 5. Real-kernel W8 feasibility (branch `w8-kernel-feasibility`; `results/w8_kernel/REPORT.md`)
 **No usable packed pair exists on sm_80** in the installed environments, neither for the cheap side (W4A8-static + rank-8) nor for the anchor side
