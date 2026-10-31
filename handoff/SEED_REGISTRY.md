@@ -47,6 +47,7 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **evaluated (2026-10-31)** |
 | 120000–120031 / 120100–120131 | cfb1 (coupled-feedback-bridge-pilot): fit / validation | **evaluated (2026-10-31)** |
 | 121000–121255 | cfb1 confirmation — **never opened** (validation gate failed); still fresh | reserved, unopened (2026-10-31) |
+| 128000–128511 | bar1 (ba-replication): fresh evaluation cohort for the BA/BL training-seed replication; first N used (N frozen by PROTOCOL §3 before any output), remainder unopened. Mechanism audit reuses inspected 60200–60215; dev 60200–60231; training 60100–60163 | reserved (2026-10-31) |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
