@@ -108,3 +108,4 @@ Unopened confirmation seeds are reported by exact ID.
 ## Amendments and results
 (appended below, dated)
 - 2026-10-31 09:31 UTC, checks attempt 1 (FAILED, OOM): check 1 passed (endpoint rel 0.046 ≤ 0.05; step-1 rel 1.2e-7; 50 + 13 calls, 12 bridges), then CUDA OOM in the BL-loss gradient check (8 per-step graphs alive at once + check models still resident). Fix (implementation only, objective unchanged): BL accumulates each per-step term's gradient immediately (scaled 1/n; identical gradient to backpropagating the mean); check models freed. Checks rerun in full.
+- 2026-10-31 09:38 UTC, checks attempt 2 (FAILED, OOM at the reported-only STE finite-difference case, after the fp32 FD checks ran): memory not released by the resume check's three short training runs. Fix (implementation only): explicit gc/empty_cache at the end of train(); FD windows use activation checkpointing (identical values; recomputation). Checks rerun in full.

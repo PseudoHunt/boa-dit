@@ -1,0 +1,240 @@
+{
+ "provenance": {
+  "base_model": {
+   "path": "/home/boa-dit-dar/ckpt/ckpt_deflate_heig_r8_w4_s/model.pt",
+   "sha256": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced",
+   "expected": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced"
+  },
+  "base_carry": {
+   "path": "/home/boa-dit-dar/results/deflate/quant/deflate_heig_r8_w4_s/carry.pt",
+   "sha256": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+   "expected": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5"
+  },
+  "tables": {
+   "path": "/home/boa-dit-dar/ckpt/dit_joint/static_single8.pt",
+   "sha256": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+   "expected": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67"
+  },
+  "smoothing": {
+   "path": "/home/boa-dit-dar/ckpt/temporal/dit_smooth_s.pt",
+   "sha256": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26",
+   "expected": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26"
+  },
+  "h8": {
+   "path": "/home/boa-dit-dar/ckpt/weight_anchor_w8/h8.pt",
+   "sha256": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad",
+   "expected": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad"
+  },
+  "heig8_w4_model": {
+   "path": "/home/boa-dit-dar/ckpt/ckpt_deflate_heig_r8_w4/model.pt",
+   "sha256": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761",
+   "expected": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761"
+  },
+  "carry_C_L_u200": {
+   "path": "/home/boa-dit-dar/ckpt/dit_joint/carry_C_L_u200.pt",
+   "sha256": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69",
+   "expected": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69"
+  },
+  "carry_E_L_u200": {
+   "path": "/home/boa-dit-dar/ckpt/dit_joint/carry_E_L_u200.pt",
+   "sha256": "77b5d0ac43b9ed3eb393d2a2c0f73fa5d8f9135731c3a0c555ac80300639572d",
+   "expected": "77b5d0ac43b9ed3eb393d2a2c0f73fa5d8f9135731c3a0c555ac80300639572d"
+  },
+  "fid_ref_stats": {
+   "path": "/home/boa-dit-dar/results/stage0/ref_stats.npz",
+   "sha256": "a11af8b0f80b2d77640c8dcef76674eebcff02c065a11bf4261e95cef635fab4",
+   "expected": "a11af8b0f80b2d77"
+  },
+  "fid_ref_images": {
+   "path": "/home/boa-dit-dar/ckpt/VIRTUAL_imagenet256_labeled.npz",
+   "sha256": "b32732719497e42660a9affb4a966068cba0855ac449b82015e34ec376d20758",
+   "expected": "b32732719497e426"
+  }
+ },
+ "tolerances": {
+  "1": "endpoint rel L2 <= 0.05, step-1 latent rel <= 1e-4 (fixed before any result)",
+  "2": "bitwise",
+  "3": "bitwise",
+  "4": "bitwise",
+  "6": "rel err <= 1e-3 at some h, neighbour <= 1e-2"
+ },
+ "1_endpoint_rel_l2": 0.046037439537751246,
+ "1_step1_rel": 1.1916391586490304e-07,
+ "1_full_counts": {
+  "cheap": 50,
+  "fp": 13,
+  "bridges": 12
+ },
+ "1_pass": true,
+ "3_u0_export_equals_original": true,
+ "2_export_install_bitwise": {
+  "untrained": true,
+  "perturbed": true
+ },
+ "2_eval_u0_equals_abn1_CB_bs32": true,
+ "2_eval_arch_equals_abn1_LCB_bs32": true,
+ "3_eval_calls": {
+  "cheap": 50,
+  "high": 13,
+  "corrections": 12
+ },
+ "3_lr0_step_export_equals_original": true,
+ "3_tables_and_W4_unchanged": true,
+ "4_window_counts": {
+  "0": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "4": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "8": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "12": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "16": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "20": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "24": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "28": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "32": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "36": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "40": {
+   "cheap": 9,
+   "fp": 3,
+   "bridges": 2
+  },
+  "44": {
+   "cheap": 6,
+   "fp": 2,
+   "bridges": 1
+  },
+  "48": {
+   "cheap": 2,
+   "fp": 1,
+   "bridges": 0
+  }
+ },
+ "4_window_counts_pass": false,
+ "4_window_a0_equals_full_rollout_corrected_x8_bitwise": true,
+ "5_grad_b0_nonzero": true,
+ "5_grad_b27_nonzero": true,
+ "5_teacher_params_no_grad": true,
+ "5_teacher_latent_derivative_rel_effect": 0.5382328629493713,
+ "5_loss_equal_with_detached_teacher_input": true,
+ "5_bl_grad_finite_nonzero": true,
+ "4_resume_bitwise": true,
+ "6_param_direction": {
+  "autograd": -4.099151615832852e-05,
+  "fd": {
+   "0.1": {
+    "fd": -7.046317477943376e-05,
+    "rel_err": 0.71896971332487
+   },
+   "0.01": {
+    "fd": -4.073554009664804e-05,
+    "rel_err": 0.006244610730956746
+   },
+   "0.001": {
+    "fd": -3.85643943445757e-05,
+    "rel_err": 0.05921034499866101
+   },
+   "0.0001": {
+    "fd": -8.36735125631094e-06,
+    "rel_err": 0.7958760241023461
+   },
+   "1e-05": {
+    "fd": 2.200977178290486e-05,
+    "rel_err": 1.5369348061655677
+   }
+  }
+ },
+ "6_latent_direction_through_student_teacher_bridge": {
+  "autograd": -0.01208322960883379,
+  "fd": {
+   "0.1": {
+    "fd": -0.010318756103515625,
+    "rel_err": 0.14602664705040416
+   },
+   "0.01": {
+    "fd": -0.012074410915374756,
+    "rel_err": 0.0007298291718785852
+   },
+   "0.001": {
+    "fd": -0.012105563655495644,
+    "rel_err": 0.0018483507625747548
+   },
+   "0.0001": {
+    "fd": -0.01211468770634383,
+    "rel_err": 0.002603451107727148
+   },
+   "1e-05": {
+    "fd": -0.012587770470418034,
+    "rel_err": 0.04175546421921714
+   }
+  }
+ },
+ "6_param_resolved": false,
+ "6_latent_resolved": true,
+ "6_ste_quantized_fp16_reported_only": {
+  "ste_autograd": -0.002167359177292383,
+  "fd": {
+   "0.1": {
+    "fd": -0.04337504506111145,
+    "rel_vs_ste": 19.012855052155498
+   },
+   "0.01": {
+    "fd": -0.8725099265575409,
+    "rel_vs_ste": 401.5682202096016
+   },
+   "0.001": {
+    "fd": 0.025101006031036377,
+    "rel_vs_ste": 12.581378063230995
+   }
+  },
+  "note": "STE gradient through the discrete static quantizer; not exact"
+ },
+ "4_resume_note": "reported; bitwise expected",
+ "pass": false,
+ "peak_mem_GiB": 17.47484540939331,
+ "stage": "dar1",
+ "run": "checks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "c97176096d149b7375f8624869c47f8e82c4d6f8",
+ "start_utc": "2026-10-31T09:38:17Z",
+ "wall_s": 378.8525950908661,
+ "gpu_hours": 0.10523683196968503
+}
