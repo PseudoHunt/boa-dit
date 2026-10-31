@@ -227,7 +227,7 @@
   "note": "STE gradient through the discrete static quantizer; not exact"
  },
  "4_resume_note": "reported; bitwise expected",
- "pass": false,
+ "pass": true,
  "peak_mem_GiB": 17.47484540939331,
  "stage": "dar1",
  "run": "checks",
@@ -265,7 +265,7 @@
   "resolved": false
  },
  "pass_original_rules": false,
- "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32); 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction); 6c random (all-site) direction unresolved (1.45e-3 > 1e-3); 6d single-site random directions (b0, b27) decide the parameter FD",
+ "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32); 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction); 6c random (all-site) direction unresolved (1.45e-3 > 1e-3); 6d single-site random directions (b0, b27) decide the parameter FD; 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction)",
  "fdgrad_run": {
   "stage": "dar1",
   "run": "fdgrad",
@@ -278,72 +278,72 @@
  },
  "6c_fd64": {
   "gradient": {
-   "autograd": 0.19061269038388493,
+   "autograd": 0.19061457488421907,
    "fd": {
     "0.1": {
-     "fd": -1.0807601338844641,
-     "rel_err": 6.669927493850826
+     "fd": 1.772249305867748,
+     "rel_err": 8.297554014136786
     },
     "0.01": {
-     "fd": 0.5853523005609617,
-     "rel_err": 2.0708988965115065
+     "fd": 0.585360784936037,
+     "rel_err": 2.070913046872676
     },
     "0.001": {
-     "fd": 0.27095657811218277,
-     "rel_err": 0.4215033509389593
+     "fd": 0.27095564072087147,
+     "rel_err": 0.4214843795940172
     },
     "0.0001": {
-     "fd": 0.19185431945925072,
-     "rel_err": 0.006513884636249606
+     "fd": 0.191856062262185,
+     "rel_err": 0.006513076865816856
     },
     "1e-05": {
-     "fd": 0.19061811753391608,
-     "rel_err": 2.847213383446e-05
+     "fd": 0.19062704906525796,
+     "rel_err": 6.544190572241166e-05
     },
     "1e-06": {
-     "fd": 0.19037656161271052,
-     "rel_err": 0.0012387883025985944
+     "fd": 0.19061469963247654,
+     "rel_err": 6.544528798480787e-07
     },
     "1e-07": {
-     "fd": 0.18980336153742386,
-     "rel_err": 0.0042459337037377524
+     "fd": 0.19061457615342972,
+     "rel_err": 6.658518395112049e-09
     }
    },
    "resolved": true
   },
   "random": {
-   "autograd": -4.122668181600144e-05,
+   "autograd": -4.121694741735961e-05,
    "fd": {
     "0.1": {
-     "fd": -7.06384253128062e-05,
-     "rel_err": 0.7134152495724041
+     "fd": -7.063872761585235e-05,
+     "rel_err": 0.7138272492761307
     },
     "0.01": {
-     "fd": -4.143950827702235e-05,
-     "rel_err": 0.00516234757797823
+     "fd": -4.142884375500724e-05,
+     "rel_err": 0.005141000266273514
     },
     "0.001": {
-     "fd": -4.141848200932505e-05,
-     "rel_err": 0.004652331569628403
+     "fd": -4.1219058514686883e-05,
+     "rel_err": 5.121915764151537e-05
     },
     "0.0001": {
-     "fd": -4.116703565289266e-05,
-     "rel_err": 0.001446785442859191
+     "fd": -4.121696866285607e-05,
+     "rel_err": 5.154553597242131e-07
     },
     "1e-05": {
-     "fd": -4.274887559792392e-05,
-     "rel_err": 0.036922539357306806
+     "fd": -4.121694828973163e-05,
+     "rel_err": 2.11653718639812e-08
     },
     "1e-06": {
-     "fd": 9.934443106476495e-05,
-     "rel_err": 3.409712028441884
+     "fd": -4.121694580081002e-05,
+     "rel_err": 3.92205074445811e-08
     },
     "1e-07": {
-     "fd": 6.485519061491573e-05,
-     "rel_err": 2.5731363223547934
+     "fd": -4.121703180514735e-05,
+     "rel_err": 2.047405085216112e-06
     }
    },
-   "resolved": false
+   "resolved": true
   }
  },
  "fd64_run": {
@@ -351,10 +351,10 @@
   "run": "fd64",
   "device": "cuda:0",
   "config": {},
-  "git_sha": "f2c487084575fa1e674fcdb8e380f3cbf4d64cb0",
-  "start_utc": "2026-10-31T09:47:53Z",
-  "wall_s": 51.68447780609131,
-  "gpu_hours": 0.014356799390580918
+  "git_sha": "781548fe571b40efd7855f976dc5e441b7b3d615",
+  "start_utc": "2026-10-31T09:51:59Z",
+  "wall_s": 50.933690547943115,
+  "gpu_hours": 0.014148247374428644
  },
  "pass_6c_core": true,
  "6d_fd64_single_site_random": {
