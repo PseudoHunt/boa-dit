@@ -103,3 +103,4 @@ There is no step or token bootstrap, nonsignificance is not called equivalence, 
   batch 32 peak reserved 10.25 GiB -> **frozen batch 32** for all configurations and references. Profiled J 89.9 s, FP50 19.2 s per
   32-image trajectory; plan fit 0.75 + val 0.20 + conf 1.45 + checks 0.20 + diag 0.15 h, total incl. spend 2.76 h <= 3.0 -> the complete grid and reserved confirmation fit.
 - 2026-10-31 06:20 UTC, gate (0.161 A30-h): all checks pass (overnight FP50/G/GB/ACB reproduced bitwise with J(0,0), J(0,0,1), J(1,1,1) incl. ACB states; λ0, K1, counts, independence, reset, resume 8/9, instrumentation, gain placement). Fit started.
+- 2026-10-31 07:01 UTC, fit complete (32, complete 27-point grid): selected and frozen before validation B = U = J(0,0,1) (fit 0.00446), J = J(0.5,0,1) (fit 0.00310; feedback on at anchor calls only). Validation configurations after dedup: J(0,0,1) [B0, B, U], J(1,1,1) [N], J(0,1,1) [H], J(0.5,0,1) [J]. Validation started.
