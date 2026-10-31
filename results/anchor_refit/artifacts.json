@@ -1,0 +1,61 @@
+{
+ "note": "local only (standing instruction: nothing trained is uploaded). Learned branches carry_BA_u{82,165,330}.pt / carry_BL_u{82,165,330}.pt / carry_BL_tm.pt are regenerable by `python -m boa_dit.anchor_refit.run train_ba|train_bl` (deterministic draw list, verified resume); latents by the dev/conf stages.",
+ "files": {
+  "anchor_cache.pt": {
+   "sha256": "7b27ff9e79a629feace83c441f4d5f3e80b9de6ccfe5ae25efed643e8f870c5d",
+   "bytes": 15337701
+  },
+  "carry_BA_u0.pt": {
+   "sha256": "f68353c9d8e9badc0efbe37a27c2d8c437bf8cdb5de90ec6134950a9113df41d",
+   "bytes": 8323401
+  },
+  "carry_BA_u165.pt": {
+   "sha256": "b93d2b714940752d2d06081c29d6ca0fabb58577610ddb67fc95b7127dafdcc1",
+   "bytes": 8323925
+  },
+  "carry_BA_u330.pt": {
+   "sha256": "85ef8619f059a103ccf532ffad5348909407ac2e84dc9a3887e29220f5190fa6",
+   "bytes": 8323925
+  },
+  "carry_BA_u82.pt": {
+   "sha256": "e4f1541f8a7c08a9a41d1edcb61898c0c597f15e35874bfba5a16da254e40daf",
+   "bytes": 8323631
+  },
+  "carry_BL_tm.pt": {
+   "sha256": "8f6f81e1c9f75d05b6c002d13f7184cfdfd5eac87249abf99dbed3e05d703ff2",
+   "bytes": 8323401
+  },
+  "carry_BL_u0.pt": {
+   "sha256": "5775e69870f5e64468cd39e73b6d2a72bbce22b5cde4bac59bafc05f32cb6d30",
+   "bytes": 8323401
+  },
+  "carry_BL_u165.pt": {
+   "sha256": "faf3f79ba446b8fc86a2f21edce5edcba7231950fa35f663d1d8734f3e58d166",
+   "bytes": 8323925
+  },
+  "carry_BL_u330.pt": {
+   "sha256": "8f8e8249f473cc1c6232064ac3e51fff4c4c7d080cd63eb7e8e5fea5c682a6d8",
+   "bytes": 8323925
+  },
+  "carry_BL_u82.pt": {
+   "sha256": "a53ee7858b0b04dace2b07b8e04894a1229d94fbc35fe1220fac277c728de673",
+   "bytes": 8323631
+  },
+  "carry_u0_check.pt": {
+   "sha256": "56d6f4ead62b62c6a67ebc219a1305872322a7356ed0efbe2138da36369c0bd2",
+   "bytes": 8324155
+  },
+  "conf_latents.pt": {
+   "sha256": "ccbdb9583cc55a79afddc6dc1f23783553d99a738a1cf5a00929b6ab05481a25",
+   "bytes": 12585973
+  },
+  "den.pt": {
+   "sha256": "3dafdcfb893e363faefd7415e93ea2808fa37d0d92d07962a5e4eb6dd956b422",
+   "bytes": 1826
+  },
+  "dev_latents.pt": {
+   "sha256": "4ebcd71eed0f78030309cd566dfbb9e0b62d17b5f2dde7f874cf707e41da1cd6",
+   "bytes": 5247029
+  }
+ }
+}
