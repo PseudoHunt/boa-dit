@@ -1,0 +1,9 @@
+{
+ "note": "local only; regenerate with RUN.md (pinned seeds, abn1 harness)",
+ "files": {
+  "latents.pt": {
+   "sha256": "35225fb1202f9bc3a277598c275b516da061e6055e5b4f558e621cbf6f5b754f",
+   "bytes": 5245626
+  }
+ }
+}

@@ -692,7 +692,7 @@ def train(dev, obj, n_updates, ckpt_at=(), save=True, time_cap_s=None, return_pa
 
 def need(name):
     r = jload(name)
-    if not (r and (r.get("pass") or r.get("status") == "complete")):
+    if not (r and (r.get("pass") or r.get("status") == "complete" or "updates" in r)):      # training outputs carry "updates"
         print(f"[dar1] {name} required first", flush=True)
         sys.exit(6)
     return r

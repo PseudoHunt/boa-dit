@@ -46,3 +46,4 @@ size is frozen before any quality result.
 ## Amendments and results
 (appended below, dated)
 - 2026-10-31 09:22 UTC, checks pass (K2 25/24, coef ½·b, K1 = H8_50 bitwise, CB and CB.w8 reproduce bitwise; 0.050 A30-h). Run attempt 1: all 5 arms × 64 seeds generated and saved (counts asserted per trajectory), then a **crash in the out-of-sampler per-call timing** (the cheap model's static quantizer had no step index; CTX.step unset). Logged as FAILED. Fix: CTX.step = 25 during per-call timing; the rerun reuses the saved latents (no regeneration) and attempt 1's trajectory timings (results/w8_spacing/attempt1_timing.json). No metric had been computed.
+- 2026-10-31 10:20 UTC, run complete (rerun 0.092 A30-h; total 0.276). Primary W8-K2/FP-K4 0.341 [0.142, 0.802], 52/64, ΔLPIPS −0.0164 → useful; W8-K2/W8-K4 0.273 [0.101, 0.761]; W8-K4/FP-K4 1.247 inconclusive; W8-K2/H8_50 1.054. Simulated C_W8/C_FP 1.17 (fake-quant; not a kernel cost). 126000–126063 evaluated.
