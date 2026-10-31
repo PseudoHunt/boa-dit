@@ -119,3 +119,9 @@ Unopened confirmation seeds are reported by exact ID.
   Added check 6b, a resolvable regime: a parameter-direction central FD along the **normalized gradient direction**, same reduced case (quantizer off,
   fp32, batch 1, a = 0), same h grid and tolerance (≤ 1e-3 with a neighbour ≤ 1e-2). It runs as stage `fdgrad`, which updates checks.json and keeps the
   original entries. Training starts only if 6b is resolved.
+- 2026-10-31 09:50 UTC, check 6b result: along the normalized gradient direction (fp32), autograd 0.1906 vs FD rel. errors 4.9 / 2.1 / 0.42 / 6.7e-3 /
+  2.5e-3 at h = 1e-1 … 1e-5. The error converges with h but stalls at the fp32 noise floor (~0.25%), so it is **not resolved** and not counted as
+  validation. Added check 6c, a resolved regime by precision: the same reduced case (no activation quantizer, batch 1, window a = 0 with 2 bridges)
+  entirely in **float64**. fp64 variants are used only in this check: the guided call without autocast or fp32 cast, the carry hook without fp32 cast,
+  and DiT's timestep embedder output cast to fp64. FD along the gradient and a random direction, h ∈ {1e-1 … 1e-7}, same tolerance. Training proceeds
+  only if both directions are resolved.

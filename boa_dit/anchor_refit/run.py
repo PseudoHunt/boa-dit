@@ -86,7 +86,7 @@ def tea(fp, x, lab, i, sch, ck, detach_input=False):
     return checkpoint(f, xi, use_reentrant=False) if (ck and xi.requires_grad) else f(xi)
 
 
-def window(m, jq, fp, xa, lab, a, span, sch, Ac, bc, ck=True, detach_teacher=False, trace=None):
+def window(m, jq, fp, xa, lab, a, span, sch, Ac, bc, ck=True, detach_teacher=False, trace=None, S_=None, F_=None):
     """corrected anchored window from the pre-anchor-operation latent at anchor a: no bridge at a (history outside the window), bridges at internal
     anchors and at the right boundary anchor a + span if it is an anchor < T. Returns (endpoint, counts)."""
     end = min(a + span, T)
@@ -94,7 +94,8 @@ def window(m, jq, fp, xa, lab, a, span, sch, Ac, bc, ck=True, detach_teacher=Fal
     cnt = {"cheap": 0, "fp": 0, "bridges": 0}
     for i in range(a, end):
         if i % KA == 0:
-            q, f = stu(m, jq, x, lab, i, sch, ck), tea(fp, x, lab, i, sch, ck, detach_teacher)
+            q = S_(x, i) if S_ else stu(m, jq, x, lab, i, sch, ck)
+            f = F_(x, i) if F_ else tea(fp, x, lab, i, sch, ck, detach_teacher)
             cnt["cheap"] += 1; cnt["fp"] += 1
             dn = q - f
             if dprev is not None:
@@ -104,11 +105,12 @@ def window(m, jq, fp, xa, lab, a, span, sch, Ac, bc, ck=True, detach_teacher=Fal
                 trace[i] = x.detach().clone()
             dprev, aprev, eps = dn, i, f
         else:
-            eps = stu(m, jq, x, lab, i, sch, ck) - dprev
+            eps = (S_(x, i) if S_ else stu(m, jq, x, lab, i, sch, ck)) - dprev
             cnt["cheap"] += 1
         x = ddim_step(x, eps, i, sch)
     if end < T and end % KA == 0 and end == a + span:
-        q, f = stu(m, jq, x, lab, end, sch, ck), tea(fp, x, lab, end, sch, ck, detach_teacher)
+        q = S_(x, end) if S_ else stu(m, jq, x, lab, end, sch, ck)
+        f = F_(x, end) if F_ else tea(fp, x, lab, end, sch, ck, detach_teacher)
         cnt["cheap"] += 1; cnt["fp"] += 1
         x = x - LAM * AB.bridge_coef(Ac, bc, aprev, end - aprev) * ((q - f) - dprev)
         cnt["bridges"] += 1
@@ -486,6 +488,99 @@ def stage_fdgrad(dev):
     return 0 if ch["pass"] else 6
 
 
+class Carry64(Carry):
+    """float64 carry hook for the fd64 check only (the training Carry casts to fp32)."""
+
+    def _hook(self, i):
+        def hook(mod, inp, out):
+            return out + (inp[0] @ self.V[i]) @ self.D[i].T
+        return hook
+
+
+def guided64(model, x, labels, i, sch):
+    """guided_eps without autocast or the fp32 output cast (fd64 only)."""
+    n = len(x)
+    y = torch.cat([labels, torch.full_like(labels, NULL_CLASS)])
+    t = sch.tmap[torch.full((2 * n,), sch.idx[i], device=x.device, dtype=torch.long)]
+    out = model(torch.cat([x, x]), t, y)
+    eps3, rest = out[:, :3], out[:, 3:]
+    c, u = eps3[:n], eps3[n:]
+    return torch.cat([u + DJ.CFG * (c - u), rest[:n, :1]], 1)
+
+
+def to64(model):
+    model.double()
+    te = model.t_embedder
+    te.forward = lambda t, te=te: te.mlp(te.timestep_embedding(t, te.frequency_embedding_size).double())
+    return model
+
+
+def stage_fd64(dev):
+    """check 6c (amendment 2026-10-31 09:50): float64 central FD of the reduced case (no quantizer, batch 1, window a = 0, 2 bridges) along the
+    normalized gradient and a random carry direction; same h grid extended to 1e-7, same tolerance."""
+    ch = json.load(open(os.path.join(OUT, "checks.json")))
+    guard("fd64", 0.03)
+    with Run(TAG, "fd64", dev, {}) as run:
+        d = make_diffusion(T)
+        sch = Sched(d, dev)
+        Ac, bc = AB.coeffs(d)
+        m = to64(DJ.common_base_nocarry(dev))
+        fp = to64(DJ.fp_model(dev))
+        c = Carry64(m, torch.load(DJ.BASE_CARRY, map_location="cpu"), dev).double()
+        cache = load_cache()
+        x1 = cache["train"][:1, 0].to(dev).double()
+        l1 = torch.as_tensor(labels_for_seeds(TRAIN[:1]), device=dev)
+        S_ = lambda x, i: guided64(m, x, l1, i, sch)
+        F_ = lambda x, i: guided64(fp, x, l1, i, sch)
+        with torch.no_grad():
+            xF = x1
+            for i in range(0, 2 * KA):
+                xF = ddim_step(xF, F_(xF, i), i, sch)
+        L = lambda: (window(None, None, None, x1, l1, 0, 2 * KA, sch, Ac, bc, ck=False, S_=S_, F_=F_)[0] - xF).pow(2).sum()
+        c.zero_grad(set_to_none=True)
+        L().backward()
+        g = [p.grad.detach().clone() for p in c.parameters()]
+        th = math.sqrt(sum(float(p.detach().pow(2).sum()) for p in c.parameters()))
+        rg = torch.Generator().manual_seed(9)
+        rnd = [torch.randn(p.shape, generator=rg).to(dev).double() for p in c.parameters()]
+        out = {}
+        for name, dr in (("gradient", g), ("random", rnd)):
+            nn_ = math.sqrt(sum(float(v.pow(2).sum()) for v in dr))
+            dirs = [v * th / nn_ for v in dr]
+            ad = sum(float((gi * v).sum()) for gi, v in zip(g, dirs))
+            fd = {}
+            with torch.no_grad():
+                for h in (1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7):
+                    for p, v in zip(c.parameters(), dirs):
+                        p.add_(h * v)
+                    lp = float(L())
+                    for p, v in zip(c.parameters(), dirs):
+                        p.sub_(2 * h * v)
+                    lm = float(L())
+                    for p, v in zip(c.parameters(), dirs):
+                        p.add_(h * v)
+                    fd[h] = {"fd": (lp - lm) / (2 * h), "rel_err": abs((lp - lm) / (2 * h) - ad) / abs(ad)}
+            hs = sorted(fd, reverse=True)
+            res = any(fd[h]["rel_err"] <= 1e-3 and ((i > 0 and fd[hs[i - 1]]["rel_err"] <= 1e-2) or (i + 1 < len(hs) and fd[hs[i + 1]]["rel_err"] <= 1e-2))
+                      for i, h in enumerate(hs))
+            out[name] = {"autograd": ad, "fd": fd, "resolved": res}
+            print(f"  fd64 {name}: autograd {ad:.6g}; " + ", ".join(f"h={h:g}: {fd[h]['rel_err']:.2e}" for h in hs), flush=True)
+        ch["6c_fd64"] = out
+        prev = ch.get("pass_note", "")
+        keys_ok = [ch["1_pass"], *ch["2_export_install_bitwise"].values(), ch["2_eval_u0_equals_abn1_CB_bs32"], ch["2_eval_arch_equals_abn1_LCB_bs32"],
+                   ch["3_u0_export_equals_original"], ch["3_lr0_step_export_equals_original"], ch["3_tables_and_W4_unchanged"],
+                   ch["4_window_counts_pass_corrected_expectation"], ch["4_window_a0_equals_full_rollout_corrected_x8_bitwise"], ch["5_grad_b0_nonzero"],
+                   ch["5_grad_b27_nonzero"], ch["5_teacher_params_no_grad"], ch["5_teacher_latent_derivative_rel_effect"] > 0,
+                   ch["5_loss_equal_with_detached_teacher_input"], ch["5_bl_grad_finite_nonzero"], ch["6_latent_resolved"],
+                   out["gradient"]["resolved"], out["random"]["resolved"]]
+        ch["pass"] = bool(all(keys_ok))
+        ch["pass_note"] = prev + "; 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction)"
+        ch["fd64_run"] = run.record()
+    jdump("checks.json", ch)
+    print(json.dumps({"6c": {k: {"resolved": v["resolved"]} for k, v in out.items()}, "pass": ch["pass"]}, indent=1))
+    return 0 if ch["pass"] else 6
+
+
 def resume_check(dev):
     p1 = train(dev, "BA", n_updates=4, save=False, return_params=True)
     p2a = train(dev, "BA", n_updates=2, save=False, return_params=True, keep_state=True)
@@ -797,7 +892,7 @@ def main():
     dev = "cuda:0"
     torch.cuda.set_device(dev)
     st = sys.argv[1]
-    f = {"cache": stage_cache, "norm": stage_norm, "checks": stage_checks, "fdgrad": stage_fdgrad, "profile": stage_profile, "train_ba": lambda d: stage_train(d, "BA"),
+    f = {"cache": stage_cache, "norm": stage_norm, "checks": stage_checks, "fdgrad": stage_fdgrad, "fd64": stage_fd64, "profile": stage_profile, "train_ba": lambda d: stage_train(d, "BA"),
          "train_bl": lambda d: stage_train(d, "BL"), "dev": stage_dev, "conf": stage_conf, "diag": stage_diag}[st]
     sys.exit(f(dev) or 0)
 
