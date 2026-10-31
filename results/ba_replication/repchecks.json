@@ -1,0 +1,143 @@
+{
+ "provenance": {
+  "base_model": {
+   "path": "/home/boa-dit-bar/ckpt/ckpt_deflate_heig_r8_w4_s/model.pt",
+   "sha256": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced",
+   "expected": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced"
+  },
+  "base_carry": {
+   "path": "/home/boa-dit-bar/results/deflate/quant/deflate_heig_r8_w4_s/carry.pt",
+   "sha256": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+   "expected": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5"
+  },
+  "tables": {
+   "path": "/home/boa-dit-bar/ckpt/dit_joint/static_single8.pt",
+   "sha256": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+   "expected": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67"
+  },
+  "smoothing": {
+   "path": "/home/boa-dit-bar/ckpt/temporal/dit_smooth_s.pt",
+   "sha256": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26",
+   "expected": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26"
+  },
+  "h8": {
+   "path": "/home/boa-dit-bar/ckpt/weight_anchor_w8/h8.pt",
+   "sha256": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad",
+   "expected": "c574916e3f8a34754cc7d95e21db3c0de3d5498f3c46a4d2120109477aa248ad"
+  },
+  "heig8_w4_model": {
+   "path": "/home/boa-dit-bar/ckpt/ckpt_deflate_heig_r8_w4/model.pt",
+   "sha256": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761",
+   "expected": "facee154c8a3e1a983c0f547fc8fd11a8eecae820ab63eea04fa26f580633761"
+  },
+  "carry_C_L_u200": {
+   "path": "/home/boa-dit-bar/ckpt/dit_joint/carry_C_L_u200.pt",
+   "sha256": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69",
+   "expected": "ac20161034dbae00139cf472d1a10f2be77e39d201c83fa9e842ef4d06b55e69"
+  },
+  "carry_E_L_u200": {
+   "path": "/home/boa-dit-bar/ckpt/dit_joint/carry_E_L_u200.pt",
+   "sha256": "77b5d0ac43b9ed3eb393d2a2c0f73fa5d8f9135731c3a0c555ac80300639572d",
+   "expected": "77b5d0ac43b9ed3eb393d2a2c0f73fa5d8f9135731c3a0c555ac80300639572d"
+  },
+  "fid_ref_stats": {
+   "path": "/home/boa-dit-bar/results/stage0/ref_stats.npz",
+   "sha256": "a11af8b0f80b2d77640c8dcef76674eebcff02c065a11bf4261e95cef635fab4",
+   "expected": "a11af8b0f80b2d77"
+  },
+  "fid_ref_images": {
+   "path": "/home/boa-dit-bar/ckpt/VIRTUAL_imagenet256_labeled.npz",
+   "sha256": "b32732719497e42660a9affb4a966068cba0855ac449b82015e34ec376d20758",
+   "expected": "b32732719497e426"
+  }
+ },
+ "hashes_ok": false,
+ "draw_sha_s0_equals_pilot": true,
+ "s0_reproduces_pilot_first3_updates": {
+  "BA": {
+   "new": [
+    [
+     0.8803042769432068,
+     0.4867750108242035
+    ],
+    [
+     0.9836329817771912,
+     0.33312755823135376
+    ],
+    [
+     1.2401771545410156,
+     2.0008697509765625
+    ]
+   ],
+   "pilot": [
+    [
+     0.8803042769432068,
+     0.4867750108242035
+    ],
+    [
+     0.9836329817771912,
+     0.33312755823135376
+    ],
+    [
+     1.2401771545410156,
+     2.0008697509765625
+    ]
+   ],
+   "exact": true
+  },
+  "BL": {
+   "new": [
+    [
+     1.1347475051879883,
+     0.9601535201072693
+    ],
+    [
+     0.5149181485176086,
+     0.8231140971183777
+    ],
+    [
+     0.9870867729187012,
+     0.8014798164367676
+    ]
+   ],
+   "pilot": [
+    [
+     1.1347475051879883,
+     0.9601535201072693
+    ],
+    [
+     0.5149181485176086,
+     0.8231140971183777
+    ],
+    [
+     0.9870867729187012,
+     0.8014798164367676
+    ]
+   ],
+   "exact": true
+  }
+ },
+ "draw_sha": {
+  "s1": "73d0a2d9df1921c98504fe09b5a8cbaf0ae416d065e4b3e40df1e03e35df9e71",
+  "s2": "7eea28b18397a1df755def579af07d4402556867131246ad629c7ded05df5abf"
+ },
+ "draws_distinct": true,
+ "resume_bitwise_s1": true,
+ "export_install_bitwise_trained_s1": true,
+ "teacher_params_no_grad": true,
+ "window_counts_a0": {
+  "cheap": 9,
+  "fp": 3,
+  "bridges": 2
+ },
+ "base_W4_and_tables_unchanged": true,
+ "pass": false,
+ "stage": "bar1",
+ "run": "repchecks",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "311efd3faafa80679035fa86c86a79fbc1a84c51",
+ "start_utc": "2026-10-31T14:26:32Z",
+ "wall_s": 155.62847518920898,
+ "gpu_hours": 0.04323013199700249
+}
