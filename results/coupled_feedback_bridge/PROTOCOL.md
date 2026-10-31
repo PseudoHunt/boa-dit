@@ -102,3 +102,4 @@ There is no step or token bootstrap, nonsignificance is not called equivalence, 
   reference files were absent from this new worktree — copied from the abn worktree, sha256 b4a537b0… / a11af8b0… verified; 0.006 A30-h logged as FAILED):
   batch 32 peak reserved 10.25 GiB -> **frozen batch 32** for all configurations and references. Profiled J 89.9 s, FP50 19.2 s per
   32-image trajectory; plan fit 0.75 + val 0.20 + conf 1.45 + checks 0.20 + diag 0.15 h, total incl. spend 2.76 h <= 3.0 -> the complete grid and reserved confirmation fit.
+- 2026-10-31 06:20 UTC, gate (0.161 A30-h): all checks pass (overnight FP50/G/GB/ACB reproduced bitwise with J(0,0), J(0,0,1), J(1,1,1) incl. ACB states; λ0, K1, counts, independence, reset, resume 8/9, instrumentation, gain placement). Fit started.

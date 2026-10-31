@@ -1,0 +1,15 @@
+{
+ "cap_gpu_h": 3.0,
+ "combined_cap_gpu_h": 6.0,
+ "log": [
+  {
+   "utc": "2026-10-31T06:19:55Z",
+   "stage": "fit (complete grid + reserved validation, confirmation, diagnostics)",
+   "spent_before_h": 0.1824,
+   "estimate_h": 2.5433813875781843,
+   "reserve_h": 0.1,
+   "ok": true
+  }
+ ],
+ "spent_gpu_h": 0.1824
+}
