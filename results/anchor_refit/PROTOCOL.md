@@ -139,3 +139,9 @@ Unopened confirmation seeds are reported by exact ID.
   Fix: in the fp64 copy only, the smoothing pre-hooks are replaced by fp64 equivalents (x / s with the same s). **Check 6c is rerun as originally
   amended** (gradient and random all-site directions, same tolerance). It decides; no further check variants will be added. If it fails, the BA
   implementation stage stops and is documented.
+- 2026-10-31 10:08 UTC, **check 6c rerun with the fp64 harness fixed: both directions resolved.** Gradient direction 6.5e-5 / 6.5e-7 / 6.7e-9 at
+  h = 1e-5 / 1e-6 / 1e-7; random all-site direction 5.1e-5 / 5.2e-7 / 2.1e-8 at h = 1e-3 / 1e-4 / 1e-5; clean second-order convergence.
+  checks.json `pass` = true. All earlier entries (fp32 6, 6b, fp64 6c/6d before the fix) remain recorded.
+  The training path's gradient through the sampler, bridge and teacher latent is validated for the smooth (quantizer-off) case. The static
+  quantizer is an STE; its fp16 quantized FD is reported only. Spend so far: dar1 0.409 h, w8s1 0.184 h, handoff total 0.593 h. Next: profile →
+  train BA → train BL → dev → diag → conf (conditional).
