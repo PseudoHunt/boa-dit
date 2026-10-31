@@ -113,6 +113,14 @@
    "total_spent": 1.4535,
    "est": 0.22,
    "ok": true
+  },
+  {
+   "utc": "2026-10-31T10:55:48Z",
+   "stage": "diag",
+   "tag_spent": 1.3389,
+   "total_spent": 1.6148,
+   "est": 0.1,
+   "ok": true
   }
  ]
 }
