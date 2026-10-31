@@ -89,6 +89,14 @@
    "total_spent": 0.6847,
    "est": 0.06,
    "ok": true
+  },
+  {
+   "utc": "2026-10-31T10:01:05Z",
+   "stage": "train_ba",
+   "tag_spent": 0.43320000000000003,
+   "total_spent": 0.7091,
+   "est": 0.3675,
+   "ok": true
   }
  ]
 }
