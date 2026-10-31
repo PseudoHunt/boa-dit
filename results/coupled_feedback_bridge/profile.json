@@ -1,0 +1,26 @@
+{
+ "device_total_bytes": 25337004032,
+ "rule": "batch 32 if J peak reserved <= 0.85 x device memory, else 16",
+ "s_per_traj": {
+  "J": 89.88899370015133,
+  "FP50": 19.187605145270936
+ },
+ "peak_reserved": 11001659392,
+ "batch_size": 32,
+ "stage": "cfb1",
+ "run": "profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "21f07fdc5264be42189b46077536de41cb084a85",
+ "start_utc": "2026-10-31T06:08:43Z",
+ "wall_s": 55.78414249420166,
+ "gpu_hours": 0.015495595137278238,
+ "plan_h": {
+  "fit": 0.7474470773761924,
+  "val": 0.20065936780022134,
+  "conf": 1.4452749424017708,
+  "checks": 0.2,
+  "diag": 0.15
+ },
+ "plan_total_h": 2.7588769827154627
+}

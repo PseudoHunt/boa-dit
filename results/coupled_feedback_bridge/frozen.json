@@ -1,0 +1,196 @@
+{
+ "written_utc": "2026-10-31T06:10:02Z",
+ "batch_size": 32,
+ "batch_rule": "batch 32 if J peak reserved <= 0.85 x device memory, else 16",
+ "profile_peak_reserved": 11001659392,
+ "source_sha256": {
+  "boa_dit/feedback_bridge/core.py": "37a4ce1a65e66ae55891fbc40daa42d7934ca4d56eda88fdb2a6a930e5a54320",
+  "boa_dit/feedback_bridge/cfb.py": "7506740c174050d38ba26b61cf46a86df961a4f4d3c19462d9d932b8ecc1ca9d",
+  "boa_dit/activation_bridge/run.py": "850bc98161ef9bbe3ae7c57c97649d60ea86573b5b885dc0b2fde2f0a87d16f9",
+  "boa_dit/local_refresh/run.py": "72f8cec864c6dfd6bde21a1e015df5901d04daaacd735bb5339f4beea3f17e56",
+  "boa_dit/dit_joint/run.py": "29ef8b20a10c576a7b4d517896746a4b78f9ee4cab19e03099a974d6f5e73529",
+  "boa_dit/temporal/act.py": "54fad072cb28c64fc7ddc4e2e6f70991d1ec5038cef8dd47e15e495695e01f30"
+ },
+ "grid": [
+  [
+   0.0,
+   0.0,
+   0.5
+  ],
+  [
+   0.0,
+   0.0,
+   1.0
+  ],
+  [
+   0.0,
+   0.0,
+   1.5
+  ],
+  [
+   0.0,
+   0.5,
+   0.5
+  ],
+  [
+   0.0,
+   0.5,
+   1.0
+  ],
+  [
+   0.0,
+   0.5,
+   1.5
+  ],
+  [
+   0.0,
+   1.0,
+   0.5
+  ],
+  [
+   0.0,
+   1.0,
+   1.0
+  ],
+  [
+   0.0,
+   1.0,
+   1.5
+  ],
+  [
+   0.5,
+   0.0,
+   0.5
+  ],
+  [
+   0.5,
+   0.0,
+   1.0
+  ],
+  [
+   0.5,
+   0.0,
+   1.5
+  ],
+  [
+   0.5,
+   0.5,
+   0.5
+  ],
+  [
+   0.5,
+   0.5,
+   1.0
+  ],
+  [
+   0.5,
+   0.5,
+   1.5
+  ],
+  [
+   0.5,
+   1.0,
+   0.5
+  ],
+  [
+   0.5,
+   1.0,
+   1.0
+  ],
+  [
+   0.5,
+   1.0,
+   1.5
+  ],
+  [
+   1.0,
+   0.0,
+   0.5
+  ],
+  [
+   1.0,
+   0.0,
+   1.0
+  ],
+  [
+   1.0,
+   0.0,
+   1.5
+  ],
+  [
+   1.0,
+   0.5,
+   0.5
+  ],
+  [
+   1.0,
+   0.5,
+   1.0
+  ],
+  [
+   1.0,
+   0.5,
+   1.5
+  ],
+  [
+   1.0,
+   1.0,
+   0.5
+  ],
+  [
+   1.0,
+   1.0,
+   1.0
+  ],
+  [
+   1.0,
+   1.0,
+   1.5
+  ]
+ ],
+ "fixed": {
+  "B0": [
+   0.0,
+   0.0,
+   1.0
+  ],
+  "N": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "H": [
+   0.0,
+   1.0,
+   1.0
+  ]
+ },
+ "fit": [
+  120000,
+  120031
+ ],
+ "val": [
+  120100,
+  120131
+ ],
+ "conf": [
+  121000,
+  121255
+ ],
+ "diag": [
+  120000,
+  120007
+ ],
+ "tiebreak": "rel 1e-6: fewer nonzero gains, lower gain sum, smaller |lambda-1|, lexicographic",
+ "gate": "J nonzero feedback, mean err <= 0.95 B, LPIPS <= LPIPS(B)+0.005",
+ "primary": "J/B",
+ "plan_h": {
+  "fit": 0.7474470773761924,
+  "val": 0.20065936780022134,
+  "conf": 1.4452749424017708,
+  "checks": 0.2,
+  "diag": 0.15
+ },
+ "plan_total_h": 2.7588769827154627,
+ "cap_gpu_h": 3.0
+}

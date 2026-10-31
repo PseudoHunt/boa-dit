@@ -98,3 +98,7 @@ There is no step or token bootstrap, nonsignificance is not called equivalence, 
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-31 06:10 UTC, profile (no quality data; one earlier attempt failed at model load because the local-only carry and FID
+  reference files were absent from this new worktree — copied from the abn worktree, sha256 b4a537b0… / a11af8b0… verified; 0.006 A30-h logged as FAILED):
+  batch 32 peak reserved 10.25 GiB -> **frozen batch 32** for all configurations and references. Profiled J 89.9 s, FP50 19.2 s per
+  32-image trajectory; plan fit 0.75 + val 0.20 + conf 1.45 + checks 0.20 + diag 0.15 h, total incl. spend 2.76 h <= 3.0 -> the complete grid and reserved confirmation fit.
