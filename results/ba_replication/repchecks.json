@@ -51,7 +51,7 @@
    "expected": "b32732719497e426"
   }
  },
- "hashes_ok": false,
+ "hashes_ok": true,
  "draw_sha_s0_equals_pilot": true,
  "s0_reproduces_pilot_first3_updates": {
   "BA": {
@@ -131,7 +131,7 @@
   "bridges": 2
  },
  "base_W4_and_tables_unchanged": true,
- "pass": false,
+ "pass": true,
  "stage": "bar1",
  "run": "repchecks",
  "device": "cuda:0",
@@ -139,5 +139,8 @@
  "git_sha": "311efd3faafa80679035fa86c86a79fbc1a84c51",
  "start_utc": "2026-10-31T14:26:32Z",
  "wall_s": 155.62847518920898,
- "gpu_hours": 0.04323013199700249
+ "gpu_hours": 0.04323013199700249,
+ "pass_original_attempt": false,
+ "hashes_ok_original_check": false,
+ "hashes_ok_note": "original check compared full sha256 to 'expected' strings by equality; some expected values are 16-hex prefixes (e.g. fid_ref_images b32732719497e426). Re-scored from the recorded provenance with prefix matching (amendment 2026-10-31 14:31 UTC); every hash matches."
 }

@@ -83,7 +83,7 @@ def stage_repchecks(dev):
     guard("repchecks", 0.08)
     with Run(TAG, "repchecks", dev, {}) as run:
         ch = {"provenance": AB.provenance()}
-        ch["hashes_ok"] = all(v.get("sha256") == v.get("expected") for v in ch["provenance"].values() if isinstance(v, dict) and "expected" in v)
+        ch["hashes_ok"] = all(str(v.get("sha256", "")).startswith(str(v.get("expected"))) for v in ch["provenance"].values() if isinstance(v, dict) and "expected" in v)
         pba, pbl = json.load(open(os.path.join(DOUT, "train_ba.json"))), json.load(open(os.path.join(DOUT, "train_bl.json")))
         setup(0)
         ch["draw_sha_s0_equals_pilot"] = hashlib.sha256(json.dumps(R.draws(R.NMAX)).encode()).hexdigest() == pba["draw_sha"] == pbl["draw_sha"]
