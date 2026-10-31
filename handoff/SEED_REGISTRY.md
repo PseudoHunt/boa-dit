@@ -62,8 +62,8 @@ PixArt uses prompt indices; the seed is the prompt index.
 | `mjhq1k` | 400–431 | PixArt fresh development set | **untouched (registered, unopened)** |
 | `mjhq1k` | 432–463 | reserve dev set for the conditional trajectory-anchored target | **untouched (reserved)** |
 | `mjhq1k` | 600–663 | PixArt refit training states | training |
-| `mjhq1k` | 352–367 | snk1 SANA development (timing prompts 358, 352, 361, 359 within it) | **reserved (2026-10-31)** |
-| `mjhq1k` | 464–527 | snk1 SANA confirmation (64) | **reserved, unopened (2026-10-31)** |
+| `mjhq1k` | 352–367 | snk1 SANA development (timing prompts 358, 352, 361, 359 within it) | **evaluated (2026-10-31)** |
+| `mjhq1k` | 464–527 | snk1 SANA confirmation (64) — never opened (development rule failed); still fresh | **reserved, unopened (2026-10-31)** |
 | `mjhq1k` | 368–399, 528–599, 664–999 | — | free |
 
 Rule (all protocols): a range is untouched only if this registry says so. A range does not count as untouched just because one branch never used it.

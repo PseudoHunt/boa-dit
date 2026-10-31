@@ -1,0 +1,25 @@
+{
+ "note": "local only; regenerable via RUN.md",
+ "files": {
+  "dev_outputs.pt": {
+   "sha256": "84c38050b0d807d0613d2c2263f2126b782a9c3eee3c7ab1a7ad769233b60209",
+   "bytes": 262148293
+  },
+  "example_H.png": {
+   "sha256": "92adc3d20039d34147bdd98d371ce2ee32fc1d05f8582ae4159a04b7b7e0af01",
+   "bytes": 591929
+  },
+  "example_Q.png": {
+   "sha256": "9cac4edf8083f0282ba0e4815325f9899b1274e2e6e9398502c5e7eefd6adf85",
+   "bytes": 587660
+  },
+  "trace_H.json": {
+   "sha256": "a715e1838ad9f460eab23782bd8b52cd2b84ee70bee7a700328924f22b1c5250",
+   "bytes": 2932295
+  },
+  "trace_Q.json": {
+   "sha256": "5566eec0ceb14ee708efdddaf5c0d29a0ec883181189f53e5aced58e16494516",
+   "bytes": 1806141
+  }
+ }
+}

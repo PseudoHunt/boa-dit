@@ -127,7 +127,7 @@ multistep (latent, history) state and replay validation under its own protocol.
 
 ## Amendments and results
 (appended below, dated)
-- 2026-10-31 08:20 UTC, smoke and determinism (before any timing or quality result; 0.016 A30-h incl. one FAILED attempt where precomputed embeddings
+- 2026-10-31 08:10 UTC, smoke and determinism (before any timing or quality result; 0.016 A30-h incl. one FAILED attempt where precomputed embeddings
   needed `negative_prompt=None`):
   - Both models are finite and coherent on the official example; the example images are saved in ckpt/sana_a30/.
   - **BF16 is bitwise repeatable. The official Nunchaku INT4 SANA transformer is not.** Six identical single calls differ by up to rel L2 0.087 (max
@@ -140,7 +140,7 @@ multistep (latent, history) state and replay validation under its own protocol.
     - Q's call-to-call noise (~9%) is a non-reusable component of any held discrepancy.
   - Bug found: the router run did not match the direct pipeline even for BF16 (0.394), because `encode_prompt` was called without the pipeline's
     `__call__` defaults (complex human instruction). Fixed: embeddings now use the pipeline's own defaults. Router vs direct is re-checked in `kernels`.
-- 2026-10-31 08:40 UTC, kernels and timing (no quality data):
+- 2026-10-31 08:13 UTC, kernels and timing (no quality data):
   - **Kernels:** 260 GEMM_W4A4 launches, 41.3 of 59.0 ms CUDA time in the INT4 call. BF16 stays only in 6 linears (time embedding, caption
     projection, proj_out) and the patch-embed conv.
   - **Memory:** both denoisers + text encoder + VAE resident; peak reserved 12.18 GiB of 23.6 GiB (fits with a 1 GiB reserve).
@@ -152,3 +152,4 @@ multistep (latent, history) state and replay validation under its own protocol.
   - **Loaded pipeline:** H20 2.68 s, Q20 1.52 s, HYB-K4 2.11 s, HYB-K8 1.88 s.
   - **LPIPS:** computed by a separate metrics script in the main DiT environment from saved uint8 images, because nk_env has no lpips and is not
     modified.
+- 2026-10-31 08:22 UTC, checks pass (Q paths judged against Q's own spread; routing/resume bitwise with a deterministic stand-in); development screen: R/A 1.110 [0.951, 1.276] (rule <= 0.90) → **fails**; confirmation 464–527 not opened; Hk not evaluated. Same-state diagnostics: Q run-to-run noise = 57% of Q−H energy; held subtraction leaves 1.56x. Report written; nothing running.
