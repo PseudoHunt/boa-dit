@@ -1,0 +1,54 @@
+{
+ "device_total_bytes": 25337004032,
+ "rule": "largest of 32/16/8 with R-full peak reserved <= 0.85 x device memory",
+ "rfull": {
+  "32": {
+   "oom": true
+  },
+  "16": {
+   "peak_allocated": 15211959808,
+   "peak_reserved": 16414408704,
+   "s_per_step_incl_warmup": 1.5013428416568786,
+   "state_bytes_per_image_incl_cfg": 462422016.0,
+   "oom": false
+  },
+  "8": {
+   "peak_allocated": 10344850432,
+   "peak_reserved": 11142168576,
+   "s_per_step_incl_warmup": 0.6496573837163547,
+   "state_bytes_per_image_incl_cfg": 462422016.0,
+   "oom": false
+  }
+ },
+ "batch_size": 16,
+ "timing_at_choice": {
+  "FP50": {
+   "s_per_step_warm": 0.19523656112141907,
+   "est_s_per_trajectory": 9.761828056070954
+  },
+  "G": {
+   "s_per_step_warm": 0.90869110240601,
+   "est_s_per_trajectory": 45.4345551203005
+  },
+  "ACB": {
+   "s_per_step_warm": 0.907980767369736,
+   "est_s_per_trajectory": 45.3990383684868
+  },
+  "RDB": {
+   "s_per_step_warm": 0.9228023596224375,
+   "est_s_per_trajectory": 46.140117981121875
+  },
+  "RFB": {
+   "s_per_step_warm": 1.2311599150998518,
+   "est_s_per_trajectory": 61.55799575499259
+  }
+ },
+ "stage": "rfb1",
+ "run": "profile",
+ "device": "cuda:0",
+ "config": {},
+ "git_sha": "5023a0a16f0651fdd92ccfa5eecb51b618ee7ab5",
+ "start_utc": "2026-10-31T04:46:26Z",
+ "wall_s": 103.62513709068298,
+ "gpu_hours": 0.028784760302967494
+}

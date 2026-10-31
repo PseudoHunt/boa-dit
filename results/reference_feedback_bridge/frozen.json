@@ -1,0 +1,69 @@
+{
+ "written_utc": "2026-10-31T04:48:37Z",
+ "batch_size": 16,
+ "batch_rule": "largest of 32/16/8 with R-full peak reserved <= 0.85 x device memory",
+ "profile_rfull": {
+  "32": {
+   "oom": true
+  },
+  "16": {
+   "peak_allocated": 15211959808,
+   "peak_reserved": 16414408704,
+   "s_per_step_incl_warmup": 1.5013428416568786,
+   "state_bytes_per_image_incl_cfg": 462422016.0,
+   "oom": false
+  },
+  "8": {
+   "peak_allocated": 10344850432,
+   "peak_reserved": 11142168576,
+   "s_per_step_incl_warmup": 0.6496573837163547,
+   "state_bytes_per_image_incl_cfg": 462422016.0,
+   "oom": false
+  }
+ },
+ "source_sha256": {
+  "boa_dit/feedback_bridge/core.py": "37a4ce1a65e66ae55891fbc40daa42d7934ca4d56eda88fdb2a6a930e5a54320",
+  "boa_dit/feedback_bridge/rfb.py": "e6f562e4e82506729dbdd108550de07635058d8473b4480b3af013a078c3899f",
+  "boa_dit/activation_bridge/run.py": "850bc98161ef9bbe3ae7c57c97649d60ea86573b5b885dc0b2fde2f0a87d16f9",
+  "boa_dit/local_refresh/run.py": "72f8cec864c6dfd6bde21a1e015df5901d04daaacd735bb5339f4beea3f17e56",
+  "boa_dit/dit_joint/run.py": "29ef8b20a10c576a7b4d517896746a4b78f9ee4cab19e03099a974d6f5e73529",
+  "boa_dit/temporal/act.py": "54fad072cb28c64fc7ddc4e2e6f70991d1ec5038cef8dd47e15e495695e01f30",
+  "boa_dit/temporal/dit_act.py": "5f536b0390fb97cf5648996c6a3208bf88594767718f5ecef06c1fb6766eea5b"
+ },
+ "model_sha256": {
+  "base_model": "f017af877a79015fb9670504da4fb9fb51df30e1d8e94f6b4a3deedd5aec7ced",
+  "base_carry": "b4a537b0570b97d7f50f8f7d9230f1f6e37c157b7277f589285dbd1ee41aedd5",
+  "tables": "b73030de42a83255338f4a4ab92dce52febf604f5b5b935779c1f2342298dd67",
+  "smoothing": "7ee15c0c72fc18569f2e72671089b20c1293d368dc193d1af49276c1a296db26"
+ },
+ "arms": [
+  "FP50",
+  "G",
+  "GB",
+  "ACB",
+  "RFB",
+  "RDB",
+  "RD"
+ ],
+ "lambda": 1.0,
+ "K": 4,
+ "dev": [
+  60200,
+  60231
+ ],
+ "conf": [
+  122000,
+  122127
+ ],
+ "diag": [
+  60208,
+  60215
+ ],
+ "gate": "RFB or RDB: dev mean error <= 0.95 GB and mean LPIPS <= LPIPS(GB)+0.005",
+ "primary": "RDB/GB",
+ "calls": {
+  "anchored": "50 cheap + 13 FP; bridge arms 12 corrections",
+  "FP50": "50 FP"
+ },
+ "cap_gpu_h": 3.0
+}
