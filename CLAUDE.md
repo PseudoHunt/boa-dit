@@ -1,7 +1,7 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (since 2026-10-30, branch nunchaku-sdxl-feasibility)
-- **Active:** Nunchaku SDXL feasibility on the A30 (nk1), installation + profiling only. Protocol `results/nunchaku_sdxl/PROTOCOL.md`; 0.5 A30-h cap; separate conda env `nunchaku`; script `scripts/nunchaku_sdxl_profile.py`.
+## Active task (2026-10-31): snk1 real-kernel SANA anchoring feasibility, branch sana-a30-feasibility, worktree /home/boa-dit-snk; protocol results/sana_a30/PROTOCOL.md; cap 1.5 A30-h; venv /home/nk_env. (Earlier: rfb1/cfb1 complete; nk1 complete.)
+- Completed: Nunchaku SDXL feasibility on the A30 (nk1), installation + profiling only. Protocol `results/nunchaku_sdxl/PROTOCOL.md`; 0.5 A30-h cap; separate conda env `nunchaku`; script `scripts/nunchaku_sdxl_profile.py`.
 - Install Nunchaku only from the official GitHub release wheels (the PyPI package `nunchaku` is unrelated).
 - Do NOT delete the GitHub release park-assets-2026-10-29 (user instruction 2026-10-30).
 - Completed (do not rerun): weight-anchor controls wac1 (weight-anchor-controls), weight-anchor pilot wa1 (weight-anchor-pilot), quantizer observer pilot (quantizer-observer-pilot, gate failed), joint pilot (`results/dit_joint/`), DNS response pilot (dns-response-pilot), analytic carry (analytic-carry-pilot, parked method).

@@ -35,6 +35,16 @@ PixArt uses prompt indices; the seed is the prompt index.
 | 90200–90263 / 90300–90363 | qo1 observer confirmation / live confirmation | **untouched (registered, unopened; stopped by gate)** |
 | 92000–92031 / 92100–92163 | weight-anchor pilot (wa1): live development / live confirmation | **evaluated (2026-10-30)** |
 | 93000–93063 | weight-anchor controls (wac1): fresh confirmation | **evaluated (2026-10-30)** |
+| 94000–94031 / 94100–94163 | W8-anchor pilot (wa8): development / confirmation | **evaluated (2026-10-30)** |
+| 95100–95163 | shared-anchor pilot (ws1): fresh confirmation (dev reuses 94000–94031) | **evaluated (2026-10-30)** |
+| 96100–96163 | activation-anchor pilot (aa1): fresh confirmation (dev reuses 60200–60215; G1 bitwise test on 61000–61031) | **evaluated (2026-10-30)** |
+| 97100–97163 | anchor-drift pilot (ad1): fresh confirmation (ler1 reserved it but stopped at E1 without opening it); dev 60208–60223 | **reserved (2026-10-30)** |
+| 98100–98163 | anchor-bridge pilot (br1): fresh confirmation (dev 60208–60223; bitwise test 60200–60215) | **evaluated (2026-10-30)** |
+| 110000–110255 | overnight abn1 (activation-bridge-overnight): confirmation cohort (Stages 2–4 use 110000–110127) | **evaluated (2026-10-30)** |
+| 112000–113999 | overnight abn1: FID-2k cohort (labels index // 2) — **never generated** (stage skipped by budget); still fresh | reserved, unopened (2026-10-30) |
+| 122000–122127 | rfb1 (reference-feedback-bridge-pilot): fresh confirmation (dev reuses inspected 60200–60231; checks reuse 110000–110031) | **evaluated (2026-10-31)** |
+| 120000–120031 / 120100–120131 | cfb1 (coupled-feedback-bridge-pilot): fit / validation | **evaluated (2026-10-31)** |
+| 121000–121255 | cfb1 confirmation — **never opened** (validation gate failed); still fresh | reserved, unopened (2026-10-31) |
 
 ## PixArt prompt sets (indices into the named list; seed = index)
 | set | indices | use | status |
@@ -52,6 +62,8 @@ PixArt uses prompt indices; the seed is the prompt index.
 | `mjhq1k` | 400–431 | PixArt fresh development set | **untouched (registered, unopened)** |
 | `mjhq1k` | 432–463 | reserve dev set for the conditional trajectory-anchored target | **untouched (reserved)** |
 | `mjhq1k` | 600–663 | PixArt refit training states | training |
-| `mjhq1k` | 352–399, 464–599, 664–999 | — | free |
+| `mjhq1k` | 352–367 | snk1 SANA development (timing prompts 358, 352, 361, 359 within it) | **reserved (2026-10-31)** |
+| `mjhq1k` | 464–527 | snk1 SANA confirmation (64) | **reserved, unopened (2026-10-31)** |
+| `mjhq1k` | 368–399, 528–599, 664–999 | — | free |
 
 Rule (all protocols): a range is untouched only if this registry says so. A range does not count as untouched just because one branch never used it.
