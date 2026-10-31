@@ -508,8 +508,17 @@ def guided64(model, x, labels, i, sch):
     return torch.cat([u + DJ.CFG * (c - u), rest[:n, :1]], 1)
 
 
-def to64(model):
+def to64(model, smoothed=False):
     model.double()
+    if smoothed:                                                            # dit_joint.apply_smoothing casts x to fp32 inside its pre-hook: replace it
+        from boa_dit.model import block_linear
+        for key, sv in DJ.smoothing().items():
+            l, ln = key.split(".", 1)
+            lin = block_linear(model.blocks[int(l[1:])], ln)
+            assert len(lin._forward_pre_hooks) == 1
+            lin._forward_pre_hooks.clear()
+            s64 = sv.to(next(model.parameters()).device).float().double()
+            lin.register_forward_pre_hook(lambda mod, inp, s64=s64: (inp[0] / s64,))
     te = model.t_embedder
     te.forward = lambda t, te=te: te.mlp(te.timestep_embedding(t, te.frequency_embedding_size).double())
     return model
@@ -524,7 +533,7 @@ def stage_fd64(dev):
         d = make_diffusion(T)
         sch = Sched(d, dev)
         Ac, bc = AB.coeffs(d)
-        m = to64(DJ.common_base_nocarry(dev))
+        m = to64(DJ.common_base_nocarry(dev), smoothed=True)
         fp = to64(DJ.fp_model(dev))
         c = Carry64(m, torch.load(DJ.BASE_CARRY, map_location="cpu"), dev).double()
         cache = load_cache()

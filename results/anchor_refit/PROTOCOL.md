@@ -131,3 +131,11 @@ Unopened confirmation seeds are reported by exact ID.
   because ~4M components cancel. So 6c fails as written (both directions were required); this is kept on record. Tolerances are not loosened.
   Bounded diagnostic 6d (fp64, same reduced case, same tolerance): random directions restricted to the carries of one early site (b0.*) and one late
   site (b27.*). Training proceeds only if both resolve; otherwise this implementation stage stops and is documented.
+- 2026-10-31 10:05 UTC, check 6d result: single-site random directions **not resolved** (b0: 2.9e-5 at h = 1e-3, but neighbours 1.3e-2 / 1.4e-2 >
+  1e-2; b27: best 1.8e-3 at 1e-3). Kept on record. Both 6c and 6d showed an h-dependent noise floor far above fp64 precision.
+  **Harness defect found** by a dtype audit (every module output was fp64, but): `dit_joint.apply_smoothing`'s pre-hook computes `x.float() / s` at all
+  56 fc1/fc2 inputs, so the "fp64" cheap model truncated activations to fp32 precision there. This is a deterministic bug in the fp64 check harness
+  only; the training path is fp32/fp16 by design and unaffected.
+  Fix: in the fp64 copy only, the smoothing pre-hooks are replaced by fp64 equivalents (x / s with the same s). **Check 6c is rerun as originally
+  amended** (gradient and random all-site directions, same tolerance). It decides; no further check variants will be added. If it fails, the BA
+  implementation stage stops and is documented.
