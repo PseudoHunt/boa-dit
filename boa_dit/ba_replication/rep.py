@@ -295,7 +295,7 @@ def stage_plan(dev=None):
 def stage_eval(dev):
     need("eval_plan.json", key="utc")
     names, roles = eval_arms()
-    register({k: v for k, v in names.items() if v})
+    register(names)                                                           # B0 (no carry file) maps to the abn1 CB arm
     arms = ["FP50"] + list(names)
     n_anch = len(names)
     est = EVAL_N * (n_anch * (0.3594 - 0.022) / 5 / 128 + 0.022 / 128) * 1.05
