@@ -107,3 +107,4 @@ Unopened confirmation seeds are reported by exact ID.
 
 ## Amendments and results
 (appended below, dated)
+- 2026-10-31 09:31 UTC, checks attempt 1 (FAILED, OOM): check 1 passed (endpoint rel 0.046 ≤ 0.05; step-1 rel 1.2e-7; 50 + 13 calls, 12 bridges), then CUDA OOM in the BL-loss gradient check (8 per-step graphs alive at once + check models still resident). Fix (implementation only, objective unchanged): BL accumulates each per-step term's gradient immediately (scaled 1/n; identical gradient to backpropagating the mean); check models freed. Checks rerun in full.

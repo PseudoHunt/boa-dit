@@ -25,6 +25,14 @@
    "total_spent": 0.25639999999999996,
    "est": 0.2,
    "ok": true
+  },
+  {
+   "utc": "2026-10-31T09:31:43Z",
+   "stage": "checks",
+   "tag_spent": 0.14450000000000002,
+   "total_spent": 0.3287,
+   "est": 0.2,
+   "ok": true
   }
  ]
 }
