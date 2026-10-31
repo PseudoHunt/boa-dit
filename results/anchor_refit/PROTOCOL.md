@@ -125,3 +125,4 @@ Unopened confirmation seeds are reported by exact ID.
   entirely in **float64**. fp64 variants are used only in this check: the guided call without autocast or fp32 cast, the carry hook without fp32 cast,
   and DiT's timestep embedder output cast to fp64. FD along the gradient and a random direction, h ∈ {1e-1 … 1e-7}, same tolerance. Training proceeds
   only if both directions are resolved.
+- 2026-10-31 09:52 UTC, fd64 attempt 1 FAILED (OOM: two fp64 DiT-XL copies + an unchecked 11-call graph). Fix: activation checkpointing of the fp64 calls (identical values). Rerun.

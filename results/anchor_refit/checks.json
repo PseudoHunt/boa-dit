@@ -265,7 +265,7 @@
   "resolved": false
  },
  "pass_original_rules": false,
- "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32)",
+ "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32); 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction)",
  "fdgrad_run": {
   "stage": "dar1",
   "run": "fdgrad",
@@ -275,5 +275,85 @@
   "start_utc": "2026-10-31T09:45:40Z",
   "wall_s": 32.51958155632019,
   "gpu_hours": 0.00903321709897783
+ },
+ "6c_fd64": {
+  "gradient": {
+   "autograd": 0.19061269038388493,
+   "fd": {
+    "0.1": {
+     "fd": -1.0807601338844641,
+     "rel_err": 6.669927493850826
+    },
+    "0.01": {
+     "fd": 0.5853523005609617,
+     "rel_err": 2.0708988965115065
+    },
+    "0.001": {
+     "fd": 0.27095657811218277,
+     "rel_err": 0.4215033509389593
+    },
+    "0.0001": {
+     "fd": 0.19185431945925072,
+     "rel_err": 0.006513884636249606
+    },
+    "1e-05": {
+     "fd": 0.19061811753391608,
+     "rel_err": 2.847213383446e-05
+    },
+    "1e-06": {
+     "fd": 0.19037656161271052,
+     "rel_err": 0.0012387883025985944
+    },
+    "1e-07": {
+     "fd": 0.18980336153742386,
+     "rel_err": 0.0042459337037377524
+    }
+   },
+   "resolved": true
+  },
+  "random": {
+   "autograd": -4.122668181600144e-05,
+   "fd": {
+    "0.1": {
+     "fd": -7.06384253128062e-05,
+     "rel_err": 0.7134152495724041
+    },
+    "0.01": {
+     "fd": -4.143950827702235e-05,
+     "rel_err": 0.00516234757797823
+    },
+    "0.001": {
+     "fd": -4.141848200932505e-05,
+     "rel_err": 0.004652331569628403
+    },
+    "0.0001": {
+     "fd": -4.116703565289266e-05,
+     "rel_err": 0.001446785442859191
+    },
+    "1e-05": {
+     "fd": -4.274887559792392e-05,
+     "rel_err": 0.036922539357306806
+    },
+    "1e-06": {
+     "fd": 9.934443106476495e-05,
+     "rel_err": 3.409712028441884
+    },
+    "1e-07": {
+     "fd": 6.485519061491573e-05,
+     "rel_err": 2.5731363223547934
+    }
+   },
+   "resolved": false
+  }
+ },
+ "fd64_run": {
+  "stage": "dar1",
+  "run": "fd64",
+  "device": "cuda:0",
+  "config": {},
+  "git_sha": "f2c487084575fa1e674fcdb8e380f3cbf4d64cb0",
+  "start_utc": "2026-10-31T09:47:53Z",
+  "wall_s": 51.68447780609131,
+  "gpu_hours": 0.014356799390580918
  }
 }
