@@ -140,3 +140,15 @@ multistep (latent, history) state and replay validation under its own protocol.
     - Q's call-to-call noise (~9%) is a non-reusable component of any held discrepancy.
   - Bug found: the router run did not match the direct pipeline even for BF16 (0.394), because `encode_prompt` was called without the pipeline's
     `__call__` defaults (complex human instruction). Fixed: embeddings now use the pipeline's own defaults. Router vs direct is re-checked in `kernels`.
+- 2026-10-31 08:40 UTC, kernels and timing (no quality data):
+  - **Kernels:** 260 GEMM_W4A4 launches, 41.3 of 59.0 ms CUDA time in the INT4 call. BF16 stays only in 6 linears (time embedding, caption
+    projection, proj_out) and the patch-embed conv.
+  - **Memory:** both denoisers + text encoder + VAE resident; peak reserved 12.18 GiB of 23.6 GiB (fits with a 1 GiB reserve).
+  - **Router:** router vs direct is bitwise for H after the embedding fix.
+  - **Per-call Q/H:** 0.515 / 0.519 / 0.515 at steps 0 / 10 / 19.
+  - **Loops (medians):** H20 2.345 s, Q20 1.186 s, HYB-K4 1.775 s (**0.757**), HYB-K8
+    1.540 s (0.657).
+  - **Gate:** both pass; **K4 selected** (timing-only, before any quality result).
+  - **Loaded pipeline:** H20 2.68 s, Q20 1.52 s, HYB-K4 2.11 s, HYB-K8 1.88 s.
+  - **LPIPS:** computed by a separate metrics script in the main DiT environment from saved uint8 images, because nk_env has no lpips and is not
+    modified.

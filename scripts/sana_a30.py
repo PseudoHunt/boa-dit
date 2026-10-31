@@ -439,5 +439,265 @@ def timing():
     print(json.dumps({k: out[k] for k in ("ratio_per_call", "loop_ratio_vs_H20", "gate", "loaded_pipeline_s")}, indent=1, default=str))
 
 
+
+
+# =================================================================================================================== conditional reuse pilot
+class FakeQ(nn.Module):
+    """deterministic stand-in cheap model for routing-logic checks only (Q itself is not bitwise repeatable): 0.97 x H's output."""
+
+    def __init__(self, H):
+        super().__init__()
+        self.H = H
+
+    def forward(self, *a, **k):
+        return (self.H(*a, **k)[0] * 0.97,)
+
+
+def selected():
+    t = jload("timing.json")
+    assert t and t["gate"]["selected"], "timing gate did not pass: quality stages are not permitted"
+    return t["gate"]["selected"]
+
+
+@torch.no_grad()
+def own_loop(pipe, R, mode, emb, seed, anchors=(), stop=None, resume=None):
+    """replica of SanaPipeline's denoising loop (same ops) supporting stop/resume with the full scheduler state (deepcopy) and router state."""
+    R.mode, R.anchors = mode, set(anchors)
+    pe = torch.cat([emb["negative_prompt_embeds"], emb["prompt_embeds"]])
+    pm = torch.cat([emb["negative_prompt_attention_mask"], emb["prompt_attention_mask"]])
+    if resume is None:
+        R.reset()
+        sch = pipe.scheduler
+        sch.set_timesteps(STEPS, device="cuda")
+        lat = pipe.prepare_latents(1, 32, RES, RES, torch.float32, "cuda", torch.Generator().manual_seed(seed))
+        i0 = 0
+    else:
+        sch, lat, i0 = copy.deepcopy(resume["sched"]), resume["lat"].clone(), resume["i"]
+        R.i, R.d, R.stale, R.calls = resume["router"]["i"], resume["router"]["d"], resume["router"]["stale"], dict(resume["router"]["calls"])
+    for i, t in enumerate(sch.timesteps):
+        if i < i0:
+            continue
+        if stop is not None and i == stop:
+            return {"sched": copy.deepcopy(sch), "lat": lat.clone(), "i": i,
+                    "router": {"i": R.i, "d": None if R.d is None else R.d.clone(), "stale": None if R.stale is None else R.stale.clone(), "calls": dict(R.calls)}}
+        x = torch.cat([lat] * 2)
+        ts = t.expand(x.shape[0]) * R.config.timestep_scale
+        npred = R(x.to(torch.bfloat16), encoder_hidden_states=pe.to(torch.bfloat16), encoder_attention_mask=pm, timestep=ts, return_dict=False,
+                  attention_kwargs=None)[0].float()
+        u, c = npred.chunk(2)
+        npred = u + GUIDE * (c - u)
+        lat = sch.step(npred, t, lat, return_dict=False)[0]
+    return lat
+
+
+@torch.no_grad()
+def checks():
+    guard("checks", 0.08)
+    K = selected()
+    an = SCHED[K]
+    with Run("checks") as run_:
+        pipe, R, _ = load()
+        P = prompts()
+        s = DEVP[0]
+        emb = embed(pipe, P[s])
+        ch = {"schedule": K, "anchors": an}
+        h20, c = run(pipe, R, "H", emb, s)
+        pipe.transformer = R.H
+        direct = pipe(**emb, negative_prompt=None, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS,
+                      generator=torch.Generator().manual_seed(s), output_type="latent").images
+        pipe.transformer = R.Q
+        dq = [pipe(**emb, negative_prompt=None, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS,
+                   generator=torch.Generator().manual_seed(s), output_type="latent").images for _ in range(2)]
+        pipe.transformer = R
+        q20, _ = run(pipe, R, "Q", emb, s)
+        ch["wrapper_H20_equals_unwrapped_bitwise"] = bool(torch.equal(h20, direct))
+        ch["wrapper_Q20_vs_unwrapped_rel_l2"] = rel(q20, dq[0])
+        ch["Q20_unwrapped_run_to_run_rel_l2"] = rel(dq[1], dq[0])
+        xa, ca = run(pipe, R, "R", emb, s, anchors=range(STEPS))
+        ch["anchor_every_call_equals_H20_bitwise"] = bool(torch.equal(xa, h20))
+        ch["anchor_every_call_calls"] = ca
+        Qreal = R.Q
+        R.Q = R.H                                                             # identical stateless cheap/high
+        D = []
+        orig = R.forward
+
+        def spy(*a, **k):
+            o = orig(*a, **k)
+            if R.d is not None:
+                D.append(float(R.d.abs().max()))
+            return o
+        R.forward = spy
+        xi, _ = run(pipe, R, "R", emb, s, anchors=an)
+        R.forward = orig
+        ch["identical_QH_zero_discrepancy"] = bool(max(D) == 0.0 and torch.equal(xi, h20))
+        R.Q = FakeQ(R.H)                                                      # deterministic stand-in for routing logic
+        xr0, _ = run(pipe, R, "R0", emb, s, anchors=an)
+        xA, cA = run(pipe, R, "A", emb, s, anchors=an)
+        ch["reuse_disabled_equals_A_bitwise_fakeQ"] = bool(torch.equal(xr0, xA))
+        full = own_loop(pipe, R, "R", emb, s, an)
+        ch["own_loop_equals_pipeline_bitwise_fakeQ"] = bool(torch.equal(full, run(pipe, R, "R", emb, s, an)[0]))
+        rs = {}
+        for st in (8, 9):
+            snap = own_loop(pipe, R, "R", emb, s, an, stop=st)
+            rs[st] = bool(torch.equal(own_loop(pipe, R, "R", emb, s, an, resume=snap), full))
+        ch["resume_incl_scheduler_history_bitwise_fakeQ"] = rs
+        R.Q = Qreal
+        counts = {}
+        for m in ("H", "Q", "A", "R", "S"):
+            counts[m] = run(pipe, R, m, emb, s, anchors=an)[1]
+        ch["calls"] = counts
+        ch["no_offload_or_hooks"] = bool(getattr(pipe, "_offload_gpu_id", None) is None and not any(hasattr(m, "_hf_hook") for m in (R.H, R.Q, pipe.vae, pipe.text_encoder)))
+        ch["pass"] = bool(ch["wrapper_H20_equals_unwrapped_bitwise"] and ch["anchor_every_call_equals_H20_bitwise"] and ch["identical_QH_zero_discrepancy"]
+                          and ch["reuse_disabled_equals_A_bitwise_fakeQ"] and ch["own_loop_equals_pipeline_bitwise_fakeQ"] and all(rs.values())
+                          and ch["no_offload_or_hooks"])
+        ch["note"] = "Q paths cannot be bitwise (Q is not repeatable, determinism.json); routing logic verified with a deterministic stand-in (0.97 x H)"
+        ch["gpu_h"] = run_.hours()
+    jdump("checks.json", ch)
+    print(json.dumps(ch, indent=1, default=str))
+
+
+def to_u8(pipe, lat):
+    im = pipe.vae.decode(lat.to(torch.bfloat16) / pipe.vae.config.scaling_factor, return_dict=False)[0]
+    return ((im.float().clamp(-1, 1) + 1) * 127.5).round().to(torch.uint8).cpu()
+
+
+def loop_time(pipe, R, mode, emb, seed, an, steps=STEPS, reps=3):
+    run(pipe, R, mode, emb, seed, an, steps=steps)
+    v = []
+    for _ in range(reps):
+        torch.cuda.synchronize()
+        v.append(ev_time(lambda: run(pipe, R, mode, emb, seed, an, steps=steps)) / 1e3)
+    return float(np.median(v)), v
+
+
+@torch.no_grad()
+def gen_arms(pipe, R, idx, arms, an, P, tag):
+    lat, img, calls = {a: [] for a in arms}, {a: [] for a in arms}, {}
+    for j, s in enumerate(idx):
+        emb = embed(pipe, P[s])
+        for a in arms:
+            if a.startswith("H") and a[1:].isdigit() and a != "H20":
+                x, c = run(pipe, R, "H", emb, s, steps=int(a[1:]))
+            else:
+                m = {"H20": "H", "Q20": "Q"}.get(a, a)
+                x, c = run(pipe, R, m, emb, s, anchors=an)
+            assert torch.isfinite(x).all(), (a, s)
+            lat[a].append(x.float().cpu()); img[a].append(to_u8(pipe, x)); calls[a] = c
+        print(f"  {tag} prompt {s} ({j + 1}/{len(idx)})", flush=True)
+    lat = {a: torch.cat(v) for a, v in lat.items()}
+    img = {a: torch.cat(v) for a, v in img.items()}
+    torch.save({"lat": lat, "img": img, "idx": idx, "calls": calls}, os.path.join(CK, f"{tag}_outputs.pt"))
+    return lat, calls
+
+
+@torch.no_grad()
+def dev():
+    K = selected()
+    an = SCHED[K]
+    assert (jload("checks.json") or {}).get("pass"), "checks not passed"
+    guard("dev", 0.15)
+    with Run("dev") as run_:
+        pipe, R, _ = load()
+        P = prompts()
+        arms = ["H20", "Q20", "A", "R", "S"]
+        lat, calls = gen_arms(pipe, R, DEVP, arms, an, P, "dev")
+        relm = {a: [float(((lat[a][i] - lat["H20"][i]).double().pow(2).sum() / lat["H20"][i].double().pow(2).sum())) for i in range(len(DEVP))]
+                for a in arms if a != "H20"}
+        out = {"schedule": K, "anchors": an, "calls": calls, "latent_rel_mse": relm, "mean": {a: float(np.mean(v)) for a, v in relm.items()},
+               "median": {a: float(np.median(v)) for a, v in relm.items()}}
+        # diagnostics at the same states (H20 trajectory): guided Q - H, Q's own repeat noise, persistence
+        diag = {"lag_corr": {}, "lag_energy_ratio": {}, "held_remaining": [], "raw_energy": [], "q_noise_energy": []}
+        E = []
+        for s in DEVP:
+            emb = embed(pipe, P[s])
+            xs = {}
+
+            def cb(p, i, t, kw):
+                xs[i + 1] = kw["latents"].clone()
+                return {}
+            R.mode, R.anchors = "H", set(); R.reset()
+            pipe(**emb, negative_prompt=None, height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=STEPS, generator=torch.Generator().manual_seed(s),
+                 output_type="latent", callback_on_step_end=cb, callback_on_step_end_tensor_inputs=["latents"])
+            xs[0] = pipe.prepare_latents(1, 32, RES, RES, torch.float32, "cuda", torch.Generator().manual_seed(s))
+            pipe.scheduler.set_timesteps(STEPS, device="cuda")
+            ts = pipe.scheduler.timesteps
+            pe = torch.cat([emb["negative_prompt_embeds"], emb["prompt_embeds"]]).to(torch.bfloat16)
+            pm = torch.cat([emb["negative_prompt_attention_mask"], emb["prompt_attention_mask"]])
+            g = lambda o: (lambda u, c: u + GUIDE * (c - u))(*o.float().chunk(2))
+            e, nz = [], []
+            for i in range(STEPS):
+                x = torch.cat([xs[i]] * 2).to(torch.bfloat16)
+                k = dict(encoder_hidden_states=pe, encoder_attention_mask=pm, timestep=ts[i].expand(2) * R.config.timestep_scale, return_dict=False)
+                h = g(R.H(x, **k)[0]); q1 = g(R.Q(x, **k)[0]); q2 = g(R.Q(x, **k)[0])
+                e.append((q1 - h).double().cpu()); nz.append(float((q2 - q1).double().pow(2).sum()) / 2)
+            E.append(e)
+            diag["raw_energy"].append([float(v.pow(2).sum()) for v in e]); diag["q_noise_energy"].append(nz)
+        for L in (1, 2, 4, 8):
+            num = sum(float((e[i] * e[i + L]).sum()) for e in E for i in range(STEPS - L))
+            den = (sum(float(e[i].pow(2).sum()) for e in E for i in range(STEPS - L)) * sum(float(e[i + L].pow(2).sum()) for e in E for i in range(STEPS - L))) ** 0.5
+            diag["lag_corr"][L] = num / den
+            diag["lag_energy_ratio"][L] = sum(float((e[i + L] - e[i]).pow(2).sum()) for e in E for i in range(STEPS - L)) / sum(float(e[i + L].pow(2).sum()) for e in E for i in range(STEPS - L))
+        held = [i for i in range(STEPS) if i not in an]
+        anc_of = lambda i: max(a for a in an if a <= i)
+        diag["held_remaining_fraction"] = sum(float((e[i] - e[anc_of(i)]).pow(2).sum()) for e in E for i in held) / sum(float(e[i].pow(2).sum()) for e in E for i in held)
+        diag["q_noise_over_raw_energy"] = float(np.sum(diag["q_noise_energy"]) / np.sum(diag["raw_energy"]))
+        diag["definitions"] = {"e_i": "guided Q - guided H at the H20 state x_i (scheduler-consumed flow prediction)", "q_noise": "|Q2 - Q1|^2 / 2 at the same state (Q run-to-run variance)",
+                               "held_remaining_fraction": "sum_held |e_i - e_anchor(i)|^2 / sum_held |e_i|^2 at the selected schedule (pooled, same states)"}
+        out["diagnostics"] = diag
+        rt = {m: loop_time(pipe, R, mm, embed(pipe, P[DEVP[0]]), DEVP[0], an) for m, mm in (("H20", "H"), ("R", "R"), ("A", "A"))}
+        out["loop_time_s"] = {m: {"median": v[0], "all": v[1]} for m, v in rt.items()}
+        ratio = out["mean"]["R"] / out["mean"]["A"]
+        out["rule"] = {"R_over_A_mean": ratio, "R_time_over_H20": rt["R"][0] / rt["H20"][0], "finite": True,
+                       "pass": bool(ratio <= 0.90 and rt["R"][0] / rt["H20"][0] <= 0.90),
+                       "text": "confirmation iff R mean endpoint rel. MSE <= 0.90 x A, finite, R warm loop median <= 0.90 x H20"}
+        out["gpu_h"] = run_.hours()
+    jdump("dev.json", out)
+    print(json.dumps({k: out[k] for k in ("mean", "median", "rule", "loop_time_s")}, indent=1), json.dumps({k: v for k, v in out["diagnostics"].items() if k in ("lag_corr", "lag_energy_ratio", "held_remaining_fraction", "q_noise_over_raw_energy")}, indent=1))
+
+
+@torch.no_grad()
+def conf():
+    K = selected()
+    an = SCHED[K]
+    d = jload("dev.json")
+    assert d and d["rule"]["pass"], "development rule not met: confirmation not permitted"
+    with Run("hk_select") as run_:
+        pipe, R, _ = load()
+        P = prompts()
+        emb = embed(pipe, P[DEVP[0]])
+        tR = loop_time(pipe, R, "R", emb, DEVP[0], an, reps=5)
+        tk = {k: loop_time(pipe, R, "H", emb, DEVP[0], (), steps=k, reps=3)[0] for k in range(1, STEPS + 1)}
+        k = max(kk for kk, v in tk.items() if v <= tR[0])
+        per_prompt = sum(v for v in tk.values() if False) or (d["loop_time_s"]["H20"]["median"] * 2 + 2 * tR[0] + tk[k] + 3.0)
+        sel = {"R_loop_s": tR, "H_k_loop_s": tk, "k": k, "rule": "largest k in 1..20 with warmed BF16 k-step loop <= R's loop (timing only)"}
+    jdump("hk_select.json", sel)
+    est = len(CONFP) * per_prompt / 3600 * 1.2
+    guard("conf", est)
+    with Run("conf") as run_:
+        arms = ["H20", "Q20", "A", "R", "S", f"H{k}"]
+        lat, calls = gen_arms(pipe, R, CONFP, arms, an, P, "conf")
+        relm = {a: [float(((lat[a][i] - lat["H20"][i]).double().pow(2).sum() / lat["H20"][i].double().pow(2).sum())) for i in range(len(CONFP))]
+                for a in arms if a != "H20"}
+        out = {"schedule": K, "k": k, "calls": calls, "latent_rel_mse": relm, "mean": {a: float(np.mean(v)) for a, v in relm.items()},
+               "estimate_h": est, "gpu_h": run_.hours()}
+        torch.cuda.reset_peak_memory_stats()
+        pl = {}
+        for a, (m, an_, st) in {"H20": ("H", (), STEPS), "R": ("R", an, STEPS), f"H{k}": ("H", (), k)}.items():
+            v = []
+            for rep in range(3):
+                R.mode, R.anchors = m, set(an_); R.reset()
+                torch.cuda.synchronize(); t0 = time.perf_counter()
+                pipe(prompt=P[DEVP[rep]], height=RES, width=RES, guidance_scale=GUIDE, num_inference_steps=st, generator=torch.Generator().manual_seed(DEVP[rep]))
+                torch.cuda.synchronize(); v.append(time.perf_counter() - t0)
+            pl[a] = {"median_s": float(np.median(v)), "all_s": v}
+        out["loaded_pipeline_s"] = pl
+        out["peak_reserved"] = torch.cuda.max_memory_reserved()
+    jdump("conf.json", out)
+    print(json.dumps({k_: out[k_] for k_ in ("k", "mean", "loaded_pipeline_s")}, indent=1))
+
+
+STAGES = {"env": env, "smoke": smoke, "kernels": kernels, "timing": timing, "checks": checks, "dev": dev, "conf": conf}
+
+
 if __name__ == "__main__":
-    {"env": env, "smoke": smoke, "kernels": kernels, "timing": timing}[sys.argv[1]]()
+    STAGES[sys.argv[1]]()
