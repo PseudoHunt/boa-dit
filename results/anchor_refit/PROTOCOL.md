@@ -145,3 +145,4 @@ Unopened confirmation seeds are reported by exact ID.
   The training path's gradient through the sampler, bridge and teacher latent is validated for the smooth (quantizer-off) case. The static
   quantizer is an STE; its fp16 quantized FD is reported only. Spend so far: dar1 0.409 h, w8s1 0.184 h, handoff total 0.593 h. Next: profile →
   train BA → train BL → dev → diag → conf (conditional).
+- 2026-10-31 10:01 UTC, profile (no quality data): BA 3.62 s/update, BL 1.95 s/update (peak 9.8 GiB) → **N = 330** (≥ 100; not budget-limited), checkpoints at updates 82 / 165 / 330. BL uses the same draws through 330, then continues to the BA-matched training time (BL-tm). Frozen before training.

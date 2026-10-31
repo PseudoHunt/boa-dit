@@ -714,6 +714,7 @@ def stage_profile(dev):
         res["N"] = N
         res["ckpts"] = sorted({round(N / 4), round(N / 2), N})
         res["budget_limited"] = N < 100
+        res["status"] = "complete"
         res.update(run.record())
     jdump("profile.json", res)
     print(res, flush=True)
