@@ -1,0 +1,51 @@
+{
+ "schedule": "K4",
+ "anchors": [
+  0,
+  4,
+  8,
+  12,
+  16
+ ],
+ "wrapper_H20_equals_unwrapped_bitwise": true,
+ "wrapper_Q20_vs_unwrapped_rel_l2": 0.3449225093412417,
+ "Q20_unwrapped_run_to_run_rel_l2": 0.33232902685923954,
+ "anchor_every_call_equals_H20_bitwise": true,
+ "anchor_every_call_calls": {
+  "H": 20,
+  "Q": 20
+ },
+ "identical_QH_zero_discrepancy": true,
+ "reuse_disabled_equals_A_bitwise_fakeQ": true,
+ "own_loop_equals_pipeline_bitwise_fakeQ": true,
+ "resume_incl_scheduler_history_bitwise_fakeQ": {
+  "8": true,
+  "9": true
+ },
+ "calls": {
+  "H": {
+   "H": 20,
+   "Q": 0
+  },
+  "Q": {
+   "H": 0,
+   "Q": 20
+  },
+  "A": {
+   "H": 5,
+   "Q": 15
+  },
+  "R": {
+   "H": 5,
+   "Q": 20
+  },
+  "S": {
+   "H": 5,
+   "Q": 0
+  }
+ },
+ "no_offload_or_hooks": true,
+ "pass": true,
+ "note": "Q paths cannot be bitwise (Q is not repeatable, determinism.json); routing logic verified with a deterministic stand-in (0.97 x H)",
+ "gpu_h": 0.012422137525346544
+}
