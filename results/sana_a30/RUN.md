@@ -14,3 +14,5 @@
     $P scripts/sana_a30.py dev        # 16-prompt screen + same-state diagnostics
     /root/miniconda3/envs/py3.10/bin/python scripts/sana_a30_metrics.py dev    # LPIPS/PSNR/bootstrap in the main env
     $P scripts/sana_a30.py conf       # refuses unless the development rule passed (it did not)
+    $P scripts/sana_a30_rep.py loc      # snk1b: repeatability / mutation / RNG checks, per-layer localization
+    $P scripts/sana_a30_rep.py split    # snk1b: split-half persistent vs repeat noise

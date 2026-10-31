@@ -100,3 +100,52 @@ Protocol: `PROTOCOL.md` (pre-registered; amendments dated). Spend: **0.163 of 1.
   ckpt/sana_a30/trace_*.json), timing.json, checks.json, dev.json, dev_metrics.json (per prompt), budget in `results/gpu_hours.csv`.
 - Images, latents and traces are local (`ckpt/sana_a30/`); see artifacts.json for hashes. They are regenerable from RUN.md with the pinned
   revisions. Nothing was uploaded.
+
+## Follow-up snk1b results (2026-10-31, 0.127 of 0.5 A30-h; nothing running)
+**Last completed step:** 2 (persistent vs repeat noise) plus step-3 source inspection. **No patched build** (the registered criteria are not met; see
+below). **Development screen not rerun** (repeatability unchanged). Confirmation set untouched.
+
+**1. Reproduce and localize** (`rep_loc.json`)
+- The variation is reproduced at every state tested. Max rel L2 vs the first of 16 repeats is ≈0.03 at step 0, ≈0.04–0.06 at step 10 and ≈0.09–0.11
+  at step 19.
+- Inputs are bitwise unchanged after the calls; CPU and CUDA RNG states are unchanged.
+- The router path and the bare module give the same spread; BF16 is bitwise in all 12 states.
+- Per-layer, on a fixed input:
+  - **every one of the 20 Nunchaku layers is individually non-bitwise**, first divergence at layer 0, isolated spread 0.02–0.85% per layer;
+  - through the chained stack the divergence compounds to 8–14% of the hidden state by the late layers.
+- This is small per-layer nondeterminism amplified through depth, consistent with, but not proof of, re-quantization of perturbed activations to 4 bits.
+- The fused C++ layer cannot be split further without a rebuild.
+
+**2. Persistent vs repeat noise** (`rep_split.json`; split-half cross estimators, prompt bootstrap 2,000)
+
+| quantity | estimate [95% CI] |
+|---|---|
+| repeat-noise share of Q−H energy | 0.576 [0.548, 0.604] |
+| lag-1 / 2 / 4 / 8 correlation, reproducible p | 0.551 / 0.358 / 0.180 / 0.075 |
+| lag-1 / 2 / 4 / 8 correlation, single calls | 0.239 / 0.160 / 0.081 / 0.033 |
+| **K4 held residual for noise-free p**, ‖p_t − p_a‖² / ‖p_t‖² | **1.309 [1.197, 1.469]** |
+| K4 held residual, single calls: independent-noise prediction (‖p_t − p_a‖² + V_t + V_a) | 1.562 [1.510, 1.630] |
+| K4 held residual, single calls: measured | 1.553 [1.505, 1.619] |
+| raw single-call energy / (‖p‖² + V) | 0.998 |
+
+- The decomposition e = p + η with independent repeat noise matches the measurements closely (predicted 1.562 vs measured 1.553), so your noise
+  argument is quantitatively confirmed here.
+- But the reproducible part itself decorrelates quickly. Even with perfectly repeatable INT4, holding the anchor discrepancy over K4 intervals would
+  leave **1.31× the held-step error energy**: it would still add error locally.
+- Subtraction helps only where the lag correlation exceeds ≈0.5 at equal energies. That is met here only at lag 1, i.e. K2. A K2 hybrid would cost
+  ≈0.515 + 10/20 ≈ 1.0× H20 per call, which fails the timing gate.
+
+**3. PR #820** (open, head 3713fa96)
+- It replaces the float `red.add` in `lora.cuh::reduce_lora_act` with fixed-point. The pinned v1.2.1 uses that float-atomic path (`lora.cuh:91`).
+- v1.2.1 has **a second float-atomic reduction, in the LiteLA linear-attention epilogue** (`epilogues.cuh:665`, `reduce_add` into `out_vk`). SANA
+  uses linear attention, and the PR does not touch this site.
+- Registered build criterion (a) is not met: localization cannot attribute the variation to the LoRA path, and the PR covers at most one of the two
+  sites. **No build was attempted.** A full deterministic SANA path would also need a change to the LiteLA epilogue, which is new kernel modification
+  with no upstream PR. That needs its own approval.
+- `/home/nk_env` and the wheel are untouched.
+
+**Assessment**
+- Fixing repeatability would roughly double the usable correlation (lag 1: 0.24 → 0.55), but the measured noise-free persistence is still too short for
+  K4 reuse to help, and the schedules short enough to benefit lose the speed margin.
+- The noise analysis explains the screen failure. Removing the noise is predicted to remove part of the harm, not to produce a gain at K4.
+- A deterministic build would test that prediction directly; it is the remaining unknown.

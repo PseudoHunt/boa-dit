@@ -186,3 +186,4 @@ envelope), wall ≤ 3 h. The confirmation set (mjhq1k 464–527) stays untouched
    - The working wheel and `/home/nk_env` are never modified.
    - Accuracy (vs BF16) and speed are both checked; determinism alone is insufficient.
 4. The development screen is rerun only if repeatability materially improves.
+- 2026-10-31 ~09:10 UTC, snk1b complete (0.127 A30-h): steps 1–2 done; PR #820 inspected (covers lora.cuh only; a second float-atomic site in the LiteLA epilogue is untouched); build criterion (a) not met → no build; dev screen not rerun. Results appended to REPORT.md.
