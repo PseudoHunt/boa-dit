@@ -41,6 +41,14 @@
    "total_spent": 0.4301,
    "est": 0.2,
    "ok": true
+  },
+  {
+   "utc": "2026-10-31T09:45:40Z",
+   "stage": "fdgrad",
+   "tag_spent": 0.3511,
+   "total_spent": 0.5353,
+   "est": 0.03,
+   "ok": true
   }
  ]
 }

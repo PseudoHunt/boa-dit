@@ -236,5 +236,44 @@
  "git_sha": "c97176096d149b7375f8624869c47f8e82c4d6f8",
  "start_utc": "2026-10-31T09:38:17Z",
  "wall_s": 378.8525950908661,
- "gpu_hours": 0.10523683196968503
+ "gpu_hours": 0.10523683196968503,
+ "4_window_counts_pass_corrected_expectation": true,
+ "6b_param_gradient_direction": {
+  "autograd": 0.19059315220556527,
+  "fd": {
+   "0.1": {
+    "fd": 1.1150789260864258,
+    "rel_err": 4.850571823712488
+   },
+   "0.01": {
+    "fd": 0.5853582173585892,
+    "rel_err": 2.0712447461241834
+   },
+   "0.001": {
+    "fd": 0.27096905978396535,
+    "rel_err": 0.42171456134851165
+   },
+   "0.0001": {
+    "fd": 0.19186909412383102,
+    "rel_err": 0.006694584267589896
+   },
+   "1e-05": {
+    "fd": 0.19011022232007233,
+    "rel_err": 0.0025338260053125263
+   }
+  },
+  "resolved": false
+ },
+ "pass_original_rules": false,
+ "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32)",
+ "fdgrad_run": {
+  "stage": "dar1",
+  "run": "fdgrad",
+  "device": "cuda:0",
+  "config": {},
+  "git_sha": "9163c54fe308b915e945d97c56d8316fcbe30757",
+  "start_utc": "2026-10-31T09:45:40Z",
+  "wall_s": 32.51958155632019,
+  "gpu_hours": 0.00903321709897783
+ }
 }
