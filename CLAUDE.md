@@ -1,6 +1,6 @@
 # boa-dit: notes for Claude Code sessions
 
-## Active task (2026-10-31): snk1 + snk1b SANA A30 feasibility COMPLETE (branch sana-a30-feasibility): timing passes (HYB-K4 0.757); reuse fails; INT4 nondeterminism localized (all layers, chained amplification; PR #820 covers only lora.cuh, LiteLA epilogue atomic untouched); even noise-free p leaves K4 held residual 1.31. No build attempted. Nothing running.
+## Active task (2026-10-31): SANA reuse PARKED (sr1 never run; reproducer script preserved). DiT tracks on dit-anchor-refit.
 - Completed: Nunchaku SDXL feasibility on the A30 (nk1), installation + profiling only. Protocol `results/nunchaku_sdxl/PROTOCOL.md`; 0.5 A30-h cap; separate conda env `nunchaku`; script `scripts/nunchaku_sdxl_profile.py`.
 - Install Nunchaku only from the official GitHub release wheels (the PyPI package `nunchaku` is unrelated).
 - Do NOT delete the GitHub release park-assets-2026-10-29 (user instruction 2026-10-30).
