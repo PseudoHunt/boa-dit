@@ -265,7 +265,7 @@
   "resolved": false
  },
  "pass_original_rules": false,
- "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32); 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction)",
+ "pass_note": "amended 2026-10-31 09:46: check 4 expectation corrected (9 cheap calls); check 6 parameter FD via 6b (gradient direction); original random-direction result kept (unresolved at fp32); 6b (fp32, gradient direction) unresolved at the fp32 noise floor (0.25% at h=1e-5); parameter FD decided by 6c (float64, gradient AND random direction); 6c random (all-site) direction unresolved (1.45e-3 > 1e-3); 6d single-site random directions (b0, b27) decide the parameter FD",
  "fdgrad_run": {
   "stage": "dar1",
   "run": "fdgrad",
@@ -356,5 +356,85 @@
   "wall_s": 51.68447780609131,
   "gpu_hours": 0.014356799390580918
  },
- "pass_6c_core": true
+ "pass_6c_core": true,
+ "6d_fd64_single_site_random": {
+  "random_site_b0": {
+   "autograd": 0.00024611265474588847,
+   "fd": {
+    "0.1": {
+     "fd": 0.00039573513859649054,
+     "rel_err": 0.6079430738947066
+    },
+    "0.01": {
+     "fd": 0.00024298625071410342,
+     "rel_err": 0.012703142124134429
+    },
+    "0.001": {
+     "fd": 0.0002461054871679041,
+     "rel_err": 2.9123159033691275e-05
+    },
+    "0.0001": {
+     "fd": 0.00024274525240435961,
+     "rel_err": 0.013682361620151946
+    },
+    "1e-05": {
+     "fd": 0.0002364509501457984,
+     "rel_err": 0.03925724424884113
+    },
+    "1e-06": {
+     "fd": 0.00019955676510124282,
+     "rel_err": 0.1891649565631424
+    },
+    "1e-07": {
+     "fd": -0.000648380980727988,
+     "rel_err": 3.6344885897778885
+    }
+   },
+   "resolved": false
+  },
+  "random_site_b27": {
+   "autograd": -0.0001115518372496634,
+   "fd": {
+    "0.1": {
+     "fd": -0.00043982626974352454,
+     "rel_err": 2.942797183690954
+    },
+    "0.01": {
+     "fd": -0.00012496305685081864,
+     "rel_err": 0.12022410326725215
+    },
+    "0.001": {
+     "fd": -0.00011175587044235082,
+     "rel_err": 0.0018290437676143085
+    },
+    "0.0001": {
+     "fd": -0.00011313706454729383,
+     "rel_err": 0.014210678521435233
+    },
+    "1e-05": {
+     "fd": -0.00010446344244291411,
+     "rel_err": 0.06354350570564607
+    },
+    "1e-06": {
+     "fd": -0.00013285063915047224,
+     "rel_err": 0.19093187907914183
+    },
+    "1e-07": {
+     "fd": -0.0006130470779050533,
+     "rel_err": 4.4956251104407805
+    }
+   },
+   "resolved": false
+  }
+ },
+ "fd64_sites_run": {
+  "stage": "dar1",
+  "run": "fd64",
+  "device": "cuda:0",
+  "config": {},
+  "git_sha": "194cb0b9262f272b674ba0ee40f7425c536858f7",
+  "start_utc": "2026-10-31T09:49:36Z",
+  "wall_s": 51.418678760528564,
+  "gpu_hours": 0.014282966322369046
+ }
 }
