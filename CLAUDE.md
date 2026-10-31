@@ -1,7 +1,7 @@
 # boa-dit: notes for Claude Code sessions
 
 ## Active task (2026-10-31): BOTH pilots COMPLETE, nothing running. rfb1 (reference-feedback-bridge-pilot, /home/boa-dit-abn): 1.324 of 3.0 A30-h, primary RDB/GB 0.988 inconclusive. cfb1 (coupled-feedback-bridge-pilot, /home/boa-dit-cfb): 1.158 of 3.0 A30-h, validation gate failed (J/B 1.262), confirmation 121000–121255 unopened. No further runs without user approval.
-- **Active:** overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
+- Completed 2026-10-30: overnight abn1 (feedback × bridge, W8 anchors, K8, local refit + bridge, diagnostics, FID-2k if it fits, timing). Protocol
   `results/activation_bridge_overnight/PROTOCOL.md`; cap 6.0 A30-h + 8 h wall (tag abn1); queue `bash scripts/abn1_queue.sh` (resumable, flock); see RUN.md.
 - Completed 2026-10-30: anchor-drift ad1 (anchor-drift-pilot b42f065; drift vs local inconclusive, 1.518 A30-h).
 - **Completed 2026-10-30 (no further runs):** retrospective anchor-bridge correction (br1), branch anchor-bridge-pilot; `results/anchor_bridge/REPORT.md`;

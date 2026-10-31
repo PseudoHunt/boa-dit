@@ -47,7 +47,7 @@ def main():
            for f in (sorted(os.listdir(CK)) if os.path.isdir(CK) else []) if f.endswith("_latents.pt")}
     json.dump({"note": "local only (standing instruction: nothing generated/trained is uploaded); regenerate with RUN.md", "files": art},
               open(os.path.join(OUT, "artifacts.json"), "w"), indent=1)
-    st = lambda n, r: ("not run" if r is None else ("pass" if r.get("pass") else "FAIL") if n == "checks" else r.get("status", "?"))
+    st = lambda n, r: ("not run" if r is None else ("pass" if r.get("pass") else "FAIL") if n == "checks" else r.get("status", "complete" if "batch_size" in r else "?"))
     stages = (("profile", pr), ("checks", ch), ("fit", ft), ("val", vl), ("conf", cf), ("diag", dg))
     L = ["# cfb1 — zero-reference feedback with joint gains and bridge strength (pilot J): report", "",
          f"Protocol: `PROTOCOL.md` (amendments dated). Spend: **{spent():.3f} of 3.0 A30-h** (ledger tag cfb1).", "",

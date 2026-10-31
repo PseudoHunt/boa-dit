@@ -5,7 +5,7 @@ Protocol: `PROTOCOL.md` (amendments dated). Spend: **1.158 of 3.0 A30-h** (ledge
 ## Status
 | stage | status |
 |---|---|
-| profile | ? |
+| profile | complete |
 | checks | pass |
 | fit | complete |
 | val | complete |
