@@ -1,0 +1,64 @@
+{
+ "alternative_ratio": 0.9,
+ "shift_factor_vs_BL@330": 1.0781933712557938,
+ "n_sim": 2000,
+ "n_boot": 1000,
+ "per_N": {
+  "128": {
+   "single_pair_median_ci_halfwidth": 0.4737070101297754,
+   "single_pair_power_upper_lt_1": 0.249,
+   "aggregate_median_ci_halfwidth_APPROX": 0.3831839765805204,
+   "aggregate_power_upper_lt_1_APPROX": 0.2125,
+   "aggregate_power_confirm_rule_APPROX": 0.212,
+   "delta_method_se_single": 0.26344077580521297
+  },
+  "256": {
+   "single_pair_median_ci_halfwidth": 0.344729023079092,
+   "single_pair_power_upper_lt_1": 0.1615,
+   "aggregate_median_ci_halfwidth_APPROX": 0.2817952103790822,
+   "aggregate_power_upper_lt_1_APPROX": 0.1575,
+   "aggregate_power_confirm_rule_APPROX": 0.1575,
+   "delta_method_se_single": 0.18628075901291108
+  },
+  "512": {
+   "single_pair_median_ci_halfwidth": 0.247878704283279,
+   "single_pair_power_upper_lt_1": 0.164,
+   "aggregate_median_ci_halfwidth_APPROX": 0.2030339565776862,
+   "aggregate_power_upper_lt_1_APPROX": 0.1995,
+   "aggregate_power_confirm_rule_APPROX": 0.1995,
+   "delta_method_se_single": 0.13172038790260648
+  }
+ },
+ "cost": {
+  "rate_anchored_arm_per_image_h": 0.0005271875,
+  "rate_fp50_per_image_h": 0.000171875,
+  "projected_fixed": {
+   "spent": 0.0,
+   "mechanism": 0.15,
+   "two_pairs_train_dev": 1.7288,
+   "kernel_track": 0.3,
+   "reserve": 0.4
+  },
+  "per_N_total": {
+   "512": {
+    "eval_h": 2.24736,
+    "total_h": 4.82616,
+    "fits": false
+   },
+   "256": {
+    "eval_h": 1.12368,
+    "total_h": 3.7024799999999995,
+    "fits": true
+   },
+   "128": {
+    "eval_h": 0.56184,
+    "total_h": 3.14064,
+    "fits": true
+   }
+  }
+ },
+ "frozen_N": 256,
+ "label": "bounded replication, not a decisive test (projected power < 0.8 for a 10% reduction)",
+ "limits": "resampling from 128 observed pairs cannot produce tails heavier than observed; one image (124092) carries 28% of BA@330's total error; aggregate uses BL@330 and BL-tm as two comparator realizations sharing the same BA outputs (over-correlated proxy; approximate)",
+ "status": "complete"
+}
