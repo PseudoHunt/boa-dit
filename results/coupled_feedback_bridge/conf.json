@@ -1,0 +1,10 @@
+{
+ "status": "skipped (validation gate failed; confirmation cohort 121000-121255 not opened)",
+ "gate": {
+  "J_nonzero_feedback": true,
+  "ratio_J_over_B": 1.2621444230435959,
+  "dlpips_J_minus_B": 0.0033657890162430704,
+  "pass": false,
+  "rule": "J nonzero feedback, mean error <= 0.95 x B, mean LPIPS <= LPIPS(B) + 0.005"
+ }
+}
